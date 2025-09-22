@@ -1,0 +1,20 @@
+{
+  "cSpell.words": [
+    "chartjs",
+    "Edon",
+    "firstname",
+    "fullcalendar",
+    "headlessui",
+    "lastname",
+    "Ownerinfo",
+    "Paymentbar",
+    "progressbar",
+    "Resultbar",
+    "schoolify",
+    "SQOOLIFY",
+    "Texam",
+    "timeslots",
+    "Timetablebar"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

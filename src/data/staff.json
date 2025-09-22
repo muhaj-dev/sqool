@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "first_name": "Tyrus",
+    "last_name": "McVity",
+    "email": "tmcvity0@sciencedirect.com",
+    "role": "Cleaner",
+    "department": "Support",
+    "phone": "(335) 8084695",
+    "contract_type": "Part time"
+  },
+  {
+    "id": 2,
+    "first_name": "Evangeline",
+    "last_name": "Gilford",
+    "email": "egilford1@yandex.ru",
+    "role": "Teacher",
+    "department": "Legal",
+    "phone": "(949) 3495660",
+    "contract_type": "Part time"
+  },
+  {
+    "id": 3,
+    "first_name": "Samuele",
+    "last_name": "Aspin",
+    "email": "saspin2@vk.com",
+    "role": "Gate Man",
+    "department": "Human Resources",
+    "phone": "(395) 2574830",
+    "contract_type": "Full time"
+  },
+  {
+    "id": 4,
+    "first_name": "Sammy",
+    "last_name": "Finlow",
+    "email": "sfinlow3@marriott.com",
+    "role": "Teacher",
+    "department": "Legal",
+    "phone": "(460) 2046615",
+    "contract_type": "Full time"
+  },
+  {
+    "id": 5,
+    "first_name": "Marcelle",
+    "last_name": "Capnerhurst",
+    "email": "mcapnerhurst4@mail.ru",
+    "role": "Head Master",
+    "department": "Business Development",
+    "phone": "(515) 9965394",
+    "contract_type": "Part time"
+  },
+  {
+    "id": 6,
+    "first_name": "Dale",
+    "last_name": "Langshaw",
+    "email": "dlangshaw5@mlb.com",
+    "role": "Head Master",
+    "department": "Legal",
+    "phone": "(254) 1466026",
+    "contract_type": "Full time"
+  }
+]
