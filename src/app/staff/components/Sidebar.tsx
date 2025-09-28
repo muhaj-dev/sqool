@@ -71,30 +71,8 @@ const Sidebar = () => {
               </AccordionTrigger>
               <AccordionContent className="bg-gray ">
                 <div className="flex flex-col gap-4 w-[50%] pt-3 mx-auto">
-                  <Link
-                    href="/staff/class/timetable"
-                    className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
-                      pathname === "/staff/class/timetable" ? "text-primaryColor" : ""
-                    }`}
-                  >
-                    Time Table
-                  </Link>
-                  <Link
-                    href="/staff/class/results"
-                    className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
-                      pathname === "/staff/class/results" ? "text-primaryColor" : ""
-                    }`}
-                  >
-                    Results
-                  </Link>
-                  <Link
-                    href="/staff/class/library"
-                    className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
-                      pathname === "/staff/class/library" ? "text-primaryColor" : ""
-                    }`}
-                  >
-                    Library
-                  </Link>
+                 
+                 
                   <Link
                     href="/staff/class/attendance"
                     className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
@@ -119,6 +97,19 @@ const Sidebar = () => {
               Student
             </p>
           </Link>
+           <Link href="/staff/timetable" className={`flex items-center gap-3 pl-4`}>
+            <StudentIcon
+              color={`${pathname === "/staff/timetable" ? "#E5B80B" : "#515B6F"}`}
+            />
+            <p
+              className={`text-[#515B6F] ${
+                pathname.startsWith("/staff/timetable") ? "text-primaryColor" : ""
+              }`}
+            >
+              Time Table
+            </p>
+          </Link>
+          
           <Link href="/staff/noticeboard" className={`flex items-center gap-3 pl-4`}>
             <NoticeboardIcon
               color={`${pathname === "/staff/noticeboard" ? "#E5B80B" : "#515B6F"}`}
@@ -129,6 +120,18 @@ const Sidebar = () => {
               }`}
             >
               Notice Board
+            </p>
+          </Link>
+          <Link href="/staff/exam" className={`flex items-center gap-3 pl-4`}>
+            <NoticeboardIcon
+              color={`${pathname === "/staff/exam" ? "#E5B80B" : "#515B6F"}`}
+            />
+            <p
+              className={`text-[#515B6F] ${
+                pathname === "/staff/exam" ? "text-primaryColor" : ""
+              }`}
+            >
+              Examinations
             </p>
           </Link>
 

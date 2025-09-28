@@ -24,6 +24,11 @@ import {
   ISubjectResponse,
   ISubject,
   StaffProfileResponse,
+  CreateExamResponse,
+  SessionsResponse,
+  Exam,
+  ExamsResponse,
+  TimetableResponse,
 } from "@/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -597,7 +602,7 @@ export const createClassSchedule = async (payload: {
   endTime: string;
 }) => {
   try {
-    const response = await api.post("/v1/admin/classes/schedule", payload);
+    const response = await api.post("/v1/admin/class/schedule", payload);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -759,5 +764,195 @@ export const getStaffProfile = async (): Promise<StaffProfileResponse> => {
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch staff profile");
+  }
+};
+
+
+// Add this API function
+export const createExamination = async (formData: FormData): Promise<CreateExamResponse> => {
+  try {
+    const response = await api.post<CreateExamResponse>("/v1/staff/examination", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response?.data ?? {};
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error?.response?.data?.message || "Failed to create examination";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to create examination");
+  }
+};
+
+
+export const getSessions = async (page: string = "1", limit: string = "10") => {
+  try {
+    const response = await api.get<SessionsResponse>(
+      "/v1/admin/session-and-terms",
+      {
+        params: {
+          page,
+          limit,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch classes";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch classes");
+  }
+};
+
+
+
+export const getSessionsForStaff = async (page: string = "1", limit: string = "10") => {
+  try {
+    const response = await api.get<SessionsResponse>(
+      "/v1/staff/session-and-terms",
+      {
+        params: {
+          page,
+          limit,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch classes";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch classes");
+  }
+};
+
+
+
+export const getClassesForStaff = async (page: string = "1", limit: string = "10") => {
+  try {
+    const response = await api.get<ClassPaginationResponse>(
+      "/v1/staff/classes",
+      {
+        params: {
+          page,
+          limit,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch classes";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch classes");
+  }
+};
+
+
+export const getSubjectsForStaff = async (page: number = 1, search: string = "") => {
+  try {
+    const response = await api.get(`/v1/staff/subject`, {
+      params: { page, search, limit: 100 },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch subjects");
+  }
+};
+
+
+
+// Update your getAllExams function to accept page and limit parameters
+export const getAllExams = async (page: number = 1, limit: number = 10): Promise<ExamsResponse> => {
+  try {
+    const response = await api.get<ExamsResponse>("/v1/staff/examination", {
+      params: {
+        page,
+        limit
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch exams";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch exams");
+  }
+};
+
+export const getExamById = async (examId: string): Promise<{ data: Exam; message: string }> => {
+  try {
+    const response = await api.get<{ data: Exam; message: string }>(`/v1/staff/examination/${examId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch exam";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch exam");
+  }
+};
+
+// utils/api.ts
+export const updateExamination = async (examId: string, formData: FormData): Promise<any> => {
+  try {
+    const response = await api.patch(`/v1/staff/examination/${examId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to update exam";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to update exam");
+  }
+};
+
+export const deleteExam = async (examId: string): Promise<void> => {
+  try {
+    await api.delete(`/v1/staff/examination/${examId}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to delete exam";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to delete exam");
+  }
+};
+
+
+// utils/api.ts
+export const getClassScheduleForStaff = async (): Promise<TimetableResponse> => {
+  try {
+    const response = await api.get<TimetableResponse>("/v1/staff/class/schedule");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch timetable";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch timetable");
   }
 };

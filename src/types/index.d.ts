@@ -187,6 +187,7 @@ export interface IClassConfigurationResponse extends IClassConfiguration {
 export interface ClassPaginationResponse {
   data: {
     result: IClassConfigurationResponse[];
+    message: string;
     pagination: {
       total: number;
       currentPage: number;
@@ -492,3 +493,259 @@ export interface StaffProfileResponse {
   message: string;
 }
 
+// Add to your types
+export interface CreateExamPayload {
+  subject: string;
+  class: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  venue?: string;
+  mode?: string;
+  sessionId: string;
+  questions: File;
+}
+
+export interface CreateExamResponse {
+  data?: {
+    _id: string;
+    subject: string;
+    class: string;
+    examDate: string;
+    startTime: string;
+    endTime: string;
+    venue?: string;
+    mode?: string;
+    sessionId: string;
+    status: string;
+    createdAt: string;
+  };
+  message?: string;
+}
+
+
+// Add these types
+// export interface Class {
+//   _id: string;
+//   className: string;
+//   shortName: string;
+//   levelType: string;
+//   classSection: string;
+// }
+
+export interface Subject {
+  _id: string;
+  name: string;
+  code?: string;
+  category: string;
+  description: string;
+  isActive: boolean;
+}
+
+export interface Session {
+  _id: string;
+  session: string;
+  isActive: boolean;
+  firstTerm: {
+    startDate: string;
+    endDate: string;
+  };
+  secondTerm: {
+    startDate: string;
+    endDate: string;
+  };
+  thirdTerm: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
+
+// In your types.ts file, update the Class interface:
+export interface Class {
+  _id: string;
+  className: string;
+  shortName: string;
+  levelType: string;
+  classSection?: string; // Make this optional to match IClassConfigurationResponse
+  classTeacher?: Array<{
+    _id: string;
+    userId: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    subjects: string[];
+    isActive: boolean;
+  }>;
+  classSchedule?: any[];
+  resources?: any[];
+  tutors?: any[];
+  subjects?: string[];
+  students?: any[];
+}
+export interface ClassesResponse {
+  data?: {
+    result: Class[];
+    pagination: any;
+  };
+  message?: string;
+}
+
+export interface SubjectsResponse {
+  data?: {
+    result: Subject[];
+    pagination: any;
+  };
+  message?: string;
+}
+
+export interface SessionsResponse {
+  data?: {
+    result: Session[];
+    pagination: any;
+  };
+  message?: string;
+}
+
+
+
+
+// Exam-related types
+export interface ExamCreator {
+  role: string;
+  primarySubject: string;
+  isActive: boolean;
+  details: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
+export interface ExamSubject {
+  name: string;
+  _id?: string;
+}
+
+// types/index.ts
+export interface ExamSubject {
+  _id: string;
+  name: string;
+}
+
+export interface ExamCreator {
+  role: string;
+  primarySubject: string;
+  isActive: boolean;
+  details: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
+export interface SessionTerm {
+  startDate: string;
+  endDate: string;
+}
+
+export interface Session {
+  _id: string;
+  session: string;
+  firstTerm: SessionTerm;
+  secondTerm: SessionTerm;
+  thirdTerm: SessionTerm;
+  isActive: boolean;
+  school: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Exam {
+  _id: string;
+  subject: ExamSubject;
+  questions: string; // This is now the file URL/path
+  class: {
+    _id: string;
+    className: string;
+  };
+  creator: ExamCreator;
+  status: 'pending' | 'active' | 'completed' | 'cancelled';
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  venue: string;
+  mode: 'online' | 'offline' | 'hybrid';
+  session: Session; // Changed from sessionId to session object
+  students: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// types/index.ts
+export interface ExamsResponse {
+  data: Exam[];
+  message: string;
+  // Add these if your API returns pagination data
+  total?: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+}
+
+export interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
+
+
+// types/timetable.ts
+export interface Subject {
+  _id: string;
+  name: string;
+  code: string;
+  category: string;
+  description: string;
+  isActive: boolean;
+  prerequisites: string[];
+  slug: string;
+}
+
+export interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface TeacherSubject {
+  _id: string;
+  name: string;
+  code: string;
+}
+
+export interface Teacher {
+  _id: string;
+  userId: User;
+  subjects: TeacherSubject[];
+  isActive: boolean;
+}
+
+export interface ClassSchedule {
+  _id: string;
+  class: string;
+  day: string;
+  subject: Subject;
+  teacher: Teacher;
+  startTime: string;
+  endTime: string;
+}
+
+export interface TimetableResponse {
+  data: ClassSchedule[];
+  message: string;
+}
