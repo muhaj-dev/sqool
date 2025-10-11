@@ -142,6 +142,22 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
           </p>
         </Link>
 
+             <Link href="/admin/notice" className={`flex items-center gap-4 pl-4 `}>
+          <Landmark
+            className={`text-[#515B6F] ${
+              pathname.startsWith('/admin/notice') ? 'text-primaryColor' : ''
+            }`}
+          />
+          <p
+            onClick={toggleSidebar}
+            className={`text-[#515B6F] ${
+              pathname.startsWith('/admin/notice')? 'text-primaryColor' : ''
+            }`}
+          >
+            Notice
+          </p>
+        </Link>
+
         <Link href="/admin/account" className={`flex items-center gap-4 pl-4 `}>
           <Landmark
             className={`text-[#515B6F] ${

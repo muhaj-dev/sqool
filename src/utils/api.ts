@@ -956,3 +956,95 @@ export const getClassScheduleForStaff = async (): Promise<TimetableResponse> => 
     throw new Error("Failed to fetch timetable");
   }
 };
+
+
+
+export const getAllExaminations = async (page: number = 1, limit: number = 50) => {
+  try {
+    const response = await api.get("/v1/admin/examination", {
+      params: { page, limit }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch examinations");
+  }
+};
+
+export const updateExaminationStatus = async (
+  examId: string,
+  status: "approve" | "reject" | "scheduled"
+) => {
+  try {
+    const response = await api.patch(`/v1/admin/examination/${examId}/approve`, {
+      status: "approve"
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to approve examination");
+  }
+};
+
+// Create a notice
+export const createNotice = async (payload: {
+  title: string;
+  content: string;
+  body: string;
+  visibility: string;
+  resources: string[];
+  expirationDate: string;
+  notificationDate: string;
+}) => {
+  try {
+    const response = await api.post("/v1/admin/notices", payload);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to create notice");
+  }
+};
+
+// Get all notices with search, filter, and limit
+export const getAllNotices = async (
+  search: string = "",
+  filter: string = "",
+  limit: number = 20,
+) => {
+  try {
+    const response = await api.get("/v1/admin/notices", {
+      params: { search, filter, limit }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch notices");
+  }
+};
+
+// Update a notice
+export const updateNotice = async (
+  noticeId: string,
+  payload: {
+    title: string;
+    content: string;
+    body: string;
+    visibility: string;
+    resources: string[];
+    expirationDate: string;
+    notificationDate: string;
+  }
+) => {
+  try {
+    const response = await api.patch(`/v1/admin/notices/${noticeId}`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update notice");
+  }
+};
+
+// Delete a notice
+export const deleteNotice = async (noticeId: string) => {
+  try {
+    await api.delete(`/v1/admin/notices/${noticeId}`);
+  } catch (error) {
+    throw new Error("Failed to delete notice");
+  }
+};
+

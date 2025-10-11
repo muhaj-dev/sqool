@@ -749,3 +749,19 @@ export interface TimetableResponse {
   data: ClassSchedule[];
   message: string;
 }
+
+
+export interface Notice {
+  id?: string;
+  title: string;
+  content: string;
+  body: string;
+  visibility: "parent" | "staff" | "everyone";
+  resources: string[];
+  expirationDate: string;
+  notificationDate: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type NoticeFormData = Omit<Notice, "id" | "createdAt" | "updatedAt">;

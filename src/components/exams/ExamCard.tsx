@@ -11,6 +11,7 @@ import Image, { StaticImageData } from "next/image"
 import AttachmentUpload from "../AttachmentUpload"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
+
 type TProps = {
   photo: StaticImageData
   fullname: string
@@ -18,7 +19,13 @@ type TProps = {
   subject: string
   total: number
   approved: boolean
+  onApprove?: () => void
+  onReject?: () => void
+  onSchedule?: () => void
+  loading?: boolean
+  status?: string
 }
+
 const ExamCard = ({
   photo,
   fullname,
@@ -26,6 +33,11 @@ const ExamCard = ({
   total,
   subject,
   approved,
+  onApprove,
+  onReject,
+  onSchedule,
+  loading,
+  status,
 }: TProps) => {
   return (
     <Card className="py-4 px-3">
@@ -39,7 +51,6 @@ const ExamCard = ({
           <div>
             <CardTitle className="text-[16px]">{fullname}</CardTitle>
             <CardDescription className="w-[150px] text-sm break-words">
-              {" "}
               {email}
             </CardDescription>
           </div>
@@ -56,24 +67,73 @@ const ExamCard = ({
         </div>
         <div className="flex items-center justify-between">
           <span>Attach Exam Question</span>
-
-          <AttachmentUpload />
+          {/* <AttachmentUpload /> */}
         </div>
       </CardContent>
-    {!approved && 
-    <>
-    <Separator className="my-2" />
-    <CardFooter className="p-0">
-      <Button
-        className={`w-full text-white ${
-          approved ? "bg-green-600 hover:bg-green-500" : "bg-primaryColor"
-        }`}
-      >
-        {approved ? " Approved" : " Approve"}
-      </Button>
-    </CardFooter>
-    </>
-    }
+      {!approved && (
+        <>
+          <Separator className="my-2" />
+          <CardFooter className="p-0 gap-3">
+            <Button
+              className="w-full text-white bg-primaryColor"
+              onClick={onApprove}
+              disabled={loading}
+            >
+              {loading ? "Approving..." : "Approve"}
+            </Button>
+          </CardFooter>
+        </>
+      )}
+      {approved && (
+        <>
+          <Separator className="my-2" />
+          <CardFooter className="p-0 gap-3">
+              {status === "pending" && (
+          <>
+            <Button
+              className="w-full text-white bg-primaryColor"
+              onClick={onApprove}
+              disabled={loading}
+            >
+              {loading ? "Approving..." : "Approve"}
+            </Button>
+            <Button
+              className="w-full text-white bg-red-600"
+              onClick={onReject}
+              disabled={loading}
+            >
+              {loading ? "Rejecting..." : "Reject"}
+            </Button>
+          </>
+        )}
+         {status === "scheduled" && (
+          <Button
+            className="w-full text-white bg-yellow-600"
+            onClick={onSchedule}
+            disabled={loading}
+          >
+            {loading ? "Scheduling..." : "Schedule"}
+          </Button>
+        )}
+        {approved && (
+          <Button
+            className="w-full text-white bg-green-600"
+            disabled
+          >
+            Approved
+          </Button>
+        )}
+        {status === "reject" && (
+          <Button
+            className="w-full text-white bg-gray-600"
+            disabled
+          >
+            Rejected
+          </Button>
+        )}
+          </CardFooter>
+        </>
+      )}
     </Card>
   )
 }

@@ -1,69 +1,85 @@
 "use client";
-import React, { useState } from "react";
-import ExamData from "../../data/exams.json";
+import React, { useState, useEffect } from "react";
 import ExamCard from "./ExamCard";
 import avatar from "../../assets/avatar.png";
-import { ChevronRight } from "lucide-react";
 import { Separator } from "../ui/separator";
 import FilterBar from "./Filterbar";
-import Link from "next/link";
-import { useRouter } from 'next/navigation';
 import { SchoolSession } from "./SchoolSession";
+import { getAllExaminations, updateExaminationStatus } from "@/utils/api";
 
-const Department = [
-  "Chemistry",
-  "Physics",
-  "Art",
-  "Engineering",
-  "Mathematics",
-];
-const Class = ["SSS1", "SSS2", "SSS3"];
-const STEPS = ["Approved", "Pending Approval", "Rejected"];
+// Removed static Department array
+
+const STEPS = ["Pending Approval", "Approved", "Rejected"];
+
+const STATUS_OPTIONS = ["approve", "reject", "pending", "scheduled"];
 
 const Exam = () => {
-  const [data, setData] = useState([...ExamData]);
-  const SSS3 = data.slice(0, 3);
-  const SSS2 = data.slice(5, 8);
-  const SSS1 = data.slice(10, 13);
-  const SSS3Approved = data.slice(14, 16);
-  const SSS2Approved = data.slice(16, 17);
-  const SSS1Approved = data.slice(17, 19);
-
+  const [exams, setExams] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const renderExaminations = () => {
-    switch (STEPS[activeIndex]) {
-      case "Approved":
-        return (
-          <>
-            <Examination level="SSS3" data={SSS3Approved} approved={true} />
-            <Examination level="SSS2" data={SSS2Approved} approved={true} />
-            <Examination level="SSS1" data={SSS1Approved} approved={true} />
-          </>
-        );
-      case "Pending Approval":
-      case "Rejected":
-        return (
-          <>
-            <Examination level="SSS3" data={SSS3} approved={false} />
-            <Examination level="SSS2" data={SSS2} approved={false} />
-            <Examination level="SSS1" data={SSS1} approved={false} />
-          </>
-        );
-      default:
-        return null;
+  // Fetch exams from API
+  const fetchExams = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllExaminations(1, 50);
+      setExams(res.data || []);
+    } catch {
+      setExams([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <section className="">
-      <div
-      className="flex justify-end"
-      >
+  console.log(exams);
+  useEffect(() => {
+    fetchExams();
+  }, []);
 
-     <SchoolSession />
+  // Filter exams by status
+  const filteredExams = exams.filter((exam) => {
+    if (STEPS[activeIndex] === "Pending Approval")
+      return exam.status === "pending";
+    if (STEPS[activeIndex] === "Approved") return exam.status === "approve";
+    if (STEPS[activeIndex] === "Rejected") return exam.status === "rejected";
+    return true;
+  });
+
+  // Handle approve
+const handleApprove = async (examId: string) => {
+  setLoading(true);
+  try {
+    await updateExaminationStatus(examId, "approve");
+    fetchExams();
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleReject = async (examId: string) => {
+  setLoading(true);
+  try {
+    await updateExaminationStatus(examId, "reject");
+    fetchExams();
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleSchedule = async (examId: string) => {
+  setLoading(true);
+  try {
+    await updateExaminationStatus(examId, "scheduled");
+    fetchExams();
+  } finally {
+    setLoading(false);
+  }
+};
+  return (
+    <section>
+      <div className="flex justify-end">
+        <SchoolSession />
       </div>
-      <FilterBar department={Department} level={Class} setData={setData} />
       <div className="flex items-center gap-8">
         {STEPS.map((item, ind) => (
           <div
@@ -79,63 +95,45 @@ const Exam = () => {
         ))}
       </div>
       <Separator className="mb-4 mt-0" />
-      {renderExaminations()}
+      {/* {classes.map((className) => (
+        <div key={className} className="mb-8">
+          <h3 className="text-lg font-bold mb-2">{className}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4">
+            {examsByClass[className].map((exam) => (
+              <ExamCard
+                key={exam._id}
+                fullname={`${exam.creator.details.firstName} ${exam.creator.details.lastName}`}
+                email={exam.creator.details.email}
+                subject={exam.subject.name}
+                total={exam.students}
+                photo={avatar}
+                approved={exam.status === "approve"}
+                onApprove={() => handleApprove(exam._id)}
+                loading={loading}
+              />
+            ))}
+          </div>
+        </div>
+      ))} */}
+
+      {filteredExams.map((exam) => (
+        <ExamCard
+          key={exam._id}
+          fullname={`${exam.creator.details.firstName} ${exam.creator.details.lastName}`}
+          email={exam.creator.details.email}
+          subject={exam.subject.name}
+          total={exam.students}
+          photo={avatar}
+          approved={exam.status === "approve"}
+          status={exam.status}
+          onApprove={() => handleApprove(exam._id)}
+          onReject={() => handleReject(exam._id)}
+          onSchedule={() => handleSchedule(exam._id)}
+          loading={loading}
+        />
+      ))}
     </section>
   );
 };
 
 export default Exam;
-
-const Examination = ({
-  level,
-  data,
-  approved,
-}: {
-  level: string;
-  approved: boolean;
-  data: {
-    id: number;
-    fullname: string;
-    email: string;
-    subject: string;
-  }[];
-}) => {
-
-  const router = useRouter();
-
-  const handleViewList = () => {
-    if (!approved) {
-      router.push(`/admin/exam/pending/${level}`);
-    } else {
-      router.push(`/admin/exam/${level}`);
-    }
-  };
-
-  return (
-    <>
-      <div className="flex items-center justify-between">
-        <p className="text-[.9rem] md:text-xl font-bold">{`${level.toUpperCase()} Exam question List`}</p>
-        <div
-           onClick={handleViewList}
-        >
-          <div className="text-sm flex items-center text-primaryColor cursor-pointer underline">
-            View List <ChevronRight size={20} />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4">
-        {data.map((item) => (
-          <ExamCard
-            key={item.id}
-            fullname={item.fullname}
-            email={item.email}
-            subject={item.subject}
-            total={data.length}
-            photo={avatar}
-            approved={approved}
-          />
-        ))}
-      </div>
-    </>
-  );
-};
