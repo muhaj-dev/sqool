@@ -41,7 +41,7 @@ const Exam = () => {
     if (STEPS[activeIndex] === "Pending Approval")
       return exam.status === "pending";
     if (STEPS[activeIndex] === "Approved") return exam.status === "approve";
-    if (STEPS[activeIndex] === "Rejected") return exam.status === "rejected";
+    if (STEPS[activeIndex] === "Rejected") return exam.status === "reject";
     return true;
   });
 

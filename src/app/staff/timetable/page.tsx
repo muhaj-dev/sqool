@@ -349,7 +349,7 @@ const timetableRef = useRef<HTMLDivElement>(null);
        {/* Subject Legend */}
        <Card className="p-6">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Subject Legend</h3>
+          <h3 className="text-lg font-semibold">Subject </h3>
           {subjectLoading ? (
             <div className="text-muted-foreground">Loading subjects...</div>
           ) : (

@@ -976,7 +976,7 @@ export const updateExaminationStatus = async (
 ) => {
   try {
     const response = await api.patch(`/v1/admin/examination/${examId}/approve`, {
-      status: "approve"
+      status
     });
     return response.data;
   } catch (error) {

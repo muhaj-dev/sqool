@@ -672,7 +672,7 @@ export interface Exam {
     className: string;
   };
   creator: ExamCreator;
-  status: 'pending' | 'active' | 'completed' | 'cancelled';
+  status: 'pending' | 'approve' | 'completed' | 'cancelled' | 'reject' | 'scheduled';
   examDate: string;
   startTime: string;
   endTime: string;

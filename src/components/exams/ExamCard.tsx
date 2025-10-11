@@ -40,7 +40,7 @@ const ExamCard = ({
   status,
 }: TProps) => {
   return (
-    <Card className="py-4 px-3">
+    <Card className="py-4 px-3 my-3">
       <div className="flex justify-between mb-4 ">
         <div className="flex gap-2">
           <Image
@@ -70,17 +70,32 @@ const ExamCard = ({
           {/* <AttachmentUpload /> */}
         </div>
       </CardContent>
-      {!approved && (
+      {status === "pending" && (
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
-            <Button
+           
+                <Button
               className="w-full text-white bg-primaryColor"
               onClick={onApprove}
               disabled={loading}
             >
               {loading ? "Approving..." : "Approve"}
             </Button>
+            <Button
+              className="w-full text-white bg-red-600"
+              onClick={onReject}
+              disabled={loading}
+            >
+              {loading ? "Rejecting..." : "Reject"}
+            </Button>
+            <Button
+            className="w-full text-white bg-yellow-600"
+            onClick={onSchedule}
+            disabled={loading}
+          >
+            {loading ? "Scheduling..." : "Schedule"}
+          </Button>
           </CardFooter>
         </>
       )}
@@ -88,7 +103,7 @@ const ExamCard = ({
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
-              {status === "pending" && (
+              {/* {status === "approve" && (
           <>
             <Button
               className="w-full text-white bg-primaryColor"
@@ -104,31 +119,26 @@ const ExamCard = ({
             >
               {loading ? "Rejecting..." : "Reject"}
             </Button>
+            
           </>
-        )}
-         {status === "scheduled" && (
-          <Button
-            className="w-full text-white bg-yellow-600"
-            onClick={onSchedule}
-            disabled={loading}
-          >
-            {loading ? "Scheduling..." : "Schedule"}
-          </Button>
-        )}
-        {approved && (
-          <Button
-            className="w-full text-white bg-green-600"
-            disabled
-          >
-            Approved
-          </Button>
-        )}
+        )} */}
+         
+     
         {status === "reject" && (
           <Button
             className="w-full text-white bg-gray-600"
             disabled
           >
             Rejected
+          </Button>
+        )}
+        {status === "scheduled" && (
+          <Button
+            className="w-full text-white bg-yellow-600"
+            onClick={onSchedule}
+            disabled={loading}
+          >
+            {loading ? "Scheduling..." : "Schedule"}
           </Button>
         )}
           </CardFooter>
