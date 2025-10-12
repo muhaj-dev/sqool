@@ -1048,3 +1048,14 @@ export const deleteNotice = async (noticeId: string) => {
   }
 };
 
+
+export const getStaffNotices = async (search: string = "", limit: number = 20) => {
+  try {
+    const response = await api.get("/v1/staff/notices", {
+      params: { search, limit }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch staff notices");
+  }
+};

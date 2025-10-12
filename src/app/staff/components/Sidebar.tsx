@@ -53,7 +53,7 @@ const Sidebar = () => {
               Dashboard
             </p>
           </Link>
-          <Accordion type="multiple" className="w-[100%] -my-6 hover:outline-none">
+          {/* <Accordion type="multiple" className="w-[100%] -my-6 hover:outline-none">
             <AccordionItem value="item-1" className="border-b-0">
               <AccordionTrigger>
                 <div className="flex items-center gap-3 pl-4">
@@ -84,8 +84,22 @@ const Sidebar = () => {
                 </div>
               </AccordionContent>
             </AccordionItem>
-          </Accordion>
-          <Link href="/staff/student" className={`flex items-center gap-3 pl-4`}>
+          </Accordion> */}
+
+           <Link href="/staff/attendance" className={`flex items-center gap-3 pl-4`}>
+            <ClassIcon
+              color={`${pathname === "/staff/attendance" ? "#E5B80B" : "#515B6F"}`}
+            />
+           
+            <p
+              className={`text-[#515B6F] ${
+                pathname.startsWith("/staff/attendance") ? "text-primaryColor" : ""
+              }`}
+            >
+              Attendance
+            </p>
+          </Link>
+          {/* <Link href="/staff/student" className={`flex items-center gap-3 pl-4`}>
             <StudentIcon
               color={`${pathname === "/staff/student" ? "#E5B80B" : "#515B6F"}`}
             />
@@ -96,7 +110,7 @@ const Sidebar = () => {
             >
               Student
             </p>
-          </Link>
+          </Link> */}
            <Link href="/staff/timetable" className={`flex items-center gap-3 pl-4`}>
             <StudentIcon
               color={`${pathname === "/staff/timetable" ? "#E5B80B" : "#515B6F"}`}
@@ -136,7 +150,7 @@ const Sidebar = () => {
           </Link>
 
         
-          <Link
+          {/* <Link
             href="/staff/settings"
             className={`flex items-center gap-3 pl-4 ${pathname === ""}`}
           >
@@ -152,7 +166,7 @@ const Sidebar = () => {
             >
               Setting
             </p>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

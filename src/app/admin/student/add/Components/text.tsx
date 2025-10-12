@@ -122,7 +122,8 @@ export default function AddStudentForm() {
   const [classes, setClasses] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [classLoading, setClassLoading] = useState(false);
-
+ const [isSubmitting, setIsSubmitting] = useState(false);
+ 
   useEffect(() => {
     const fetchClasses = async () => {
       setClassLoading(true);
@@ -172,23 +173,96 @@ export default function AddStudentForm() {
     router.push('/admin/student');
   };
 
-  const onSubmit = async (data: FormData) => {
-    let parentId = data.parentId;
-    console.log('Selected parentId:', parentId);
+  // const onSubmit = async (data: FormData) => {
+    
+  //   let parentId = data?.parentId;
+  //   console.log('Selected parentId:', parentId);
 
+  //   try {
+  //     if (!parentId && data.newParentEmail) {
+  //       const newParentResponse = await addParent({
+  //         firstName: data.newParentFirstName || data.studentFirstName,
+  //         lastName: data.newParentLastName || data.studentLastName,
+  //         occupation: '',
+  //         email: data?.newParentEmail,
+  //       });
+  //       parentId = newParentResponse.data._id;
+  //       console.log('New parentId:', parentId);
+  //     }
+  //     console.log('Final parentId:', parentId);
+
+  //     const studentData: AddStudentPayload = {
+  //       firstName: data.studentFirstName,
+  //       lastName: data.studentLastName,
+  //       gender: data.gender,
+  //       class: data.class,
+  //       parent: parentId || '',
+  //       language: data.language,
+  //       dateOfBirth: data.dateOfBirth,
+  //       address: data.address,
+  //       aboutMe: data.aboutMe,
+  //       hobbies: data.hobbies ? data.hobbies.split(',').map((hobby) => hobby.trim()) : [],
+  //       enrolmentDate: data.enrolmentDate,
+  //     };
+
+  //     const response = await (addStudent as (payload: AddStudentPayload) => Promise<StudentResponse>)(studentData);
+  //     toast({
+  //       title: 'Student and Parent added successfully',
+  //       description: response?.data?.message || 'Success',
+  //     });
+  //     handleReset();
+  //     router.push('/admin/student');
+  //   } catch (error) {
+  //     toast({
+  //       title: 'Error adding student or parent',
+  //       description: error instanceof Error ? error.message : 'An error occurred',
+  //       variant: 'destructive',
+  //     });
+  //   }
+  // };
+
+
+    const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    
     try {
-      if (!parentId && data.newParentEmail) {
-        const newParentResponse = await addParent({
-          firstName: data.newParentFirstName || data.studentFirstName,
-          lastName: data.newParentLastName || data.studentLastName,
-          occupation: '',
-          email: data.newParentEmail,
+      // Validate that either parentId or new parent details are provided
+      if (!data.parentId && (!data.newParentEmail || !data.newParentFirstName || !data.newParentLastName)) {
+        toast({
+          title: 'Validation Error',
+          description: 'Please either select an existing parent or provide new parent details',
+          variant: 'destructive',
         });
-        parentId = newParentResponse.data._id;
-        console.log('New parentId:', parentId);
+        setIsSubmitting(false);
+        return;
       }
-      console.log('Final parentId:', parentId);
 
+      let parentId = data.parentId;
+
+      // Create new parent if no existing parent selected
+      if (!parentId && data.newParentEmail) {
+        try {
+          const newParentResponse = await addParent({
+            firstName: data.newParentFirstName || '',
+            lastName: data.newParentLastName || '',
+            occupation: '',
+            email: data.newParentEmail,
+          });
+          parentId = newParentResponse.data._id;
+          console.log('New parent created with ID:', parentId);
+        } catch (error) {
+          console.error('Error creating parent:', error);
+          toast({
+            title: 'Error creating parent',
+            description: error instanceof Error ? error.message : 'Failed to create parent account',
+            variant: 'destructive',
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Prepare student data
       const studentData: AddStudentPayload = {
         firstName: data.studentFirstName,
         lastName: data.studentLastName,
@@ -203,49 +277,34 @@ export default function AddStudentForm() {
         enrolmentDate: data.enrolmentDate,
       };
 
-      const response = await (addStudent as (payload: AddStudentPayload) => Promise<StudentResponse>)(studentData);
+      console.log('Submitting student data:', studentData);
+
+      // Add student
+      const response = await addStudent(studentData);
+      
       toast({
-        title: 'Student and Parent added successfully',
-        description: response?.data?.message || 'Success',
+        title: 'Success!',
+        description: response?.message || 'Student added successfully',
       });
+      
       handleReset();
       router.push('/admin/student');
+      
     } catch (error) {
+      console.error('Error adding student:', error);
       toast({
-        title: 'Error adding student or parent',
-        description: error instanceof Error ? error.message : 'An error occurred',
+        title: 'Error adding student',
+        description: error instanceof Error ? error.message : 'An unexpected error occurred',
         variant: 'destructive',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
   return (
     <Form {...form}>
-      <form id="studentForm" onSubmit={form.handleSubmit(onSubmit)} className="mt-6">
-
-      <div className="my-6 flex justify-end gap-4">
-          <Button
-            type="button"
-            onClick={handleCancel}
-            className="px-5 py-4 bg-white text-primaryColor border-[1px] border-primaryColor hover:bg-primaryColor hover:text-white"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            className="px-5 py-4 bg-white text-primaryColor border-[1px] border-primaryColor hover:bg-primaryColor hover:text-white"
-            onClick={handleReset}
-          >
-            Reset
-          </Button>
-          <Button
-            type="submit"
-            form="studentForm"
-            className="px-5 py-4 bg-primaryColor text-white border-[1px] border-primaryColor hover:bg-white hover:text-primaryColor"
-          >
-            Save
-          </Button>
-        </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Form Fields - MOVE BUTTONS TO THE BOTTOM */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Basic Information */}
           <div className="bg-white p-4 rounded-lg shadow">
@@ -256,7 +315,7 @@ export default function AddStudentForm() {
                 name="studentFirstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>First Name *</FormLabel>
                     <FormControl>
                       <Input placeholder="First Name" {...field} />
                     </FormControl>
@@ -269,7 +328,7 @@ export default function AddStudentForm() {
                 name="studentLastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>Last Name *</FormLabel>
                     <FormControl>
                       <Input placeholder="Last Name" {...field} />
                     </FormControl>
@@ -316,11 +375,15 @@ export default function AddStudentForm() {
                 name="class"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Class</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel>Class *</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      disabled={classLoading}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a class" />
+                          <SelectValue placeholder={classLoading ? "Loading classes..." : "Select a class"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -342,7 +405,7 @@ export default function AddStudentForm() {
                   <FormItem>
                     <FormLabel>Hobbies</FormLabel>
                     <FormControl>
-                      <Input placeholder="Hobbies (comma-separated)" {...field} />
+                      <Input placeholder="Reading, Sports, Music" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -355,7 +418,7 @@ export default function AddStudentForm() {
                   <FormItem>
                     <FormLabel>Language</FormLabel>
                     <FormControl>
-                      <Input placeholder="Language (e.g., English)" {...field} />
+                      <Input placeholder="English" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -374,60 +437,62 @@ export default function AddStudentForm() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Address (e.g., 123 Main St, Lagos)" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="aboutMe"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>About Me</FormLabel>
-                    <FormControl>
-                      <Input placeholder="About the student (e.g., Loves drawing and reading)" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="col-span-2">
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="123 Main St, Lagos" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-2">
+                <FormField
+                  control={form.control}
+                  name="aboutMe"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>About Me</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Loves drawing and reading" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
 
           {/* Parent Details */}
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="font-medium mb-4">Parent Details</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="parentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Parent</FormLabel>
+                    <FormLabel>Search Existing Parent</FormLabel>
                     <FormControl>
-                      <>
+                      <div className="space-y-2">
                         <Input
-                          placeholder="Search for a parent..."
+                          placeholder="Type to search for parents..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        {searchLoading && <p>Loading...</p>}
+                        {searchLoading && <p className="text-sm text-muted-foreground">Loading...</p>}
                         {parents.length > 0 && (
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a parent" />
-                              </SelectTrigger>
-                            </FormControl>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a parent" />
+                            </SelectTrigger>
                             <SelectContent>
                               {parents.map((parent) => (
                                 <SelectItem key={parent.parentId} value={parent.parentId}>
@@ -437,59 +502,92 @@ export default function AddStudentForm() {
                             </SelectContent>
                           </Select>
                         )}
-                        {!field.value && (
-                          <>
-                            <FormField
-                              control={form.control}
-                              name="newParentFirstName"
-                              render={({ field: newField }) => (
-                                <FormItem>
-                                  <FormLabel>Parent First Name</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Parent First Name" {...newField} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="newParentLastName"
-                              render={({ field: newField }) => (
-                                <FormItem>
-                                  <FormLabel>Parent Last Name</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Parent Last Name" {...newField} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="newParentEmail"
-                              render={({ field: newField }) => (
-                                <FormItem>
-                                  <FormLabel>Email</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="john.doe@example.com" {...newField} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </>
-                        )}
-                      </>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              {/* Show new parent form only if no parent is selected */}
+              {!form.watch('parentId') && (
+                <div className="border-t pt-4 space-y-4">
+                  <h4 className="font-medium text-sm">Or Create New Parent</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="newParentFirstName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Parent First Name *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="First Name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="newParentLastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Parent Last Name *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Last Name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="col-span-2">
+                      <FormField
+                        control={form.control}
+                        name="newParentEmail"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="john.doe@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      
+
+        {/* Action Buttons - MOVED TO BOTTOM */}
+        <div className="flex justify-end gap-4 pt-6 border-t">
+          <Button
+            type="button"
+            onClick={handleCancel}
+            variant="outline"
+            className="px-6 py-2"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            onClick={handleReset}
+            variant="outline"
+            className="px-6 py-2"
+          >
+            Reset
+          </Button>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-6 py-2 bg-primaryColor text-white hover:bg-primaryColor/90"
+          >
+            {isSubmitting ? 'Saving...' : 'Save Student'}
+          </Button>
+        </div>
       </form>
     </Form>
   );

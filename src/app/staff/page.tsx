@@ -29,9 +29,9 @@ const Page = () => {
             <PersonalInfo />
           </div>
         )}
-        <div className="bg-white h-fit w-full min-[850px]:w-[48%] min-[1125px]:w-[30%]">
+        {/* <div className="bg-white h-fit w-full min-[850px]:w-[48%] min-[1125px]:w-[30%]">
           <Noticeboard />
-        </div>
+        </div> */}
       </section>
     </div>
   );

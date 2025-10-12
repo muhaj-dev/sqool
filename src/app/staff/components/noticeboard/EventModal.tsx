@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Link from "next/link";
 
 import {
   Form,
@@ -35,26 +36,25 @@ import {
 } from "@/components/ui/select";
 import { X } from "lucide-react";
 
-
 type Participant = {
-    name: string;
-    role: string;
-  };
-  
-  type Event = {
-    title: string;
-    participants: Participant[];
-    time: string;
-    date: string;
-    description: string;
-    attachments: string[];
-    eventDate: string;
-    eventTime: string;
-  };
-  
-  interface EventModalProps {
-    event: Event;
-  }
+  name: string;
+  role: string;
+};
+
+type Event = {
+  title: string;
+  participants: Participant[];
+  time: string;
+  date: string;
+  description: string;
+  attachments: string[];
+  eventDate: string;
+  eventTime: string;
+};
+
+interface EventModalProps {
+  event: Event;
+}
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -65,8 +65,7 @@ const FormSchema = z.object({
   }),
 });
 
-  
-  export function EventModal({ event }: EventModalProps) {
+export function EventModal({ event }: EventModalProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -101,7 +100,10 @@ const FormSchema = z.object({
             <div className="flex text-sm justify-between flex-wrap">
               <div className="mt-1 md:mt-4 pb-1 md:pb-3">
                 {event?.participants.map((participant, index) => (
-                  <p key={index} className="flex gap-2 md:gap-5 justify-between">
+                  <p
+                    key={index}
+                    className="flex gap-2 md:gap-5 justify-between"
+                  >
                     <span>{participant.name}</span>{" "}
                     <span>{participant.role}</span>
                   </p>
@@ -116,41 +118,27 @@ const FormSchema = z.object({
         </div>
         <div className="flex-1 mt-3 text-sm">
           <p className=" ">{event.description}</p>
-          <p className="">{event.description}</p>
           <div className="border-b-[1px] border-[#A7A9AD] pb-6">
             <p>Time: {event.time}</p>
             <p>Date: {event.date}</p>
           </div>
           <div className="flex justify-between items-center">
             <div className="mt-2 md:mt-4 text-sm  flex flex-wrap gap-5">
-              <a href="#" className="text-blue-500">
-                {event.attachments[0]}
-              </a>
+              {event.attachments[0] && (
+                <Link
+                  href={event.attachments[0]}
+                  className="text-blue-400 underline hover:text-blue-600"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Click here to view the resource
+                </Link>
+              )}
               <span>{event.eventDate}</span>
               <span>{event.eventTime}</span>
             </div>
             <div className="mt-2">
               <Dots />
-            </div>
-          </div>
-
-          <div className="my-7 md:my-12 p-4 rounded-md bg-[#A7A9AD33]">
-            <p>Do you want to perticipate?</p>
-            <div className="space-x-3 w-fit ml-auto my-3">
-              <Button
-                //  onClick={toggleTexam}
-                className="text-white px-5"
-              >
-                Yes
-              </Button>
-              <Button
-                type="submit"
-                className=" border-primaryColor text-primaryColor border-[1px] bg-transparent px-5"
-              >
-              <DialogClose className="">
-                No
-      </DialogClose>
-              </Button>
             </div>
           </div>
         </div>
