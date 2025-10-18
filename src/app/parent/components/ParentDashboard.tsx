@@ -20,8 +20,12 @@ import { getParentDashboard } from "@/utils/api";
 import { Child, Notice, Expense } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 const ParentDashboard = () => {
+    const router = useRouter();
+  
   const [activeTab, setActiveTab] = useState("children");
   const [children, setChildren] = useState<Child[]>([]);
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -32,32 +36,31 @@ const ParentDashboard = () => {
 
   // Fetch dashboard data
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        const response = await getParentDashboard();
-        console.log('Dashboard API Response:', response);
-        
-        // Use optional chaining to prevent errors if data is missing
-        setChildren(response?.data?.children || []);
-        setNotices(response?.data?.notices || []);
-        setExpenses(response?.data?.expenses || []);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-        toast({
-          title: "Error",
-          description: "Failed to load dashboard data",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const response = await getParentDashboard();
+      setChildren(response?.data?.children || []);
+      setNotices(response?.data?.notices || []);
+      setExpenses(response?.data?.expenses || []);
+      setError(null);
 
-    fetchDashboardData();
-  }, [toast]);
+      // Save to localStorage
+      localStorage.setItem("parentDashboard", JSON.stringify(response?.data?.children));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+      toast({
+        title: "Error",
+        description: "Failed to load dashboard data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchDashboardData();
+}, [toast]);
 
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase();
@@ -251,12 +254,15 @@ const ParentDashboard = () => {
                         <span className="font-medium">{formatDate(child?.createdAt)}</span>
                       </div>
                       <div className="flex gap-2 mt-4">
-                        <Button variant="outline" size="sm" className="flex-1">
+                        <Button 
+                         onClick={() => router.push(`/parent/kid/${child._id}`)}
+
+                        variant="outline" size="sm" className="flex-1">
                           View Details
                         </Button>
-                        <Button variant="outline" size="sm" className="flex-1">
+                        {/* <Button variant="outline" size="sm" className="flex-1">
                           Attendance
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                   </CardContent>

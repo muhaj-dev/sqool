@@ -1,13 +1,3 @@
-"use client";
-
-import React, { useState } from "react";
-
-import Staffbar from "./components/parent/Staffbar";
-import ParentProfile from "./components/parent/ParentProfile";
-import Noticeboard from "./components/parent/Noticeboard";
-import ParentExp from "./components/parent/ParentExp";
-import PaymentTable from "./components/payment/PaymentTable";
-import PaymentBar from "./components/payment/PaymentBar";
 import ParentDashboard from "./components/ParentDashboard";
 
 const Page = () => {

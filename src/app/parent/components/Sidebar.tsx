@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react"; // Add useEffect import
 import { Separator } from "@/components/ui/separator";
 import {
   Accordion,
@@ -21,11 +21,31 @@ import { useAuthStore } from "@/zustand/authStore";
 import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
-    const router = useRouter();
+  const router = useRouter();
   const { user } = useAuthStore.getState();
-console.log(user); // Use school name in your project
-
   const pathname = usePathname();
+  const [children, setChildren] = useState<any[]>([]); // Add state for children
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
+
+  // Use useEffect to access localStorage only on client side
+  useEffect(() => {
+    // This code runs only on the client
+    try {
+      const childrenData = JSON.parse(localStorage.getItem("parentDashboard") || "[]");
+      const childrenArray = Array.isArray(childrenData) ? childrenData : [childrenData];
+      setChildren(childrenArray);
+    } catch (error) {
+      console.error("Error parsing localStorage data:", error);
+      setChildren([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Helper to format last name
+  const formatLastName = (lastName: string) =>
+    lastName.length > 4 ? `${lastName.slice(0, 6)}...` : lastName;
+
   return (
     <div className=" py-8 bg-white">
       <div className="flex flex-col min-h-[120vh] bg-white max-[700px]:w-full w-[25%] max-w-[280px] fixed  gap-6">
@@ -95,23 +115,26 @@ console.log(user); // Use school name in your project
                 </div>
               </AccordionTrigger>
               <AccordionContent className="bg-gray ">
-                <div className="flex flex-col gap-4 w-[50%] pt-3 mx-auto">
-                  <Link
-                    href="/parent/kid/schedule"
-                    className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
-                      pathname === "/parent/kid/schedule" ? "text-primaryColor" : ""
-                    }`}
-                  >
-                    Schedule
-                  </Link>
-                  <Link
-                    href="/parent/kid/results"
-                    className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
-                      pathname === "/parent/kid/results" ? "text-primaryColor" : ""
-                    }`}
-                  >
-                    Results
-                  </Link>
+                <div className="pl-4 flex flex-col gap-4 w-[90%] pt-3 mx-auto">
+                  {isLoading ? (
+                    <div className="text-muted-foreground text-sm">Loading children...</div>
+                  ) : children.length > 0 ? (
+                    children.map((child: any) => (
+                      <div key={child._id} className="flex items-center justify-between">
+                        <button
+                          className={`hover:text-primaryColor text-[#515B6F] cursor-pointer`}
+                          onClick={() => router.push(`/parent/kid/${child._id}`)}
+                        >
+                          {child.firstName}{" "}
+                          <span className="ml-1 hover:text-primaryColor  text-muted-foreground">
+                            {formatLastName(child.lastName)}
+                          </span>
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-muted-foreground text-sm">No children found</div>
+                  )}
                 </div>
               </AccordionContent>
             </AccordionItem>

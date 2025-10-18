@@ -1081,3 +1081,21 @@ export const getParentDashboard = async (): Promise<ParentDashboardResponse> => 
     throw new Error("Failed to fetch parent dashboard data");
   }
 };
+
+export const getParentKidById = async (id: string) => {
+  try {
+    const response = await api.get(`/v1/parent/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch student data");
+  }
+};
+
+export const getStudentSchedule = async (id: string) => {
+  try {
+    const response = await api.get(`/v1/parent/${id}/schedule`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch student schedule");
+  }
+};
