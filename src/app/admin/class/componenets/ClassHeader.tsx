@@ -6,21 +6,21 @@ import CreateClassDialog from "./CreateClassDialog";
 import { Class, Teacher } from "./types";
 
 interface ClassHeaderProps {
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
-  teachers: Teacher[];
-  classes: Class[];
-  setClasses: (classes: Class[]) => void;
-  onRefresh?: () => void; 
+  // searchTerm: string;
+  // onSearchChange: (term: string) => void;
+  // teachers: Teacher[];
+  // classes: Class[];
+  // setClasses: (classes: Class[]) => void;
+  // onRefresh?: () => void; 
 }
 
 const ClassHeader = ({
-  searchTerm,
-  onSearchChange,
-  teachers,
-  classes,
-  setClasses,
-  onRefresh,
+  // searchTerm,
+  // onSearchChange,
+  // teachers,
+  // classes,
+  // setClasses,
+  // onRefresh,
 }: ClassHeaderProps) => {
   return (
     <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -34,7 +34,7 @@ const ClassHeader = ({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4 justify-between">
+        {/* <div className="flex items-center gap-4 justify-between">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
@@ -50,7 +50,7 @@ const ClassHeader = ({
             setClasses={setClasses}
               onRefresh={onRefresh}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -202,7 +202,11 @@ const OwnerInfoForm = () => {
                     <FormItem className="w-full grid">
                       <FormLabel>Date of Birth</FormLabel>
                       <FormControl>
-                        <DatePicker />
+                        {/* <DatePicker /> */}
+                        <DatePicker 
+  selected={field.value}
+  onSelect={field.onChange}
+/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -313,7 +317,7 @@ const OwnerInfoForm = () => {
                   </FormItem>
                 )}
               /> */}
-                <AttachmentUpload />
+                {/* <AttachmentUpload /> */}
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <Button className="flex-1 text-white">Save</Button>
                   <Button

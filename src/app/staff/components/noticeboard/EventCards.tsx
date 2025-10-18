@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { EventModal } from "./EventModal";
-import { getStaffNotices } from "@/utils/api";
+import { getParentNotices } from "@/utils/api";
 
 const EventCards = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +12,7 @@ const [loading, setLoading] = useState(false);
   const fetchNotices = async () => {
     setLoading(true);
     try {
-      const res = await getStaffNotices(searchTerm, 20);
+      const res = await getParentNotices(searchTerm, 20);
       setEvents(res.data.result || []);
     } catch {
       setEvents([]);

@@ -1,4 +1,6 @@
-import { sections } from "../app/onboarding/page"
+// import { sections } from "../app/onboarding/page"
+import { sections } from "@/lib/sections"
+
 import { cn } from "@/lib/utils"
 
 type Category = (typeof sections)[number]

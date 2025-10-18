@@ -115,7 +115,7 @@ const BusinessDocForm = () => {
                         Attach your cooperate affairs commission
                       </FormLabel>
                       <FormControl>
-                        <AttachmentUpload />
+                        {/* <AttachmentUpload /> */}
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -139,7 +139,7 @@ const BusinessDocForm = () => {
                     <FormItem className="w-full col-span-3">
                       <FormLabel>Attach your utility bills</FormLabel>
                       <FormControl>
-                        <AttachmentUpload />
+                        {/* <AttachmentUpload /> */}
                       </FormControl>
                       <FormMessage />
                     </FormItem>

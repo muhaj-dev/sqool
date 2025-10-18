@@ -1,7 +1,7 @@
 "use client"
 import { Dispatch, SetStateAction } from "react"
 import NavItems from "./NavItems"
-import { sections } from "../app/onboarding/page"
+import { sections } from "@/lib/sections"
 
 type Sections = typeof sections
 export interface NavbarProps {

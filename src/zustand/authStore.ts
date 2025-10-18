@@ -30,6 +30,7 @@ export function ToValidSchool(school: {
 }
 
 interface AuthUser {
+   _id?: string;
   firstName?: string; // Made optional
   lastName?: string; // Made optional
   email: string;
@@ -37,6 +38,10 @@ interface AuthUser {
   phoneNumber?: string; // Made optional
   verificationCode?: string;
   role?: Role;
+   school?: {
+    _id: string;
+    name: string;
+  };
 }
 
 interface LoginResponse {
@@ -246,11 +251,13 @@ export const useAuthStore = create<AuthState>()(
             const userRole = userSchool.roles[0];
 
             const authUser = {
+               _id: user._id,
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
               phoneNumber: user.phoneNumber || '',
               role: userRole,
+               school: userSchool.schoolId, // <-- Save school info here
             };
 
             set({
@@ -290,12 +297,14 @@ export const useAuthStore = create<AuthState>()(
           // Case 3: Single school with single role
           if (validSchools.length === 1 && validSchools[0].roles.length === 1) {
             const minimalUser: AuthUser = {
+               _id: user?._id,
               email: email,
               role: validSchools[0].roles[0],
               // Add empty defaults for required fields if needed
               firstName: '',
               lastName: '',
               phoneNumber: '',
+              school: validSchools[0].schoolId,
             };
 
             set({
@@ -318,6 +327,7 @@ export const useAuthStore = create<AuthState>()(
           return {
             success: true,
             requiresSecondStep: true,
+            schoolId: validSchools[0].schoolId._id,
             schools: validSchools,
             accessToken,
           };
@@ -362,17 +372,19 @@ export const useAuthStore = create<AuthState>()(
           }
 
           set({
-            user: {
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              phoneNumber: user.phoneNumber || '',
-              role: role,
-            },
-            token: accessToken,
-            isAuthenticated: true,
-            error: null,
-          });
+  user: {
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phoneNumber: user.phoneNumber || '',
+    role: role,
+    school: user.schools?.find(s => s.schoolId._id === schoolId)?.schoolId, // <-- Save selected school
+  },
+  token: accessToken,
+  isAuthenticated: true,
+  error: null,
+});
 
           return { success: true, role };
         } catch (error: any) {

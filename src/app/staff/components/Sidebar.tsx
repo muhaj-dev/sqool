@@ -12,14 +12,23 @@ import { Landmark, Settings } from "lucide-react";
 import Link from "next/link";
 import { DashboardIcon, NoticeboardIcon, StudentIcon, ClassIcon } from "@/utils/icon";
 import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/zustand/authStore";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const pathname = usePathname();
+      const router = useRouter();
+    const { user } = useAuthStore.getState();
+  // console.log(user); // Use school name in your project
+  
   return (
     <div className=" py-8 bg-white">
       <div className="flex flex-col min-h-[120vh] bg-white max-[700px]:w-full w-[25%] max-w-[280px] fixed  gap-6">
         <div>
-          <h2 className="text-primaryColor text-center text-2xl font-bold cursor-pointer pb-4">
+          <h2 
+            onClick={() => router.push("/")}
+          
+          className="text-primaryColor text-center text-2xl font-bold cursor-pointer pb-4">
             SQOOLIFY
           </h2>
           <Separator />
@@ -30,10 +39,9 @@ const Sidebar = () => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
-          <div className="flex-1">
-            <h3>Purs School</h3>
-            <p className="text-muted-foreground mb-4 border-b-0">John Doe</p>
-            
+           <div className="flex-1">
+            <h3>{user?.school?.name} School</h3>
+            <p className="text-muted-foreground mb-4 border-b-0">{user?.firstName} {user?.lastName}</p>
           </div>
         </div>
         <Separator />

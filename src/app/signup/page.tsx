@@ -284,7 +284,7 @@ const SignUp = () => {
                       Accept terms and conditions
                     </label>
                     <p className="text-sm text-muted-foreground">
-                      By clicking 'Continue', you acknowledge that you have read
+                      By clicking &apos;Continue&apos;, you acknowledge that you have read
                       and accept the{" "}
                       <span className="text-primaryColor font-semibold">
                         Terms of Service and Privacy Policy

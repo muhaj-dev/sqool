@@ -439,8 +439,8 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="national_id">National ID</SelectItem>
-                            <SelectItem value="voters_card">Voter's Card</SelectItem>
-                            <SelectItem value="drivers_license">Driver's License</SelectItem>
+                            <SelectItem value="voters_card">Voter&apos;s Card</SelectItem>
+                            <SelectItem value="drivers_license">Driver&apos;s License</SelectItem>
                             <SelectItem value="international_passport">International Passport</SelectItem>
                           </SelectContent>
                         </Select>

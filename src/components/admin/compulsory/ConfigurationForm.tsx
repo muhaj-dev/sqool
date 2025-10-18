@@ -46,7 +46,7 @@ interface PaginatedResponse {
       pageSize: number;
     };
   };
-  message: string;
+  // message: string;
 }
 
 type PropertyKey = 'classname' | 'shortname' | 'leveltype' | 'classSection';
@@ -116,26 +116,27 @@ const ConfigurationForm = ({ classType }: ConfigurationFormProps) => {
       });
     }
   }, [classType, reset]);
+  
 
   async function fetchClasses() {
-    try {
-      const response: PaginatedResponse = await getClasses(page, limit);
-      console.log('Fetched classes:', response);
-      setClasses(response.data.result.map((cls, index) => ({
-        ...cls,
-        classname: cls.className,
-        shortname: cls.shortName,
-        leveltype: cls.levelType,
-        classSection: cls.classSection || '',
-        id: cls._id,
-        edited: false,
-        index,
-      })));
-      setTotalItems(response.data.pagination.total);
-    } catch (error) {
-      console.error('Error fetching classes:', error);
-    }
+  try {
+    const response = await getClasses(page, limit);
+    console.log('Fetched classes:', response);
+    setClasses(response.data.result.map((cls, index) => ({
+      ...cls,
+      classname: cls.className,
+      shortname: cls.shortName,
+      leveltype: cls.levelType,
+      classSection: cls.classSection || '',
+      id: cls._id,
+      edited: false,
+      index,
+    })));
+    setTotalItems(response.data.pagination.total);
+  } catch (error) {
+    console.error('Error fetching classes:', error);
   }
+}
 
   useEffect(() => {
     fetchClasses();

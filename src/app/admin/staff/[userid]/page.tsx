@@ -3,12 +3,12 @@
 import LeftBar from "@/components/staff/LeftBar";
 import StaffSteps from "@/components/staff/StaffSteps";
 import StaffTopbar from "@/components/staff/StaffTopbar";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; // Removed ReactNode import
 import { usePathname } from "next/navigation";
 import { getStaffById } from "@/utils/api";
 import { StaffResult, SingleStaffResponse } from "@/types";
 
-const Page = ({ children }: { children: ReactNode }) => {
+const Page = () => { // Removed the children prop
   const pathname = usePathname();
   const [staffId, setStaffId] = useState("");
   const [staff, setStaff] = useState<StaffResult | null>(null);

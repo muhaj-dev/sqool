@@ -201,7 +201,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                 <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">No Exams Found</h3>
                 <p className="text-muted-foreground mb-4">
-                  You haven't created any exams yet. Create your first exam to get started.
+                  You haven&apos;t created any exams yet. Create your first exam to get started.
                 </p>
               </div>
             ) : (

@@ -9,13 +9,13 @@ import { ISingleStudent, StudentResponse } from "@/types"
 // Define the props interface for components
 interface StepComponentProps {
   studentId: string;
-  studentData: ISingleStudent | null; // Changed to ISingleStudent | null to match context
+  studentData: ISingleStudent | null;
 }
 
 // Define the context value type
 interface StudentContextValue {
   updateIndex: (index: number) => void;
-  step: ComponentType<StepComponentProps>;
+  StepComponent: React.ReactNode; // Changed to ReactNode
   activeIndex: number;
   studentId: string;
   studentData: ISingleStudent | null;
@@ -25,7 +25,7 @@ interface StudentContextValue {
 
 export const StudentContext = createContext<StudentContextValue>({
   updateIndex: (index: number): void => {},
-  step: StudentProfile,
+  StepComponent: null,
   activeIndex: 0,
   studentId: "",
   studentData: null,
@@ -69,8 +69,22 @@ const StudentContextProvider = ({ children, studentId }: { children: ReactNode; 
     fetchStudent()
   }, [studentId])
 
-  const step = Elements[activeIndex < Elements.length ? activeIndex : Elements.length - 1]
-  const value = { updateIndex, step, activeIndex, studentId, studentData, loading, error }
+  const CurrentComponent = Elements[activeIndex < Elements.length ? activeIndex : Elements.length - 1]
+  
+  // Create the component with props already bound
+  const StepComponent = CurrentComponent ? (
+    <CurrentComponent studentId={studentId} studentData={studentData} />
+  ) : null
+
+  const value = { 
+    updateIndex, 
+    StepComponent, 
+    activeIndex, 
+    studentId, 
+    studentData, 
+    loading, 
+    error 
+  }
 
   return (
     <StudentContext.Provider value={value}>{children}</StudentContext.Provider>

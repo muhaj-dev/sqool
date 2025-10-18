@@ -11,7 +11,7 @@ import { LessonTable } from "@/components/staff/tables/lesson-table"
 
 export const MainStaffContext = createContext({
   updateIndex: (index: number): void => {},
-  step: () => <></>,
+  step: ({ staffId }: { staffId: string }) => <></>,
   activeIndex: 0,
 })
 

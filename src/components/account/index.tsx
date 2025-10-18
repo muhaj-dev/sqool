@@ -229,7 +229,7 @@ export default function Account() {
       accessorKey: 'paymentStatus',
       header: 'Status',
       cell: ({ row }) => (
-        <StatusBadge status={row.original.paymentStatus} />
+        <StatusBadge status={row?.original?.paymentStatus} />
       ),
   // paymentStatus: 'paid' | 'not paid' | 'processing' | 'Success' | 'Failed' | 'Processing';
 

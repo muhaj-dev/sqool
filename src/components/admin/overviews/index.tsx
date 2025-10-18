@@ -10,8 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import CustomPieChart from "./charts/PieChartPlot"
-import { FeeTable } from "./tables/FeeTable"
-import { DataTable } from "@/components/data-table"
+
 import { outstandingColumns, performanceColumns } from "./tables/column"
 import outstanding from "../../../data/outstanding_fees.json"
 import performance from "../../../data/performance.json"
@@ -22,7 +21,7 @@ import { getDashboardData } from '@/utils/api';
 import { DashboardData } from "@/types"
 
 
-const Overview = async () => {
+const Overview = () => {
 
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     genderDistribution: { totalStudents: 0, totalMale: 0, totalFemale: 0 },

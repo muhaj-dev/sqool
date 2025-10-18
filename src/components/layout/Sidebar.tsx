@@ -12,13 +12,24 @@ import { Landmark, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardIcon, PersonIcon, StudentIcon } from '@/utils/icon';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from "@/zustand/authStore";
+import { useRouter } from "next/navigation";
+
 
 const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const pathname = usePathname();
+
+      const router = useRouter();
+    const { user } = useAuthStore.getState();
+  console.log(user); // Use school name in your project
+  
   return (
     <div className="py-8 bg-white flex flex-col max-h-[200vh]  gap-6 w-[300px]">
       <div>
-        <h2 className="text-primaryColor text-center text-2xl font-bold cursor-pointer pb-4">
+        <h2
+            onClick={() => router.push("/")}
+        
+        className="text-primaryColor text-center text-2xl font-bold cursor-pointer pb-4">
           SQOOLIFY
         </h2>
         <Separator />
@@ -30,11 +41,12 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         </Avatar>
 
         <div className="flex-1">
-          <h3>Purs School</h3>
+                     <h3>{user?.school?.name} School</h3>
+
           <Accordion type="multiple">
             <AccordionItem value="item-1" className="border-b-0">
               <AccordionTrigger className="text-muted-foreground">
-                John Doe
+                {user?.firstName} {user?.lastName}
               </AccordionTrigger>
               <AccordionContent className="w-[50%]">
                 <div className="flex flex-col gap-4">

@@ -29,6 +29,7 @@ import {
   Exam,
   ExamsResponse,
   TimetableResponse,
+  ParentDashboardResponse,
 } from "@/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -1057,5 +1058,26 @@ export const getStaffNotices = async (search: string = "", limit: number = 20) =
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch staff notices");
+  }
+};
+
+export const getParentNotices = async (search: string = "", limit: number = 20) => {
+  try {
+    const response = await api.get("/v1/parent/notices", {
+      params: { search, limit }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch staff notices");
+  }
+};
+
+// utils/api.ts
+export const getParentDashboard = async (): Promise<ParentDashboardResponse> => {
+  try {
+    const response = await api.get("/v1/parent/dashboard");
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch parent dashboard data");
   }
 };

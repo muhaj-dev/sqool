@@ -88,7 +88,7 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
   }, [notice, form]);
 
   const onSubmit = (data: NoticeFormValues) => {
-    const noticeData: Notice = {
+    const noticeData: any = {
       title: data.title,
       content: data.content,
       body: data.body,

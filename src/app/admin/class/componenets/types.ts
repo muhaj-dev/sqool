@@ -96,12 +96,28 @@ export interface ClassPaginationResponse {
 }
 
 // Application Types
+// export interface Class {
+//   id: string;
+//   name: string;
+//   level: string;
+//   section?: string;
+//   // ... other properties you need in your app
+// }
+
 export interface Class {
   id: string;
-  name: string;
-  level: string;
   section?: string;
-  // ... other properties you need in your app
+
+  name: string;
+  level: string; // 'basic' or 'secondary'
+  stream?: string; // For secondary: 'science', 'arts', 'commerce'
+  description: string;
+  capacity: number;
+  classTeacher: Teacher | null;
+  subjects: SubjectAssignment[];
+  schedules: Schedule[];
+  resources: Resource[];
+  createdAt: string;
 }
 
 export interface ClassFormData {

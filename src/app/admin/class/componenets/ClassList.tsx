@@ -16,18 +16,17 @@ import { useToast } from "@/components/ui/use-toast"; // <-- Import useToast
 
 
 interface ClassManagementProps {
-  initialTeachers: Teacher[];
+  // initialTeachers: Teacher[];
 //   initialSubjects: Subject[];
 //   initialClasses: Class[];
 }
 
 const ClassList = ({
-  initialTeachers,
+  // initialTeachers,
 //   initialSubjects,
 //   initialClasses,
 }: ClassManagementProps) => {
-  const [teachers] = useState<Teacher[]>(initialTeachers);
-//   const [availableSubjects] = useState<Subject[]>(initialSubjects);
+
   const [classes, setClasses] = useState<IClassConfigurationResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
@@ -59,11 +58,11 @@ const ClassList = ({
   return (
     <div className="min-h-screen bg-gray-50">
       <ClassHeader
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        teachers={teachers}
-        classes={classes}
-        setClasses={setClasses}
+        // searchTerm={searchTerm}
+        // onSearchChange={setSearchTerm}
+        // teachers={teachers}
+        // classes={classes}
+        // setClasses={setClasses}
       />
 
       <div className="p-6">

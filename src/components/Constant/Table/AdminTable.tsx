@@ -7,7 +7,7 @@ import { IParent, IStudent } from "@/types";
 interface AdminTableProps {
   title?: string;
   columns: ColumnDef[];
-  data: IStudent[];
+  data: any[];
   currentPage: number;
   totalPages: number;
   totalItems: number;
@@ -20,7 +20,7 @@ interface AdminTableProps {
   showPagination?: boolean;
   showItemCheck?: boolean;
   onPageChange?: (page: number) => void;
-  onRecordClicked?: (student: IStudent) => void;
+  onRecordClicked?: (student: any) => void;
   sortOptions?: { label: string; value: string }[];
   statusOptions?: { label: string; value: string }[];
   onSort?: (sortValue: string) => void;
@@ -30,7 +30,7 @@ interface AdminTableProps {
 interface ColumnDef {
   key: string;
   label: string;
-  renderCell?: (item: IStudent) => React.ReactNode; // Explicitly type item as IStudent
+  renderCell?: (item: any) => React.ReactNode; // Explicitly type item as any
   width?: string;
 }
 
@@ -93,8 +93,8 @@ const AdminTable = ({
   };
 
   // Default render function for cases where renderCell is not provided
-  const defaultRenderCell = (item: IStudent, key: string): React.ReactNode => {
-    const value = item[key as keyof IStudent];
+  const defaultRenderCell = (item: any, key: string): React.ReactNode => {
+    const value = item[key as keyof any];
     if (typeof value === "object" && value !== null) {
       // Handle nested objects (e.g., parent, class) by extracting a string representation
       if (key === "parent") {

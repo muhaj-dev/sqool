@@ -36,7 +36,7 @@ const CreateClassDialog = ({ teachers, classes, setClasses, onRefresh }: CreateC
         id: Date.now().toString(),
         name: newClass.name,
         level: newClass.level,
-        stream: newClass.stream || undefined,
+        stream: newClass?.stream || undefined,
         description: newClass.description,
         capacity: parseInt(newClass.capacity),
         classTeacher,

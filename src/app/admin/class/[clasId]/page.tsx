@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ClassManagement from "../componenets/ClassManagement";
 import { Class, Subject, Teacher } from "../componenets/types";
@@ -141,59 +141,16 @@ const initialSubjects: Subject[] = [
   },
 ];
 
-// const initialClasses: Class[] = [
-//   {
-//     id: "c1",
-//     name: "JSS 1A",
-//     level: "basic",
-//     description: "Junior Secondary School 1A",
-//     capacity: 30,
-//     classTeacher: initialTeachers[0],
-//     subjects: [
-//       {
-//         id: "sa1",
-//         subject: initialSubjects[0], // Mathematics
-//         teacher: initialTeachers[0],
-//         classId: "c1",
-//       },
-//       {
-//         id: "sa2",
-//         subject: initialSubjects[1], // English
-//         teacher: initialTeachers[2],
-//         classId: "c1",
-//       },
-//     ],
-//     schedules: [],
-//     resources: [
-//       {
-//         id: "r1",
-//         title: "JSS 1 Mathematics Syllabus",
-//         description: "Complete syllabus for JSS 1 Mathematics",
-//         url: "https://example.com/jss1-math-syllabus.pdf",
-//         type: "syllabus",
-//       },
-//     ],
-//     createdAt: "2024-01-15",
-//   },
-// ];
-
-const Page = ({ children }: { children: ReactNode }) => {
+const Page = () => { // Remove the children prop
   const params = useParams();
-  const classId = params.clasId as string; // <-- get the classId from the route
-
-  // You can now use classId as needed, e.g., pass to ClassManagement or fetch data
+  const classId = params.clasId as string;
 
   return (
-    <>
-      <ClassManagement
+    <ClassManagement
       classId={classId}
-        initialTeachers={initialTeachers}
-        initialSubjects={initialSubjects}
-        // initialClasses={initialClasses}
-        // You can also pass classId as a prop if needed
-        // classId={classId}
-      />
-    </>
+      initialTeachers={initialTeachers}
+      initialSubjects={initialSubjects}
+    />
   );
 };
 

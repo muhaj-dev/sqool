@@ -110,7 +110,7 @@ const SetupSchoolForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>Upload School Logo</FormLabel>
                     <FormControl>
-                      <AttachmentUpload />
+                      {/* <AttachmentUpload /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,7 +124,10 @@ const SetupSchoolForm = () => {
                     <FormItem className="w-full grid">
                       <FormLabel>Founding Date</FormLabel>
                       <FormControl>
-                        <DatePicker />
+                        <DatePicker 
+                          selected={field.value}
+  onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

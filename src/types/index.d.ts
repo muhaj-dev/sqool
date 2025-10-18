@@ -64,7 +64,7 @@ export interface StudentPaginationResponse {
 // Parent-related types
 export interface IParent {
   _id: string;
-  userId: {
+  user: {
     _id: string;
     firstName: string;
     lastName: string;
@@ -765,3 +765,48 @@ export interface Notice {
 }
 
 export type NoticeFormData = Omit<Notice, "id" | "createdAt" | "updatedAt">;
+
+
+// types/index.ts
+export interface ParentDashboardResponse {
+  data: {
+    children: Child[];
+    notices: Notice[];
+    expenses: Expense[];
+  };
+  message: string;
+}
+
+export interface Child {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  class: {
+    _id: string;
+    className: string;
+    levelType: string;
+  };
+  gender: string;
+  createdAt: string;
+}
+
+export interface Notice {
+  _id: string;
+  title: string;
+  content: string;
+  visibility: string;
+  notificationType: string;
+  isActive: boolean;
+  isPinned: boolean;
+  resources: string[];
+  expirationDate: string;
+}
+
+export interface Expense {
+  _id: string;
+  description: string;
+  amount: number;
+  dueDate: string;
+  status: string;
+  category: string;
+}

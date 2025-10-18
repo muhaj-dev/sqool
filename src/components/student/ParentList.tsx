@@ -10,6 +10,28 @@ import Link from 'next/link';
 import { IParent, ParentPaginationResponse, IStudent } from '@/types';
 import { getAllParents } from '@/utils/api';
 
+
+
+interface ITableData {
+  _id: string;
+  photo: string;
+  firstName: string;
+  lastName: string;
+  parent?: {
+    _id: string;
+    userId: {
+      firstName: string;
+      lastName: string;
+    };
+    isActive: boolean;
+  };
+  occupation?: string;
+  class?: any;
+  gender?: any;
+  hobbies?: any[];
+}
+
+
 const ParentList = () => {
   const [parents, setParents] = useState<IParent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,19 +87,19 @@ const ParentList = () => {
   // };
 
   // Transform IParent data into IStudent-compatible data
-  const filteredParents = (): IStudent[] => {
+  const filteredParents = (): ITableData[] => {
     return parents.map((parent) => ({
       _id: parent._id,
-      photo: "/images/user.png", // Placeholder since IParent doesn't have a photo
-      firstName: parent.userId.firstName,
-      lastName: parent.userId.lastName,
+      photo: "/images/user.png", // Default photo for parents
+      firstName: parent?.user?.firstName,
+      lastName: parent?.user?.lastName,
       parent: {
         _id: parent._id,
         userId: {
-          firstName: parent.userId.firstName,
-          lastName: parent.userId.lastName,
+          firstName: parent?.user?.firstName,
+          lastName: parent?.user?.lastName,
         },
-        isActive: parent.isActive,
+        isActive: parent?.isActive,
       },
       class: {
         _id: "", // Placeholder; IParent doesn't have class info
@@ -91,10 +113,10 @@ const ParentList = () => {
   const RenderParentName = ({ item }: { item: IStudent }) => {
     return (
       <div className="flex gap-4 items-center">
-        <Avatar className="h-12 w-12">
+        {/* <Avatar className="h-12 w-12">
           <AvatarImage src={item.photo} />
-          <AvatarFallback>{`${item.firstName[0]}${item.lastName[0]}`}</AvatarFallback>
-        </Avatar>
+          <AvatarFallback>{`${item.firstName}${item.lastName}`}</AvatarFallback>
+        </Avatar> */}
         <p className="text-[16px] font-medium text-[#3F4946]">{`${item.firstName} ${item.lastName}`}</p>
       </div>
     );

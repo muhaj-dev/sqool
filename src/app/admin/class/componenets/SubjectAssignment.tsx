@@ -75,7 +75,7 @@ const SubjectAssignment = ({ classData,onRefresh }: SubjectAssignmentProps) => {
             // ... map other properties as needed
           })) || [];
 
-        setClasses(transformedClasses);
+        setClasses(transformedClasses as any);
         setSubjects(subjectsRes.data?.result || []);
       } catch (error) {
         toast({

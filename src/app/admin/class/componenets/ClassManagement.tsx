@@ -76,11 +76,11 @@ const ClassManagement = ({
   return (
     <div className="min-h-screen bg-gray-50">
       <ClassHeader
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        teachers={teachers}
-        classes={classes}
-        setClasses={setClasses}
+        // searchTerm={searchTerm}
+        // onSearchChange={setSearchTerm}
+        // teachers={teachers}
+        // classes={classes}
+        // setClasses={setClasses}
       />
 
       <div className="p-6">
