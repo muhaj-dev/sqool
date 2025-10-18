@@ -28,7 +28,7 @@ const Page = () => {
       <Noticebar />
       <div className="w-full mt-8 bg-white py-5 px-0 md:px-9">
         <EventCards />
-        <SchoolEvents />
+        {/* <SchoolEvents /> */}
       </div>
     </div>
   );
