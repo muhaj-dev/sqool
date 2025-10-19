@@ -6,17 +6,13 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
   experimental: {
-    webpackBuildWorker: false,
-    outputFileTracing: false,
-  },
-  output: 'standalone',
-  productionBrowserSourceMaps: false,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
+    outputFileTracingIncludes: {
+      // include only safe directories if needed in future
+      // e.g. ['src/**']
+    },
   },
 }
 
