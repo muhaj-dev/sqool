@@ -3,12 +3,15 @@ import { useParams } from "next/navigation";
 import KidsProfile from "../../components/KidsProfile";
 
 const Page = () => {
-  const params = useParams();
-  const id = params.id; // This is your [id] from the route
+  const params = useParams<{ id: string }>(); // ✅ strongly type the param
+  const id = params?.id;
+
+  if (!id) {
+    return <div>No kid selected</div>; // handle undefined safely
+  }
 
   return (
     <div>
-      {/* <h1>Kid ID: {id}</h1> */}
       <KidsProfile kidId={id} />
     </div>
   );

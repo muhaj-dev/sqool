@@ -1,0 +1,11 @@
+# .vercelignore
+
+node_modules
+.next
+build
+out
+.vercel
+.git
+pnpm-lock.yaml
+*.log
+coverage

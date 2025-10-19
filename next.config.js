@@ -9,9 +9,14 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    outputFileTracingIncludes: {
-      // include only safe directories if needed in future
-      // e.g. ['src/**']
+    outputFileTracingExcludes: {
+      '*': [
+        '**/.next/**',
+        '**/node_modules/**',
+        '**/.git/**',
+        '**/.vercel/**',
+        '**/pnpm-lock.yaml',
+      ],
     },
   },
 }

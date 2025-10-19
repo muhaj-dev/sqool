@@ -8,23 +8,15 @@ import StudentContextProvider from "@/contexts/student-context";
 import React from "react";
 import { useStudent } from "@/contexts/student-context";
 
-interface PageProps {
-  params: { studentId: string };
+interface PageParams {
+  studentId: string;
 }
 
-// Create a component that uses the context (inside the provider)
 const StudentContent = ({ studentId }: { studentId: string }) => {
   const { StepComponent, studentData, loading, error } = useStudent();
 
-  console.log(studentData);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
@@ -43,9 +35,12 @@ const StudentContent = ({ studentId }: { studentId: string }) => {
   );
 };
 
-const Page = ({ params }: PageProps) => {
-  const { studentId } = params;
-  console.log("studentId:", studentId);
+const Page = async ({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) => {
+  const { studentId } = await params;
 
   return (
     <StudentContextProvider studentId={studentId}>

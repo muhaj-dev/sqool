@@ -2,7 +2,14 @@ import ConfigurationForm from "@/components/admin/compulsory/ConfigurationForm"
 import Link from "next/link"
 import React from "react"
 
-const page = ({ searchParams }: { searchParams: { type: string } }) => {
+interface PageProps {
+  searchParams?: Promise<{ type?: string }>
+}
+
+const Page = async ({ searchParams }: PageProps) => {
+  const params = await searchParams
+  const type = params?.type || ""
+
   return (
     <div>
       <Link
@@ -11,9 +18,9 @@ const page = ({ searchParams }: { searchParams: { type: string } }) => {
       >
         Back
       </Link>
-      <ConfigurationForm classType={searchParams.type} />
+      <ConfigurationForm classType={type} />
     </div>
   )
 }
 
-export default page
+export default Page
