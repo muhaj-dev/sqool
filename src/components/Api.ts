@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/zustand/authStore";
 import { useToast } from "@/components/ui/use-toast";
 
-export const BASE_URL = "http://194.146.13.57:3000/v1/admin";
+export const BASE_URL =  process.env.NEXT_PUBLIC_BASE_URL +"/v1/admin";
 
 export const submitOnboardingApplication = async (data: any) => {
   const token = useAuthStore.getState().token;
