@@ -68,7 +68,7 @@ const ParentList = () => {
 
   useEffect(() => {
     fetchParents(pagination.currentPage, pagination.pageSize, search, statusFilter);
-  }, [search, statusFilter, pagination.pageSize]);
+  }, [search, statusFilter]);
 
   const handlePageChange = (newPage: number) => {
     fetchParents(newPage, pagination.pageSize, search, statusFilter);

@@ -1072,7 +1072,7 @@ export const getParentNotices = async (search: string = "", limit: number = 20) 
   }
 };
 
-// utils/api.ts
+
 export const getParentDashboard = async (): Promise<ParentDashboardResponse> => {
   try {
     const response = await api.get("/v1/parent/dashboard");
@@ -1081,6 +1081,39 @@ export const getParentDashboard = async (): Promise<ParentDashboardResponse> => 
     throw new Error("Failed to fetch parent dashboard data");
   }
 };
+
+// export const getParentDashboard = async (): Promise<ParentDashboardResponse> => {
+//     const token = useAuthStore.getState().token;
+
+//   try {
+//     // const response = await axios.get('http://194.146.13.57:3000/api/v1/parent/dashboard', {
+//     //   headers: {
+//     //     'Content-Type': 'application/json',
+//     //   },
+//     //   timeout: 10000,
+//     // });
+
+//      const response = await axios.get('194.146.13.57:3000/v1/parent/dashboard', {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         ...(token && { Authorization: `Bearer ${token}` }), // Add Bearer token if exists
+//       },
+//       timeout: 10000,
+//     });
+
+//     return response.data;
+//   } catch (error: any) {
+//     console.error('Error fetching parent dashboard:', error);
+    
+//     if (error.response) {
+//       throw new Error(`Failed to fetch parent dashboard: ${error.response.data?.message || error.response.status}`);
+//     } else if (error.request) {
+//       throw new Error('Network error: Unable to connect to server');
+//     } else {
+//       throw new Error('Failed to fetch parent dashboard data');
+//     }
+//   }
+// };
 
 export const getParentKidById = async (id: string) => {
   try {
