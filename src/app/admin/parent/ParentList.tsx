@@ -1,11 +1,11 @@
 // src/app/admin/parent/ParentList.tsx
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Separator } from '../ui/separator';
-import AdminTable from '../Constant/Table/AdminTable';
+import { Separator } from '@/components/ui/separator';
+import AdminTable from '@/components/Constant/Table/AdminTable';
 import { useRouter } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '../ui/button';
+// import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+// import { Button } from '../ui/button';
 import Link from 'next/link';
 import { IParent, ParentPaginationResponse, IStudent } from '@/types';
 import { getAllParents } from '@/utils/api';
