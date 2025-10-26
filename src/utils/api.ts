@@ -30,7 +30,17 @@ import {
   ExamsResponse,
   TimetableResponse,
   ParentDashboardResponse,
+  CreateFeeData, 
+  UpdateFeeData, 
+  GetFeesParams, 
+  FeesResponse, 
+  FeeStructure,
+  Session,
+  Class,
+  ClassesResponse,
 } from "@/types";
+
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -1130,5 +1140,149 @@ export const getStudentSchedule = async (id: string) => {
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch student schedule");
+  }
+};
+
+
+
+// GET - Get all school fees with pagination and filters
+export const getSchoolFees = async (params: GetFeesParams = {}): Promise<FeesResponse> => {
+  try {
+    const queryParams = new URLSearchParams();
+    
+    // Add optional parameters
+    if (params.search) queryParams.append('search', params.search);
+    if (params.filter) queryParams.append('filter', params.filter);
+    // if (params.skip !== undefined) queryParams.append('skip', params.skip.toString());
+    if (params.limit !== undefined) queryParams.append('limit', params.limit.toString());
+    if (params.class) queryParams.append('class', params.class);
+    if (params.session) queryParams.append('session', params.session);
+
+    const queryString = queryParams.toString();
+    const url = `${'/v1/admin/schools/fee'}${queryString ? `?${queryString}` : ''}`;
+
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch school fees");
+  }
+};
+
+// POST - Create a new fee structure
+export const createFeeStructure = async (feeData: CreateFeeData): Promise<{ data: FeeStructure; message: string }> => {
+  try {
+    // Transform the data to match API expectations
+    const requestData = {
+      class: feeData.class,
+      session: feeData.session,
+      totalAmount: feeData.totalAmount, // Note: API expects lowercase 'totalamount'
+      terms: feeData.terms,
+      isActive: feeData.isActive
+    };
+
+    const response = await api.post('/v1/admin/schools/fee', requestData);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to create fee structure");
+  }
+};
+
+// PATCH - Update an existing fee structure
+export const updateFeeStructure = async (feeId: string, updateData: UpdateFeeData): Promise<{ data: FeeStructure; message: string }> => {
+  try {
+    // Transform the data to match API expectations
+    const requestData: any = {};
+    
+    if (updateData.totalAmount !== undefined) {
+      requestData.totalAmount = updateData.totalAmount;
+    }
+    if (updateData.terms !== undefined) {
+      requestData.terms = updateData.terms;
+    }
+    if (updateData.isActive !== undefined) {
+      requestData.isActive = updateData.isActive;
+    }
+
+    const response = await api.patch(`${'/v1/admin/schools/fee'}/${feeId}`, requestData);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update fee structure");
+  }
+};
+
+// DELETE - Delete a fee structure (if endpoint exists)
+export const deleteFeeStructure = async (feeId: string): Promise<{ message: string }> => {
+  try {
+    const response = await api.delete(`${'/v1/admin/schools/fee'}/${feeId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to delete fee structure");
+  }
+};
+
+// GET - Get single fee structure by ID
+export const getFeeStructureById = async (feeId: string): Promise<{ data: FeeStructure; message: string }> => {
+  try {
+    const response = await api.get(`${'/v1/admin/schools/fee'}/${feeId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch fee structure");
+  }
+};
+
+
+
+// Add these to your existing API functions
+
+// Alternative approach with optional chaining
+export const getAllSessions = async (): Promise<Session[]> => {
+  try {
+    const response = await api.get<SessionsResponse>("/v1/admin/session-and-terms", {
+      params: {
+        page: "1",
+        limit: "100"
+      }
+    });
+    
+    // Use optional chaining with fallback
+    const sessions = response.data?.data?.result || [];
+    
+    if (sessions.length === 0) {
+      console.warn("No sessions found in response");
+    }
+    
+    return sessions;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch sessions";
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch sessions");
+  }
+};
+
+export const getAllClasses = async (): Promise<Class[]> => {
+  try {
+    const response = await api.get<ClassesResponse>("/v1/admin/classes", {
+      params: {
+        page: "1",
+        limit: "100"
+      }
+    });
+    
+    // Use optional chaining with fallback
+    const classes = response.data?.data?.result || [];
+    
+    if (classes.length === 0) {
+      console.warn("No classes found in response");
+    }
+    
+    return classes;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch classes");
   }
 };

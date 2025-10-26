@@ -358,7 +358,10 @@ export interface LoginSecondResponse {
     firstName: string;
     lastName: string;
     email: string;
-    phoneNumber?: string;
+      phoneId:{
+    phoneNumber?: string; // Made optional
+  }
+    // phoneNumber?: string;
     isVerify: boolean;
     isBlock: boolean;
     schools: School[];
@@ -809,4 +812,260 @@ export interface Expense {
   dueDate: string;
   status: string;
   category: string;
+}
+
+
+// Fee-related types
+export interface TermBreakdown {
+  tuition: number;
+  uniform: number;
+  excursion: number;
+  books?: number;
+  sports?: number;
+  pta?: number;
+}
+
+export interface FeeTerm {
+  term: "first" | "second" | "third";
+  amount: number;
+  breakdown: TermBreakdown;
+  _id?: string;
+}
+
+export interface ClassInfo {
+  _id: string;
+  className: string;
+  shortName: string;
+  levelType: string;
+  classSection?: string;
+}
+
+export interface SessionTerm {
+  startDate: string;
+  endDate: string;
+}
+
+export interface SessionInfo {
+  _id: string;
+  firstTerm: SessionTerm;
+  secondTerm: SessionTerm;
+  thirdTerm: SessionTerm;
+}
+
+export interface FeeStructure {
+  _id: string;
+  school: string;
+  class: ClassInfo;
+  session: SessionInfo | string; // Can be string (session ID) or full session object
+  totalAmount: number;
+  terms: FeeTerm[];
+  isActive: boolean;
+}
+
+export interface FeesResponse {
+  data: {
+    result: FeeStructure[];
+    pagination: {
+      total: number;
+      currentPage: number;
+      pageSize: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      nextPage: number | null;
+      previousPage: number | null;
+    };
+  };
+  message: string;
+}
+
+export interface CreateFeeData {
+  class: string; // class ID
+  session: string; // session ID
+  totalAmount: number;
+  terms: Omit<FeeTerm, '_id'>[];
+  isActive: boolean;
+}
+
+export interface UpdateFeeData {
+  totalAmount?: number;
+  terms?: Omit<FeeTerm, '_id'>[];
+  isActive?: boolean;
+}
+
+export interface GetFeesParams {
+  search?: string;
+  filter?: string;
+  skip?: number;
+  limit?: number;
+  class?: string;
+  session?: string;
+}
+
+
+// Add to your existing types
+
+// Session types
+export interface SessionTerm {
+  startDate: string;
+  endDate: string;
+}
+
+export interface Session {
+  _id: string;
+  session: string;
+  firstTerm: SessionTerm;
+  secondTerm: SessionTerm;
+  thirdTerm: SessionTerm;
+  isActive: boolean;
+  school: string;
+}
+
+export interface SessionsResponse {
+  data: {
+    result: Session[];
+    pagination: {
+      total: number;
+      currentPage: string;
+      pageSize: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      nextPage: number | null;
+      previousPage: number | null;
+    };
+  };
+  message: string;
+}
+
+// Class types (if not already defined)
+export interface ClassTeacher {
+  _id: string;
+  userId: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  subjects: string[];
+  isActive: boolean;
+}
+
+export interface ClassTutor {
+  subject: string[];
+  teacher: string;
+  _id: string;
+}
+
+export interface Class {
+  _id: string;
+  className: string;
+  shortName: string;
+  levelType: string;
+  classSection: string;
+  classTeacher: ClassTeacher[];
+  classSchedule: string[];
+  resources: string[];
+  tutors: ClassTutor[];
+  subjects: string[];
+  students: string[];
+}
+
+export interface ClassPaginationResponse {
+  data: {
+    result: Class[];
+    pagination: {
+      total: number;
+      currentPage: string;
+      pageSize: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      nextPage: number | null;
+      previousPage: number | null;
+    };
+  };
+  message: string;
+}
+
+// Fee types (add these to your existing fee types)
+export interface TermBreakdown {
+  tuition: number;
+  uniform: number;
+  excursion: number;
+  books?: number;
+  sports?: number;
+  pta?: number;
+}
+
+export interface FeeTerm {
+  term: "first" | "second" | "third";
+  amount: number;
+  breakdown: TermBreakdown;
+  _id?: string;
+}
+
+export interface ClassInfo {
+  _id: string;
+  className: string;
+  shortName: string;
+  levelType: string;
+  classSection?: string;
+}
+
+export interface SessionInfo {
+  _id: string;
+  firstTerm: SessionTerm;
+  secondTerm: SessionTerm;
+  thirdTerm: SessionTerm;
+}
+
+export interface FeeStructure {
+  _id: string;
+  school: string;
+  class: ClassInfo;
+  session: SessionInfo | string;
+  totalAmount: number;
+  terms: FeeTerm[];
+  isActive: boolean;
+}
+
+export interface FeesResponse {
+  data: {
+    result: FeeStructure[];
+    pagination: {
+      total: number;
+      currentPage: number;
+      pageSize: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      nextPage: number | null;
+      previousPage: number | null;
+    };
+  };
+  message: string;
+}
+
+export interface CreateFeeData {
+  class: string;
+  session: string;
+  totalAmount: number;
+  terms: Omit<FeeTerm, '_id'>[];
+  isActive: boolean;
+}
+
+export interface UpdateFeeData {
+  totalAmount?: number;
+  terms?: Omit<FeeTerm, '_id'>[];
+  isActive?: boolean;
+}
+
+export interface GetFeesParams {
+  search?: string;
+  filter?: string;
+  skip?: number;
+  limit?: number;
+  class?: string;
+  session?: string;
 }

@@ -30,15 +30,17 @@ export function ToValidSchool(school: {
 }
 
 interface AuthUser {
-   _id?: string;
-  firstName?: string; // Made optional
-  lastName?: string; // Made optional
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   password?: string;
-  phoneNumber?: string; // Made optional
+  phoneId: {
+    phoneNumber?: string;
+  };
   verificationCode?: string;
   role?: Role;
-   school?: {
+  school?: {
     _id: string;
     name: string;
   };
@@ -51,7 +53,9 @@ interface LoginResponse {
     firstName: string;
     lastName: string;
     email: string;
-    phoneNumber?: string;
+    phoneId: {
+      phoneNumber?: string;
+    };
     isVerify: boolean;
     isBlock: boolean;
     schools: {
@@ -59,7 +63,7 @@ interface LoginResponse {
         _id: string;
         name: string;
       };
-      roles: string[]; // API returns strings
+      roles: string[];
     }[];
   };
   schools?: {
@@ -67,7 +71,7 @@ interface LoginResponse {
       _id: string;
       name: string;
     };
-    roles: string[]; // API returns strings
+    roles: string[];
   }[];
 }
 
@@ -79,7 +83,7 @@ interface LoginResult {
   schoolId?: string;
   role?: Role;
   schools?: School[];
-  user?: AuthUser; // Add user to the return type
+  user?: AuthUser;
   error?: string;
 }
 
@@ -115,7 +119,6 @@ interface AuthState {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-// Create an Axios instance with base configuration
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -145,7 +148,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       saveTokenOnly: (token) => {
-        console.log('Saving token:', token); // Add this
+        console.log('Saving token:', token);
         if (typeof window !== 'undefined') {
           console.log('Window available, setting cookie');
           document.cookie = `auth-token=${token}; path=/; max-age=${
@@ -186,7 +189,9 @@ export const useAuthStore = create<AuthState>()(
 
           const completeUser = {
             ...user,
-            phoneNumber: tempPhone,
+            phoneId: {
+              phoneNumber: tempPhone,
+            },
             verificationCode: otp,
           };
 
@@ -197,7 +202,6 @@ export const useAuthStore = create<AuthState>()(
             throw new Error('No access token received');
           }
 
-          // Set HTTP-only cookie for server-side access
           if (typeof window !== 'undefined') {
             document.cookie = `auth-token=${
               data.data.accessToken
@@ -221,7 +225,6 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // In your login method
       login: async (email, password): Promise<LoginResult> => {
         set({ isLoading: true, error: null });
         try {
@@ -235,8 +238,23 @@ export const useAuthStore = create<AuthState>()(
             throw new Error('No access token received');
           }
 
-          // Always save the token immediately (for all cases)
           get().saveTokenOnly(accessToken);
+
+          // Save user data to cookies if available
+          if (user && typeof window !== 'undefined') {
+            const userData = {
+              _id: user._id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phoneId: user.phoneId,
+              isVerify: user.isVerify,
+              isBlock: user.isBlock,
+              schools: user.schools
+            };
+            
+            document.cookie = `user-data=${JSON.stringify(userData)}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
+          }
 
           // Case 1: New response format with user data
           if (user && user.schools?.length) {
@@ -250,14 +268,14 @@ export const useAuthStore = create<AuthState>()(
             const userSchool = validSchools[0];
             const userRole = userSchool.roles[0];
 
-            const authUser = {
-               _id: user._id,
+            const authUser: AuthUser = {
+              _id: user._id,
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
-              phoneNumber: user.phoneNumber || '',
+              phoneId: user.phoneId,
               role: userRole,
-               school: userSchool.schoolId, // <-- Save school info here
+              school: userSchool.schoolId,
             };
 
             set({
@@ -282,10 +300,10 @@ export const useAuthStore = create<AuthState>()(
             return {
               success: true,
               requiresOnboarding: true,
+              accessToken,
             };
           }
 
-          // Validate and convert API schools to our School type
           const validSchools = schools
             .map(ToValidSchool)
             .filter(Boolean) as School[];
@@ -294,16 +312,14 @@ export const useAuthStore = create<AuthState>()(
           }
 
           // Case 3: Single school with single role
-          // Case 3: Single school with single role
           if (validSchools.length === 1 && validSchools[0].roles.length === 1) {
             const minimalUser: AuthUser = {
-               _id: user?._id,
+              _id: user?._id,
               email: email,
               role: validSchools[0].roles[0],
-              // Add empty defaults for required fields if needed
               firstName: '',
               lastName: '',
-              phoneNumber: '',
+              phoneId: { phoneNumber: '' },
               school: validSchools[0].schoolId,
             };
 
@@ -341,12 +357,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      completeLogin: async (
-        email,
-        password,
-        schoolId,
-        role,
-      ): Promise<CompleteLoginResult> => {
+      completeLogin: async (email, password, schoolId, role): Promise<CompleteLoginResult> => {
         set({ isLoading: true, error: null });
         try {
           const response = await api.post<{ data: LoginSecondResponse }>(
@@ -371,20 +382,38 @@ export const useAuthStore = create<AuthState>()(
             }; Secure; SameSite=Strict`;
           }
 
+          // Save user data to cookies if available
+          if (user && typeof window !== 'undefined') {
+            const userData = {
+              _id: user._id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phoneId: user.phoneId,
+              isVerify: user.isVerify,
+              isBlock: user.isBlock,
+              schools: user.schools
+            };
+            
+            document.cookie = `user-data=${JSON.stringify(userData)}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
+          }
+
+          const authUser: AuthUser = {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneId: user.phoneId,
+            role: role,
+            school: user.schools?.find(s => s.schoolId._id === schoolId)?.schoolId,
+          };
+
           set({
-  user: {
-    _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    phoneNumber: user.phoneNumber || '',
-    role: role,
-    school: user.schools?.find(s => s.schoolId._id === schoolId)?.schoolId, // <-- Save selected school
-  },
-  token: accessToken,
-  isAuthenticated: true,
-  error: null,
-});
+            user: authUser,
+            token: accessToken,
+            isAuthenticated: true,
+            error: null,
+          });
 
           return { success: true, role };
         } catch (error: any) {
@@ -397,10 +426,11 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        // Clear cookie on logout
         if (typeof window !== 'undefined') {
           document.cookie =
             'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          document.cookie =
+            'user-data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
         set({
           user: null,
@@ -412,10 +442,11 @@ export const useAuthStore = create<AuthState>()(
       },
 
       clearAuth: () => {
-        // Clear cookie on logout
         if (typeof window !== 'undefined') {
           document.cookie =
             'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          document.cookie =
+            'user-data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
         set({
           user: null,

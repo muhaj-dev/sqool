@@ -8,9 +8,9 @@ const layout = ({ children }: { children: ReactNode }) => {
     <>
      {/* <StudentContextProvider> */}
       
-      <div className="w-full bg-white  px-0 md:px-4">
+      <div className="w-full  px-0 md:px-4">
         {/* <StudentLeftBar /> */}
-        <div className="bg-white flex-1 rounded-md">
+        <div className=" flex-1 rounded-md">
           {/* <StudentSteps /> */}
           {children}
         </div>

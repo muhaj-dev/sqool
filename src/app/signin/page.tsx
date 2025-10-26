@@ -71,7 +71,7 @@ export default function SignIn() {
       
       // Redirect based on role
       switch(role) {
-        case 'superAdmin': router.push('/admin/compulsory'); break
+        case 'superAdmin': router.push('/admin/overview'); break
         case 'parent': router.push('/parent'); break
         case 'teacher': router.push('/staff'); break
         case 'student': router.push('/student'); break
@@ -119,9 +119,9 @@ export default function SignIn() {
     
     
       // Handle case where we already have user data (new format)
-      if (result.user && result.role) {
+      if (result.user && result?.role) {
         // Redirect based on role
-        switch(result.role) {
+        switch(result?.role) {
           case 'superAdmin': router.push('/admin/compulsory'); break
           case 'parent': router.push('/parent'); break
           case 'teacher': router.push('/staff'); break

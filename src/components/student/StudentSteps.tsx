@@ -7,7 +7,7 @@ const StudentSteps = () => {
   const { activeIndex, updateIndex } = useStudent()
   return (
     <div className="mb-4 overflow-auto ">
-      <section className=" flex items-center justify-between px-1 md:px-8 pt-4 w-[500px]">
+      <section className=" flex items-center justify-between px-1 md:px-1 pt-4 pb-3 max-w-[fit] w-[500px]">
         {tabs.map((item, ind) => (
           <p
             onClick={() => updateIndex(ind)}
@@ -22,7 +22,7 @@ const StudentSteps = () => {
           </p>
         ))}
       </section>
-      <Separator />
+      {/* <Separator /> */}
     </div>
   )
 }

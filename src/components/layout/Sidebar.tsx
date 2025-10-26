@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Landmark, Settings } from 'lucide-react';
+import { Landmark, Settings, GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardIcon, PersonIcon, StudentIcon } from '@/utils/icon';
 import { usePathname } from 'next/navigation';
@@ -167,6 +167,22 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
             }`}
           >
             Notice
+          </p>
+        </Link>
+
+        <Link href="/admin/fees" className={`flex items-center gap-4 pl-4 `}>
+          <GraduationCap
+            className={`text-[#515B6F] ${
+              pathname.startsWith('/admin/fees') ? 'text-primaryColor' : ''
+            }`}
+          />
+          <p
+            onClick={toggleSidebar}
+            className={`text-[#515B6F] ${
+              pathname.startsWith('/admin/fees')? 'text-primaryColor' : ''
+            }`}
+          >
+            Fees
           </p>
         </Link>
 

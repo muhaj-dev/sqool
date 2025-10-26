@@ -34,7 +34,7 @@ const StudentLeftBar = ({ studentId }: StudentLeftBarProps) => {
 
   return (
     <div className="bg-white min-w-[25%] py-4 md:py-8 md:px-4 max-h-screen flex flex-col gap-4">
-      <div className="flex items-center gap-4">
+      {/* <div className="flex items-center gap-4">
         <Avatar className="h-20 w-20">
           <AvatarImage src={photo || "/images/user.png"} />
           <AvatarFallback>{`${firstName[0]}${lastName[0]}`}</AvatarFallback>
@@ -68,32 +68,10 @@ const StudentLeftBar = ({ studentId }: StudentLeftBarProps) => {
           <p className="text-muted-foreground">Sub Subject</p>
           <p className="">Chemistry</p>
         </div>
-      </div>
-      <MultiLevelProgressBar completionPercent={70} />
-      <Separator />
-      <div className="flex flex-col gap-4">
-        <p className="text-xl">Parent contact</p>
-        <div className="flex items-center justify-between bg-[#FAFAFA] p-2 w-[95%] hover:shadow-sm cursor-pointer">
-          <div className="flex gap-4">
-            <User className="text-muted-foreground" size={24} />
-            <div>
-              <p className="text-muted-foreground">Father</p>
-              <p className="text-[14px]">James Bond</p>
-            </div>
-          </div>
-          <ChevronRight />
-        </div>
-        <div className="flex items-center justify-between bg-[#FAFAFA] p-2 w-[95%] hover:shadow-sm cursor-pointer">
-          <div className="flex gap-4">
-            <User className="text-muted-foreground" size={24} />
-            <div>
-              <p className="text-muted-foreground">Mother</p> {/* Fixed typo */}
-              <p className="text-[14px]">Marry Bond</p>
-            </div>
-          </div>
-          <ChevronRight />
-        </div>
-      </div>
+      </div> */}
+      {/* <MultiLevelProgressBar completionPercent={70} /> */}
+      {/* <Separator /> */}
+      
     </div>
   )
 }

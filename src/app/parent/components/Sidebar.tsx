@@ -140,22 +140,22 @@ const Sidebar = () => {
             </AccordionItem>
           </Accordion>
           <Link
-            href="/parent/payment"
+            href="/parent/fees"
             className={`flex items-center gap-3 pl-4`}
           >
             <StudentIcon
               color={`${
-                pathname === "/parent/payment" ? "#E5B80B" : "#515B6F"
+                pathname === "/parent/fees" ? "#E5B80B" : "#515B6F"
               }`}
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/parent/payment"
+                pathname === "/parent/fees"
                   ? "text-primaryColor"
                   : ""
               }`}
             >
-              Payment
+              Fees
             </p>
           </Link>
           <Link
