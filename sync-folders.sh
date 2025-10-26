@@ -28,7 +28,7 @@ fi
 
 # Step 2: Pull latest from original repo
 echo "📥 Pulling latest changes from original repo..."
-git pull origin "$BRANCH" --no-ff --rebase || echo "ℹ️ Nothing new to pull."
+git pull origin "$BRANCH" --no-ff  || echo "ℹ️ Nothing new to pull."
 
 # Step 3: Temporarily switch to personal remote
 echo "🔄 Switching remote to personal: $TEMP_REMOTE"
