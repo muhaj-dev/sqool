@@ -36,11 +36,11 @@ git remote set-url origin "$TEMP_REMOTE"
 
 # Step 4: Push to personal repo
 echo "📤 Pushing code to personal repo..."
-git push origin "$BRANCH"
+# git push origin "$BRANCH"
 
 # Step 5: Restore original remote
 echo "🔁 Restoring remote back to original..."
-git remote set-url origin "$ORIGINAL_REMOTE"
+# git remote set-url origin "$ORIGINAL_REMOTE"
 
 # Step 6: Verify
 NEW_REMOTE=$(git remote get-url origin)
