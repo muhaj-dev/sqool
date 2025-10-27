@@ -41,18 +41,33 @@
 import StudentPageClient from "./StudentPageClient";
 
 
-export default async function StudentPage({ 
-  params, 
-}: 
-{params: Promise<{studentId: string}>;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ studentId: string }>
 }) {
-  const studentId = (await params).studentId;
+  const { studentId } = await params
   // if (!studentId) return notFound(); // Handle 404 gracefully
   return (
-   
-        <div>
-      <p>{studentId}</p>
-       <StudentPageClient studentId={studentId} />
-    </div>
+
+    <div className="w-full bg-white  px-0 md:px-4">
+        {/* <StudentLeftBar /> */}
+        <div className="bg-white flex-1 rounded-md">
+<p>{studentId}</p>
+          {/* <StudentSteps /> */}
+<StudentPageClient studentId={studentId} />
+          {/* {children} */}
+        </div>
+      </div>
   );
 }
+
+
+// export default async function Page({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>
+// }) {
+//   const { slug } = await params
+//   return <div>My Post: {slug}</div>
+// }
