@@ -326,11 +326,17 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                   <SelectValue placeholder="Choose a teacher" />
                 </SelectTrigger>
                 <SelectContent>
-                  {teachers.map((teacher: any) => (
-                    <SelectItem key={teacher.id} value={teacher.id}>
-                      {teacher.name}
-                    </SelectItem>
-                  ))}
+                  {teachers.length > 0 ? (
+  teachers.map((teacher: any) => (
+    <SelectItem key={teacher.id} value={teacher.id}>
+      {teacher.name}
+    </SelectItem>
+  ))
+) : (
+  <SelectItem value="no-teacher" disabled className="text-muted-foreground italic">
+    No Teacher has been assigned to this class yet, please assign teacher to this class
+  </SelectItem>
+)}
                 </SelectContent>
               </Select>
             </div>
