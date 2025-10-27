@@ -16,22 +16,43 @@
 
 // export default Page;
 
-'use client'
+// 'use client'
 
-import { use } from 'react'
+// import { use } from 'react'
+// import StudentPageClient from "./StudentPageClient";
+ 
+// export default function StudentPage({
+//   params,
+// }: {
+//   params: Promise<{ studentId: string }>
+// }) {
+//   const { studentId } = use(params)
+ 
+//   return (
+//     <div>
+//       <p>{studentId}</p>
+//        <StudentPageClient studentId={studentId} />
+//     </div>
+//   )
+// }
+
+
+// import { notFound } from "next/navigation";
 import StudentPageClient from "./StudentPageClient";
- 
-export default function StudentPage({
-  params,
-}: {
-  params: Promise<{ studentId: string }>
+
+
+export default async function StudentPage({ 
+  params, 
+}: 
+{params: Promise<{studentId: string}>;
 }) {
-  const { studentId } = use(params)
- 
+  const studentId = (await params).studentId;
+  // if (!studentId) return notFound(); // Handle 404 gracefully
   return (
-    <div>
+   
+        <div>
       <p>{studentId}</p>
        <StudentPageClient studentId={studentId} />
     </div>
-  )
+  );
 }
