@@ -17,6 +17,7 @@
 // export default Page;
 
 'use client'
+
 import { use } from 'react'
 import StudentPageClient from "./StudentPageClient";
  
@@ -29,7 +30,7 @@ export default function StudentPage({
  
   return (
     <div>
-      {/* <p>{studentId}</p> */}
+      <p>{studentId}</p>
        <StudentPageClient studentId={studentId} />
     </div>
   )
