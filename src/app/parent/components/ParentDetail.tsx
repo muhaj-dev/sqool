@@ -164,7 +164,7 @@ const ParentDetail = () => {
                         <DialogHeader>
                           <DialogTitle>Edit Occupation</DialogTitle>
                           <DialogDescription>
-                            Update the parent's occupation information.
+                            Update the parent&apos;s occupation information.
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">

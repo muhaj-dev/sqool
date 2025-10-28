@@ -387,7 +387,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <Card className="max-w-4xl mx-auto bg-primary-foreground/10 border-primary-foreground/20">
             <div className="p-12 text-center">
-              <div className="text-5xl mb-6">"</div>
+              <div className="text-5xl mb-6">&quot;</div>
               <p className="text-xl italic mb-6 leading-relaxed">
                 The daily tasks of being the school bursar have never been this easy to accomplish. 
                 Thanks to our management for adopting this new system. The system has made my work so much easier and more efficient.

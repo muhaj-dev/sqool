@@ -396,7 +396,7 @@ const ParentFees = () => {
                                       <p className="text-sm">Account Name: SchoolsFocus Academy</p>
                                       <p className="text-sm">Account Number: 0123456789</p>
                                       <p className="text-sm mt-2 text-muted-foreground">
-                                        Please use your child's admission number as reference
+                                        Please use your child&apos;s admission number as reference
                                       </p>
                                     </AlertDescription>
                                   </Alert>
