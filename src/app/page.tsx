@@ -479,7 +479,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold mb-4">Why Choose Sqoolify?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Honestly, why not? Sqoolify offers you A-List sought after tools and features in a School Management Software; 
-              with more being developed and added frequently. We won't stop at anything to provide your school with the right tools.
+              with more being developed and added frequently. We won&apos;t stop at anything to provide your school with the right tools.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -532,7 +532,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <h2 className="text-4xl font-bold">Hosted and Maintained for You</h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              We take care of all the big technicalities, so you don't have to. While you focus on what matters most, 
+              We take care of all the big technicalities, so you don&apos;t have to. While you focus on what matters most, 
               we work round the clock to ensure you have the right digital tools in place to manage and grow your school.
             </p>
             <div className="grid md:grid-cols-2 gap-6 mt-12">
@@ -611,7 +611,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Let's Take Your School Online</h2>
+              <h2 className="text-4xl font-bold mb-4">Let&apos;s Take Your School Online</h2>
               <p className="text-xl text-muted-foreground">
                 Join the league of ambitious schools leveraging technology to achieve academic excellence
               </p>
