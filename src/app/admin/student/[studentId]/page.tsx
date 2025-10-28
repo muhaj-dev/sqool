@@ -79,7 +79,7 @@ export default async function Page({
 
     return (
       <div className="w-full bg-white px-0 md:px-4">
-        <p>Student ID: {studentId}</p>
+        {/* <p>Student ID: {studentId}</p> */}
         <StudentPageClient studentId={studentId} />
       </div>
     );
