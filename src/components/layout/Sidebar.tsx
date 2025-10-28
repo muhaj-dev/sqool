@@ -41,7 +41,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         </Avatar>
 
         <div className="flex-1">
-                     <h3>{user?.school?.name} School</h3>
+                     <p className='font-500 text-2xl'>{user?.school?.name} School</p>
 
           <Accordion type="multiple">
             <AccordionItem value="item-1" className="border-b-0">
