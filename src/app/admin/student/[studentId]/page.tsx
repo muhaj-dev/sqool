@@ -38,36 +38,53 @@
 
 
 // import { notFound } from "next/navigation";
-import StudentPageClient from "./StudentPageClient";
+// import StudentPageClient from "./StudentPageClient";
 
+
+// export default async function Page({
+//   params,
+// }: {
+//   params: Promise<{ studentId: string }>
+// }) {
+//   const { studentId } = await params
+//   // if (!studentId) return notFound(); // Handle 404 gracefully
+//   return (
+
+//     <div className="w-full bg-white  px-0 md:px-4">
+//         {/* <StudentLeftBar /> */}
+//         <div className="bg-white flex-1 rounded-md">
+// <p>{studentId}</p>
+//           {/* <StudentSteps /> */}
+// <StudentPageClient studentId={studentId} />
+//           {/* {children} */}
+//         </div>
+//       </div>
+//   );
+// }
+
+import StudentPageClient from "./StudentPageClient";
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ studentId: string }>
 }) {
-  const { studentId } = await params
-  // if (!studentId) return notFound(); // Handle 404 gracefully
-  return (
+  try {
+    const { studentId } = await params;
+    
+    // Validate studentId
+    if (!studentId || studentId.trim() === '') {
+      throw new Error('Invalid studentId');
+    }
 
-    <div className="w-full bg-white  px-0 md:px-4">
-        {/* <StudentLeftBar /> */}
-        <div className="bg-white flex-1 rounded-md">
-<p>{studentId}</p>
-          {/* <StudentSteps /> */}
-<StudentPageClient studentId={studentId} />
-          {/* {children} */}
-        </div>
+    return (
+      <div className="w-full bg-white px-0 md:px-4">
+        <p>Student ID: {studentId}</p>
+        <StudentPageClient studentId={studentId} />
       </div>
-  );
+    );
+  } catch (error) {
+    console.error('Error in dynamic route:', error);
+    throw error; // This will trigger your error boundary
+  }
 }
-
-
-// export default async function Page({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>
-// }) {
-//   const { slug } = await params
-//   return <div>My Post: {slug}</div>
-// }
