@@ -28,7 +28,7 @@ fi
 
 # Step 2: Pull latest from original repo
 echo "📥 Pulling latest changes from original repo..."
-git pull origin "$BRANCH" --no-ff --rebase || echo "ℹ️ Nothing new to pull."
+git pull origin "$BRANCH" --no-ff  || echo "ℹ️ Nothing new to pull."
 
 # Step 3: Temporarily switch to personal remote
 echo "🔄 Switching remote to personal: $TEMP_REMOTE"
@@ -36,11 +36,11 @@ git remote set-url origin "$TEMP_REMOTE"
 
 # Step 4: Push to personal repo
 echo "📤 Pushing code to personal repo..."
-git push origin "$BRANCH"
+# git push origin "$BRANCH"
 
 # Step 5: Restore original remote
 echo "🔁 Restoring remote back to original..."
-git remote set-url origin "$ORIGINAL_REMOTE"
+# git remote set-url origin "$ORIGINAL_REMOTE"
 
 # Step 6: Verify
 NEW_REMOTE=$(git remote get-url origin)
