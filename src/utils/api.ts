@@ -257,16 +257,21 @@ export const getDashboardData = async (): Promise<DashboardData> => {
 };
 
 export const getAllStudents = async (
-  limit: number,
+  page: number, 
+  limit: number = 10,
   search?: string,
   filter?: string
 ): Promise<StudentPaginationResponse> => {
   try {
+    const skip = (page - 1) * limit; // Calculate skip from page
+    
     const response = await api.get<StudentPaginationResponse>(
       "/v1/admin/student/all",
       {
         params: {
+          page,
           limit,
+          // skip, // Add skip parameter
           search,
           filter,
         },
@@ -390,6 +395,25 @@ export const getAllParents = async (
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch parents");
+  }
+};
+
+
+export const getParentById = async (parentId: string) => {
+  try {
+    const response = await api.get(`/v1/admin/parents/${parentId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch parent details";
+      console.error("API Error:", {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch parent details");
   }
 };
 
@@ -1169,21 +1193,32 @@ export const getSchoolFees = async (params: GetFeesParams = {}): Promise<FeesRes
 };
 
 // POST - Create a new fee structure
-export const createFeeStructure = async (feeData: CreateFeeData): Promise<{ data: FeeStructure; message: string }> => {
+export const createFeeStructure = async (feeData: CreateFeeData): Promise<any> => {
   try {
-    // Transform the data to match API expectations
     const requestData = {
       class: feeData.class,
       session: feeData.session,
-      totalAmount: feeData.totalAmount, // Note: API expects lowercase 'totalamount'
+      totalAmount: feeData.totalAmount,
       terms: feeData.terms,
-      isActive: feeData.isActive
+      // isActive: feeData.isActive,
     };
 
-    const response = await api.post('/v1/admin/schools/fee', requestData);
+    const response = await api.post("/v1/admin/schools/fee", requestData);
     return response.data;
   } catch (error) {
-    throw new Error("Failed to create fee structure");
+    // If API responded with a body, return it so callers can show the server message/payload
+    if (axios.isAxiosError(error)) {
+      const serverData = error.response?.data;
+      console.error("createFeeStructure API error:", {
+        status: error.response?.status,
+        data: serverData,
+      });
+      return serverData ?? { message: error.message, error: true };
+    }
+
+    // Non-Axios error fallback
+    console.error("createFeeStructure unexpected error:", error);
+    return { message: String(error), error: true };
   }
 };
 
@@ -1284,5 +1319,24 @@ export const getAllClasses = async (): Promise<Class[]> => {
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch classes");
+  }
+};
+
+// Publish a fee structure
+export const publishFeeStructure = async (feeId: string) => {
+  try {
+    const response = await api.patch(`/v1/admin/schools/fee/publish/${feeId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to publish fee structure";
+      console.error("API Error:", {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to publish fee structure");
   }
 };

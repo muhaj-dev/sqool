@@ -14,6 +14,8 @@ interface AdminTableProps {
   pagination: {
     hasPreviousPage: boolean;
     hasNextPage: boolean;
+    currentPage: number;
+    totalPages: number;
   };
   showFilter?: boolean;
   showSorting?: boolean;
@@ -30,7 +32,7 @@ interface AdminTableProps {
 interface ColumnDef {
   key: string;
   label: string;
-  renderCell?: (item: any) => React.ReactNode; // Explicitly type item as any
+  renderCell?: (item: any) => React.ReactNode;
   width?: string;
 }
 
@@ -41,7 +43,12 @@ const AdminTable = ({
   currentPage = 1,
   totalPages = 1,
   totalItems = 0,
-  pagination = { hasPreviousPage: false, hasNextPage: false },
+  pagination = { 
+    hasPreviousPage: false, 
+    hasNextPage: false, 
+    currentPage: 1, 
+    totalPages: 1 
+  },
   showFilter = true,
   showSorting = true,
   showPagination = true,
@@ -92,41 +99,55 @@ const AdminTable = ({
     }
   };
 
-  // Default render function for cases where renderCell is not provided
+  // Generate page numbers for pagination
+  const generatePageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
+  };
+
   const defaultRenderCell = (item: any, key: string): React.ReactNode => {
     const value = item[key as keyof any];
     if (typeof value === "object" && value !== null) {
-      // Handle nested objects (e.g., parent, class) by extracting a string representation
       if (key === "parent") {
         return `${item.parent.userId.firstName} ${item.parent.userId.lastName} (Active: ${item.parent.isActive})`;
       } else if (key === "class") {
         return item.class.className || "N/A";
       }
-      return JSON.stringify(value); // Fallback for other objects
+      return JSON.stringify(value);
     }
-    return value ?? "N/A"; // Handle undefined/null with a default string
+    return value ?? "N/A";
   };
 
   return (
     <div className="bg-white relative w-full font-inter px-6 py-4">
-        <p className="font-medium text-[22px]">{title}</p>
+      <p className="font-medium text-[22px]">{title}</p>
+      
       <div className="flex flex-wrap justify-between ml-auto w-fit gap-4 mt-0 md:mt-4 mb-8">
-
         <div className="flex flex-wrap gap-5 items-center">
           <div className="flex gap-2 flex-wrap items-center">
             {showFilter && statusOptions.length > 0 && (
               <div className="flex gap-3">
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
-                    <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700">
+                    <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700 border border-gray-300 rounded-md">
                       Filter by: {selectedLabel}
-                      <RiArrowDownSFill
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
+                      <RiArrowDownSFill className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
                     </Menu.Button>
                   </div>
-
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -136,24 +157,22 @@ const AdminTable = ({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                       <div className="py-1">
                         {statusOptions?.map((option, idx) => (
                           <Menu.Item key={idx}>
                             {({ active }) => (
-                              <a
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
+                              <button
+                                onClick={() => {
                                   onStatusFilterChange(option.value);
                                   setSelectedLabel(option.label);
                                 }}
                                 className={`${
                                   active ? "bg-gray-100" : ""
-                                } block px-4 py-2 text-sm text-gray-700`}
+                                } block w-full text-left px-4 py-2 text-sm text-gray-700`}
                               >
                                 {option.label}
-                              </a>
+                              </button>
                             )}
                           </Menu.Item>
                         ))}
@@ -168,15 +187,11 @@ const AdminTable = ({
               <div className="flex gap-3">
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
-                    <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700">
+                    <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700 border border-gray-300 rounded-md">
                       Sort by: {selectedLabelDate}
-                      <RiArrowDownSFill
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
+                      <RiArrowDownSFill className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
                     </Menu.Button>
                   </div>
-
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -186,24 +201,22 @@ const AdminTable = ({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                       <div className="py-1">
                         {sortOptions?.map((option, idx) => (
                           <Menu.Item key={idx}>
                             {({ active }) => (
-                              <a
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
+                              <button
+                                onClick={() => {
                                   onSort(option.value);
                                   setSelectedLabelDate(option.label);
                                 }}
                                 className={`${
                                   active ? "bg-gray-100" : ""
-                                } block px-4 py-2 text-sm text-gray-700`}
+                                } block w-full text-left px-4 py-2 text-sm text-gray-700`}
                               >
                                 {option.label}
-                              </a>
+                              </button>
                             )}
                           </Menu.Item>
                         ))}
@@ -217,12 +230,12 @@ const AdminTable = ({
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white ">
+      <div className="overflow-x-auto bg-white">
         <table className="w-full max-w-[1000px] text-sm text-left text-gray-500">
           <thead className="text-xs h-[70px] capitalize bg-[#F8F8FD] text-[#171D1B]">
             <tr>
               {showItemCheck && (
-                  <th scope="col" className="px-3 py-3 text-[14px] font-medium" style={{ width: "5%" }}>
+                <th scope="col" className="px-3 py-3 text-[14px] font-medium" style={{ width: "5%" }}>
                   <input
                     checked={Object.values(checkedItems).every(Boolean)}
                     onChange={handleToggleAll}
@@ -248,7 +261,7 @@ const AdminTable = ({
             {data?.map((student) => (
               <tr
                 key={student._id}
-                className="hover:bg-[#F8F8FD] cursor-pointer"
+                className="hover:bg-[#F8F8FD] cursor-pointer border-b border-gray-200"
                 onClick={() => onRecordClicked(student)}
               >
                 {showItemCheck && (
@@ -263,7 +276,7 @@ const AdminTable = ({
                   </td>
                 )}
                 {columns.map((col) => (
-                  <td key={col.key} className=" py-5">
+                  <td key={col.key} className="py-5">
                     {col.renderCell ? col.renderCell(student) : defaultRenderCell(student, col.key)}
                   </td>
                 ))}
@@ -273,23 +286,39 @@ const AdminTable = ({
         </table>
       </div>
 
-      {showPagination && (
-        <div className="flex justify-between items-center mt-4">
+      {showPagination && totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
           <div>
             <span className="text-sm text-muted-foreground">
-              Showing {data.length} of {totalItems} students
+              Showing {data.length} of {totalItems} items (Page {currentPage} of {totalPages})
             </span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <button
-              className="px-4 py-2 text-sm rounded-md border border-gray-300 disabled:opacity-50"
+              className="px-3 py-2 text-sm rounded-md border border-gray-300 disabled:opacity-50 hover:bg-gray-50 transition-colors"
               disabled={!pagination.hasPreviousPage}
               onClick={handlePrevPage}
             >
               Previous
             </button>
+            
+            {/* Page numbers */}
+            {generatePageNumbers().map((page) => (
+              <button
+                key={page}
+                className={`px-3 py-2 text-sm rounded-md border transition-colors ${
+                  page === currentPage
+                    ? "bg-primaryColor text-white border-primaryColor"
+                    : "border-gray-300 hover:bg-gray-50"
+                }`}
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </button>
+            ))}
+            
             <button
-              className="px-4 py-2 text-sm rounded-md border border-gray-300 disabled:opacity-50"
+              className="px-3 py-2 text-sm rounded-md border border-gray-300 disabled:opacity-50 hover:bg-gray-50 transition-colors"
               disabled={!pagination.hasNextPage}
               onClick={handleNextPage}
             >

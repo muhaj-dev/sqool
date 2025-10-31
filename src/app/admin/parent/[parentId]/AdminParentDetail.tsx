@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Mail, Phone, Briefcase, Users, School, DollarSign, AlertTriangle, TrendingUp, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-// import { Parent } from "@/types/parent";
+import { useToast } from "@/components/ui/use-toast";
+import { getParentById } from "@/utils/api";
 
 interface FeeItem {
   id: string;
@@ -25,123 +26,217 @@ interface FeeItem {
   paymentMethod?: string;
 }
 
-// Mock data
-const mockParentData: any = {
-  _id: "683112addb58d74f5da0511b",
-  userId: "683112addb58d74f5da05119",
-  children: ["683112addb58d74f5da05120", "683112addb58d74f5da05121"],
-  occupation: "Lecturer",
-  schools: ["6828ae29252ba86fcc693144"],
-  isActive: true,
-  user: {
-    firstName: "Adewale",
-    lastName: "Okonkwo",
-    email: "adewale.okonkwo@email.com",
-    phone: "+234 803 456 7890",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Adewale"
-  },
-  childrenDetails: [
-    {
-      _id: "683112addb58d74f5da05120",
-      firstName: "Chioma",
-      lastName: "Okonkwo",
-      class: {
-        className: "JSS 2A",
-        levelType: "Junior Secondary"
-      },
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chioma"
-    },
-    {
-      _id: "683112addb58d74f5da05121",
-      firstName: "Emeka",
-      lastName: "Okonkwo",
-      class: {
-        className: "Primary 5B",
-        levelType: "Primary"
-      },
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emeka"
+// Helper functions to calculate financial data from current API structure
+const calculateFinancialData = (studentFee: any) => {
+  if (!studentFee) {
+    return {
+      totalOwing: 0,
+      totalPaid: 0,
+      overdueAmount: 0,
+      unpaidCount: 0,
+      paidCount: 0,
+      overdueCount: 0
+    };
+  }
+
+  let totalOwing = 0;
+  let totalPaid = 0;
+  let overdueAmount = 0;
+  let unpaidCount = 0;
+  let paidCount = 0;
+  let overdueCount = 0;
+
+  // Calculate Total Owing (amount left to pay in past + current terms)
+  const pastAndCurrentFees = [
+    ...(studentFee.past || []),
+    ...(studentFee.current || [])
+  ];
+
+  pastAndCurrentFees.forEach(fee => {
+    const amountOwed = fee.totalAmount - fee.totalPaid;
+    
+    // Total Owing - only include positive amounts (not overpaid)
+    if (amountOwed > 0) {
+      totalOwing += amountOwed;
+      unpaidCount++;
     }
-  ]
+  });
+
+  // Calculate Total Paid (from current term payments)
+  studentFee.current?.forEach((fee: any) => {
+    if (fee.totalPaid > 0) {
+      totalPaid += fee.totalPaid;
+      paidCount++;
+    }
+  });
+
+  // Calculate Overdue Amount (from past terms that are not fully paid)
+  studentFee.past?.forEach((fee: any) => {
+    const amountOwed = fee.totalAmount - fee.totalPaid;
+    if (amountOwed > 0) {
+      overdueAmount += amountOwed;
+      overdueCount++;
+    }
+  });
+
+  return {
+    totalOwing,
+    totalPaid,
+    overdueAmount,
+    unpaidCount,
+    paidCount,
+    overdueCount
+  };
 };
 
-const mockFeeItems: FeeItem[] = [
-  {
-    id: "1",
-    childName: "Chioma Okonkwo",
-    childClass: "JSS 2A",
-    feeName: "Tuition Fee - Term 1",
-    amount: 75000,
-    dueDate: "2025-02-15",
-    status: "pending"
-  },
-  {
-    id: "2",
-    childName: "Chioma Okonkwo",
-    childClass: "JSS 2A",
-    feeName: "Development Levy",
-    amount: 15000,
-    dueDate: "2025-01-30",
-    status: "overdue"
-  },
-  {
-    id: "3",
-    childName: "Emeka Okonkwo",
-    childClass: "Primary 5B",
-    feeName: "Tuition Fee - Term 1",
-    amount: 60000,
-    dueDate: "2025-02-15",
-    status: "pending"
-  },
-  {
-    id: "4",
-    childName: "Emeka Okonkwo",
-    childClass: "Primary 5B",
-    feeName: "Textbook Fee",
-    amount: 12000,
-    dueDate: "2025-02-01",
-    status: "overdue"
-  },
-  {
-    id: "5",
-    childName: "Chioma Okonkwo",
-    childClass: "JSS 2A",
-    feeName: "Tuition Fee - Term 3 2024",
-    amount: 70000,
-    dueDate: "2024-09-15",
-    status: "paid",
-    paidDate: "2024-09-10",
-    paymentMethod: "Bank Transfer"
-  },
-  {
-    id: "6",
-    childName: "Emeka Okonkwo",
-    childClass: "Primary 5B",
-    feeName: "Tuition Fee - Term 3 2024",
-    amount: 55000,
-    dueDate: "2024-09-15",
-    status: "paid",
-    paidDate: "2024-09-10",
-    paymentMethod: "Bank Transfer"
-  },
-  {
-    id: "7",
-    childName: "Chioma Okonkwo",
-    childClass: "JSS 2A",
-    feeName: "Sports Fee - Term 3 2024",
-    amount: 8000,
-    dueDate: "2024-10-01",
-    status: "paid",
-    paidDate: "2024-09-28",
-    paymentMethod: "Card Payment"
+// Transform API data to FeeItem format
+const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
+  const feeItems: FeeItem[] = [];
+  
+  if (!studentFee) return feeItems;
+
+  // Create child name mapping for better display
+  const childMap = new Map();
+  children.forEach(child => {
+    childMap.set(child._id, `${child.firstName} ${child.lastName}`);
+  });
+
+  // Process all fees
+  const allFees = [
+    ...(studentFee.past || []),
+    ...(studentFee.current || []),
+    ...(studentFee.upcoming || [])
+  ];
+
+  allFees.forEach(fee => {
+    const childName = childMap.get(fee.student._id) || `${fee.student.firstName} ${fee.student.lastName}`;
+    const amountOwed = fee.totalAmount - fee.totalPaid;
+    
+    // Determine status based on paymentStatus, computedStatus, and amount owed
+    let status: "paid" | "pending" | "overdue" = "pending";
+    
+    if (amountOwed <= 0) {
+      status = "paid";
+    } else if (fee.computedStatus === 'past') {
+      status = "overdue";
+    } else if (fee.paymentStatus === 'OVERDUE') {
+      status = "overdue";
+    } else {
+      status = "pending";
+    }
+
+    // Create due date based on term and session (fallback logic)
+    const dueDate = estimateDueDate(fee.term, fee.session.session);
+
+    feeItems.push({
+      id: fee._id,
+      childName,
+      childClass: fee.student.class?.className || 'Class Pending',
+      feeName: `School Fees - ${fee.term.charAt(0).toUpperCase() + fee.term.slice(1)} Term ${fee.session.session}`,
+      amount: fee.totalAmount,
+      dueDate,
+      status,
+      paidDate: fee.payments?.[0]?.date || undefined,
+      paymentMethod: fee.payments?.[0]?.method || undefined
+    });
+  });
+
+  return feeItems;
+};
+
+// Fallback function to estimate due dates
+const estimateDueDate = (term: string, session: string): string => {
+  const [startYear] = session.split('/');
+  const year = parseInt(startYear);
+  
+  switch (term) {
+    case 'first':
+      return `${year}-09-30`; // End of September
+    case 'second':
+      return `${year + 1}-01-31`; // End of January next year
+    case 'third':
+      return `${year + 1}-05-31`; // End of May next year
+    default:
+      return `${year}-12-31`;
   }
-];
+};
 
 const AdminParentDetail = ({ parentId }: { parentId: string }) => {
-  // const { parentId } = useParams();
-    const router = useRouter();
-  
-  const [parent] = useState<any>(mockParentData);
-  const [feeItems] = useState<FeeItem[]>(mockFeeItems);
+  const router = useRouter();
+  const { toast } = useToast();
+  const [parent, setParent] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!parentId) return;
+    const fetchParent = async () => {
+      setLoading(true);
+      try {
+        const res = await getParentById(parentId);
+        // Handle various shapes: res may be { data: { parent: {...}, ... } } or response.data directly
+        const payload = res?.data?.parent ?? res?.data ?? res?.parent ?? res;
+        const parentData = payload.parent ?? payload;
+        setParent(parentData);
+      } catch (err: any) {
+        toast({
+          title: "Error",
+          description: err?.message || "Failed to fetch parent details",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchParent();
+  }, [parentId, toast]);
+
+  // Calculate financial data from API
+  const financialData = parent?.data?.studentFee ? 
+    calculateFinancialData(parent.data.studentFee) : 
+    { 
+      totalOwing: 0, 
+      totalPaid: 0, 
+      overdueAmount: 0, 
+      unpaidCount: 0, 
+      paidCount: 0, 
+      overdueCount: 0 
+    };
+
+  // Transform API data to fee items
+  const feeItems = parent?.data?.studentFee ? 
+    transformFeeDataToItems(parent.data.studentFee, parent.data.parent?.children) : 
+    [];
+
+  // Filter for display
+  const pendingFees = feeItems.filter(fee => fee.status === "pending");
+  const overdueFees = feeItems.filter(fee => fee.status === "overdue");
+  const paidFees = feeItems.filter(fee => fee.status === "paid");
+
+  // Use the calculated financial data
+  const { 
+    totalOwing, 
+    totalPaid, 
+    overdueAmount, 
+    unpaidCount, 
+    paidCount, 
+    overdueCount 
+  } = financialData;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">Loading parent information...</div>
+      </div>
+    );
+  }
+
+  if (!parent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-muted-foreground">No parent data available.</div>
+      </div>
+    );
+  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', {
@@ -159,15 +254,6 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
     });
   };
 
-  // Calculate fee summaries
-  const pendingFees = feeItems.filter(fee => fee.status === "pending");
-  const overdueFees = feeItems.filter(fee => fee.status === "overdue");
-  const paidFees = feeItems.filter(fee => fee.status === "paid");
-
-  const totalOwing = [...pendingFees, ...overdueFees].reduce((sum, fee) => sum + fee.amount, 0);
-  const totalPaid = paidFees.reduce((sum, fee) => sum + fee.amount, 0);
-  const overdueAmount = overdueFees.reduce((sum, fee) => sum + fee.amount, 0);
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "paid":
@@ -179,6 +265,30 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
+  };
+
+  const userInfo = parent?.user ?? (typeof parent?.userId === "object" ? parent.userId : null);
+  const childrenList = parent?.childrenDetails ?? parent?.children ?? parent?.data?.parent?.children ?? [];
+  const displayName = `${userInfo?.firstName ?? ""} ${userInfo?.lastName ?? ""}`.trim() || "Parent";
+  const avatarInitials = (userInfo?.firstName?.[0] ?? "") + (userInfo?.lastName?.[0] ?? "");
+
+  // Calculate child-specific owing (only from past and current terms)
+  const calculateChildOwing = (childId: string, childName: string) => {
+    if (!parent.data?.studentFee) return 0;
+
+    const pastAndCurrentFees = [
+      ...(parent.data.studentFee.past || []),
+      ...(parent.data.studentFee.current || [])
+    ];
+
+    const childFees = pastAndCurrentFees.filter(fee => 
+      fee.student._id === childId
+    );
+    
+    return childFees.reduce((sum, fee) => {
+      const amountOwed = fee.totalAmount - fee.totalPaid;
+      return amountOwed > 0 ? sum + amountOwed : sum;
+    }, 0);
   };
 
   return (
@@ -208,11 +318,11 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
 
       <main className="container mx-auto px-4 py-8">
         {/* Alert for overdue fees */}
-        {overdueFees.length > 0 && (
+        {overdueCount > 0 && (
           <Alert variant="destructive" className="mb-6">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              This parent has {overdueFees.length} overdue payment(s) totaling {formatCurrency(overdueAmount)}
+              This parent has {overdueCount} overdue payment(s) totaling {formatCurrency(overdueAmount)}
             </AlertDescription>
           </Alert>
         )}
@@ -226,17 +336,17 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
             <CardContent className="space-y-6">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="h-32 w-32 mb-4">
-                  <AvatarImage src={parent.user?.photo} alt={`${parent.user?.firstName} ${parent.user?.lastName}`} />
+                  <AvatarImage src={userInfo?.photo ?? undefined} alt={displayName} />
                   <AvatarFallback className="text-3xl">
-                    {parent.user?.firstName?.[0]}{parent.user?.lastName?.[0]}
+                    {avatarInitials || "P"}
                   </AvatarFallback>
                 </Avatar>
                 <h2 className="text-2xl font-bold">
-                  {parent.user?.firstName} {parent.user?.lastName}
+                  {displayName}
                 </h2>
                 <p className="text-muted-foreground">Parent</p>
-                <Badge variant={parent.isActive ? "default" : "secondary"} className="mt-2">
-                  {parent.isActive ? "Active" : "Inactive"}
+                <Badge variant={parent?.isActive ? "default" : "secondary"} className="mt-2">
+                  {parent?.isActive ? "Active" : "Inactive"}
                 </Badge>
               </div>
 
@@ -247,7 +357,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                   <Mail className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">Email</p>
-                    <p className="font-medium text-sm">{parent.user?.email}</p>
+                    <p className="font-medium text-sm">{userInfo?.email ?? "N/A"}</p>
                   </div>
                 </div>
 
@@ -255,7 +365,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                   <Phone className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">Phone</p>
-                    <p className="font-medium">{parent.user?.phone}</p>
+                    <p className="font-medium">{userInfo?.phone ?? "N/A"}</p>
                   </div>
                 </div>
 
@@ -263,23 +373,15 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                   <Briefcase className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">Occupation</p>
-                    <p className="font-medium">{parent.occupation}</p>
+                    <p className="font-medium">{parent?.occupation ?? "N/A"}</p>
                   </div>
                 </div>
-
-                {/* <div className="flex items-start gap-3">
-                  <School className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground">Schools</p>
-                    <p className="font-medium">{parent.schools.length} School(s)</p>
-                  </div>
-                </div> */}
 
                 <div className="flex items-start gap-3">
                   <Users className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">Children</p>
-                    <p className="font-medium">{parent.childrenDetails?.length || 0} Child(ren)</p>
+                    <p className="font-medium">{childrenList?.length ?? 0} Child(ren)</p>
                   </div>
                 </div>
               </div>
@@ -300,7 +402,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                 <CardContent>
                   <div className="text-2xl font-bold text-destructive">{formatCurrency(totalOwing)}</div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {pendingFees.length + overdueFees.length} unpaid fee(s)
+                    {unpaidCount} unpaid fee(s) in past & current terms
                   </p>
                 </CardContent>
               </Card>
@@ -309,13 +411,13 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
-                    Total Paid
+                    Total Paid (Current)
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-green-600">{formatCurrency(totalPaid)}</div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {paidFees.length} payment(s) received
+                    {paidCount} payment(s) for current term
                   </p>
                 </CardContent>
               </Card>
@@ -330,7 +432,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                 <CardContent>
                   <div className="text-2xl font-bold text-orange-600">{formatCurrency(overdueAmount)}</div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {overdueFees.length} overdue fee(s)
+                    {overdueCount} overdue fee(s) from past terms
                   </p>
                 </CardContent>
               </Card>
@@ -347,35 +449,33 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {parent?.childrenDetails?.map(({child}: any) => {
-                    const childFees = feeItems.filter(fee => fee?.childName === `${child?.firstName} ${child?.lastName}`);
-                    const childOwing = childFees
-                      .filter(fee => fee.status !== "paid")
-                      .reduce((sum, fee) => sum + fee.amount, 0);
+                  {childrenList?.map((child: any) => {
+                    const childName = `${child.firstName} ${child.lastName}`;
+                    const childOwing = calculateChildOwing(child._id, childName);
                     
                     return (
                       <Card
-                      key={child?._id} 
-                      className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer" 
-                      onClick={() => router.push(`/admin/student/${child?._id}`)}
+                        key={child._id} 
+                        className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer" 
+                        onClick={() => router.push(`/admin/student/${child._id}`)}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
                             <Avatar className="h-16 w-16">
-                              <AvatarImage src={child?.photo} alt={`${child?.firstName} ${child?.lastName}`} />
+                              <AvatarImage src={child?.photo} alt={childName} />
                               <AvatarFallback>
-                                {child?.firstName?.[0]}{child?.lastName?.[0]}
+                                {child.firstName?.[0]}{child.lastName?.[0]}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
                               <h3 className="font-semibold">
-                                {child?.firstName} {child?.lastName}
+                                {childName}
                               </h3>
                               <p className="text-sm text-muted-foreground">
-                                {child?.class?.className}
+                                {child.class?.className || 'Class not set'}
                               </p>
                               <Badge variant="secondary" className="mt-1">
-                                {child?.class.levelType}
+                                {child.class?.levelType || 'Level not set'}
                               </Badge>
                               {childOwing > 0 && (
                                 <p className="text-sm font-semibold text-destructive mt-2">

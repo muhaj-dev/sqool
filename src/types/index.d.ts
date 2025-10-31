@@ -816,14 +816,7 @@ export interface Expense {
 
 
 // Fee-related types
-export interface TermBreakdown {
-  tuition: number;
-  uniform: number;
-  excursion: number;
-  books?: number;
-  sports?: number;
-  pta?: number;
-}
+export type TermBreakdown = Record<string, number>;
 
 export interface FeeTerm {
   term: "first" | "second" | "third";
@@ -884,7 +877,7 @@ export interface CreateFeeData {
   session: string; // session ID
   totalAmount: number;
   terms: Omit<FeeTerm, '_id'>[];
-  isActive: boolean;
+  // isActive: boolean;
 }
 
 export interface UpdateFeeData {
@@ -1020,16 +1013,16 @@ export interface SessionInfo {
   thirdTerm: SessionTerm;
 }
 
+
 export interface FeeStructure {
   _id: string;
   school: string;
   class: ClassInfo;
-  session: SessionInfo | string;
+  session: SessionInfo | string; // Can be string (session ID) or full session object
   totalAmount: number;
   terms: FeeTerm[];
-  isActive: boolean;
+  // removed isActive
 }
-
 export interface FeesResponse {
   data: {
     result: FeeStructure[];
@@ -1048,17 +1041,17 @@ export interface FeesResponse {
 }
 
 export interface CreateFeeData {
-  class: string;
-  session: string;
+  class: string; // class ID
+  session: string; // session ID
   totalAmount: number;
   terms: Omit<FeeTerm, '_id'>[];
-  isActive: boolean;
+  // removed isActive
 }
 
 export interface UpdateFeeData {
   totalAmount?: number;
   terms?: Omit<FeeTerm, '_id'>[];
-  isActive?: boolean;
+  // removed isActive
 }
 
 export interface GetFeesParams {
@@ -1068,4 +1061,18 @@ export interface GetFeesParams {
   limit?: number;
   class?: string;
   session?: string;
+}
+
+
+// In your types file
+export interface FeeStructure {
+  _id: string;
+  class: string | Class;
+  session: string | Session;
+  totalAmount: number;
+  terms: Term[];
+  isActive: boolean;
+  isPublished: boolean; // Add this field
+  createdAt: string;
+  updatedAt: string;
 }
