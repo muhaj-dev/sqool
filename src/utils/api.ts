@@ -1340,3 +1340,22 @@ export const publishFeeStructure = async (feeId: string) => {
     throw new Error("Failed to publish fee structure");
   }
 };
+
+
+export const getParentFees = async () => {
+  try {
+    const response = await api.get(`/v1/parent/fees`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch parent details";
+      console.error("API Error:", {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch parent details");
+  }
+};
