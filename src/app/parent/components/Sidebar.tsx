@@ -42,6 +42,7 @@ const Sidebar = () => {
     }
   }, []);
 
+  console.log(user)
   // Helper to format last name
   const formatLastName = (lastName: string) =>
     lastName.length > 4 ? `${lastName.slice(0, 6)}...` : lastName;

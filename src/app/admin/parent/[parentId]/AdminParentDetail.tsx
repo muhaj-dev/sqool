@@ -26,12 +26,67 @@ interface FeeItem {
   paymentMethod?: string;
 }
 
-// Helper functions to calculate financial data from current API structure
+// Calculate total fees for past and current terms only - FIXED VERSION
+const calculateTotalFees = (studentFee: any) => {
+  if (!studentFee) return 0;
+
+  // Sum all fees in past array
+  const pastTotal = (studentFee.past || []).reduce((total: number, fee: any) => {
+    return total + (fee.totalAmount || 0);
+  }, 0);
+
+  // Sum all fees in current array  
+  const currentTotal = (studentFee.current || []).reduce((total: number, fee: any) => {
+    return total + (fee.totalAmount || 0);
+  }, 0);
+
+  return pastTotal + currentTotal;
+};
+
+// Get description of terms included - UPDATED to handle multiple fees per term
+const getTermsDescription = (studentFee: any) => {
+  if (!studentFee) return 'No fee data available';
+
+  const terms = new Set<string>();
+  const sessions = new Set<string>();
+
+  // Collect terms and sessions from all past and current fees
+  const allFees = [
+    ...(studentFee.past || []),
+    ...(studentFee.current || [])
+  ];
+
+  allFees.forEach(fee => {
+    if (fee.term) terms.add(fee.term);
+    if (fee.session?.session) sessions.add(fee.session.session);
+  });
+
+  const termList = Array.from(terms)
+    .filter(term => term && typeof term === 'string')
+    .map(term => `${term.charAt(0).toUpperCase() + term.slice(1)} Term`)
+    .join(', ');
+
+  const sessionList = Array.from(sessions).join(', ');
+
+  // Count total number of fee items
+  const feeCount = allFees.length;
+
+  if (termList && sessionList) {
+    return `${feeCount} fee(s) • ${termList} • ${sessionList}`;
+  } else if (termList) {
+    return `${feeCount} fee(s) • ${termList}`;
+  } else {
+    return `${feeCount} fee item(s)`;
+  }
+};
+
+// Update the financial data calculation to include totalPaid from both past and current
 const calculateFinancialData = (studentFee: any) => {
   if (!studentFee) {
     return {
       totalOwing: 0,
       totalPaid: 0,
+      totalFees: 0,
       overdueAmount: 0,
       unpaidCount: 0,
       paidCount: 0,
@@ -41,6 +96,7 @@ const calculateFinancialData = (studentFee: any) => {
 
   let totalOwing = 0;
   let totalPaid = 0;
+  let totalFees = calculateTotalFees(studentFee);
   let overdueAmount = 0;
   let unpaidCount = 0;
   let paidCount = 0;
@@ -53,26 +109,24 @@ const calculateFinancialData = (studentFee: any) => {
   ];
 
   pastAndCurrentFees.forEach(fee => {
-    const amountOwed = fee.totalAmount - fee.totalPaid;
+    const amountOwed = (fee.totalAmount || 0) - (fee.totalPaid || 0);
     
     // Total Owing - only include positive amounts (not overpaid)
     if (amountOwed > 0) {
       totalOwing += amountOwed;
       unpaidCount++;
     }
-  });
 
-  // Calculate Total Paid (from current term payments)
-  studentFee.current?.forEach((fee: any) => {
+    // Total Paid - include payments from both past and current terms
     if (fee.totalPaid > 0) {
-      totalPaid += fee.totalPaid;
+      totalPaid += (fee.totalPaid || 0);
       paidCount++;
     }
   });
 
   // Calculate Overdue Amount (from past terms that are not fully paid)
-  studentFee.past?.forEach((fee: any) => {
-    const amountOwed = fee.totalAmount - fee.totalPaid;
+  (studentFee.past || []).forEach((fee: any) => {
+    const amountOwed = (fee.totalAmount || 0) - (fee.totalPaid || 0);
     if (amountOwed > 0) {
       overdueAmount += amountOwed;
       overdueCount++;
@@ -82,6 +136,7 @@ const calculateFinancialData = (studentFee: any) => {
   return {
     totalOwing,
     totalPaid,
+    totalFees,
     overdueAmount,
     unpaidCount,
     paidCount,
@@ -167,45 +222,50 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
   const [parent, setParent] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!parentId) return;
-    const fetchParent = async () => {
-      setLoading(true);
-      try {
-        const res = await getParentById(parentId);
-        // Handle various shapes: res may be { data: { parent: {...}, ... } } or response.data directly
-        const payload = res?.data?.parent ?? res?.data ?? res?.parent ?? res;
-        const parentData = payload.parent ?? payload;
-        setParent(parentData);
-      } catch (err: any) {
-        toast({
-          title: "Error",
-          description: err?.message || "Failed to fetch parent details",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchParent();
-  }, [parentId, toast]);
+useEffect(() => {
+  if (!parentId) return;
+  const fetchParent = async () => {
+    setLoading(true);
+    try {
+      const res = await getParentById(parentId);
+      // Get the main data object that contains both parent and studentFee
+      const parentData = res?.data ?? res;
+      setParent(parentData);
+      
+      // For debugging - log the structure
+      console.log('API Response:', res);
+      console.log('Parent Data:', parentData);
+      console.log('Student Fee Data:', parentData?.studentFee);
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err?.message || "Failed to fetch parent details",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchParent();
+}, [parentId, toast]);
 
   // Calculate financial data from API
-  const financialData = parent?.data?.studentFee ? 
-    calculateFinancialData(parent.data.studentFee) : 
-    { 
-      totalOwing: 0, 
-      totalPaid: 0, 
-      overdueAmount: 0, 
-      unpaidCount: 0, 
-      paidCount: 0, 
-      overdueCount: 0 
-    };
+  const financialData = parent?.studentFee ? 
+  calculateFinancialData(parent.studentFee) : 
+  { 
+    totalOwing: 0, 
+    totalPaid: 0, 
+    totalFees: 0,
+    overdueAmount: 0, 
+    unpaidCount: 0, 
+    paidCount: 0, 
+    overdueCount: 0 
+  };
 
-  // Transform API data to fee items
-  const feeItems = parent?.data?.studentFee ? 
-    transformFeeDataToItems(parent.data.studentFee, parent.data.parent?.children) : 
-    [];
+// Transform API data to fee items - CORRECTED
+const feeItems = parent?.studentFee ? 
+  transformFeeDataToItems(parent.studentFee, parent.parent?.children) : 
+  [];
 
   // Filter for display
   const pendingFees = feeItems.filter(fee => fee.status === "pending");
@@ -216,6 +276,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
   const { 
     totalOwing, 
     totalPaid, 
+    totalFees,
     overdueAmount, 
     unpaidCount, 
     paidCount, 
@@ -267,29 +328,32 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
     }
   };
 
-  const userInfo = parent?.user ?? (typeof parent?.userId === "object" ? parent.userId : null);
-  const childrenList = parent?.childrenDetails ?? parent?.children ?? parent?.data?.parent?.children ?? [];
+const userInfo = parent?.parent?.userId ?? parent?.user ?? (typeof parent?.userId === "object" ? parent.userId : null);
+const childrenList = parent?.parent?.children ?? parent?.childrenDetails ?? parent?.children ?? [];
   const displayName = `${userInfo?.firstName ?? ""} ${userInfo?.lastName ?? ""}`.trim() || "Parent";
   const avatarInitials = (userInfo?.firstName?.[0] ?? "") + (userInfo?.lastName?.[0] ?? "");
 
   // Calculate child-specific owing (only from past and current terms)
-  const calculateChildOwing = (childId: string, childName: string) => {
-    if (!parent.data?.studentFee) return 0;
+const calculateChildOwing = (childId: string, childName: string) => {
+  if (!parent?.studentFee) return 0;
 
-    const pastAndCurrentFees = [
-      ...(parent.data.studentFee.past || []),
-      ...(parent.data.studentFee.current || [])
-    ];
+  const pastAndCurrentFees = [
+    ...(parent.studentFee.past || []),
+    ...(parent.studentFee.current || [])
+  ];
 
-    const childFees = pastAndCurrentFees.filter(fee => 
-      fee.student._id === childId
-    );
-    
-    return childFees.reduce((sum, fee) => {
-      const amountOwed = fee.totalAmount - fee.totalPaid;
-      return amountOwed > 0 ? sum + amountOwed : sum;
-    }, 0);
-  };
+  const childFees = pastAndCurrentFees.filter(fee => 
+    fee.student._id === childId
+  );
+  
+  return childFees.reduce((sum, fee) => {
+    const amountOwed = fee.totalAmount - fee.totalPaid;
+    return amountOwed > 0 ? sum + amountOwed : sum;
+  }, 0);
+};
+
+      console.log(parent)
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -326,6 +390,33 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
             </AlertDescription>
           </Alert>
         )}
+
+         {/* Quick Actions */}
+         <div className="mb-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Button variant="outline">Generate Invoice</Button>
+                   <Button variant="outline" onClick={() => router.push('/admin/account')}>
+                    Payment History
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+         </div>
+
+  {/* {
+                "_id": "68cc5db9c031eb3ef15607de",
+                "paymentDate": "2022-01-01T00:00:00.000Z",
+                "paymentStatus": "paid",
+                "amount": 10000,
+                "userId": "683112addb58d74f5da05120",
+                "paymentMemo": "http://localhost:3000/public/files/1758223798053--Screenshot 2023-05-22 at 13.18.30.png"
+            }, */}
 
         <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6">
           {/* Parent Information Card */}
@@ -365,7 +456,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                   <Phone className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">Phone</p>
-                    <p className="font-medium">{userInfo?.phone ?? "N/A"}</p>
+                    <p className="font-medium">{userInfo?.phoneId?.phoneNumber ?? "N/A"}</p>
                   </div>
                 </div>
 
@@ -408,34 +499,34 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
               </Card>
 
               <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4" />
-                    Total Paid (Current)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">{formatCurrency(totalPaid)}</div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {paidCount} payment(s) for current term
-                  </p>
-                </CardContent>
-              </Card>
+  <CardHeader className="pb-3">
+    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+      <TrendingUp className="h-4 w-4" />
+      Total Paid
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold text-green-600">{formatCurrency(totalPaid)}</div>
+    <p className="text-xs text-muted-foreground mt-1">
+      {paidCount} payment(s) in past & current terms
+    </p>
+  </CardContent>
+</Card>
 
               <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Overdue Amount
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-orange-600">{formatCurrency(overdueAmount)}</div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {overdueCount} overdue fee(s) from past terms
-                  </p>
-                </CardContent>
-              </Card>
+  <CardHeader className="pb-3">
+    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+      <School className="h-4 w-4" />
+      Total Fees
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold text-blue-600">{formatCurrency(totalFees)}</div>
+<p className="text-xs text-muted-foreground mt-1">
+  {getTermsDescription(parent?.studentFee)}
+</p>
+  </CardContent>
+</Card>
             </div>
 
             {/* Children Cards */}
@@ -492,6 +583,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
               </CardContent>
             </Card>
 
+            {/* Rest of your component remains the same... */}
             {/* Fee Details Tabs */}
             <Card>
               <CardHeader>
@@ -637,20 +729,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
               </CardContent>
             </Card>
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <Button variant="outline">Send Reminder</Button>
-                  <Button variant="outline">Generate Invoice</Button>
-                  <Button variant="outline">Payment History</Button>
-                  <Button variant="outline">Contact Parent</Button>
-                </div>
-              </CardContent>
-            </Card>
+           
           </div>
         </div>
       </main>
