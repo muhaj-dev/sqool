@@ -43,7 +43,6 @@ import {
   Loader2,
 } from "lucide-react";
 import { getParentFees } from "@/utils/api";
-
 interface FeeItem {
   id: string;
   childName: string;
@@ -61,7 +60,6 @@ interface FeeItem {
   totalPaid?: number;
 }
 
-
 interface Student {
   id: string;
   name: string;
@@ -69,7 +67,63 @@ interface Student {
   admissionNumber: string;
 }
 
-// Helper functions from AdminParentDetail
+// Helper functions
+const estimateDueDate = (term: string, session: string): string => {
+  const [startYear] = session.split("/");
+  const year = parseInt(startYear);
+
+  switch (term) {
+    case "first":
+      return `${year}-09-30`;
+    case "second":
+      return `${year + 1}-01-31`;
+    case "third":
+      return `${year + 1}-05-31`;
+    default:
+      return `${year}-12-31`;
+  }
+};
+
+const getDueDateFromSession = (fee: any): string => {
+  if (!fee.session) return estimateDueDate(fee.term, fee.session?.session);
+  
+  const term = fee.term;
+  const sessionData = fee.session;
+  
+  switch (term) {
+    case 'first':
+      return sessionData.firstTerm?.endDate || estimateDueDate(term, sessionData.session);
+    case 'second':
+      return sessionData.secondTerm?.endDate || estimateDueDate(term, sessionData.session);
+    case 'third':
+      return sessionData.thirdTerm?.endDate || estimateDueDate(term, sessionData.session);
+    default:
+      return estimateDueDate(term, sessionData.session);
+  }
+};
+
+const determineFeeStatus = (fee: any, amountOwed: number): "paid" | "pending" | "overdue" => {
+  if (amountOwed <= 0) {
+    return "paid";
+  }
+  
+  const dueDate = getDueDateFromSession(fee);
+  const currentDate = new Date();
+  const dueDateObj = new Date(dueDate);
+  
+  if (currentDate > dueDateObj) {
+    return "overdue";
+  }
+  
+  if (fee.computedStatus === 'past' || fee.computedStatus === 'current') {
+    return "overdue";
+  } else if (fee.computedStatus === 'upcoming') {
+    return "pending";
+  }
+  
+  return "pending";
+};
+
 const calculateFinancialData = (studentFee: any) => {
   if (!studentFee) {
     return {
@@ -91,7 +145,6 @@ const calculateFinancialData = (studentFee: any) => {
   let paidCount = 0;
   let overdueCount = 0;
 
-  // Calculate Total Fees (past + current terms)
   const pastAndCurrentFees = [
     ...(studentFee.past || []),
     ...(studentFee.current || []),
@@ -99,24 +152,19 @@ const calculateFinancialData = (studentFee: any) => {
 
   pastAndCurrentFees.forEach((fee) => {
     const amountOwed = (fee.totalAmount || 0) - (fee.totalPaid || 0);
-
-    // Total Fees
     totalFees += fee.totalAmount || 0;
 
-    // Total Owing - only include positive amounts (not overpaid)
     if (amountOwed > 0) {
       totalOwing += amountOwed;
       unpaidCount++;
     }
 
-    // Total Paid - include payments from both past and current terms
     if (fee.totalPaid > 0) {
       totalPaid += fee.totalPaid || 0;
       paidCount++;
     }
   });
 
-  // Calculate Overdue Amount (from past terms that are not fully paid)
   (studentFee.past || []).forEach((fee: any) => {
     const amountOwed = (fee.totalAmount || 0) - (fee.totalPaid || 0);
     if (amountOwed > 0) {
@@ -136,21 +184,16 @@ const calculateFinancialData = (studentFee: any) => {
   };
 };
 
-
-
-// Update the transformFeeDataToItems function
 const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
   const feeItems: FeeItem[] = [];
   
   if (!studentFee) return feeItems;
 
-  // Create child name mapping for better display
   const childMap = new Map();
   children.forEach(child => {
     childMap.set(child._id, `${child.firstName} ${child.lastName}`);
   });
 
-  // Process all fees
   const allFees = [
     ...(studentFee.past || []),
     ...(studentFee.current || []),
@@ -163,28 +206,10 @@ const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
     const totalPaid = fee.totalPaid || 0;
     const amountOwed = totalAmount - totalPaid;
     
-    // Determine status based on computedStatus and payment amount
-    let status: "paid" | "pending" | "overdue" = "pending";
-    
-    if (amountOwed <= 0) {
-      // Fully paid or overpaid
-      status = "paid";
-    } else {
-      // Still owes money
-      if (fee.computedStatus === 'past' || fee.computedStatus === 'current') {
-        // Past or current terms with outstanding balance = OVERDUE
-        status = "overdue";
-      } else if (fee.computedStatus === 'upcoming') {
-        // Upcoming terms with outstanding balance = PENDING
-        status = "pending";
-      } else {
-        // Fallback
-        status = "pending";
-      }
-    }
+    // Use the new status determination function
+    const status = determineFeeStatus(fee, amountOwed);
 
-    // Create due date based on term and session (fallback logic)
-    const dueDate = estimateDueDate(fee.term, fee.session.session);
+    const dueDate = getDueDateFromSession(fee);
 
     feeItems.push({
       id: fee._id,
@@ -198,28 +223,12 @@ const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
       paymentMethod: fee.payments?.[0]?.method || undefined,
       term: fee.term,
       session: fee.session.session,
-      outstanding: amountOwed > 0 ? amountOwed : 0, // Only show positive outstanding
+      outstanding: amountOwed > 0 ? amountOwed : 0,
       totalPaid: totalPaid
     });
   });
 
   return feeItems;
-};
-
-const estimateDueDate = (term: string, session: string): string => {
-  const [startYear] = session.split("/");
-  const year = parseInt(startYear);
-
-  switch (term) {
-    case "first":
-      return `${year}-09-30`; // End of September
-    case "second":
-      return `${year + 1}-01-31`; // End of January next year
-    case "third":
-      return `${year + 1}-05-31`; // End of May next year
-    default:
-      return `${year}-12-31`;
-  }
 };
 
 const ParentFees = () => {
@@ -535,6 +544,50 @@ const formatSession = (session: string | undefined): string => {
   return session || 'N/A';
 };
 
+const getDueDateFromSession = (fee: any): string => {
+  if (!fee.session) return estimateDueDate(fee.term, fee.session?.session);
+  
+  const term = fee.term;
+  const sessionData = fee.session;
+  
+  // Use the actual end date from the session data
+  switch (term) {
+    case 'first':
+      return sessionData.firstTerm?.endDate || estimateDueDate(term, sessionData.session);
+    case 'second':
+      return sessionData.secondTerm?.endDate || estimateDueDate(term, sessionData.session);
+    case 'third':
+      return sessionData.thirdTerm?.endDate || estimateDueDate(term, sessionData.session);
+    default:
+      return estimateDueDate(term, sessionData.session);
+  }
+};
+
+// Enhanced status determination with actual due dates
+const determineFeeStatus = (fee: any, amountOwed: number): "paid" | "pending" | "overdue" => {
+  if (amountOwed <= 0) {
+    return "paid";
+  }
+  
+  const dueDate = getDueDateFromSession(fee);
+  const currentDate = new Date();
+  const dueDateObj = new Date(dueDate);
+  
+  // If current date is past due date, mark as overdue
+  if (currentDate > dueDateObj) {
+    return "overdue";
+  }
+  
+  // Otherwise use computedStatus as fallback
+  if (fee.computedStatus === 'past' || fee.computedStatus === 'current') {
+    return "overdue";
+  } else if (fee.computedStatus === 'upcoming') {
+    return "pending";
+  }
+  
+  return "pending";
+};
+
 
   if (loading) {
     return (
@@ -794,77 +847,76 @@ const formatSession = (session: string | undefined): string => {
   ) : (
     <>
       {/* Show overdue fees first with clear separation */}
-      {pendingFees.filter(fee => fee.status === "overdue").length > 0 && (
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <AlertCircle className="h-5 w-5 text-destructive" />
-            <h3 className="font-semibold text-destructive">Overdue Payments</h3>
-            <Badge variant="destructive" className="ml-2">
-              {pendingFees.filter(fee => fee.status === "overdue").length}
-            </Badge>
-          </div>
-          <div className="space-y-3 mb-6">
-            {pendingFees
-              .filter(fee => fee.status === "overdue")
-              .map((fee) => (
-              <Card 
-                key={fee.id} 
-                className="border-l-4 border-l-destructive bg-destructive/5"
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3 flex-1">
-                      <input
-                        type="checkbox"
-                        checked={selectedFees.includes(fee.id)}
-                        onChange={() => handleFeeSelection(fee.id)}
-                        className="mt-1 h-4 w-4 rounded border-gray-300"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold">{fee.feeName}</h3>
-                          <Badge variant="destructive">
-                            OVERDUE - PAY NOW
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">Student: {fee.childName} - {fee.childClass}</p>
-                        <p className="text-sm text-destructive font-semibold">
-                          Due Date: {formatDate(fee.dueDate)} ⚠️ PAST DUE
-                        </p>
-                       <p className="text-sm text-muted-foreground">
-  {fee.term && fee.session ? (
-    <>Term: {fee.term.charAt(0).toUpperCase() + fee.term.slice(1)} • {fee.session}</>
-  ) : fee.term ? (
-    <>Term: {fee.term.charAt(0).toUpperCase() + fee.term.slice(1)}</>
-  ) : fee.session ? (
-    <>Session: {fee.session}</>
-  ) : (
-    'Term information not available'
-  )}
-  {fee.status === "overdue" && (
-    <span className="text-destructive ml-2">• URGENT</span>
-  )}
-</p>
-                       <p className="text-xs text-destructive font-semibold mt-1">
-  Outstanding: {formatCurrency(fee.outstanding || 0)}
-</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-destructive">
-                        {formatCurrency(fee.amount)}
-                      </p>
-                      <p className="text-xs text-destructive font-semibold mt-1">
-                        Immediate Payment Required
-                      </p>
-                    </div>
+    {pendingFees.filter(fee => fee.status === "overdue").length > 0 && (
+  <div>
+    <div className="flex items-center gap-2 mb-3">
+      <AlertCircle className="h-5 w-5 text-muted-foreground" />
+      <h3 className="font-semibold">Overdue Payments</h3>
+      <Badge variant="destructive" className="ml-2">
+        {pendingFees.filter(fee => fee.status === "overdue").length}
+      </Badge>
+    </div>
+    <div className="space-y-3 mb-6">
+      {pendingFees
+        .filter(fee => fee.status === "overdue")
+        .map((fee) => (
+        <Card 
+          key={fee.id} 
+          className=""
+        >
+          <CardContent className="p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <input
+                  type="checkbox"
+                  checked={selectedFees.includes(fee.id)}
+                  onChange={() => handleFeeSelection(fee.id)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300"
+                />
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold">{fee.feeName}</h3>
+                    <Badge variant="destructive">
+                      OVERDUE
+                      {/* OVERDUE - PAY NOW */}
+                    </Badge>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
+                  <p className="text-sm text-muted-foreground">Student: {fee.childName} - {fee.childClass}</p>
+                  <p className="text-sm font-semibold">
+                    Due Date: {formatDate(fee.dueDate)} ⚠️ PAST DUE
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {fee.term && fee.session ? (
+                      <>Term: {fee.term.charAt(0).toUpperCase() + fee.term.slice(1)} • {fee.session}</>
+                    ) : fee.term ? (
+                      <>Term: {fee.term.charAt(0).toUpperCase() + fee.term.slice(1)}</>
+                    ) : fee.session ? (
+                      <>Session: {fee.session}</>
+                    ) : (
+                      'Term information not available'
+                    )}
+                    {/* <span className="ml-2">• URGENT</span> */}
+                  </p>
+                  <p className="text-xs font-semibold mt-1">
+                    Outstanding: {formatCurrency(fee.outstanding || 0)}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold">
+                  {formatCurrency(fee.amount)}
+                </p>
+                <p className="text-xs font-semibold mt-1">
+                  Immediate Payment Required
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+)}
 
       {/* Show pending (upcoming) fees */}
       {pendingFees.filter(fee => fee.status === "pending").length > 0 && (
@@ -902,7 +954,7 @@ const formatSession = (session: string | undefined): string => {
                           Due Date: {formatDate(fee.dueDate)}
                         </p>
                         <p className="text-sm text-muted-foreground">
-  Term: {formatTerm(fee.term)} + {formatSession(fee.session)}
+  Term: {formatTerm(fee.term)} • {formatSession(fee.session)}
 </p>
                       </div>
                     </div>
