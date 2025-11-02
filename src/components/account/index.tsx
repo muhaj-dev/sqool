@@ -163,7 +163,7 @@ export default function Account() {
       try {
         const [paymentsResponse, studentsResponse] = await Promise.all([
           getPayments(1, 100),
-          getAllStudents(100, '')
+          getAllStudents(1, 100)
         ]);
         
         // Adjust based on your actual API response structure

@@ -1076,3 +1076,28 @@ export interface FeeStructure {
   createdAt: string;
   updatedAt: string;
 }
+
+// types/payment.ts
+export interface CreatePaymentRequest {
+  paymentDate: string;
+  amountPaid: number;
+  paymentMethod: string;
+  paymentStatus: string;
+  paymentType: string;
+  paymentCategory: string;
+  transactionId?: string;
+  paymentMemo: File | null;
+  userId: string;
+}
+
+export interface PaymentRecord {
+  id: string;
+  date: string;
+  parentName: string;
+  studentName: string;
+  feeType: string;
+  amount: number;
+  status: "paid" | "pending" | "overdue";
+  paymentMethod?: string;
+  transactionId?: string;
+}

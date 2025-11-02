@@ -716,7 +716,7 @@ export const deleteClassSchedule = async (classId: string, scheduleId: string): 
 };
 
 // Payment-related API calls
-export const createPayment = async (paymentData: {
+export const adminC= async (paymentData: {
   paymentMemo: File | null;
   userId: string;
   paymentDate: string;
@@ -1357,5 +1357,56 @@ export const getParentFees = async () => {
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch parent details");
+  }
+};
+
+
+export const adminCreatePayment = async (data: FormData) => {
+  try {
+    const response = await api.post("/v1/admin/payment", data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to create payment";
+      console.error("API Error:", {
+        status: error.response?.status,
+        message: errorMessage,
+        url: error.config?.url,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to create payment");
+  }
+};
+
+
+// utils/api.ts - Add this function
+export const getAllPayments = async (
+  page: number, 
+  limit: number = 10,
+  paymentStatus?: string
+): Promise<any> => {
+  try {
+    const response = await api.get("/v1/admin/payment", {
+      params: {
+        page,
+        limit,
+        paymentStatus,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch payments";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch payments");
   }
 };
