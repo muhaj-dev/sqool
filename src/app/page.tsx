@@ -154,7 +154,7 @@ export default function Home() {
 
     </div> */}
       <nav className="border-b bg-card sticky top-0 z-50 backdrop-blur-sm bg-card/95">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container max-w-screen-lg mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <School className="h-8 w-8 text-primary" />
@@ -215,7 +215,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.15),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--secondary)/0.15),transparent_50%)]" />
 
-        <div className="container mx-auto px-4 relative">
+        <div className="container max-w-screen-2xl mx-auto px-4 relative ">
           <div className="max-w-5xl mx-auto">
             {/* Badge */}
             <div className="flex justify-center mb-8 animate-fade-in">
@@ -229,7 +229,7 @@ export default function Home() {
             </div>
 
             {/* Main Content */}
-            <div className="text-center space-y-8">
+            <div className="text-center space-y-8 ">
               <h1 className="text-5xl md:text-7xl font-bold leading-tight">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-foreground/70">
                   Transform Your School Management
@@ -252,7 +252,7 @@ export default function Home() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button type="button" className="text-lg px-8 group">
-                  <a href="#contact">
+                  <a href="#contact" className="flex items-center">
                     Get Started Free
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </a>
@@ -356,21 +356,26 @@ export default function Home() {
         </div>
       </section>
 
-        {/* Key Features */}
+      {/* Key Features */}
       <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
+        <div className="container  max-w-screen-lg mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Complete Digital Solution</h2>
-            <p className="text-xl text-muted-foreground">Everything your school needs to thrive in the digital age</p>
+            <h2 className="text-4xl font-bold mb-4">
+              Complete Digital Solution
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Everything your school needs to thrive in the digital age
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 max-w-screen-lg w-full bg">
             {keyFeatures.map((feature, index) => (
-              <Card key={index} className="p-8 hover:shadow-lg transition-all hover:-translate-y-1">
+              <Card
+                key={index}
+                className="p-8 hover:shadow-lg transition-all hover:-translate-y-1 w-full"
+              >
                 <div className="space-y-4">
                   <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <div className="text-4xl">
-                      {feature.icon}
-                    </div>
+                    <div className="text-4xl">{feature.icon}</div>
                   </div>
                   <h3 className="text-2xl font-bold">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
@@ -381,42 +386,54 @@ export default function Home() {
         </div>
       </section>
 
-
-  {/* Testimonial Section */}
+      {/* Testimonial Section */}
       <section className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4">
           <Card className="max-w-4xl mx-auto bg-primary-foreground/10 border-primary-foreground/20">
             <div className="p-12 text-center">
               <div className="text-5xl mb-6">&quot;</div>
               <p className="text-xl italic mb-6 leading-relaxed">
-                The daily tasks of being the school bursar have never been this easy to accomplish. 
-                Thanks to our management for adopting this new system. The system has made my work so much easier and more efficient.
+                The daily tasks of being the school bursar have never been this
+                easy to accomplish. Thanks to our management for adopting this
+                new system. The system has made my work so much easier and more
+                efficient.
               </p>
               <div className="space-y-1">
                 <p className="font-bold text-lg">ANI FRANCISCA</p>
-                <p className="text-primary-foreground/80">Bursar, God Provides Group of Schools, Enugu</p>
+                <p className="text-primary-foreground/80">
+                  Bursar, God Provides Group of Schools, Enugu
+                </p>
               </div>
             </div>
           </Card>
         </div>
       </section>
-        {/* Benefits Section */}
+      {/* Benefits Section */}
       <section id="benefits" className="py-20">
-        <div className="container mx-auto px-4">
+        <div className="container max-w-screen-lg mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Benefits for Everyone</h2>
-            <p className="text-xl text-muted-foreground">Designed to serve every member of your school community</p>
+            <p className="text-xl text-muted-foreground">
+              Designed to serve every member of your school community
+            </p>
           </div>
-          
+
           <div className="space-y-12">
             {/* Schools & Administrators */}
             <div>
-              <h3 className="text-2xl font-bold mb-6 text-primary">Schools and Administrators</h3>
+              <h3 className="text-2xl font-bold mb-6 text-primary">
+                Schools and Administrators
+              </h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {benefits.administrators.map((benefit, index) => (
-                  <Card key={index} className="p-4 hover:shadow-md transition-shadow">
+                  <Card
+                    key={index}
+                    className="p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start gap-3">
-                      <div className="text-primary mt-1 text-lg font-bold">✓</div>
+                      <div className="text-primary mt-1 text-lg font-bold">
+                        ✓
+                      </div>
                       <p className="text-muted-foreground">{benefit}</p>
                     </div>
                   </Card>
@@ -429,9 +446,14 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-6 text-primary">Teachers</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {benefits.teachers.map((benefit, index) => (
-                  <Card key={index} className="p-4 hover:shadow-md transition-shadow">
+                  <Card
+                    key={index}
+                    className="p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start gap-3">
-                      <div className="text-primary mt-1 text-lg font-bold">✓</div>
+                      <div className="text-primary mt-1 text-lg font-bold">
+                        ✓
+                      </div>
                       <p className="text-muted-foreground">{benefit}</p>
                     </div>
                   </Card>
@@ -444,9 +466,14 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-6 text-primary">Parents</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {benefits.parents.map((benefit, index) => (
-                  <Card key={index} className="p-4 hover:shadow-md transition-shadow">
+                  <Card
+                    key={index}
+                    className="p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start gap-3">
-                      <div className="text-primary mt-1 text-lg font-bold">✓</div>
+                      <div className="text-primary mt-1 text-lg font-bold">
+                        ✓
+                      </div>
                       <p className="text-muted-foreground">{benefit}</p>
                     </div>
                   </Card>
@@ -459,9 +486,14 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-6 text-primary">Students</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {benefits.students.map((benefit, index) => (
-                  <Card key={index} className="p-4 hover:shadow-md transition-shadow">
+                  <Card
+                    key={index}
+                    className="p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start gap-3">
-                      <div className="text-primary mt-1 text-lg font-bold">✓</div>
+                      <div className="text-primary mt-1 text-lg font-bold">
+                        ✓
+                      </div>
                       <p className="text-muted-foreground">{benefit}</p>
                     </div>
                   </Card>
@@ -474,25 +506,30 @@ export default function Home() {
 
       {/* Why Choose Us */}
       <section id="why-choose" className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
+        <div className="container max-w-screen-lg mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Why Choose Sqoolify?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Honestly, why not? Sqoolify offers you A-List sought after tools and features in a School Management Software; 
-              with more being developed and added frequently. We won&apos;t stop at anything to provide your school with the right tools.
+              Honestly, why not? Sqoolify offers you A-List sought after tools
+              and features in a School Management Software; with more being
+              developed and added frequently. We won&apos;t stop at anything to
+              provide your school with the right tools.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyChoose.map((item, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+              <Card
+                key={index}
+                className="p-6 hover:shadow-lg transition-all hover:-translate-y-1"
+              >
                 <div className="space-y-3">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <div className="text-2xl">
-                      {item.icon}
-                    </div>
+                    <div className="text-2xl">{item.icon}</div>
                   </div>
                   <h3 className="font-bold text-lg">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {item.description}
+                  </p>
                 </div>
               </Card>
             ))}
@@ -502,16 +539,21 @@ export default function Home() {
 
       {/* Features Modules Section */}
       <section id="features" className="py-20">
-        <div className="container mx-auto px-4">
+        <div className="container max-w-screen-lg mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Comprehensive Features</h2>
-            <p className="text-xl text-muted-foreground">All the tools you need in one powerful platform</p>
+            <p className="text-xl text-muted-foreground">
+              All the tools you need in one powerful platform
+            </p>
           </div>
           <div className="space-y-4">
             {featureModules.map((row, rowIndex) => (
               <div key={rowIndex} className="grid md:grid-cols-4 gap-4">
                 {row.map((module, colIndex) => (
-                  <Card key={colIndex} className="p-4 text-center hover:shadow-lg transition-all hover:scale-105 duration-200 cursor-pointer">
+                  <Card
+                    key={colIndex}
+                    className="p-4 text-center hover:shadow-lg transition-all hover:scale-105 duration-200 cursor-pointer"
+                  >
                     <p className="font-semibold text-sm">{module}</p>
                   </Card>
                 ))}
@@ -519,7 +561,7 @@ export default function Home() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Button  type="button"  variant="outline" className="text-lg px-8">
+            <Button type="button" variant="outline" className="text-lg px-8">
               See All Features
             </Button>
           </div>
@@ -528,28 +570,39 @@ export default function Home() {
 
       {/* Integration Section */}
       <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
+        <div className="container max-w-screen-lg mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h2 className="text-4xl font-bold">Hosted and Maintained for You</h2>
+            <h2 className="text-4xl font-bold">
+              Hosted and Maintained for You
+            </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              We take care of all the big technicalities, so you don&apos;t have to. While you focus on what matters most, 
-              we work round the clock to ensure you have the right digital tools in place to manage and grow your school.
+              We take care of all the big technicalities, so you don&apos;t have
+              to. While you focus on what matters most, we work round the clock
+              to ensure you have the right digital tools in place to manage and
+              grow your school.
             </p>
             <div className="grid md:grid-cols-2 gap-6 mt-12">
               <Card className="p-8 hover:shadow-lg transition-shadow">
                 <div className="text-4xl mb-4">🌐</div>
-                <h3 className="text-2xl font-bold mb-4">Use Your Own Domain Name</h3>
+                <h3 className="text-2xl font-bold mb-4">
+                  Use Your Own Domain Name
+                </h3>
                 <p className="text-muted-foreground">
-                  We understand that you want a unique brand identity for your school. Sqoolify enables your school 
-                  to maintain its own website address. Simply connect a domain name you already own or get one for your school.
+                  We understand that you want a unique brand identity for your
+                  school. Sqoolify enables your school to maintain its own
+                  website address. Simply connect a domain name you already own
+                  or get one for your school.
                 </p>
               </Card>
               <Card className="p-8 hover:shadow-lg transition-shadow">
                 <div className="text-4xl mb-4">🔗</div>
-                <h3 className="text-2xl font-bold mb-4">Integrate with Existing Website</h3>
+                <h3 className="text-2xl font-bold mb-4">
+                  Integrate with Existing Website
+                </h3>
                 <p className="text-muted-foreground">
-                  Already have a school website? No problem! Sqoolify can easily be integrated with your existing 
-                  school website or domain. Set the service you need and connect your domain - Done!
+                  Already have a school website? No problem! Sqoolify can easily
+                  be integrated with your existing school website or domain. Set
+                  the service you need and connect your domain - Done!
                 </p>
               </Card>
             </div>
@@ -559,7 +612,7 @@ export default function Home() {
 
       {/* Pricing Section */}
       <section id="pricing" className="py-20">
-        <div className="container mx-auto px-4">
+        <div className="container max-w-screen-lg mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Simple Pricing</h2>
             <p className="text-xl text-muted-foreground">
@@ -569,34 +622,67 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {["Basic", "Professional", "Enterprise"].map((plan, index) => (
-              <Card key={index} className={index === 1 ? "border-primary shadow-lg scale-105" : ""}>
+              <Card
+                key={index}
+                className={
+                  index === 1 ? "border-primary shadow-lg scale-105" : ""
+                }
+              >
                 <CardContent className="p-8 space-y-6">
                   <div>
                     <h3 className="text-2xl font-bold mb-2">{plan}</h3>
                     <div className="text-4xl font-bold text-primary">
-                      ₦{index === 0 ? "50,000" : index === 1 ? "100,000" : "Custom"}
+                      ₦
+                      {index === 0
+                        ? "50,000"
+                        : index === 1
+                        ? "100,000"
+                        : "Custom"}
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">per term</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      per term
+                    </p>
                   </div>
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span>Up to {index === 0 ? "100" : index === 1 ? "500" : "Unlimited"} students</span>
+                      <span>
+                        Up to{" "}
+                        {index === 0
+                          ? "100"
+                          : index === 1
+                          ? "500"
+                          : "Unlimited"}{" "}
+                        students
+                      </span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span>{index === 2 ? "24/7" : "Business hours"} support</span>
+                      <span>
+                        {index === 2 ? "24/7" : "Business hours"} support
+                      </span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span>{index === 0 ? "1000" : index === 1 ? "5000" : "Unlimited"} SMS credits</span>
+                      <span>
+                        {index === 0
+                          ? "1000"
+                          : index === 1
+                          ? "5000"
+                          : "Unlimited"}{" "}
+                        SMS credits
+                      </span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
                       <span>All core features</span>
                     </li>
                   </ul>
-                  <Button className="w-full" variant={index === 1 ? "default" : "outline"}  type="button">
+                  <Button
+                    className="w-full"
+                    variant={index === 1 ? "default" : "outline"}
+                    type="button"
+                  >
                     Get Started
                   </Button>
                 </CardContent>
@@ -611,9 +697,12 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Let&apos;s Take Your School Online</h2>
+              <h2 className="text-4xl font-bold mb-4">
+                Let&apos;s Take Your School Online
+              </h2>
               <p className="text-xl text-muted-foreground">
-                Join the league of ambitious schools leveraging technology to achieve academic excellence
+                Join the league of ambitious schools leveraging technology to
+                achieve academic excellence
               </p>
             </div>
 
@@ -631,7 +720,7 @@ export default function Home() {
                     className="w-full px-3 py-2 rounded-md border border-input bg-background min-h-[120px] resize-none"
                     placeholder="Your Message"
                   />
-                  <Button className="w-full"  type="button">
+                  <Button className="w-full" type="button">
                     Get Started Today
                   </Button>
                 </form>
@@ -642,17 +731,23 @@ export default function Home() {
               <div className="space-y-2">
                 <Phone className="h-6 w-6 text-primary mx-auto" />
                 <div className="text-sm font-medium">Phone</div>
-                <div className="text-sm text-muted-foreground">+234 811 7321 421</div>
+                <div className="text-sm text-muted-foreground">
+                  +234 811 7321 421
+                </div>
               </div>
               <div className="space-y-2">
                 <Mail className="h-6 w-6 text-primary mx-auto" />
                 <div className="text-sm font-medium">Email</div>
-                <div className="text-sm text-muted-foreground">info@sqoolify.com</div>
+                <div className="text-sm text-muted-foreground">
+                  info@sqoolify.com
+                </div>
               </div>
               <div className="space-y-2">
                 <MapPin className="h-6 w-6 text-primary mx-auto" />
                 <div className="text-sm font-medium">Location</div>
-                <div className="text-sm text-muted-foreground">Lagos, Nigeria</div>
+                <div className="text-sm text-muted-foreground">
+                  Lagos, Nigeria
+                </div>
               </div>
             </div>
           </div>
@@ -661,7 +756,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-card border-t py-12">
-        <div className="container mx-auto px-4">
+        <div className="container max-w-screen-lg mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
@@ -675,26 +770,76 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <a href="#home" className="block hover:text-primary transition-colors">Home</a>
-                <a href="#features" className="block hover:text-primary transition-colors">Features</a>
-                <a href="#benefits" className="block hover:text-primary transition-colors">Benefits</a>
-                <a href="#pricing" className="block hover:text-primary transition-colors">Pricing</a>
+                <a
+                  href="#home"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Home
+                </a>
+                <a
+                  href="#features"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Features
+                </a>
+                <a
+                  href="#benefits"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Benefits
+                </a>
+                <a
+                  href="#pricing"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Pricing
+                </a>
               </div>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <a href="#contact" className="block hover:text-primary transition-colors">Contact</a>
-                <a href="#" className="block hover:text-primary transition-colors">Help Center</a>
-                <a href="#" className="block hover:text-primary transition-colors">Live Chat</a>
-                <a href="#" className="block hover:text-primary transition-colors">Affiliate</a>
+                <a
+                  href="#contact"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Contact
+                </a>
+                <a
+                  href="#"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Help Center
+                </a>
+                <a
+                  href="#"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Live Chat
+                </a>
+                <a
+                  href="#"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Affiliate
+                </a>
               </div>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <a href="#" className="block hover:text-primary transition-colors">Privacy Policy</a>
-                <a href="#" className="block hover:text-primary transition-colors">Terms of Service</a>
+                <a
+                  href="#"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Privacy Policy
+                </a>
+                <a
+                  href="#"
+                  className="block hover:text-primary transition-colors"
+                >
+                  Terms of Service
+                </a>
               </div>
             </div>
           </div>
@@ -703,11 +848,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
- 
-
-
-
-
     </div>
   );
 }
