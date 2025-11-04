@@ -209,12 +209,17 @@ export interface UserId {
   lastName: string;
 }
 
+export interface Subject {
+  _id: string;
+  name: string;
+}
+
 export interface StaffResult {
   result?: null;
   _id: string;
   level: string;
   userId: UserId;
-  subjects: string[];
+   subjects: Subject[];
   role: string;
   primarySubject: string;
   isActive: boolean;

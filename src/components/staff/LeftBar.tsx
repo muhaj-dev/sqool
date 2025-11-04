@@ -84,7 +84,13 @@ const LeftBar = ({ staffId, staff, loading, error }: LeftBarProps) => {
       <div className="bg-[#F8F8FD] rounded-md px-2 py-3 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">Sub Subject</p>
-          <p className="">{staff?.subjects?.[0] ?? 'Chemistry'}</p>
+          <div className="flex flex-wrap gap-1 justify-end">
+      {staff?.subjects?.map((subject, index) => (
+        <span key={subject?._id} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+          {subject?.name}
+        </span>
+      ))}
+    </div>
         </div>
       </div>
 
