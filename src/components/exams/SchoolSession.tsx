@@ -11,10 +11,10 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createPayment } from '@/utils/api';
+// import { createPayment } from '@/utils/api';
 import { IStudent } from '@/types';
 import { Plus } from 'lucide-react';
-import { TermAndSessionForm } from '../admin/compulsory/TermAndSessionForm';
+// import { TermAndSessionForm } from '../admin/compulsory/TermAndSessionForm';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
