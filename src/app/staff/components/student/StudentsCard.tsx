@@ -21,7 +21,7 @@ type TStudent = {
 const StudentsCard = ({ item }: TStudent) => {
   return (
     <Link
-      href="/staff/student/1"
+      href="/staff/students/1"
       className="bg-white text-[.9rem] border border-[#EBEAED] rounded-md p-4 shadow-sm hover:shadow-md hover:bg-gray-50 transition "
     >
       <div className="flex justify-between items-start">
@@ -45,10 +45,7 @@ const StudentsCard = ({ item }: TStudent) => {
       <div className="flex flex-col gap-4 text-sm">
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">ID</p>
-          <p>
-          {item.ID}
-
-          </p>
+          <p>{item.ID}</p>
         </div>
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">class</p>
@@ -70,7 +67,7 @@ const StudentsCard = ({ item }: TStudent) => {
         </div>
       </div>
     </Link>
-  )
+  );
 }
 
 export default StudentsCard
