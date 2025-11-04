@@ -9,8 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+// import { Input } from '@/components/ui/input';
+// import { Label } from '@/components/ui/label';
 // import { createPayment } from '@/utils/api';
 import { IStudent } from '@/types';
 import { Plus } from 'lucide-react';
