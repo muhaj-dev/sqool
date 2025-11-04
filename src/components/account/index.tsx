@@ -31,7 +31,7 @@ import { IBankAccount, IStudent } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { AccountAddModal } from './AccountAddModal';
 import { getPayments } from '@/utils/api';
-import { PaymentAddModal } from './PaymentAddModal';
+// import { PaymentAddModal } from './PaymentAddModal';
 import { getAllStudents } from '@/utils/api';
 
 interface Payment {
@@ -466,11 +466,11 @@ export default function Account() {
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">School Fees</h3>
           <div className="flex gap-2">
-            <PaymentAddModal 
+            {/* <PaymentAddModal 
               students={students} 
               refresh={refresh} 
               setRefresh={setRefresh} 
-            />
+            /> */}
             <Button variant="outline" size="sm">
               <Plus className="h-4 w-4 mr-2" />
               Filter

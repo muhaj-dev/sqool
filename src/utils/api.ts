@@ -38,6 +38,7 @@ import {
   Session,
   Class,
   ClassesResponse,
+  PaymentResponse,
 } from "@/types";
 
 
@@ -1408,5 +1409,23 @@ export const getAllPayments = async (
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch payments");
+  }
+};
+
+export const getPaymentById = async (paymentId: string): Promise<PaymentResponse> => {
+  try {
+    const response = await api.get(`/v1/admin/payment/${paymentId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch payment details";
+      console.error("API Error:", {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch payment details");
   }
 };

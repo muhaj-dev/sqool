@@ -1101,3 +1101,39 @@ export interface PaymentRecord {
   paymentMethod?: string;
   transactionId?: string;
 }
+
+
+// types/payment.ts
+export interface Parent {
+  _id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+}
+
+export interface Student {
+  _id: string;
+  name: string;
+  studentId: string;
+  class?: string;
+}
+
+export interface Payment {
+  _id: string;
+  paymentDate: string;
+  paymentStatus: 'paid' | 'pending' | 'overdue' | string;
+  amountPaid: number;
+  userId: string | null;
+  paymentMethod: string;
+  transactionId: string;
+  paymentMemo: string;
+  paymentCategory: string;
+  paymentType: string;
+  parent?: Parent;
+  student?: Student;
+}
+
+export interface PaymentResponse {
+  data: Payment;
+  message: string;
+}

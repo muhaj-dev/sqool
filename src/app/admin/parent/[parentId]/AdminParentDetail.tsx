@@ -365,12 +365,12 @@ const calculateChildOwing = (childId: string, childName: string) => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => router.push("/admin/student")}
+                onClick={() => router.push("/admin/parent")}
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-2xl font-bold">Admin - Parent Fee Management</h1>
+                <h1 className="text-2xl font-bold">Parent Details</h1>
                 <p className="text-sm text-muted-foreground">
                   View parent details and comprehensive fee information
                 </p>

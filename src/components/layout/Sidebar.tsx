@@ -79,7 +79,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
               />
               <p
                 className={`text-[#515B6F] text-xl 
-                   text-primaryColor`}
+                ]`}
               >
                 Dashboard
               </p>
@@ -123,7 +123,20 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
               pathname.startsWith('/admin/student') ? 'text-primaryColor' : ''
             }`}
           >
-            Student/Parent
+            Student
+          </p>
+        </Link>
+        <Link href="/admin/parent" className={`flex items-center gap-4 pl-4`}>
+          <StudentIcon
+            color={`${pathname.startsWith('/admin/parent') ? '#E5B80B' : '#515B6F'}`}
+          />
+          <p
+            onClick={toggleSidebar}
+            className={`text-[#515B6F] cursor-pointer ${
+              pathname.startsWith('/admin/parent') ? 'text-primaryColor' : ''
+            }`}
+          >
+            Parent
           </p>
         </Link>
         <Link href="/admin/staff" className={`flex items-center gap-4 pl-4`}>
@@ -198,7 +211,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
               pathname.startsWith('/admin/account')? 'text-primaryColor' : ''
             }`}
           >
-            Account
+            Payment History
           </p>
         </Link>
         <Link

@@ -106,10 +106,18 @@ const StudentList = () => {
         
         if (response.data.pagination) {
           setPagination({
-            total: response.data.pagination.total,
-            currentPage: response.data.pagination.currentPage,
-            pageSize: response.data.pagination.pageSize,
-            totalPages: response.data.pagination.totalPages,
+            total: typeof response.data.pagination.total === 'string' 
+              ? parseInt(response.data.pagination.total) 
+              : response.data.pagination.total,
+            currentPage: typeof response.data.pagination.currentPage === 'string'
+              ? parseInt(response.data.pagination.currentPage)
+              : response.data.pagination.currentPage,
+            pageSize: typeof response.data.pagination.pageSize === 'string'
+              ? parseInt(response.data.pagination.pageSize)
+              : response.data.pagination.pageSize || limit,
+            totalPages: typeof response.data.pagination.totalPages === 'string'
+              ? parseInt(response.data.pagination.totalPages)
+              : response.data.pagination.totalPages,
             hasNextPage: response.data.pagination.hasNextPage,
             hasPreviousPage: response.data.pagination.hasPreviousPage,
           });
@@ -151,22 +159,24 @@ const StudentList = () => {
       <div className="flex gap-4 items-center">
         <Avatar className="h-12 w-12">
           <AvatarImage src={student?.photo || "/images/user.png"} />
-          <AvatarFallback>{`${student?.firstName[0]}${student?.lastName[0]}`}</AvatarFallback>
+          <AvatarFallback>{`${student?.firstName?.[0] || ''}${student?.lastName?.[0] || ''}`}</AvatarFallback>
         </Avatar>
         <div>
-          <p className="text-[16px] font-medium text-[#3F4946]">{`${student?.firstName} ${student?.lastName}`}</p>
+          <p className="text-[16px] font-medium text-[#3F4946]">
+            {`${student?.firstName || ''} ${student?.lastName || ''}`}
+          </p>
           {/* <p className="text-sm text-muted-foreground">{student.email || 'No email'}</p> */}
         </div>
       </div>
     );
   };
 
-  const RenderClass = ({ classInfo }: { classInfo: string }) => {
-    return <p className="text-[14px] text-[#3F4946] font-medium mx-4">{classInfo}</p>;
+  const RenderClass = ({ classInfo }: { classInfo: any }) => {
+    return <p className="text-[14px] text-[#3F4946] font-medium mx-4">{classInfo?.className || "N/A"}</p>;
   };
 
   const RenderGender = ({ gender }: { gender: string }) => {
-    return <p className="capitalize text-[14px] text-[#3F4946] font-medium">{gender}</p>;
+    return <p className="capitalize text-[14px] text-[#3F4946] font-medium">{gender || "N/A"}</p>;
   };
 
   const RenderAction = ({ student }: { student: IStudent }) => {
@@ -195,12 +205,12 @@ const StudentList = () => {
     {
       key: "class",
       label: "Class",
-      renderCell: (student: IStudent) => <RenderClass classInfo={student.class.className || "N/A"} />,
+      renderCell: (student: IStudent) => <RenderClass classInfo={student.class} />,
     },
     {
       key: "gender",
       label: "Gender",
-      renderCell: (student: IStudent) => <RenderGender gender={student.gender || "N/A"} />,
+      renderCell: (student: IStudent) => <RenderGender gender={student.gender} />,
     },
     {
       key: "action",
@@ -239,7 +249,7 @@ const StudentList = () => {
             </p>
           </div>
 
-          <section className="w-fit ml-auto mb-2 flex gap-4">
+          <section className="w-fit flex-wrap ml-auto mb-2 flex gap-4">
             {/* Search Input */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -252,14 +262,14 @@ const StudentList = () => {
               />
             </div>
             
+          </section>
+        </div>
             <Link 
               href="/admin/student/add"
-              className="flex items-center text-white tex-sm rounded-md bg-primaryColor cursor-pointer hover:bg-white hover:text-primaryColor border-[1px] border-primaryColor py-2 px-6 transition-all"
+              className="ml-auto flex items-center text-white tex-sm rounded-md bg-primaryColor cursor-pointer hover:bg-white hover:text-primaryColor border-[1px] border-primaryColor py-2 px-6 transition-all"
             >
               Add New Student
             </Link>
-          </section>
-        </div>
 
         <Steps activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
         
@@ -298,7 +308,8 @@ const StudentList = () => {
             </div>
           ) : (
             <AdminTable
-              title={tabs[activeIndex]}
+              title={''}
+              // title={tabs[activeIndex]}
               columns={columns}
               data={students}
               currentPage={pagination.currentPage}

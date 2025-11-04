@@ -1,8 +1,7 @@
 'use client';
 
-
 import { useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react";
 import { ArrowLeft, Download, Printer, Mail, Phone, Calendar, CreditCard, User, Receipt, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,60 +9,38 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
+import { getPaymentById } from "@/utils/api";
+import { Payment } from "@/types";
 
 interface AdminPaymentDetailProps {
   paymentId: string;
 }
 
-const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
-  // const router.push = useNavigate();
-    const router = useRouter();
-  
+const AdminPaymentDetail = ({ paymentId }: AdminPaymentDetailProps) => {
+  const router = useRouter();
+  const [payment, setPayment] = useState<Payment | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data - replace with real data from your backend
-  const payment = {
-    id: paymentId || "1",
-    date: "2024-01-15",
-    dueDate: "2024-01-10",
-    parentName: "John Doe",
-    parentEmail: "john.doe@example.com",
-    parentPhone: "+234 803 456 7890",
-    studentName: "Emma Doe",
-    studentClass: "Primary 5A",
-    studentId: "STD001",
-    feeType: "Tuition Fee - Term 1",
-    term: "First Term",
-    session: "2023/2024",
-    amount: 5000,
-    amountPaid: 5000,
-    balance: 0,
-    status: "paid",
-    paymentMethod: "Bank Transfer",
-    transactionId: "TXN001234",
-    bankName: "First Bank",
-    reference: "REF123456",
-    paidBy: "John Doe",
-    receivedBy: "Admin User",
-    notes: "Payment received for first term tuition",
-  };
+  useEffect(() => {
+    const fetchPayment = async () => {
+      try {
+        const response = await getPaymentById(paymentId);
+        setPayment(response?.data);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch payment details",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const paymentHistory = [
-    {
-      id: "1",
-      date: "2024-01-15 10:30 AM",
-      action: "Payment Received",
-      amount: 5000,
-      method: "Bank Transfer",
-      by: "Admin User",
-    },
-    {
-      id: "2",
-      date: "2024-01-10 09:15 AM",
-      action: "Invoice Generated",
-      amount: 5000,
-      by: "System",
-    },
-  ];
+    if (paymentId) {
+      fetchPayment();
+    }
+  }, [paymentId]);
 
   const handleDownloadReceipt = () => {
     toast({
@@ -86,7 +63,7 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
     });
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status?: string) => {
     switch (status) {
       case "paid":
         return <CheckCircle2 className="h-5 w-5 text-green-500" />;
@@ -99,7 +76,7 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status?: string) => {
     switch (status) {
       case "paid":
         return <Badge className="bg-green-500">Paid</Badge>;
@@ -112,9 +89,50 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
     }
   };
 
+  const formatCurrency = (amount?: number) => {
+    if (!amount) return "₦0.00";
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN'
+    }).format(amount);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">Loading payment details...</div>
+      </div>
+    );
+  }
+
+  if (!payment) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">Payment not found</h2>
+          <Button onClick={() => router.push('/admin/account')}>
+            Back to Payments
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Mock payment history - you might want to fetch this from another endpoint
+  const paymentHistory = [
+    {
+      id: "1",
+      date: payment?.paymentDate ? new Date(payment.paymentDate).toLocaleString() : "N/A",
+      action: "Payment Received",
+      amount: payment?.amountPaid,
+      method: payment?.paymentMethod,
+      by: "System",
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-6 space-y-6">
+      <div className="min-w-[100%] max-w-[1500px] mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -124,9 +142,9 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-3xl font-bold">Payment Details</h1>
-                {getStatusIcon(payment.status)}
+                {getStatusIcon(payment?.paymentStatus)}
               </div>
-              <p className="text-muted-foreground">Transaction ID: {payment.transactionId}</p>
+              <p className="text-muted-foreground">Transaction ID: {payment?.transactionId || "N/A"}</p>
             </div>
           </div>
           <div className="flex gap-2">
@@ -156,26 +174,32 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
                     <CardTitle>Payment Summary</CardTitle>
                     <CardDescription>Overview of payment details</CardDescription>
                   </div>
-                  {getStatusBadge(payment.status)}
+                  {getStatusBadge(payment?.paymentStatus)}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Fee Type</p>
-                    <p className="font-medium">{payment.feeType}</p>
+                    <p className="text-sm text-muted-foreground">Payment Category</p>
+                    <p className="font-medium capitalize">
+                      {payment?.paymentCategory?.replace('_', ' ') || "N/A"}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Session</p>
-                    <p className="font-medium">{payment.session}</p>
+                    <p className="text-sm text-muted-foreground">Payment Type</p>
+                    <p className="font-medium capitalize">
+                      {payment?.paymentType?.replace('_', ' ') || "N/A"}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Term</p>
-                    <p className="font-medium">{payment.term}</p>
+                    <p className="text-sm text-muted-foreground">Payment Method</p>
+                    <p className="font-medium capitalize">{payment?.paymentMethod || "N/A"}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Due Date</p>
-                    <p className="font-medium">{new Date(payment.dueDate).toLocaleDateString()}</p>
+                    <p className="text-sm text-muted-foreground">Payment Date</p>
+                    <p className="font-medium">
+                      {payment?.paymentDate ? new Date(payment.paymentDate).toLocaleDateString() : "N/A"}
+                    </p>
                   </div>
                 </div>
                 
@@ -183,19 +207,11 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
                 
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Total Amount</span>
-                    <span className="text-xl font-bold">₦{payment.amount.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Amount Paid</span>
-                    <span className="text-lg font-semibold text-green-600">₦{payment.amountPaid.toLocaleString()}</span>
+                    <span className="text-xl font-bold text-green-600">
+                      {formatCurrency(payment?.amountPaid)}
+                    </span>
                   </div>
-                  {payment.balance > 0 && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Balance</span>
-                      <span className="text-lg font-semibold text-red-600">₦{payment.balance.toLocaleString()}</span>
-                    </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
@@ -211,38 +227,32 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
               <CardContent className="space-y-3">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Payment Method</p>
-                    <p className="font-medium">{payment.paymentMethod}</p>
+                    <p className="text-sm text-muted-foreground">Transaction ID</p>
+                    <p className="font-mono text-sm">{payment?.transactionId || "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Payment Date</p>
-                    <p className="font-medium">{new Date(payment.date).toLocaleDateString()}</p>
+                    <p className="font-medium">
+                      {payment?.paymentDate ? new Date(payment.paymentDate).toLocaleString() : "N/A"}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Transaction ID</p>
-                    <p className="font-mono text-sm">{payment.transactionId}</p>
+                    <p className="text-sm text-muted-foreground">Payment Method</p>
+                    <p className="font-medium capitalize">{payment?.paymentMethod || "N/A"}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Reference Number</p>
-                    <p className="font-mono text-sm">{payment.reference}</p>
-                  </div>
-                  {payment.bankName && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Bank Name</p>
-                      <p className="font-medium">{payment.bankName}</p>
-                    </div>
-                  )}
-                  <div>
-                    <p className="text-sm text-muted-foreground">Received By</p>
-                    <p className="font-medium">{payment.receivedBy}</p>
+                    <p className="text-sm text-muted-foreground">Payment Type</p>
+                    <p className="font-medium capitalize">
+                      {payment?.paymentType?.replace('_', ' ') || "N/A"}
+                    </p>
                   </div>
                 </div>
-                {payment.notes && (
+                {payment?.paymentMemo && (
                   <>
                     <Separator />
                     <div>
-                      <p className="text-sm text-muted-foreground mb-1">Notes</p>
-                      <p className="text-sm">{payment.notes}</p>
+                      <p className="text-sm text-muted-foreground mb-1">Payment Memo</p>
+                      <p className="text-sm break-words">{payment.paymentMemo}</p>
                     </div>
                   </>
                 )}
@@ -276,7 +286,7 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
                           <TableCell className="font-medium">{record.date}</TableCell>
                           <TableCell>{record.action}</TableCell>
                           <TableCell>
-                            {record.amount ? `₦${record.amount.toLocaleString()}` : "-"}
+                            {record.amount ? formatCurrency(record.amount) : "-"}
                           </TableCell>
                           <TableCell>{record.method || "-"}</TableCell>
                           <TableCell>{record.by}</TableCell>
@@ -292,68 +302,78 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Parent Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Parent Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <p className="text-sm text-muted-foreground">Name</p>
-                  <p className="font-medium">{payment.parentName}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="text-sm">{payment.parentEmail}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Phone</p>
-                  <p className="text-sm">{payment.parentPhone}</p>
-                </div>
-                <Separator />
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => router.push(`/admin/parent/${payment.parentName}`)}
-                >
-                  View Parent Profile
-                </Button>
-              </CardContent>
-            </Card>
+            {payment?.parent && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Parent Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Name</p>
+                    <p className="font-medium">{payment?.parent?.name || "N/A"}</p>
+                  </div>
+                  {payment?.parent?.email && (
+                    <div>
+                      <p className="text-sm text-muted-foreground">Email</p>
+                      <p className="text-sm">{payment.parent.email}</p>
+                    </div>
+                  )}
+                  {payment?.parent?.phone && (
+                    <div>
+                      <p className="text-sm text-muted-foreground">Phone</p>
+                      <p className="text-sm">{payment.parent.phone}</p>
+                    </div>
+                  )}
+                  <Separator />
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => router.push(`/admin/parent/${payment?.parent?._id}`)}
+                  >
+                    View Parent Profile
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Student Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Student Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <p className="text-sm text-muted-foreground">Name</p>
-                  <p className="font-medium">{payment.studentName}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Student ID</p>
-                  <p className="font-mono text-sm">{payment.studentId}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Class</p>
-                  <p className="font-medium">{payment.studentClass}</p>
-                </div>
-                <Separator />
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => router.push(`/student/${payment.studentId}`)}
-                >
-                  View Student Profile
-                </Button>
-              </CardContent>
-            </Card>
+            {payment?.student && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Student Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Name</p>
+                    <p className="font-medium">{payment?.student?.name || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Student ID</p>
+                    <p className="font-mono text-sm">{payment?.student?.studentId || "N/A"}</p>
+                  </div>
+                  {payment?.student?.class && (
+                    <div>
+                      <p className="text-sm text-muted-foreground">Class</p>
+                      <p className="font-medium">{payment.student.class}</p>
+                    </div>
+                  )}
+                  <Separator />
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => router.push(`/student/${payment?.student?._id}`)}
+                  >
+                    View Student Profile
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Quick Actions */}
             <Card>
@@ -369,7 +389,7 @@ const AdminPaymentDetail = ({paymentId}: AdminPaymentDetailProps) => {
                   <Receipt className="h-4 w-4 mr-2" />
                   Generate Invoice
                 </Button>
-                {payment.status !== "paid" && (
+                {payment?.paymentStatus !== "paid" && (
                   <Button className="w-full justify-start">
                     <CheckCircle2 className="h-4 w-4 mr-2" />
                     Mark as Paid
