@@ -84,7 +84,7 @@ const AgentProfile = ({
         <p className="text-muted-foreground">Teaching Role</p>
         <Separator />
         <div className="flex items-center justify-between">
-          <p className="text-lg font-semibold">{staffData.primarySubject}</p>
+          <p className="text-lg font-semibold">{staffData?.primarySubject}</p>
           <span className="bg-[#5542F61A] px-2 py-1 rounded-sm text-[#5542F6]">
             {staffData.level}
           </span>
