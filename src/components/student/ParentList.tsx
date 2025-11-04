@@ -250,12 +250,7 @@ const ParentList = () => {
               />
             </div>
             
-            <Link 
-              href="/admin/parent/add"
-              className="flex items-center text-white tex-sm rounded-md bg-primaryColor cursor-pointer hover:bg-white hover:text-primaryColor border-[1px] border-primaryColor py-2 px-6 transition-all"
-            >
-              Add New Parent
-            </Link>
+            
           </section>
         </div>
 
@@ -296,7 +291,7 @@ const ParentList = () => {
             </div>
           ) : (
             <AdminTable
-              title="Parents"
+              title=""
               columns={columns}
               data={parents}
               currentPage={pagination.currentPage}

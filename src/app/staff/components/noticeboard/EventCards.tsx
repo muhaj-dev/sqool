@@ -15,6 +15,7 @@ const [loading, setLoading] = useState(false);
     setLoading(true);
     try {
       const res = await getStaffNotices(searchTerm, 20);
+    
       setEvents(res.data.result || []);
     } catch {
       setEvents([]);

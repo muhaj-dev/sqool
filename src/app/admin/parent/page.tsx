@@ -1,14 +1,11 @@
-import StaffList from "@/components/staff/StaffList"
-import StaffContextProvider from "@/contexts/staff-context"
+import ParentList from "@/components/student/ParentList"
+
 import React from "react"
 
 const page = () => {
   return (
     <div>
-      <StaffContextProvider>
-
-      <StaffList />
-      </StaffContextProvider>
+      <ParentList /> 
     </div>
   )
 }

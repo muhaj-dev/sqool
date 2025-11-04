@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Download, Search, Filter, Plus, Calendar, User, CreditCard } from "lucide-react";
+import { ArrowLeft, Download, Search, Filter, Plus, Calendar, User, CreditCard, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -59,7 +59,7 @@ const AdminPaymentHistory = () => {
     total: 0,
     currentPage: 1,
     pageSize: 10,
-    totalPages: 0,
+    totalPages: 1,
     hasNextPage: false,
     hasPreviousPage: false,
   });
@@ -77,27 +77,38 @@ const AdminPaymentHistory = () => {
     userId: "",
   });
 
-  // Fetch payments data
+  // Fetch payments data with pagination
   useEffect(() => {
     const fetchPayments = async () => {
       setPaymentsLoading(true);
       try {
         const response = await getAllPayments(
-          1, 
-          100, 
+          pagination.currentPage, 
+          pagination.pageSize, 
           statusFilter !== "all" ? statusFilter : undefined
         );
         
         const paymentsData = response.data?.result || [];
         setPaymentRecords(paymentsData);
-        setPagination(response.data?.pagination || {
-          total: paymentsData.length,
-          currentPage: 1,
-          pageSize: 10,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        });
+        
+        if (response.data?.pagination) {
+          setPagination(prev => ({
+            total: typeof response.data.pagination.total === 'string' 
+              ? parseInt(response.data.pagination.total) 
+              : response.data.pagination.total,
+            currentPage: typeof response.data.pagination.currentPage === 'string'
+              ? parseInt(response.data.pagination.currentPage)
+              : response.data.pagination.currentPage,
+            pageSize: typeof response.data.pagination.pageSize === 'string'
+              ? parseInt(response.data.pagination.pageSize)
+              : response.data.pagination.pageSize || prev.pageSize,
+            totalPages: typeof response.data.pagination.totalPages === 'string'
+              ? parseInt(response.data.pagination.totalPages)
+              : response.data.pagination.totalPages,
+            hasNextPage: response.data.pagination.hasNextPage,
+            hasPreviousPage: response.data.pagination.hasPreviousPage,
+          }));
+        }
       } catch (error) {
         console.error('Failed to fetch payments:', error);
         toast({
@@ -111,7 +122,7 @@ const AdminPaymentHistory = () => {
     };
 
     fetchPayments();
-  }, [refresh, statusFilter]);
+  }, [refresh, statusFilter, pagination.currentPage, pagination.pageSize]);
 
   // Fetch students for search
   useEffect(() => {
@@ -180,6 +191,43 @@ const AdminPaymentHistory = () => {
     
     return matchesSearch;
   });
+
+  // Pagination handlers
+  const handlePageChange = (newPage: number) => {
+    setPagination(prev => ({ ...prev, currentPage: newPage }));
+  };
+
+  const handleNextPage = () => {
+    if (pagination.currentPage < pagination.totalPages) {
+      handlePageChange(pagination.currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (pagination.currentPage > 1) {
+      handlePageChange(pagination.currentPage - 1);
+    }
+  };
+
+  // Generate page numbers for pagination
+  const generatePageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, pagination.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(pagination.totalPages, startPage + maxVisiblePages - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
+  };
 
   const handleExport = () => {
     toast({
@@ -298,7 +346,7 @@ const AdminPaymentHistory = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-6 space-y-6">
+      <div className="container min-w-[100%] max-w-[1500px] mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -596,59 +644,105 @@ const AdminPaymentHistory = () => {
             {paymentsLoading ? (
               <div className="text-center py-8">Loading payments...</div>
             ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Student Name</TableHead>
-                      <TableHead>Fee Type</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Payment Method</TableHead>
-                      <TableHead>Transaction ID</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredRecords.length === 0 ? (
+              <>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
                       <TableRow>
-                        <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                          No payment records found
-                        </TableCell>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Student Name</TableHead>
+                        <TableHead>Fee Type</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Payment Method</TableHead>
+                        <TableHead>Transaction ID</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
-                    ) : (
-                      filteredRecords.map((record) => (
-                        <TableRow key={record._id}>
-                          <TableCell>{new Date(record.paymentDate).toLocaleDateString()}</TableCell>
-                          <TableCell className="font-medium">
-                            {record.student ? `${record.student.firstName} ${record.student.lastName}` : 'Unknown Student'}
-                          </TableCell>
-                          <TableCell>{record.paymentCategory}</TableCell>
-                          <TableCell className="font-semibold">{formatCurrency(record.amountPaid)}</TableCell>
-                          <TableCell>{getStatusBadge(record.paymentStatus)}</TableCell>
-                          <TableCell>{record.paymentMethod || "-"}</TableCell>
-                          <TableCell className="font-mono text-sm">{record.transactionId || "-"}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => router.push(`/admin/payment/${record._id}`)}
-                              >
-                                View
-                              </Button>
-                              {record.paymentStatus !== "paid" && record.paymentStatus !== "Success" && (
-                                <Button size="sm" variant="default">Mark Paid</Button>
-                              )}
-                            </div>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredRecords.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                            No payment records found
                           </TableCell>
                         </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+                      ) : (
+                        filteredRecords.map((record) => (
+                          <TableRow key={record._id}>
+                            <TableCell>{new Date(record.paymentDate).toLocaleDateString()}</TableCell>
+                            <TableCell className="font-medium">
+                              {record.student ? `${record.student.firstName} ${record.student.lastName}` : 'Unknown Student'}
+                            </TableCell>
+                            <TableCell>{record.paymentCategory}</TableCell>
+                            <TableCell className="font-semibold">{formatCurrency(record.amountPaid)}</TableCell>
+                            <TableCell>{getStatusBadge(record.paymentStatus)}</TableCell>
+                            <TableCell>{record.paymentMethod || "-"}</TableCell>
+                            <TableCell className="font-mono text-sm">{record.transactionId || "-"}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => router.push(`/admin/account/${record._id}`)}
+                                >
+                                  View
+                                </Button>
+                                {record.paymentStatus !== "paid" && record.paymentStatus !== "Success" && (
+                                  <Button size="sm" variant="default">Mark Paid</Button>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Pagination */}
+                {pagination.totalPages > 1 && (
+                  <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                    <div>
+                      <span className="text-sm text-muted-foreground">
+                        Showing {((pagination.currentPage - 1) * pagination.pageSize) + 1} - {Math.min(pagination.currentPage * pagination.pageSize, pagination.total)} of {pagination.total} items
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handlePrevPage}
+                        disabled={!pagination.hasPreviousPage}
+                      >
+                        <ChevronLeft className="h-4 w-4 mr-1" />
+                        Previous
+                      </Button>
+                      
+                      {/* Page numbers */}
+                      {generatePageNumbers().map((page) => (
+                        <Button
+                          key={page}
+                          variant={page === pagination.currentPage ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </Button>
+                      ))}
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleNextPage}
+                        disabled={!pagination.hasNextPage}
+                      >
+                        Next
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </CardContent>
         </Card>
