@@ -16,13 +16,12 @@ import Password from "./Password";
 
   return (
     <div className="">
-   
       <div className="flex justify-between gap-5 border-b-2  border-[#D6DDEB] ">
         <div className="space-x-3">
           <button
             className={`px-1 py-2 text-[.8rem] md:text-[1.1rem] font-semibold ${
               activeTab === "personalDetails"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("personalDetails")}
@@ -32,7 +31,7 @@ import Password from "./Password";
           <button
             className={`px-1 py-2 text-[.8rem] md:text-[1.1rem] font-semibold ${
               activeTab === "password"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("password")}
@@ -40,7 +39,6 @@ import Password from "./Password";
             Password
           </button>
         </div>
-       
       </div>
 
       <div className="py-0 md:py-4 ">

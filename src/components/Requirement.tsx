@@ -14,7 +14,7 @@ const Requirement = () => {
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle className="text-primaryColor font-semibold text-xl">
+        <DialogTitle className="text-primary font-semibold text-xl">
           The follow requirement is needed
         </DialogTitle>
         <DialogDescription>
@@ -23,7 +23,7 @@ const Requirement = () => {
             School you run.
           </p>
         </DialogDescription>
-        <div className="bg-gray-100 rounded-md p-6 text-primaryColor flex flex-col gap-4 ">
+        <div className="bg-gray-100 rounded-md p-6 text-primary flex flex-col gap-4 ">
           <h4 className="font-semibold">Secondary school</h4>
           <div className="flex items-center gap-4">
             <CheckCircle2 className="text-[#2EB57E]" /> <span>Full Name</span>
@@ -56,7 +56,7 @@ const Requirement = () => {
             <Button
               variant={"outline"}
               type="submit"
-              className="w-full text-primaryColor mt-6 hover:text-yellow-500 font-bold"
+              className="w-full text-primary mt-6 hover:text-yellow-500 font-bold"
             >
               Cancel
             </Button>
@@ -64,7 +64,7 @@ const Requirement = () => {
         </DialogFooter>
       </DialogHeader>
     </DialogContent>
-  )
+  );
 }
 
 export default Requirement

@@ -201,25 +201,31 @@ export const ExamList: React.FC<ExamListProps> = () => {
                 <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">No Exams Found</h3>
                 <p className="text-muted-foreground mb-4">
-                  You haven&apos;t created any exams yet. Create your first exam to get started.
+                  You haven&apos;t created any exams yet. Create your first exam
+                  to get started.
                 </p>
               </div>
             ) : (
               exams.map((exam) => (
-                <div key={exam._id} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                <div
+                  key={exam._id}
+                  className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                >
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-3">
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg flex items-center gap-2">
                         <FileText className="h-4 w-4" />
-                        {exam.subject?.name || 'Unknown Subject'} Examination
+                        {exam.subject?.name || "Unknown Subject"} Examination
                       </h3>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Created by {exam.creator?.details?.firstName} {exam.creator?.details?.lastName}
+                        Created by {exam.creator?.details?.firstName}{" "}
+                        {exam.creator?.details?.lastName}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant={getStatusVariant(exam.status)}>
-                        {exam.status?.charAt(0).toUpperCase() + exam.status?.slice(1)}
+                        {exam.status?.charAt(0).toUpperCase() +
+                          exam.status?.slice(1)}
                       </Badge>
                     </div>
                   </div>
@@ -228,7 +234,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">Session:</span>
-                      <span>{exam.session?.session || 'Not specified'}</span>
+                      <span>{exam.session?.session || "Not specified"}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -238,12 +244,15 @@ export const ExamList: React.FC<ExamListProps> = () => {
                     <div className="flex items-center gap-2 text-sm">
                       <Clock className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">Time:</span>
-                      <span>{formatTime(exam.startTime)} - {formatTime(exam.endTime)}</span>
+                      <span>
+                        {formatTime(exam.startTime)} -{" "}
+                        {formatTime(exam.endTime)}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <MapPin className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">Venue:</span>
-                      <span>{exam.venue || 'Not specified'}</span>
+                      <span>{exam.venue || "Not specified"}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Monitor className="h-4 w-4 text-muted-foreground" />
@@ -267,7 +276,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                         <span>{exam.students} students</span>
                       </div>
                     </div>
-                    {exam?.status !== 'approve' && (
+                    {exam?.status !== "approve" && (
                       <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
@@ -283,8 +292,8 @@ export const ExamList: React.FC<ExamListProps> = () => {
                           onClick={() => handleDeleteExam(exam)}
                           disabled={deletingId === exam._id}
                         >
-                          <Trash2 className="text-white bg-primaryColor h-4 w-4 mr-1" />
-                          {deletingId === exam._id ? 'Deleting...' : 'Delete'}
+                          <Trash2 className="text-white bg-primary h-4 w-4 mr-1" />
+                          {deletingId === exam._id ? "Deleting..." : "Delete"}
                         </Button>
                       </div>
                     )}

@@ -18,11 +18,11 @@ export function LogoutButton() {
   return (
     <Button
       onClick={handleLogout}
-      className="bg-primaryColor text-white hover:bg-primaryColor/90 flex items-center gap-2"
+      className="bg-primary text-white hover:bg-primary/90 flex items-center gap-2"
       variant="default"
     >
       <LogOut className="h-4 w-4" />
       Logout
     </Button>
-  )
+  );
 }

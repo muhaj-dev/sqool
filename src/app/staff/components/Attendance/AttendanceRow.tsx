@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
-import { Student, AttendanceStatus,StatusColorKey, StatusFilter } from "@/types";
+import { StudentAttendance, AttendanceStatus,StatusColorKey, StatusFilter } from "@/types";
 import { cn } from "@/lib/utils";
 import { Eye, FileText } from "lucide-react";
 import { useState } from "react";
@@ -19,7 +19,7 @@ import { StudentInfoDialog } from "./StudentInfoDialog";
 import { RemarkModal } from "./RemarkModal";
 
 interface AttendanceRowProps {
-  student: Student & {status:StatusFilter};
+  student: StudentAttendance
 }
 
 const statusColors = {
@@ -56,7 +56,7 @@ export function AttendanceRow({ student }: AttendanceRowProps) {
         <TableCell>
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
-              <AvatarImage src={student.avatar} alt={student.name} />
+              <AvatarImage src={student.photo} alt={student.name} />
               <AvatarFallback className="bg-primary/10 text-primary text-sm">
                 {initials}
               </AvatarFallback>

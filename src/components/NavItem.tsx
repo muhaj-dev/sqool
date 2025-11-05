@@ -15,13 +15,13 @@ const NavItem = ({ category, isCurrent, tabChangeHandler }: NavItemProps) => {
       <div
         onClick={tabChangeHandler}
         className={cn("transition-all text-muted-foreground pb-1", {
-          "border-b-2 border-primaryColor text-black ": isCurrent,
+          "border-b-2 border-primary text-black ": isCurrent,
         })}
       >
         {category.label}
       </div>
     </div>
-  )
+  );
 }
 
 export default NavItem

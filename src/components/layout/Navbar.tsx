@@ -27,7 +27,7 @@ const Navbar = ({
   isOpen: boolean;
 }) => {
   return (
-    <div className="bg-primaryColor md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
+    <div className="bg-primary md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
       <div className="">
         {/* Hamburger button - toggles sidebar */}
         <button
@@ -67,7 +67,7 @@ const Navbar = ({
       </div>
 
       <Select>
-        <SelectTrigger className="w-[120px] flex md:hidden text-white bg-primaryColor border-none">
+        <SelectTrigger className="w-[120px] flex md:hidden text-white bg-primary border-none">
           <SelectValue placeholder="Show stats: " />
         </SelectTrigger>
         <SelectContent>

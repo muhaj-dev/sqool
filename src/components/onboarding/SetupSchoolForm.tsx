@@ -133,31 +133,39 @@ function onSubmit(data: z.infer<typeof formSchema>) {
         </div>
         <div className="w-full lg:w-[60%]">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
-            <FormField
-  name="schoolLogoId"
-  control={form.control}
-  render={({ field }) => (
-    <FormItem className="w-full">
-      <FormLabel>Upload School Logo</FormLabel>
-      <FormControl>
-        <AttachmentUpload 
-          {...field}
-          onChange={(file) => {
-            if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
-              form.setValue('schoolLogoId', file);
-            } else {
-              form.setError('schoolLogoId', { message: 'Only JPG/PNG files are allowed' });
-            }
-          }}
-          accept=".jpg,.jpeg,.png"
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
-              
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-4"
+            >
+              <FormField
+                name="schoolLogoId"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Upload School Logo</FormLabel>
+                    <FormControl>
+                      <AttachmentUpload
+                        {...field}
+                        onChange={(file) => {
+                          if (
+                            file &&
+                            ["image/jpeg", "image/png"].includes(file.type)
+                          ) {
+                            form.setValue("schoolLogoId", file);
+                          } else {
+                            form.setError("schoolLogoId", {
+                              message: "Only JPG/PNG files are allowed",
+                            });
+                          }
+                        }}
+                        accept=".jpg,.jpeg,.png"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* Rest of your form fields remain the same */}
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <FormField
@@ -388,7 +396,7 @@ function onSubmit(data: z.infer<typeof formSchema>) {
             if your school don&apos;t have a brands ignore.
           </p>
         </div>
-        <Button className="text-primaryColor bg-white hover:bg-gray-200">
+        <Button className="text-primary bg-white hover:bg-gray-200">
           <Plus /> Add Brands
         </Button>
       </div>

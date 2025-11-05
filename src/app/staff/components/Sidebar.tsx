@@ -38,7 +38,7 @@ const Sidebar = () => {
         <div>
           <h2
             onClick={() => router.push("/")}
-            className="text-primaryColor text-center text-2xl font-bold cursor-pointer pb-4"
+            className="text-primary text-center text-2xl font-bold cursor-pointer pb-4"
           >
             SQOOLIFY
           </h2>
@@ -77,7 +77,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/staff" ? "text-primaryColor" : ""
+                pathname === "/staff" ? "text-primary" : ""
               }`}
             >
               Dashboard
@@ -92,7 +92,7 @@ const Sidebar = () => {
                   />
                   <p
                     className={`text-[#515B6F] ${
-                      pathname === "/staff/class*" ? "text-primaryColor" : ""
+                      pathname === "/staff/class*" ? "text-primary" : ""
                     }`}
                   >
                     Class
@@ -105,8 +105,8 @@ const Sidebar = () => {
                  
                   <Link
                     href="/staff/class/attendance"
-                    className={`hover:text-primaryColor text-[#515B6F] cursor-pointer ${
-                      pathname === "/staff/class/attendance" ? "text-primaryColor" : ""
+                    className={`hover:text-primary text-[#515B6F] cursor-pointer ${
+                      pathname === "/staff/class/attendance" ? "text-primary" : ""
                     }`}
                   >
                     Attendance
@@ -128,9 +128,7 @@ const Sidebar = () => {
 
             <p
               className={`text-[#515B6F] ${
-                pathname.startsWith("/staff/attendance")
-                  ? "text-primaryColor"
-                  : ""
+                pathname.startsWith("/staff/attendance") ? "text-primary" : ""
               }`}
             >
               Attendance
@@ -142,7 +140,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname.startsWith("/staff/student") ? "text-primaryColor" : ""
+                pathname.startsWith("/staff/student") ? "text-primary" : ""
               }`}
             >
               Student
@@ -159,9 +157,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname.startsWith("/staff/timetable")
-                  ? "text-primaryColor"
-                  : ""
+                pathname.startsWith("/staff/timetable") ? "text-primary" : ""
               }`}
             >
               Time Table
@@ -179,7 +175,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/staff/noticeboard" ? "text-primaryColor" : ""
+                pathname === "/staff/noticeboard" ? "text-primary" : ""
               }`}
             >
               Notice Board
@@ -192,7 +188,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/staff/exams" ? "text-primaryColor" : ""
+                pathname === "/staff/exams" ? "text-primary" : ""
               }`}
             >
               Examinations
@@ -210,7 +206,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/staff/students" ? "text-primaryColor" : ""
+                pathname === "/staff/students" ? "text-primary" : ""
               }`}
             >
               My Students

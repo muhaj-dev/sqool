@@ -164,14 +164,14 @@ export const StaffTimeTable: React.FC<StaffTimeTableProps> = ({ toggleView }) =>
         </Select>
         <div className="flex gap-3 items-center">
           <Button
-            variant="primaryBorder"
-            className="px-3 text-primaryColor"
-            onClick={() => toggleView('upload')}
+            variant="default"
+            className="px-3 text-primary"
+            onClick={() => toggleView("upload")}
           >
             Upload Timetable
           </Button>
           <Button
-            onClick={() => toggleView('download')}
+            onClick={() => toggleView("download")}
             className="px-3 text-white"
             icon={<Export />}
           >

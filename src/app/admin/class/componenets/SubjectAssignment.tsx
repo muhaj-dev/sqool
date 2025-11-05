@@ -229,7 +229,7 @@ const SubjectAssignment = ({ classData,onRefresh }: SubjectAssignmentProps) => {
                     <input
                       type="checkbox" // Fixed typo from "check" to "checkbox"
                       id={subject._id}
-                      className="accent-primaryColor text-white"
+                      className="accent-primary text-white"
                       checked={selectedSubjects.includes(subject._id)}
                       onChange={() => handleSubjectToggle(subject._id)}
                       disabled={!selectedClass || loading}
@@ -274,7 +274,7 @@ const SubjectAssignment = ({ classData,onRefresh }: SubjectAssignmentProps) => {
                 classData.subjects.map((subject: any) => (
                   <div
                     key={subject._id}
-                    className="flex items-center space-x-2 accent-primaryColor"
+                    className="flex items-center space-x-2 accent-primary"
                   >
                     <input
                       type="checkbox"
@@ -307,7 +307,7 @@ const SubjectAssignment = ({ classData,onRefresh }: SubjectAssignmentProps) => {
                 Cancel
               </Button>
               <Button
-              className="text-white"
+                className="text-white"
                 disabled={subjectsToRemove.length === 0}
                 onClick={async () => {
                   try {
@@ -342,7 +342,11 @@ const SubjectAssignment = ({ classData,onRefresh }: SubjectAssignmentProps) => {
       )}
 
       {/* Subject List Card */}
-      <SubjectList classes={subjectListClasses} classData={classData} onRefresh={onRefresh}/>
+      <SubjectList
+        classes={subjectListClasses}
+        classData={classData}
+        onRefresh={onRefresh}
+      />
     </div>
   );
 };

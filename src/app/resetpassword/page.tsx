@@ -38,7 +38,7 @@ const ForgotPassword = () => {
       "
       >
         <div className="text-center mb-6 ">
-          <h3 className="text-primaryColor text-2xl sm:text-3xl  mb-4">
+          <h3 className="text-primary text-2xl sm:text-3xl  mb-4">
             Reset Password
           </h3>
           <p className="text-[#434547] sm:text-xl">
@@ -64,13 +64,13 @@ const ForgotPassword = () => {
             />
             <Button
               type="submit"
-              className="w-full bg-primaryColor text-white font-semibold"
+              className="w-full bg-primary text-white font-semibold"
             >
               Send reset link
             </Button>
             <div className="text-sm">
               Remembered your password ? kindly to
-              <Link href={"/signin"} className=" text-primaryColor px-2  ">
+              <Link href={"/signin"} className=" text-primary px-2  ">
                 click here
               </Link>
               Login
@@ -79,7 +79,7 @@ const ForgotPassword = () => {
         </Form>
       </Wrapper>
     </MaxWidthWrapper>
-  )
+  );
 }
 
 export default ForgotPassword

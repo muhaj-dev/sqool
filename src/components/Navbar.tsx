@@ -14,7 +14,7 @@ const Navbar = ({ sections, activeIndex, setActiveIndex }: NavbarProps) => {
   return (
     <>
       <div className="text-center ">
-        <h2 className="text-2xl text-primaryColor font-semibold">
+        <h2 className="text-2xl text-primary font-semibold">
           Welcome to your dashboard
         </h2>
         <p className="text-[#515B6F] mt-6 ">
@@ -30,7 +30,7 @@ const Navbar = ({ sections, activeIndex, setActiveIndex }: NavbarProps) => {
         setActiveIndex={setActiveIndex}
       />
     </>
-  )
+  );
 }
 
 export default Navbar

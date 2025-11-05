@@ -19,19 +19,19 @@ const PasswordSetting = () => {
             Password must Consist the following
           </p>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>A minimum of 8 characters</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>At least one letter</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>At least one number</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>At least one special character</p>
           </div>
         </div>
@@ -59,16 +59,16 @@ const PasswordSetting = () => {
             Pin must Consist the following
           </p>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>A minimum of 4 characters</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>At least one letter</p>
           </div>
 
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primaryColor"></div>
+            <div className="w-6 h-6 rounded-full bg-primary"></div>
             <p>At least one special character</p>
           </div>
         </div>
@@ -82,8 +82,8 @@ const PasswordSetting = () => {
               validBorderColor="#E5B80B"
               values={currentPin}
               onChange={(value, index, values) => setCurrentPin(values)}
-              onComplete={values => {
-                console.log(values)
+              onComplete={(values) => {
+                console.log(values);
               }}
               containerStyle={{
                 justifyContent: "space-between",
@@ -101,8 +101,8 @@ const PasswordSetting = () => {
               validBorderColor="#E5B80B"
               values={currentPin}
               onChange={(value, index, values) => setCurrentPin(values)}
-              onComplete={values => {
-                console.log(values)
+              onComplete={(values) => {
+                console.log(values);
               }}
               containerStyle={{
                 justifyContent: "space-between",
@@ -116,7 +116,7 @@ const PasswordSetting = () => {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
 export default PasswordSetting

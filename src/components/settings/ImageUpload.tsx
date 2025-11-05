@@ -40,16 +40,13 @@ const ImageUpload = () => {
           onChange={handleImageUpload}
         />
         {!url ? (
-          <span
-            onClick={clickHandler}
-            className="text-primaryColor cursor-pointer "
-          >
+          <span onClick={clickHandler} className="text-primary cursor-pointer ">
             Add Photo
           </span>
         ) : (
           <span
             onClick={handleFileRemove}
-            className="text-primaryColor cursor-pointer "
+            className="text-primary cursor-pointer "
           >
             Change Photo
           </span>
@@ -60,7 +57,7 @@ const ImageUpload = () => {
         more that 5mb
       </span>
     </div>
-  )
+  );
 }
 
 export default ImageUpload

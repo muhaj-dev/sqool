@@ -63,7 +63,7 @@ const SignUpBusiness = () => {
       </div>
       <div className="flex justify-center items-center flex-col w-full h-screen">
         <div className="flex flex-col justify-center items-center w-[500px]">
-          <h2 className="text-xl text-primaryColor font-semibold">
+          <h2 className="text-xl text-primary font-semibold">
             Tell us about your School
           </h2>
           <p className="text-muted-foreground">

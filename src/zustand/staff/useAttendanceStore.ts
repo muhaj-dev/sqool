@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { AttendanceStatus,StatusFilter,Student } from "@/types";
+import { AttendanceStatus, StudentAttendance } from "@/types";
 
 interface AttendanceRecord {
   status: AttendanceStatus;
@@ -10,10 +10,10 @@ interface AttendanceStore {
   selectedDate: Date;
   selectedClass: string;
   attendance: Record<string, AttendanceRecord>;
-  students: (Student&{status:StatusFilter})[],
+  students: StudentAttendance[];
   setDate: (date: Date) => void;
   setClass: (classId: string) => void;
-  setStudent: (students: (Student&{status:StatusFilter})[]) => void;
+  setStudent: (students: StudentAttendance[]) => void;
   initializeAttendance: (studentIds: string[]) => void;
   updateAttendance: (
     studentId: string,

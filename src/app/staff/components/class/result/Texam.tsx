@@ -48,7 +48,10 @@ const Texam: React.FC<TexamProps> = ({ toggleTexam }) => {
             Upload New
           </Button>
         ) : (
-          <Button onClick={toggleTexam} className="px-3 bg-white border border-input">
+          <Button
+            onClick={toggleTexam}
+            className="px-3 bg-white border border-input"
+          >
             Expot
           </Button>
         )}
@@ -59,7 +62,7 @@ const Texam: React.FC<TexamProps> = ({ toggleTexam }) => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "exam"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("exam")}
@@ -69,7 +72,7 @@ const Texam: React.FC<TexamProps> = ({ toggleTexam }) => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "test"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("test")}

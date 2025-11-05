@@ -84,7 +84,7 @@ const SetupSchoolForm = () => {
             This information that you can update anytime.
           </p>
         </div>
-        <Button className="bg-primaryColor text-white" onClick={openForm}>
+        <Button className="bg-primary text-white" onClick={openForm}>
           Add School Owner
         </Button>
       </div>
@@ -109,9 +109,7 @@ const SetupSchoolForm = () => {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Upload School Logo</FormLabel>
-                    <FormControl>
-                      {/* <AttachmentUpload /> */}
-                    </FormControl>
+                    <FormControl>{/* <AttachmentUpload /> */}</FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -124,9 +122,9 @@ const SetupSchoolForm = () => {
                     <FormItem className="w-full grid">
                       <FormLabel>Founding Date</FormLabel>
                       <FormControl>
-                        <DatePicker 
+                        <DatePicker
                           selected={field.value}
-  onSelect={field.onChange}
+                          onSelect={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />
@@ -322,12 +320,12 @@ const SetupSchoolForm = () => {
             if your school don&apos;t have a brands ignore.
           </p>
         </div>
-        <Button className="text-primaryColor bg-white hover:bg-gray-200">
+        <Button className="text-primary bg-white hover:bg-gray-200">
           <Plus /> Add Brands
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 export default SetupSchoolForm

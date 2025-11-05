@@ -63,7 +63,7 @@ const CreateClassDialog = ({ teachers, classes, setClasses, onRefresh }: CreateC
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primaryColor text-white hover:bg-primaryColor/55">
+        <Button className="bg-primary text-white hover:bg-primary/55">
           <Plus className="h-4 w-4 mr-2" />
           Create Class
         </Button>
@@ -198,10 +198,7 @@ const CreateClassDialog = ({ teachers, classes, setClasses, onRefresh }: CreateC
             </div>
           </div>
 
-          <Button
-            onClick={handleCreateClass}
-            className="w-full text-white"
-          >
+          <Button onClick={handleCreateClass} className="w-full text-white">
             Create Class
           </Button>
         </div>

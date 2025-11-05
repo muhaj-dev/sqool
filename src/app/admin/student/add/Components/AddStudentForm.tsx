@@ -317,9 +317,10 @@ export default function AddStudentForm() {
         {/* Debug info - remove in production */}
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
           <p className="text-sm text-yellow-800">
-            <strong>Debug Info:</strong> Form valid: {form.formState.isValid ? 'Yes' : 'No'}, 
-            Parent selected: {selectedParentId ? 'Yes' : 'No'}, 
-            Ready to submit: {isFormValid ? 'Yes' : 'No'}
+            <strong>Debug Info:</strong> Form valid:{" "}
+            {form.formState.isValid ? "Yes" : "No"}, Parent selected:{" "}
+            {selectedParentId ? "Yes" : "No"}, Ready to submit:{" "}
+            {isFormValid ? "Yes" : "No"}
           </p>
         </div>
 
@@ -360,7 +361,10 @@ export default function AddStudentForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gender *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select gender" />
@@ -394,14 +398,20 @@ export default function AddStudentForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Class *</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
+                    <Select
+                      onValueChange={field.onChange}
                       defaultValue={field.value}
                       disabled={classLoading}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={classLoading ? "Loading classes..." : "Select a class"} />
+                          <SelectValue
+                            placeholder={
+                              classLoading
+                                ? "Loading classes..."
+                                : "Select a class"
+                            }
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -449,9 +459,9 @@ export default function AddStudentForm() {
                   <FormItem>
                     <FormLabel>Hobbies *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="reading, swimming, drawing" 
-                        {...field} 
+                      <Input
+                        placeholder="reading, swimming, drawing"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -501,7 +511,7 @@ export default function AddStudentForm() {
           {/* Parent Information */}
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="font-medium mb-4 text-lg">Parent Information</h3>
-            
+
             {/* Search Existing Parent */}
             <div className="mb-6">
               <FormField
@@ -529,21 +539,31 @@ export default function AddStudentForm() {
                             Create New
                           </Button>
                         </div>
-                        
+
                         {searchLoading && (
-                          <p className="text-sm text-muted-foreground">Searching parents...</p>
+                          <p className="text-sm text-muted-foreground">
+                            Searching parents...
+                          </p>
                         )}
-                        
+
                         {parents.length > 0 && !selectedParentId && (
-                          <Select onValueChange={handleParentSelect} value={field.value}>
+                          <Select
+                            onValueChange={handleParentSelect}
+                            value={field.value}
+                          >
                             <SelectTrigger>
                               <SelectValue placeholder="Select a parent from results" />
                             </SelectTrigger>
                             <SelectContent>
                               {parents.map((parent) => (
-                                <SelectItem key={parent.parentId} value={parent.parentId}>
+                                <SelectItem
+                                  key={parent.parentId}
+                                  value={parent.parentId}
+                                >
                                   <div className="flex flex-col">
-                                    <span className="font-medium">{parent.name}</span>
+                                    <span className="font-medium">
+                                      {parent.name}
+                                    </span>
                                     <span className="text-xs text-muted-foreground">
                                       {parent.occupation}
                                     </span>
@@ -554,24 +574,30 @@ export default function AddStudentForm() {
                           </Select>
                         )}
 
-                        {selectedParentId && selectedParentId !== 'new_parent' && (
-                          <div className="p-3 bg-green-50 border border-green-200 rounded-md">
-                            <p className="text-sm text-green-800">
-                              Parent selected: {parents.find(p => p.parentId === selectedParentId)?.name}
-                            </p>
-                            <Button
-                              type="button"
-                              variant="link"
-                              className="p-0 h-auto text-sm text-green-600"
-                              onClick={() => {
-                                form.setValue('parentId', '');
-                                setSearchQuery('');
-                              }}
-                            >
-                              Change parent
-                            </Button>
-                          </div>
-                        )}
+                        {selectedParentId &&
+                          selectedParentId !== "new_parent" && (
+                            <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                              <p className="text-sm text-green-800">
+                                Parent selected:{" "}
+                                {
+                                  parents.find(
+                                    (p) => p.parentId === selectedParentId
+                                  )?.name
+                                }
+                              </p>
+                              <Button
+                                type="button"
+                                variant="link"
+                                className="p-0 h-auto text-sm text-green-600"
+                                onClick={() => {
+                                  form.setValue("parentId", "");
+                                  setSearchQuery("");
+                                }}
+                              >
+                                Change parent
+                              </Button>
+                            </div>
+                          )}
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -581,7 +607,7 @@ export default function AddStudentForm() {
             </div>
 
             {/* New Parent Form - Only show if creating new parent */}
-            {selectedParentId === 'new_parent' && (
+            {selectedParentId === "new_parent" && (
               <div className="border-t pt-6 space-y-4">
                 <h4 className="font-medium text-lg">Create New Parent</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -592,10 +618,7 @@ export default function AddStudentForm() {
                       <FormItem>
                         <FormLabel>First Name *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="First Name" 
-                            {...field} 
-                          />
+                          <Input placeholder="First Name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -608,10 +631,7 @@ export default function AddStudentForm() {
                       <FormItem>
                         <FormLabel>Last Name *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Last Name" 
-                            {...field}
-                          />
+                          <Input placeholder="Last Name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -625,8 +645,8 @@ export default function AddStudentForm() {
                         <FormItem>
                           <FormLabel>Email *</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="john.doe@example.com" 
+                            <Input
+                              placeholder="john.doe@example.com"
                               {...field}
                             />
                           </FormControl>
@@ -643,8 +663,8 @@ export default function AddStudentForm() {
                         <FormItem>
                           <FormLabel>Occupation *</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="Engineer, Teacher, etc." 
+                            <Input
+                              placeholder="Engineer, Teacher, etc."
                               {...field}
                             />
                           </FormControl>
@@ -680,9 +700,9 @@ export default function AddStudentForm() {
           <Button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className="px-6 py-2 bg-primaryColor text-white hover:bg-primaryColor/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-primary text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Saving...' : 'Save Student'}
+            {isSubmitting ? "Saving..." : "Save Student"}
           </Button>
         </div>
       </form>

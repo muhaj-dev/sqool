@@ -98,7 +98,7 @@ const CustomToolbar: React.FC<ToolbarProps<Event>> = ({ onNavigate, date }) => {
                 <button onClick={goToNext}>{'>'}</button> */}
           <span className="ml-4 mr-2">{moment(date).format("MMMM")}</span>
           <ChevronDown size={20} />
-          <button className="ml-4 bg-primaryColor text-white px-4 py-2 rounded">
+          <button className="ml-4 bg-primary text-white px-4 py-2 rounded">
             Export
           </button>
         </div>

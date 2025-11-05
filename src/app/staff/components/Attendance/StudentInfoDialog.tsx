@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Student } from "@/types/attendance";
+import { StudentAttendance } from "@/types";
 import { User, Phone, Calendar, TrendingUp } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 
 interface StudentInfoDialogProps {
-  student: Student | null;
+  student: StudentAttendance | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -47,7 +47,7 @@ export function StudentInfoDialog({
           {/* Profile Section */}
           <div className="flex flex-col items-center space-y-4">
             <Avatar className="h-24 w-24">
-              <AvatarImage src={student.avatar} alt={student.name} />
+              <AvatarImage src={student.photo} alt={student.name} />
               <AvatarFallback className="text-2xl bg-primary/10 text-primary">
                 {initials}
               </AvatarFallback>

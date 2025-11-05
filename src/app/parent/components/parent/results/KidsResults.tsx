@@ -115,7 +115,9 @@ const KidsResult = () => {
           icon={<Search />}
           className="my-2 w-[250px]"
         />
-        <Button className="px-3 bg-white border border-[#E9EBEB]">Export</Button>
+        <Button className="px-3 bg-white border border-[#E9EBEB]">
+          Export
+        </Button>
       </div>
 
       {/* Kid selection buttons */}
@@ -125,7 +127,7 @@ const KidsResult = () => {
             key={kid.id}
             className={`px-1 py-2 text-[.9rem] md:text-[1.125rem] font-semibold ${
               selectedKid?.id === kid.id
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleKidSelect(kid.id)}

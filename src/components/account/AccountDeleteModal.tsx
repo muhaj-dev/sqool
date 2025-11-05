@@ -39,7 +39,7 @@ export function AccountDeleteModal({
             X
           </DialogClose>
           <DialogHeader className="flex flex-col items-center w-[60%] mx-auto my-4">
-            <DialogTitle className="text-primaryColor font-semibold text-xl mb-2">
+            <DialogTitle className="text-primary font-semibold text-xl mb-2">
               Delete My Account
             </DialogTitle>
             <DialogDescription className="text-center">
@@ -99,5 +99,5 @@ export function AccountDeleteModal({
         </DialogContent>
       </div>
     </div>
-  )
+  );
 }

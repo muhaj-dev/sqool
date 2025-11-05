@@ -34,7 +34,7 @@ const Ownerinfo = () => {
       </div>
       <div className="bg-white rounded-md p-4 mt-8    ">
         <div className="flex flex-col gap-4">
-          {requirments.map(item => (
+          {requirments.map((item) => (
             <div
               key={item.label}
               className="flex gap-8 items-center w-full p-4 rounded-sm border"
@@ -55,7 +55,7 @@ const Ownerinfo = () => {
             <Checkbox
               id="terms1"
               className=" border-muted-foreground  
-            data-[state=checked]:bg-transparent data-[state=checked]:text-primaryColor
+            data-[state=checked]:bg-transparent data-[state=checked]:text-primary
             "
             />
             <div className="grid gap-1.5 leading-none">
@@ -72,7 +72,7 @@ const Ownerinfo = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Ownerinfo

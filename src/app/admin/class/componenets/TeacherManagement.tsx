@@ -201,12 +201,10 @@ const [changingTeacher, setChangingTeacher] = useState(false);
   return (
     <div className="space-y-6">
       {/* Assign New Teacher */}
-     <Card>
+      <Card>
         <CardHeader>
           <CardTitle>
-            {currentClassTeacher
-              ? "Assign Class Teacher"
-              : "Add Class Teacher"}
+            {currentClassTeacher ? "Assign Class Teacher" : "Add Class Teacher"}
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             Select and assign teachers to {classData.className}
@@ -216,7 +214,9 @@ const [changingTeacher, setChangingTeacher] = useState(false);
           <div className="space-y-4">
             {currentClassTeacher && (
               <div>
-                <label className="text-sm font-medium">Current Class Teacher</label>
+                <label className="text-sm font-medium">
+                  Current Class Teacher
+                </label>
                 <div className="p-2 border rounded bg-muted mt-1">
                   {`${currentClassTeacher.firstName} ${currentClassTeacher.lastName}`}
                 </div>
@@ -224,19 +224,28 @@ const [changingTeacher, setChangingTeacher] = useState(false);
             )}
             <div>
               <label className="text-sm font-medium">
-                {currentClassTeacher ? "Change Class Teacher" : "Add Class Teacher"}
+                {currentClassTeacher
+                  ? "Change Class Teacher"
+                  : "Add Class Teacher"}
               </label>
               <Select
                 value={newClassTeacher}
                 onValueChange={setNewClassTeacher}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={currentClassTeacher ? "Select new class teacher" : "Select class teacher"} />
+                  <SelectValue
+                    placeholder={
+                      currentClassTeacher
+                        ? "Select new class teacher"
+                        : "Select class teacher"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {availableTeachers.map((teacher) => (
                     <SelectItem key={teacher._id} value={teacher._id}>
-                      {teacher.userId.firstName} {teacher.userId.lastName} - {teacher.level}
+                      {teacher.userId.firstName} {teacher.userId.lastName} -{" "}
+                      {teacher.level}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -260,74 +269,78 @@ const [changingTeacher, setChangingTeacher] = useState(false);
       </Card>
 
       {/* Assign Subjects Modal */}
-        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>
-          Assign Subjects to {selectedTeacher?.userId?.firstName}{" "}
-          {selectedTeacher?.userId?.lastName}
-        </DialogTitle>
-      </DialogHeader>
-      <div className="space-y-2">
-        <Input
-          placeholder="Search subjects..."
-          value={subjectSearch}
-          onChange={(e) => setSubjectSearch(e.target.value)}
-        />
-        <div className="space-y-2 h-[240px] overflow-y-auto p-2 border border-[#c3c3c3] rounded">
-          {allSubjects.length > 0 ? (
-            allSubjects.map((subject) => {
-              const isAssigned = assignedSubjectIds.includes(subject._id);
-              return (
-                <div
-                  key={subject._id}
-                  className="flex items-center space-x-2 accent-primaryColor"
-                >
-                  <input
-                    type="checkbox"
-                    id={subject._id}
-                    checked={selectedSubjects.includes(subject._id)}
-                    onChange={() => {
-                      setSelectedSubjects((prev) =>
-                        prev.includes(subject._id)
-                          ? prev.filter((id) => id !== subject._id)
-                          : [...prev, subject._id]
-                      );
-                    }}
-                    disabled={!isAssigned}
-                  />
-                  <label
-                    htmlFor={subject._id}
-                    className={!isAssigned ? "text-[#adadad]" : ""}
-                  >
-                    {subject.code} - {subject.name}
-                    {!isAssigned && (
-                      <span className="ml-2 text-xs text-gray-400">(Not assigned to class)</span>
-                    )}
-                  </label>
-                </div>
-              );
-            })
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              {subjectSearch ? "No subjects found" : "No subjects available"}
-            </p>
-          )}
-        </div>
-        <Button
-          onClick={handleAssignSubjectsToTutor}
-          className="w-full text-white"
-          disabled={selectedSubjects.length === 0 || loading}
-        >
-          {loading ? "Assigning..." : "Assign Subjects"}
-        </Button>
-      </div>
-    </DialogContent>
-  </Dialog>
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Assign Subjects to {selectedTeacher?.userId?.firstName}{" "}
+              {selectedTeacher?.userId?.lastName}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Input
+              placeholder="Search subjects..."
+              value={subjectSearch}
+              onChange={(e) => setSubjectSearch(e.target.value)}
+            />
+            <div className="space-y-2 h-[240px] overflow-y-auto p-2 border border-[#c3c3c3] rounded">
+              {allSubjects.length > 0 ? (
+                allSubjects.map((subject) => {
+                  const isAssigned = assignedSubjectIds.includes(subject._id);
+                  return (
+                    <div
+                      key={subject._id}
+                      className="flex items-center space-x-2 accent-primary"
+                    >
+                      <input
+                        type="checkbox"
+                        id={subject._id}
+                        checked={selectedSubjects.includes(subject._id)}
+                        onChange={() => {
+                          setSelectedSubjects((prev) =>
+                            prev.includes(subject._id)
+                              ? prev.filter((id) => id !== subject._id)
+                              : [...prev, subject._id]
+                          );
+                        }}
+                        disabled={!isAssigned}
+                      />
+                      <label
+                        htmlFor={subject._id}
+                        className={!isAssigned ? "text-[#adadad]" : ""}
+                      >
+                        {subject.code} - {subject.name}
+                        {!isAssigned && (
+                          <span className="ml-2 text-xs text-gray-400">
+                            (Not assigned to class)
+                          </span>
+                        )}
+                      </label>
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {subjectSearch
+                    ? "No subjects found"
+                    : "No subjects available"}
+                </p>
+              )}
+            </div>
+            <Button
+              onClick={handleAssignSubjectsToTutor}
+              className="w-full text-white"
+              disabled={selectedSubjects.length === 0 || loading}
+            >
+              {loading ? "Assigning..." : "Assign Subjects"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Current Class Teachers (from classData.tutors) */}
-         <Card>
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
@@ -368,48 +381,49 @@ const [changingTeacher, setChangingTeacher] = useState(false);
                       <p className="text-sm text-muted-foreground">
                         Subjects:{" "}
                         {Array.isArray(tutor.subject)
-                          ? tutor.subject.map((sub: any) =>
-                              typeof sub === "object" && sub !== null
-                                ? sub.name
-                                : sub
-                            ).join(", ")
+                          ? tutor.subject
+                              .map((sub: any) =>
+                                typeof sub === "object" && sub !== null
+                                  ? sub.name
+                                  : sub
+                              )
+                              .join(", ")
                           : ""}
                       </p>
                     </div>
-                      <div className="flex gap-2 flex-wrap mt-3">
-                        <Button
-                          size="sm"
-                          className="text-white"
-                          // variant="destructive"
-                          onClick={() => {
-                            setRemovalTutor(tutor);
-                            setRemovalSubjects([]);
-                            setRemoveModalOpen(true);
-                          }}
-                        >
-                          Edit Subject(s)
-                        </Button>
-                        <Button
-                          className="text-white"
-                          size="sm"
-                          // variant="destructive"
-                          onClick={() =>
-                            handleRemoveTutor(
-                              tutor.teacher?._id,
-                              tutor.subject.map((s: any) => s._id)
-                            )
-                          }
-                        >
-                          Remove Tutor
-                        </Button>
-                      </div>
+                    <div className="flex gap-2 flex-wrap mt-3">
+                      <Button
+                        size="sm"
+                        className="text-white"
+                        // variant="destructive"
+                        onClick={() => {
+                          setRemovalTutor(tutor);
+                          setRemovalSubjects([]);
+                          setRemoveModalOpen(true);
+                        }}
+                      >
+                        Edit Subject(s)
+                      </Button>
+                      <Button
+                        className="text-white"
+                        size="sm"
+                        // variant="destructive"
+                        onClick={() =>
+                          handleRemoveTutor(
+                            tutor.teacher?._id,
+                            tutor.subject.map((s: any) => s._id)
+                          )
+                        }
+                      >
+                        Remove Tutor
+                      </Button>
+                    </div>
                   </div>
                 ))
               )}
             </div>
           </CardContent>
         </Card>
-
 
         {/* Available Teachers */}
         <Card>
@@ -480,7 +494,7 @@ const [changingTeacher, setChangingTeacher] = useState(false);
         </Card>
       </div>
 
-       <Dialog open={removeModalOpen} onOpenChange={setRemoveModalOpen}>
+      <Dialog open={removeModalOpen} onOpenChange={setRemoveModalOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
@@ -492,7 +506,10 @@ const [changingTeacher, setChangingTeacher] = useState(false);
             <div className="space-y-2 h-[180px] overflow-y-auto p-2 border border-[#c3c3c3] rounded">
               {removalTutor?.subject?.length > 0 ? (
                 removalTutor.subject.map((sub: any) => (
-                  <div key={sub._id} className="flex items-center space-x-2 accent-primaryColor">
+                  <div
+                    key={sub._id}
+                    className="flex items-center space-x-2 accent-primary"
+                  >
                     <input
                       type="checkbox"
                       id={`remove-${sub._id}`}
@@ -525,7 +542,6 @@ const [changingTeacher, setChangingTeacher] = useState(false);
           </div>
         </DialogContent>
       </Dialog>
-  
     </div>
   );
 };

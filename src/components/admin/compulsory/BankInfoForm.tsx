@@ -83,9 +83,9 @@ export function BankInfoForm() {
       >
         <div className="flex gap-4 flex-col md:flex-row w-full lg:w-[85%]">
           <div className="max-w-[250px]">
-            <h3 className="font-semibold">Enter  your School Bank Account</h3>
+            <h3 className="font-semibold">Enter your School Bank Account</h3>
             <p className="text-muted-foreground">
-            this most be the name on your  registration Documentation.
+              this most be the name on your registration Documentation.
             </p>
           </div>
 
@@ -96,10 +96,7 @@ export function BankInfoForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Bank Name</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select your bank" />
@@ -108,8 +105,12 @@ export function BankInfoForm() {
                     <SelectContent>
                       <SelectItem value="First Bank">First Bank</SelectItem>
                       <SelectItem value="EcoBank">EcoBank</SelectItem>
-                      <SelectItem value="Kuda Microfinance">Kuda Microfinance</SelectItem>
-                      <SelectItem value="Bank of America">Bank of America</SelectItem>
+                      <SelectItem value="Kuda Microfinance">
+                        Kuda Microfinance
+                      </SelectItem>
+                      <SelectItem value="Bank of America">
+                        Bank of America
+                      </SelectItem>
                       <SelectItem value="Other">Other Bank</SelectItem>
                     </SelectContent>
                   </Select>
@@ -124,8 +125,8 @@ export function BankInfoForm() {
                 <FormItem>
                   <FormLabel>Account Number</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Enter account number" 
+                    <Input
+                      placeholder="Enter account number"
                       {...field}
                       inputMode="numeric"
                     />
@@ -141,10 +142,7 @@ export function BankInfoForm() {
                 <FormItem>
                   <FormLabel>Account Name</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Enter account holder name" 
-                      {...field} 
-                    />
+                    <Input placeholder="Enter account holder name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,12 +160,12 @@ export function BankInfoForm() {
               Add more bank accounts if needed (optional)
             </p>
           </div>
-          <div className="mx-auto flex items-center text-primaryColor cursor-pointer hover:bg-gray-50 rounded-md p-2">
+          <div className="mx-auto flex items-center text-primary cursor-pointer hover:bg-gray-50 rounded-md p-2">
             <Plus />
             <Button
               type="button"
               variant="ghost"
-              className="text-primaryColor hover:bg-transparent"
+              className="text-primary hover:bg-transparent"
             >
               Add Another Account
             </Button>
@@ -175,5 +173,5 @@ export function BankInfoForm() {
         </div>
       </form>
     </Form>
-  )
+  );
 }

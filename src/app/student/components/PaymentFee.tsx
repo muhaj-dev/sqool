@@ -33,7 +33,7 @@ const PaymentFee = () => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "school"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("school")}
@@ -43,7 +43,7 @@ const PaymentFee = () => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "transport"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("transport")}
@@ -53,7 +53,7 @@ const PaymentFee = () => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "addition"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("addition")}
@@ -61,13 +61,12 @@ const PaymentFee = () => {
             Additional Fee
           </button>
         </div>
-
       </div>
 
       {/* Tab Content Rendering */}
       <div className="py-4 px-3">
-        {activeTab === "school" && <Schoolfees  />} 
-        {activeTab === "transport" && <Schoolfees  />}
+        {activeTab === "school" && <Schoolfees />}
+        {activeTab === "transport" && <Schoolfees />}
         {activeTab === "addition" && <Schoolfees />}
       </div>
     </div>

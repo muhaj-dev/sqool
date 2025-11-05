@@ -84,7 +84,7 @@ const OwnerInfoForm = () => {
             This is Business Owner information that you can update anytime.
           </p>
         </div>
-        <Button className="bg-primaryColor text-white" onClick={openForm}>
+        <Button className="bg-primary text-white" onClick={openForm}>
           Add School Owner
         </Button>
       </div>
@@ -203,10 +203,10 @@ const OwnerInfoForm = () => {
                       <FormLabel>Date of Birth</FormLabel>
                       <FormControl>
                         {/* <DatePicker /> */}
-                        <DatePicker 
-  selected={field.value}
-  onSelect={field.onChange}
-/>
+                        <DatePicker
+                          selected={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -335,7 +335,7 @@ const OwnerInfoForm = () => {
         <div className="w-full h-[60vh]"></div>
       )}
     </div>
-  )
+  );
 }
 
 export default OwnerInfoForm

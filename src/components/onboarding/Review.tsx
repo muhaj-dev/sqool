@@ -67,7 +67,7 @@ const Ownerinfo = () => {
               checked={isChecked}
               onCheckedChange={(checked) => setIsChecked(checked as boolean)}
               className=" border-muted-foreground  
-            data-[state=checked]:bg-transparent data-[state=checked]:text-primaryColor
+            data-[state=checked]:bg-transparent data-[state=checked]:text-primary
             "
             />
             <div className="grid gap-1.5 leading-none">
@@ -78,13 +78,15 @@ const Ownerinfo = () => {
           </div>
           <div className="w-full">
             <div className="mx-auto w-full md:w-[40%] mt-6">
-            <Button 
-            onClick={submitHandler} 
-            className="text-white w-full disabled:cursor-not-allowed"
-            disabled={!isChecked || isSubmitting}
-          >
-            {isSubmitting ? "Submitting Application..." : "Submit Application"}
-          </Button>
+              <Button
+                onClick={submitHandler}
+                className="text-white w-full disabled:cursor-not-allowed"
+                disabled={!isChecked || isSubmitting}
+              >
+                {isSubmitting
+                  ? "Submitting Application..."
+                  : "Submit Application"}
+              </Button>
             </div>
           </div>
         </div>

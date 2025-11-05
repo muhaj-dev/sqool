@@ -39,9 +39,7 @@ export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
             </SelectContent>
           </Select>
         </div>
-        <Button 
-         onClick={toggleTexam}
-        className="text-white">
+        <Button onClick={toggleTexam} className="text-white">
           View Results
         </Button>
       </div>
@@ -55,7 +53,7 @@ export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
             </div>
             <h2 className="text-lg font-semibold text-center mx-auto ">
               Drag & drop files or{" "}
-              <span className="text-primaryColor underline">Browse</span>
+              <span className="text-primary underline">Browse</span>
             </h2>
             <p className="text-center text-[12px] mt-3 text-[#676767]">
               Supported formates: PDF, Word, PPT, XLSX
@@ -69,7 +67,7 @@ export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
 
             <div className="border-[1.5px] overflow-hidden border-[#E3E3E3] rounded-md">
               <p className="text-[12px] py-2 px-3">1st-term-2024-result.PDF</p>
-              <div className="w-[50%] h-1 bg-primaryColor" />
+              <div className="w-[50%] h-1 bg-primary" />
             </div>
           </div>
 
@@ -80,13 +78,13 @@ export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
 
             <div className="border-[1.5px] overflow-hidden border-[#E3E3E3] rounded-md">
               <p className="text-[12px] py-2 px-3">1st-term-2024-result.PDF</p>
-              {/* <div className="w-[50%] h-1 bg-primaryColor" /> */}
+              {/* <div className="w-[50%] h-1 bg-primary" /> */}
             </div>
           </div>
 
           <Button type="submit" className=" w-full my-5 text-white">
-          UPLOAD FILES
-        </Button>
+            UPLOAD FILES
+          </Button>
         </form>
       </div>
     </div>

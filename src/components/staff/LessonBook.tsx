@@ -179,10 +179,11 @@ export const columns: ColumnDef<Period>[] = [
     accessorKey: "attachment",
     header: "Attachment",
     cell: ({ row }) => (
-      <div className="capitalize text-primaryColor underline">{row.getValue("attachment")}</div>
+      <div className="capitalize text-primary underline">
+        {row.getValue("attachment")}
+      </div>
     ),
   },
-
 ];
 
 

@@ -80,8 +80,11 @@ const StaffTopbar = ({ staffId }: Props) => {
         </Link>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Select onValueChange={handleStatusChange} value={status || undefined}>
-              <SelectTrigger className="w-[120px] text-primaryColor">
+            <Select
+              onValueChange={handleStatusChange}
+              value={status || undefined}
+            >
+              <SelectTrigger className="w-[120px] text-primary">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -100,10 +103,8 @@ const StaffTopbar = ({ staffId }: Props) => {
               </DialogDescription>
             </DialogHeader>
             <div className="flex gap-4 justify-end">
-              <div >
-                <button
-                  className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 border-1 border-primary"
-                >
+              <div>
+                <button className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 border-1 border-primary">
                   Close
                 </button>
               </div>

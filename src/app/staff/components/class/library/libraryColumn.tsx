@@ -13,14 +13,14 @@ export const libraryColumns: ColumnDef<ILibrary>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
       />
     ),
@@ -38,11 +38,9 @@ export const libraryColumns: ColumnDef<ILibrary>[] = [
           Date
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("date")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("date")}</div>,
   },
   {
     accessorKey: "bookName",
@@ -55,27 +53,29 @@ export const libraryColumns: ColumnDef<ILibrary>[] = [
           Book Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("bookName")}</div>,
-},
-{
-  accessorKey: "author",
-  header: ({ column }) => {
-    return (
-      <div
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="flex items-center"
-      >
-        Author
-        <ChevronsUpDown className="ml-2 h-4 w-4" />
-      </div>
-    )
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("bookName")}</div>
+    ),
   },
-  cell: ({ row }) => (
-    <div className="lowercase">{row.getValue("author")}</div>
-  ),
-},
+  {
+    accessorKey: "author",
+    header: ({ column }) => {
+      return (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center"
+        >
+          Author
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </div>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("author")}</div>
+    ),
+  },
   {
     accessorKey: "class",
     header: ({ column }) => {
@@ -87,7 +87,7 @@ export const libraryColumns: ColumnDef<ILibrary>[] = [
           Class
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("class")}</div>,
   },
@@ -102,7 +102,7 @@ export const libraryColumns: ColumnDef<ILibrary>[] = [
           Type
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("type")}</div>,
   },
@@ -114,15 +114,11 @@ export const libraryColumns: ColumnDef<ILibrary>[] = [
         // href="  student/1"
         className="flex items-center gap-4 cursor-pointer"
       >
-        <p
-        className="bg-primaryColor text-white rounded-[20px] px-4 py-2 cursor-pointer"
-        
-        >
-        View
-
+        <p className="bg-primary text-white rounded-[20px] px-4 py-2 cursor-pointer">
+          View
         </p>
         <MoreHorizontal size={20} className="text-muted-foreground" />
       </button>
     ),
   },
-]
+];

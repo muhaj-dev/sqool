@@ -22,10 +22,10 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import { StatusFilter,GenderFilter } from "@/types/attendance";
+import { StatusFilter,GenderFilter,StudentAttendance } from "@/types";
 
 interface AttendanceTableProps {
-  students: (Student & {status:StatusFilter})[];
+  students: StudentAttendance[];
   isLoading: boolean;
 }
 
@@ -59,11 +59,6 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
   const startIndex = (currentPage - 1) * studentsPerPage;
   const endIndex = startIndex + studentsPerPage;
   const currentStudents = filteredStudents.slice(startIndex, endIndex);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   if (isLoading) {
     return (

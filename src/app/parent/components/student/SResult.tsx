@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Pagination from "@/components/ui/pagination";
+import { PaginationControls } from "@/components/PaginationControl";
 
 const resultsData = [
   {
@@ -52,7 +52,7 @@ const SResult: React.FC = () => {
   return (
     <div className="w-full mx-auto my-20">
       <div className="flex justify-between gap-5 ">
-       <p className="font-bold text-xl mb-4">Results</p>
+        <p className="font-bold text-xl mb-4">Results</p>
         <div className="mt-2.5">
           <select className="text-[#828282] px-2 rounded">
             <option value="10">Session</option>
@@ -81,7 +81,7 @@ const SResult: React.FC = () => {
               </div>
               <div className="ml-4 w-fit px-6 ">{result.class}</div>
               <div className="ml-4">{result.description}</div>
-              <button className="bg-primaryColor text-white px-4 py-2 ml-4 rounded-[80px]">
+              <button className="bg-primary text-white px-4 py-2 ml-4 rounded-[80px]">
                 Download Result
               </button>
               <div className="relative ml-6">
@@ -105,11 +105,10 @@ const SResult: React.FC = () => {
       </div>
 
       {/* Pagination component */}
-      <Pagination
-        totalItems={resultsData.length}
-        itemsPerPage={itemsPerPage}
+      <PaginationControls
+        totalPages={resultsData.length}
         currentPage={currentPage}
-        handlePageChange={handlePageChange}
+        onPageChange={handlePageChange}
       />
     </div>
   );

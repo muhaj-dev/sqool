@@ -111,7 +111,7 @@ export function LibraryTable({
         </DropdownMenu> */}
         <section className="f">
           <Dialog>
-            <DialogTrigger className="flex items-center text-white rounded-md bg-primaryColor cursor-pointer py-2 px-4">
+            <DialogTrigger className="flex items-center text-white rounded-md bg-primary cursor-pointer py-2 px-4">
               {/* <Plus /> */}
               <span>Upload New</span>
             </DialogTrigger>

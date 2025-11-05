@@ -66,10 +66,10 @@ export function AddStudent() {
   return (
     <DialogContent className="sm:max-w-[40%] ">
       <DialogClose className="p-1 bg-white rounded-full absolute right-0 -top-10">
-        <X className="text-primaryColor" />
+        <X className="text-primary" />
       </DialogClose>
       <DialogHeader className="w-full flex flex-col items-center ">
-        <DialogTitle className="text-primaryColor">Payment</DialogTitle>
+        <DialogTitle className="text-primary">Payment</DialogTitle>
         <DialogDescription className="text-center text-[#515B6F]">
           Lorem ipsum dolor sit amet consectetur. Sollicitudin mauris sit
           egestas gravida nisl nunc diam libero amet. Aliquam nunc.
@@ -158,7 +158,7 @@ export function AddStudent() {
             )}
           />
 
-<FormField
+          <FormField
             control={form.control}
             name="username"
             render={({ field }) => (

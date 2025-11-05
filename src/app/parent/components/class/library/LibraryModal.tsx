@@ -66,11 +66,10 @@ export function LibraryModal() {
   return (
     <DialogContent className="lg:max-w-[40%] w-[500px] ">
       <DialogClose className="p-1 bg-white rounded-full absolute right-0 -top-10">
-        <X className="text-primaryColor" />
+        <X className="text-primary" />
       </DialogClose>
-  
+
       <div className="">
-       
         <div className=" mx-auto my-4 p-8 max-w-[519px] w-[95%]">
           <h2 className="text-xl font-semibold text-center mx-auto ">Upload</h2>
           <form>
@@ -80,7 +79,7 @@ export function LibraryModal() {
               </div>
               <h2 className="text-lg font-semibold text-center mx-auto ">
                 Drag & drop files or{" "}
-                <span className="text-primaryColor underline">Browse</span>
+                <span className="text-primary underline">Browse</span>
               </h2>
               <p className="text-center text-[12px] mt-3 text-[#676767]">
                 Supported formates: PDF, Word, PPT, XLSX
@@ -96,7 +95,7 @@ export function LibraryModal() {
                 <p className="text-[12px] py-2 px-3">
                   1st-term-2024-result.PDF
                 </p>
-                <div className="w-[50%] h-1 bg-primaryColor" />
+                <div className="w-[50%] h-1 bg-primary" />
               </div>
             </div>
 
@@ -109,7 +108,7 @@ export function LibraryModal() {
                 <p className="text-[12px] py-2 px-3">
                   1st-term-2024-result.PDF
                 </p>
-                {/* <div className="w-[50%] h-1 bg-primaryColor" /> */}
+                {/* <div className="w-[50%] h-1 bg-primary" /> */}
               </div>
             </div>
 

@@ -6,17 +6,21 @@ import { Button } from "@/components/ui/button"
 const StudentAttendance = () => {
   return (
     <div className=" w-[90%] mx-auto max-w-[370px] flex flex-col justify-center px-5 py-2">
-     <p className="text-primaryColor text-center text-{28px} font-bold">Mark Attendance</p>
-     <p className="text-[#515B6F] text-center">Click the button below to mark your attendance for this class.</p>
-     <div className=" w-fit my-6 mx-auto">
-      <Attend />
-     </div>
+      <p className="text-primary text-center text-{28px} font-bold">
+        Mark Attendance
+      </p>
+      <p className="text-[#515B6F] text-center">
+        Click the button below to mark your attendance for this class.
+      </p>
+      <div className=" w-fit my-6 mx-auto">
+        <Attend />
+      </div>
 
-     <Button onClick={(() => {})} className="px-20 text-white w-fit mx-auto">
-            Click me
-          </Button>
+      <Button onClick={() => {}} className="px-20 text-white w-fit mx-auto">
+        Click me
+      </Button>
     </div>
-  )
+  );
 }
 
 export default StudentAttendance

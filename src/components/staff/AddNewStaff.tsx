@@ -141,7 +141,7 @@ const AddNewStaff = ({setOpen}: any) => {
   return (
     <DialogContent className="sm:max-w-[60%]">
       <DialogClose className="absolute right-0 -top-10 bg-white p-1 rounded-full">
-        <X className="text-primaryColor" />
+        <X className="text-primary" />
       </DialogClose>
       <DialogHeader>
         <DialogTitle>Add New Staff</DialogTitle>
@@ -153,202 +153,209 @@ const AddNewStaff = ({setOpen}: any) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
           <div className="h-[900px] max-h-[85dvh] overflow-auto">
-
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="First name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Last name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="level"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Level</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Level" />
-                    </SelectTrigger>
+                    <Input placeholder="First name" {...field} />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Junior Teacher">Junior Teacher</SelectItem>
-                    <SelectItem value="Senior Teacher">Senior Teacher</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email" type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Role</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Role" />
-                    </SelectTrigger>
+                    <Input placeholder="Last name" {...field} />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="teacher">Teacher</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="primarySubject"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Primary Subject</FormLabel>
-                <FormControl>
-                  <Input placeholder="Primary subject" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="language"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Language</FormLabel>
-                <FormControl>
-                  <Input placeholder="Language" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dateOfBirth"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date of Birth (YYYY-MM-DD)</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Address" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="aboutMe"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>About Me</FormLabel>
-                <FormControl>
-                  <Input placeholder="About me" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="hobbies"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Hobbies (comma-separated)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Hobbies (e.g., reading, swimming)"
-                    onChange={(e) => field.onChange(e.target.value.split(',').map(hobby => hobby.trim()))}
-                    value={field.value.join(', ')}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="employmentDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Employment Date (YYYY-MM-DD)</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="qualification"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Qualification</FormLabel>
-                <FormControl>
-                  <Input placeholder="Qualification" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-           <FormField
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="level"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Level</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Level" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Junior Teacher">
+                        Junior Teacher
+                      </SelectItem>
+                      <SelectItem value="Senior Teacher">
+                        Senior Teacher
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="teacher">Teacher</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="primarySubject"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Primary Subject</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Primary subject" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Language</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Language" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date of Birth (YYYY-MM-DD)</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Address" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="aboutMe"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>About Me</FormLabel>
+                  <FormControl>
+                    <Input placeholder="About me" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="hobbies"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hobbies (comma-separated)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Hobbies (e.g., reading, swimming)"
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.split(",").map((hobby) => hobby.trim())
+                        )
+                      }
+                      value={field.value.join(", ")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="employmentDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Employment Date (YYYY-MM-DD)</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="qualification"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Qualification</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Qualification" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               control={form.control}
               name="experience"
               render={({ field }) => (
@@ -363,13 +370,17 @@ const AddNewStaff = ({setOpen}: any) => {
             />
           </div>
 
-          <Button type="submit" className="text-white w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="text-white w-full"
+            disabled={loading}
+          >
             Send Invite
           </Button>
         </form>
       </Form>
     </DialogContent>
-  )
+  );
 }
 
 export default AddNewStaff

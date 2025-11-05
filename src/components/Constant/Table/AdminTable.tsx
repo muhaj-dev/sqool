@@ -135,7 +135,7 @@ const AdminTable = ({
   return (
     <div className="bg-white relative w-full font-inter px-6 py-4">
       <p className="font-medium text-[22px]">{title}</p>
-      
+
       <div className="flex flex-wrap justify-between ml-auto w-fit gap-4 mt-0 md:mt-4 mb-8">
         <div className="flex flex-wrap gap-5 items-center">
           <div className="flex gap-2 flex-wrap items-center">
@@ -145,7 +145,10 @@ const AdminTable = ({
                   <div>
                     <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700 border border-gray-300 rounded-md">
                       Filter by: {selectedLabel}
-                      <RiArrowDownSFill className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                      <RiArrowDownSFill
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
                   <Transition
@@ -189,7 +192,10 @@ const AdminTable = ({
                   <div>
                     <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700 border border-gray-300 rounded-md">
                       Sort by: {selectedLabelDate}
-                      <RiArrowDownSFill className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                      <RiArrowDownSFill
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
                   <Transition
@@ -235,7 +241,11 @@ const AdminTable = ({
           <thead className="text-xs h-[70px] capitalize bg-[#F8F8FD] text-[#171D1B]">
             <tr>
               {showItemCheck && (
-                <th scope="col" className="px-3 py-3 text-[14px] font-medium" style={{ width: "5%" }}>
+                <th
+                  scope="col"
+                  className="px-3 py-3 text-[14px] font-medium"
+                  style={{ width: "5%" }}
+                >
                   <input
                     checked={Object.values(checkedItems).every(Boolean)}
                     onChange={handleToggleAll}
@@ -277,7 +287,9 @@ const AdminTable = ({
                 )}
                 {columns.map((col) => (
                   <td key={col.key} className="py-5">
-                    {col.renderCell ? col.renderCell(student) : defaultRenderCell(student, col.key)}
+                    {col.renderCell
+                      ? col.renderCell(student)
+                      : defaultRenderCell(student, col.key)}
                   </td>
                 ))}
               </tr>
@@ -290,7 +302,8 @@ const AdminTable = ({
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
           <div>
             <span className="text-sm text-muted-foreground">
-              Showing {data.length} of {totalItems} items (Page {currentPage} of {totalPages})
+              Showing {data.length} of {totalItems} items (Page {currentPage} of{" "}
+              {totalPages})
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -301,14 +314,14 @@ const AdminTable = ({
             >
               Previous
             </button>
-            
+
             {/* Page numbers */}
             {generatePageNumbers().map((page) => (
               <button
                 key={page}
                 className={`px-3 py-2 text-sm rounded-md border transition-colors ${
                   page === currentPage
-                    ? "bg-primaryColor text-white border-primaryColor"
+                    ? "bg-primary text-white border-primary"
                     : "border-gray-300 hover:bg-gray-50"
                 }`}
                 onClick={() => onPageChange(page)}
@@ -316,7 +329,7 @@ const AdminTable = ({
                 {page}
               </button>
             ))}
-            
+
             <button
               className="px-3 py-2 text-sm rounded-md border border-gray-300 disabled:opacity-50 hover:bg-gray-50 transition-colors"
               disabled={!pagination.hasNextPage}

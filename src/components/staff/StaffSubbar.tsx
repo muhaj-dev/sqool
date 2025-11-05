@@ -14,26 +14,20 @@ const StaffSubbar = () => {
   return (
     <div className="my-6">
       <div className="flex items-center flex-wrap gap-2 justify-between">
-        
         <div className="w-full md:w-[50%]">
-        <h3 className="text-xl font-bold">
-        Staff
-        </h3>
-        <p className="text-muted-foreground w-full  max-w-[490px] text-sm">
-          Showing your Account metrics for July 19, 2021 - July 25, 2021
-        </p>
-      </div>
+          <h3 className="text-xl font-bold">Staff</h3>
+          <p className="text-muted-foreground w-full  max-w-[490px] text-sm">
+            Showing your Account metrics for July 19, 2021 - July 25, 2021
+          </p>
+        </div>
 
-        <Dialog 
-                open={open} 
-                onOpenChange={setOpen}
-                >
-        <DialogTrigger className="flex items-center gap-2 bg-primaryColor rounded-md text-white py-3 px-10">
-          <Plus />
-          Add Staff
-        </DialogTrigger>
-      <AddNewStaff setOpen={setOpen} />
-</Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger className="flex items-center gap-2 bg-primary rounded-md text-white py-3 px-10">
+            <Plus />
+            Add Staff
+          </DialogTrigger>
+          <AddNewStaff setOpen={setOpen} />
+        </Dialog>
       </div>
       <div className="flex items-center  gap-8 my-6">
         <div className="flex items-center gap-4 bg-white p-4 rounded-md w-[48%] md:w-[200px]">
@@ -52,7 +46,7 @@ const StaffSubbar = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default StaffSubbar

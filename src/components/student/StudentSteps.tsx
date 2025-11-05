@@ -14,7 +14,7 @@ const StudentSteps = () => {
             key={ind}
             className={`cursor-pointer transition pb-2  ${
               activeIndex === ind
-                ? "border-b-[2px] border-primaryColor text-black"
+                ? "border-b-[2px] border-primary text-black"
                 : "text-muted-foreground"
             }`}
           >
@@ -24,7 +24,7 @@ const StudentSteps = () => {
       </section>
       {/* <Separator /> */}
     </div>
-  )
+  );
 }
 
 export default StudentSteps

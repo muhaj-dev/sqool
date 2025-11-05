@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -36,21 +35,47 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
+  /** Optional icon to display before children */
+  icon?: React.ReactNode;
+  /** Optional icon position (default: left) */
+  iconPosition?: "left" | "right";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      icon,
+      iconPosition = "left",
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-      />
-    )
+      >
+        {icon && iconPosition === "left" && (
+          <span className="inline-flex items-center">{icon}</span>
+        )}
+        {children}
+        {icon && iconPosition === "right" && (
+          <span className="inline-flex items-center">{icon}</span>
+        )}
+      </Comp>
+    );
   }
-)
+);
+
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

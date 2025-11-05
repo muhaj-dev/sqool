@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Student } from "@/types/attendance";
+import { StudentAttendance } from "@/types";
 import { useState, useEffect } from "react";
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
 import { toast } from "@/components/ui/use-toast"
 
 interface RemarkModalProps {
-  student: Student | null;
+  student: StudentAttendance | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }

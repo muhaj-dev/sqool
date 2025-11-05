@@ -35,30 +35,28 @@ const Schoolfees = () => {
               <p className="font-bold text-[16px]">₦450,666.66</p>
             </div>
           </div>
-
         </div>
-          <div className="bg-[#A7A9AD]/10 w-[90%] my-10 mx-auto ">
-            <div className=" w-[90%] mx-auto max-w-[480px] flex flex-col justify-center px-5 pb-8 pt-12">
-                <p className="text-primaryColor text-center text-[24px] font-bold">
-                Initiate Payment
-                </p>
-                <p className="text-[#515B6F] text-center">
-                Lorem ipsum dolor sit amet consectetur. Sollicitudin mauris sit
-                egestas gravida nisl nunc diam libero amet. Aliquam nunc.
-                </p>
-                <div className=" w-fit my-6 mx-auto">
-                <Attend />
-                </div>
-
-                <Button
-                onClick={() => {}}
-                className="px-20 text-white w-fit mx-auto"
-                >
-                proceed
-                </Button>
+        <div className="bg-[#A7A9AD]/10 w-[90%] my-10 mx-auto ">
+          <div className=" w-[90%] mx-auto max-w-[480px] flex flex-col justify-center px-5 pb-8 pt-12">
+            <p className="text-primary text-center text-[24px] font-bold">
+              Initiate Payment
+            </p>
+            <p className="text-[#515B6F] text-center">
+              Lorem ipsum dolor sit amet consectetur. Sollicitudin mauris sit
+              egestas gravida nisl nunc diam libero amet. Aliquam nunc.
+            </p>
+            <div className=" w-fit my-6 mx-auto">
+              <Attend />
             </div>
 
+            <Button
+              onClick={() => {}}
+              className="px-20 text-white w-fit mx-auto"
+            >
+              proceed
+            </Button>
           </div>
+        </div>
       </div>
     </section>
   );

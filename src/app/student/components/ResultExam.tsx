@@ -42,11 +42,8 @@ const ResultExam = () => {
           icon={<Search />}
           className="my-2 w-[250px]"
         />
-       
-          <Button className="px-3 bg-white border border-input">
-           Download
-          </Button>
-     
+
+        <Button className="px-3 bg-white border border-input">Download</Button>
       </div>
 
       <div className="flex justify-between flex-wrap mt-2 gap-2 md:gap-5 border-b-2 border-[#D6DDEB]">
@@ -54,7 +51,7 @@ const ResultExam = () => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "exam"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("exam")}
@@ -64,7 +61,7 @@ const ResultExam = () => {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "test"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("test")}

@@ -30,8 +30,8 @@ const Steps = ({
             key={ind}
             className={`cursor-pointer transition pb-3 w-fit ${
               activeIndex === ind
-                ? 'border-b-[2px] border-primaryColor text-black'
-                : 'text-muted-foreground'
+                ? "border-b-[2px] border-primary text-black"
+                : "text-muted-foreground"
             }`}
           >
             {item}
@@ -188,7 +188,7 @@ const StudentList = () => {
       <div>
         <button
           onClick={handleViewDetails}
-          className="text-[14px] border-[#E9EBEB] border-[1px] text-primaryColor font-medium py-[10px] px-[16px] rounded hover:bg-primaryColor hover:text-white transition-colors"
+          className="text-[14px] border-[#E9EBEB] border-[1px] text-primary font-medium py-[10px] px-[16px] rounded hover:bg-primary hover:text-white transition-colors"
         >
           View Details
         </button>
@@ -244,7 +244,12 @@ const StudentList = () => {
               {loading ? (
                 <Skeleton className="h-4 w-48" />
               ) : (
-                `Showing ${((pagination.currentPage - 1) * pagination.pageSize) + 1} - ${Math.min(pagination.currentPage * pagination.pageSize, pagination.total)} of ${pagination.total} students`
+                `Showing ${
+                  (pagination.currentPage - 1) * pagination.pageSize + 1
+                } - ${Math.min(
+                  pagination.currentPage * pagination.pageSize,
+                  pagination.total
+                )} of ${pagination.total} students`
               )}
             </p>
           </div>
@@ -261,18 +266,17 @@ const StudentList = () => {
                 disabled={loading}
               />
             </div>
-            
           </section>
         </div>
-            <Link 
-              href="/admin/student/add"
-              className="ml-auto flex items-center text-white tex-sm rounded-md bg-primaryColor cursor-pointer hover:bg-white hover:text-primaryColor border-[1px] border-primaryColor py-2 px-6 transition-all"
-            >
-              Add New Student
-            </Link>
+        <Link
+          href="/admin/student/add"
+          className="ml-auto flex items-center text-white tex-sm rounded-md bg-primary cursor-pointer hover:bg-white hover:text-primary border-[1px] border-primary py-2 px-6 transition-all"
+        >
+          Add New Student
+        </Link>
 
         <Steps activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
-        
+
         <div className="bg-white p-0 md:p-4 rounded-md">
           {loading ? (
             <div className="bg-white relative w-full font-inter px-6 py-4">
@@ -281,11 +285,18 @@ const StudentList = () => {
                 <table className="w-full max-w-[1000px] text-sm text-left text-gray-500">
                   <thead className="text-xs h-[70px] capitalize bg-[#F8F8FD] text-[#171D1B]">
                     <tr>
-                      <th scope="col" className="px-3 py-3 text-[14px] font-medium">
+                      <th
+                        scope="col"
+                        className="px-3 py-3 text-[14px] font-medium"
+                      >
                         <Skeleton className="w-4 h-4" />
                       </th>
                       {columns.map((col) => (
-                        <th key={col.key} scope="col" className="py-3 text-[14px] font-medium">
+                        <th
+                          key={col.key}
+                          scope="col"
+                          className="py-3 text-[14px] font-medium"
+                        >
                           <Skeleton className="h-4 w-24" />
                         </th>
                       ))}
@@ -308,7 +319,7 @@ const StudentList = () => {
             </div>
           ) : (
             <AdminTable
-              title={''}
+              title={""}
               // title={tabs[activeIndex]}
               columns={columns}
               data={students}

@@ -193,7 +193,10 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="bg-white rounded-md py-4 sm:p-4 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="bg-white rounded-md py-4 sm:p-4 space-y-6"
+      >
         {/* School Type Selection */}
         <div className="border-b-2 grid grid-cols-1 lg:grid-cols-2">
           <span>Type of school</span>
@@ -214,7 +217,7 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
                       className={cn(
                         "shadow-sm border w-full text-muted-foreground",
                         {
-                          "bg-[rgba(0,0,0,0.05)] text-primaryColor": isOpen,
+                          "bg-[rgba(0,0,0,0.05)] text-primary": isOpen,
                         }
                       )}
                       variant={isOpen ? "secondary" : "ghost"}
@@ -227,7 +230,7 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             </div>
             <Dialog>
               <DialogTrigger>
-                <span className="text-sm text-primaryColor underline cursor-pointer">
+                <span className="text-sm text-primary underline cursor-pointer">
                   View the requirement document we need
                 </span>
               </DialogTrigger>
@@ -274,7 +277,8 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
           <div className="w-full max-w-[24.5rem]">
             <h3>Tell us about your School</h3>
             <p className="text-sm text-muted-foreground">
-              In a few sentences describe your school and the services you provide
+              In a few sentences describe your school and the services you
+              provide
             </p>
           </div>
           <div className="grid gap-1.5 mt-4 sm:mt-0 w-full max-w-[25rem]">
@@ -343,92 +347,99 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             />
 
             {/* State Select Field */}
-  <FormField
-    control={form.control}
-    name="address.state"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>State</FormLabel>
-        <Select
-          onValueChange={(stateValue) => {
-            field.onChange(stateValue);
-            // Find the state name by value
-            const selectedState = states.find(s => s.value === stateValue);
-            if (selectedState) {
-              fetchLgas(selectedState.label);
-            }
-          }}
-          defaultValue={field.value}
-          disabled={isLoadingStates}
-        >
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder={isLoadingStates ? "Loading states..." : "Select a state"} />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            {states.map((state) => (
-              <SelectItem key={state.value} value={state.value}>
-                {state.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+            <FormField
+              control={form.control}
+              name="address.state"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>State</FormLabel>
+                  <Select
+                    onValueChange={(stateValue) => {
+                      field.onChange(stateValue);
+                      // Find the state name by value
+                      const selectedState = states.find(
+                        (s) => s.value === stateValue
+                      );
+                      if (selectedState) {
+                        fetchLgas(selectedState.label);
+                      }
+                    }}
+                    defaultValue={field.value}
+                    disabled={isLoadingStates}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            isLoadingStates
+                              ? "Loading states..."
+                              : "Select a state"
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {states.map((state) => (
+                        <SelectItem key={state.value} value={state.value}>
+                          {state.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-  {/* LGA Select Field */}
-  <FormField
-    control={form.control}
-    name="address.localGovernment"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Local government area</FormLabel>
-        <Select
-          onValueChange={field.onChange}
-          defaultValue={field.value}
-          disabled={!localGovernment || isLoadingLgas}
-        >
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue 
-                placeholder={
-                  isLoadingLgas 
-                    ? "Loading LGAs..." 
-                    : localGovernment 
-                      ? "Select a Local Government" 
-                      : "Please select a state first"
-                } 
-              />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            {localGovernment?.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+            {/* LGA Select Field */}
+            <FormField
+              control={form.control}
+              name="address.localGovernment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Local government area</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={!localGovernment || isLoadingLgas}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            isLoadingLgas
+                              ? "Loading LGAs..."
+                              : localGovernment
+                              ? "Select a Local Government"
+                              : "Please select a state first"
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {localGovernment?.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
 
         {/* Navigation Buttons */}
         <div className="flex justify-between pt-4">
-          <Button 
-            type="button" 
-            variant="outline"
-            onClick={goPrevPage}
-          >
+          <Button type="button" variant="outline" onClick={goPrevPage}>
             Back
           </Button>
-          <Button type="submit" className="text-white w-full max-w-[25rem] text-lg">
+          <Button
+            type="submit"
+            className="text-white w-full max-w-[25rem] text-lg"
+          >
             Save and Continue
           </Button>
         </div>

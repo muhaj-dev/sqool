@@ -178,46 +178,48 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
             This is Business Owner information that you can update anytime.
           </p>
         </div>
-        <Button 
-          className="bg-primaryColor text-white"
+        <Button
+          className="bg-primary text-white"
           // onClick={() => setIsVisible(true)}
           onClick={handleAddOwner}
         >
           Add School Owner
         </Button>
       </div>
-      
+
       {/* {isVisible ? ( */}
       {isEditing ? (
-
         <div className="flex md:flex-row flex-col gap-3 sm:w-[95%] justify-between mt-12">
           <div className="w-full flex justify-between items-start">
-      <div>
-        <h3 className="text-xl font-semibold">
-          Tell us about the business owner
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          This must be the name on your registration documentation.
-        </p>
-      </div>
-      {currentOwnerIndex && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border-[#E9EBEB] rounded-md ml-4"
-          onClick={() => {
-            handleDeleteOwner(currentOwnerIndex);
-            setIsEditing(false);
-          }}
-        >
-          <Trash2 className="h-4 w-4 text-[#515B6F]" />
-        </Button>
-      )}
-    </div>
-          
+            <div>
+              <h3 className="text-xl font-semibold">
+                Tell us about the business owner
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                This must be the name on your registration documentation.
+              </p>
+            </div>
+            {currentOwnerIndex && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="border-[#E9EBEB] rounded-md ml-4"
+                onClick={() => {
+                  handleDeleteOwner(currentOwnerIndex);
+                  setIsEditing(false);
+                }}
+              >
+                <Trash2 className="h-4 w-4 text-[#515B6F]" />
+              </Button>
+            )}
+          </div>
+
           <div className="w-full md:w-[60%]">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full flex flex-col gap-4">
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="w-full flex flex-col gap-4"
+              >
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <FormField
                     control={form.control}
@@ -438,10 +440,18 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="national_id">National ID</SelectItem>
-                            <SelectItem value="voters_card">Voter&apos;s Card</SelectItem>
-                            <SelectItem value="drivers_license">Driver&apos;s License</SelectItem>
-                            <SelectItem value="international_passport">International Passport</SelectItem>
+                            <SelectItem value="national_id">
+                              National ID
+                            </SelectItem>
+                            <SelectItem value="voters_card">
+                              Voter&apos;s Card
+                            </SelectItem>
+                            <SelectItem value="drivers_license">
+                              Driver&apos;s License
+                            </SelectItem>
+                            <SelectItem value="international_passport">
+                              International Passport
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -470,7 +480,7 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                 {/* <AttachmentUpload /> */}
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
-                  <Button 
+                  <Button
                     type="button"
                     variant="outline"
                     // onClick={goPrevPage}
@@ -478,10 +488,7 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                   >
                     Back
                   </Button>
-                  <Button 
-                    type="submit" 
-                    className="flex-1 text-white text-lg"
-                  >
+                  <Button type="submit" className="flex-1 text-white text-lg">
                     Save and Continue
                   </Button>
                   {/* <Button
@@ -498,59 +505,64 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
         </div>
       ) : (
         <div className="mt-6">
-        {owners.length > 0 && (
-          <>
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold">School Owners</h3>
-              <p className="text-sm text-muted-foreground">
-                Personal information of the business Owner(s)
-              </p>
-            </div>
-            
-            <div className="space-y-4">
-              {owners.map((owner, index) => (
-                <div key={index} className="border rounded-lg p-4 flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium">{owner.firstName} {owner.lastName}</h4>
-                    <p className="text-sm w-5/6 text-muted-foreground">
-                      {/* {owner.phoneNumber} • {owner.email} */}
-                      Personal information of the business Owner(s)
-                    </p>
+          {owners.length > 0 && (
+            <>
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold">School Owners</h3>
+                <p className="text-sm text-muted-foreground">
+                  Personal information of the business Owner(s)
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {owners.map((owner, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-lg p-4 flex justify-between items-center"
+                  >
+                    <div>
+                      <h4 className="font-medium">
+                        {owner.firstName} {owner.lastName}
+                      </h4>
+                      <p className="text-sm w-5/6 text-muted-foreground">
+                        {/* {owner.phoneNumber} • {owner.email} */}
+                        Personal information of the business Owner(s)
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        // variant="ghost"
+                        className="bg-primary text-white"
+                        // size="icon"
+                        onClick={() => handleEditOwner(index)}
+                      >
+                        Edit Information
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="border-[#E9EBEB] rounded-md"
+                        onClick={() => handleDeleteOwner(index)}
+                      >
+                        <Trash2 className="h-4 w-4 text-[#515B6F]" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      // variant="ghost"
-                      className="bg-primaryColor text-white"
-                      // size="icon"
-                      onClick={() => handleEditOwner(index)}
-                    >
-                      Edit Information
-                    </Button>
-               
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="border-[#E9EBEB] rounded-md"
-                      onClick={() => handleDeleteOwner(index)}
-                    >
-                      <Trash2 className="h-4 w-4 text-[#515B6F]" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-6 flex justify-end">
-              <Button 
-                onClick={handleSaveAndContinue}
-                className="text-white text-lg"
-              >
-                Save and Continue
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <Button
+                  onClick={handleSaveAndContinue}
+                  className="text-white text-lg"
+                >
+                  Save and Continue
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
       )}
     </div>
   );

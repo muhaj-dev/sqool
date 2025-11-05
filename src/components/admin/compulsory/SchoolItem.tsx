@@ -21,7 +21,7 @@ const SchoolItem: React.FC<SchoolItemProps> = ({
       </div>
       <div className="flex items-center gap-4">
         <span
-          className="text-primaryColor p-2 rounded-md border cursor-pointer"
+          className="text-primary p-2 rounded-md border cursor-pointer"
           onClick={onEdit}
         >
           Edit Information
@@ -34,7 +34,7 @@ const SchoolItem: React.FC<SchoolItemProps> = ({
         </span>
       </div>
     </div>
-  )
+  );
 }
 
 export default SchoolItem

@@ -27,16 +27,16 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   return (
     <div
       onClick={handleClick}
-      className="bg-[#F8F8FD] p-2 flex items-center justify-center rounded-md shadow-sm border-dashed border-2 border-primaryColor cursor-pointer"
+      className="bg-[#F8F8FD] p-2 flex items-center justify-center rounded-md shadow-sm border-dashed border-2 border-primary cursor-pointer"
     >
       {value ? (
         <div className="flex items-center justify-center gap-4">
-          <Paperclip className="text-primaryColor mb-2" />
+          <Paperclip className="text-primary mb-2" />
           <p className="text-gray-500">{value.name}</p>
         </div>
       ) : (
         <div className="flex justify-center gap-4 items-center">
-          <Paperclip className="text-primaryColor mb-2" />
+          <Paperclip className="text-primary mb-2" />
           <p className="text-sm text-gray-500">Attach a document</p>
         </div>
       )}

@@ -12,11 +12,11 @@ const AccountTopbar = () => {
           Showing your Account metrics for July 19, 2021 - July 25, 2021
         </p> */}
       </div>
-      <DialogTrigger className="flex items-center bg-primaryColor text-white py-2 px-4 text-sm rounded-md cursor-pointer my-4 ">
+      <DialogTrigger className="flex items-center bg-primary text-white py-2 px-4 text-sm rounded-md cursor-pointer my-4 ">
         <Plus /> <p>Add Bank Account</p>
       </DialogTrigger>
     </div>
-  )
+  );
 }
 
 export default AccountTopbar

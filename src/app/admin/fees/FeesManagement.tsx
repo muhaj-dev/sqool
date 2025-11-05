@@ -1121,7 +1121,6 @@ export default function FeesManagement() {
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
-                          
                         </div>
                       </TableCell>
                     </TableRow>
@@ -1178,19 +1177,21 @@ export default function FeesManagement() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object?.entries(term?.breakdown || []).map(([key, value]) => (
-                          <div
-                            key={key}
-                            className="flex justify-between items-center border-b pb-2 last:border-0"
-                          >
-                            <span className="text-sm capitalize text-muted-foreground">
-                              {key.replace(/_/g, " ")}
-                            </span>
-                            <span className="font-medium">
-                              ₦{(value as number).toLocaleString()}
-                            </span>
-                          </div>
-                        ))}
+                        {Object?.entries(term?.breakdown || []).map(
+                          ([key, value]) => (
+                            <div
+                              key={key}
+                              className="flex justify-between items-center border-b pb-2 last:border-0"
+                            >
+                              <span className="text-sm capitalize text-muted-foreground">
+                                {key.replace(/_/g, " ")}
+                              </span>
+                              <span className="font-medium">
+                                ₦{(value as number).toLocaleString()}
+                              </span>
+                            </div>
+                          )
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -1235,9 +1236,9 @@ export default function FeesManagement() {
                 </div>
               </div>
 
-              <div className="bg-primaryColor/20 border border-primaryColor rounded-md p-3">
+              <div className="bg-primary/20 border border-primary rounded-md p-3">
                 <div className="flex items-start gap-2">
-                  <div className="w-5 h-5 text-primaryColor flex-shrink-0 mt-0.5">
+                  <div className="w-5 h-5 text-primary flex-shrink-0 mt-0.5">
                     <svg fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"

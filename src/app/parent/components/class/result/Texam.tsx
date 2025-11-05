@@ -28,11 +28,11 @@ interface TexamProps {
           icon={<Search />} // Icon passed as prop
           className="my-2 w-[250px]"
         />
-        <Button 
+        <Button
           //  onClick={toggleTexam}
-         className=" px-3 text-white">
+          className=" px-3 text-white"
+        >
           Upload New
-          
         </Button>
       </div>
 
@@ -41,7 +41,7 @@ interface TexamProps {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "exam"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("exam")}
@@ -51,7 +51,7 @@ interface TexamProps {
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "test"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("test")}

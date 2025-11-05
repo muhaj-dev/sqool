@@ -87,7 +87,7 @@ export function EventModal({ event }: EventModalProps) {
   return (
     <DialogContent className="lg:max-w-[40%] w-full ">
       <DialogClose className="p-1 bg-white rounded-full absolute right-0 -top-10">
-        <X className="text-primaryColor" />
+        <X className="text-primary" />
       </DialogClose>
 
       <div className=" ">

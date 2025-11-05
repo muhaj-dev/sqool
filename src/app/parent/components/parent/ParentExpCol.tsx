@@ -127,8 +127,9 @@ export const ParentExpCol: ColumnDef<IParentExp>[] = [
   
       return (
         <button className="flex items-start gap-4 cursor-pointer">
-          <p className="text-primaryColor bg-[#FFD03A1A] rounded-[20px] px-4 py-2 cursor-pointer">
-            {actionValue || "Download Receipt"} {/* Fallback to a default if necessary */}
+          <p className="text-primary bg-[#FFD03A1A] rounded-[20px] px-4 py-2 cursor-pointer">
+            {actionValue || "Download Receipt"}{" "}
+            {/* Fallback to a default if necessary */}
           </p>
           <MoreHorizontal size={20} className="text-muted-foreground" />
         </button>

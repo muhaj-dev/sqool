@@ -51,9 +51,10 @@ const Sidebar = () => {
     <div className=" py-8 bg-white">
       <div className="flex flex-col min-h-[120vh] bg-white max-[700px]:w-full w-[25%] max-w-[280px] fixed  gap-6">
         <div>
-          <h2 
+          <h2
             onClick={() => router.push("/")}
-          className="text-primaryColor text-center text-2xl font-bold cursor-pointer pb-4">
+            className="text-primary text-center text-2xl font-bold cursor-pointer pb-4"
+          >
             SQOOLIFY
           </h2>
           <Separator />
@@ -66,7 +67,9 @@ const Sidebar = () => {
 
           <div className="flex-1">
             <h3>{user?.school?.name} School</h3>
-            <p className="text-muted-foreground mb-4 border-b-0">{user?.firstName} {user?.lastName}</p>
+            <p className="text-muted-foreground mb-4 border-b-0">
+              {user?.firstName} {user?.lastName}
+            </p>
           </div>
         </div>
         <Separator />
@@ -87,7 +90,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname.startsWith("/parent") ? "text-primaryColor" : ""
+                pathname.startsWith("/parent") ? "text-primary" : ""
               }`}
             >
               Dashboard
@@ -103,12 +106,12 @@ const Sidebar = () => {
                 <div className="flex items-center gap-3 pl-4">
                   <ClassIcon
                     color={`${
-                       pathname.startsWith("/parent/kid") ? "#E5B80B" : "#515B6F"
+                      pathname.startsWith("/parent/kid") ? "#E5B80B" : "#515B6F"
                     }`}
                   />
                   <p
                     className={`text-[#515B6F] ${
-                       pathname.startsWith("/parent/kid") ? "text-primaryColor" : ""
+                      pathname.startsWith("/parent/kid") ? "text-primary" : ""
                     }`}
                   >
                     My Kids
@@ -118,42 +121,44 @@ const Sidebar = () => {
               <AccordionContent className="bg-gray ">
                 <div className="pl-4 flex flex-col gap-4 w-[90%] pt-3 mx-auto">
                   {isLoading ? (
-                    <div className="text-muted-foreground text-sm">Loading children...</div>
+                    <div className="text-muted-foreground text-sm">
+                      Loading children...
+                    </div>
                   ) : children.length > 0 ? (
                     children.map((child: any) => (
-                      <div key={child._id} className="flex items-center justify-between">
+                      <div
+                        key={child._id}
+                        className="flex items-center justify-between"
+                      >
                         <button
-                          className={`hover:text-primaryColor text-[#515B6F] cursor-pointer`}
-                          onClick={() => router.push(`/parent/kid/${child._id}`)}
+                          className={`hover:text-primary text-[#515B6F] cursor-pointer`}
+                          onClick={() =>
+                            router.push(`/parent/kid/${child._id}`)
+                          }
                         >
                           {child.firstName}{" "}
-                          <span className="ml-1 hover:text-primaryColor  text-muted-foreground">
+                          <span className="ml-1 hover:text-primary  text-muted-foreground">
                             {formatLastName(child.lastName)}
                           </span>
                         </button>
                       </div>
                     ))
                   ) : (
-                    <div className="text-muted-foreground text-sm">No children found</div>
+                    <div className="text-muted-foreground text-sm">
+                      No children found
+                    </div>
                   )}
                 </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <Link
-            href="/parent/fees"
-            className={`flex items-center gap-3 pl-4`}
-          >
+          <Link href="/parent/fees" className={`flex items-center gap-3 pl-4`}>
             <StudentIcon
-              color={`${
-                pathname === "/parent/fees" ? "#E5B80B" : "#515B6F"
-              }`}
+              color={`${pathname === "/parent/fees" ? "#E5B80B" : "#515B6F"}`}
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/parent/fees"
-                  ? "text-primaryColor"
-                  : ""
+                pathname === "/parent/fees" ? "text-primary" : ""
               }`}
             >
               Fees
@@ -170,7 +175,7 @@ const Sidebar = () => {
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/parent/noticeboard" ? "text-primaryColor" : ""
+                pathname === "/parent/noticeboard" ? "text-primary" : ""
               }`}
             >
               Notice Board
@@ -183,12 +188,12 @@ const Sidebar = () => {
           >
             <Settings
               className={`text-[#515B6F] ${
-                pathname === "/parent/settings" ? "text-primaryColor" : ""
+                pathname === "/parent/settings" ? "text-primary" : ""
               }`}
             />
             <p
               className={`text-[#515B6F] ${
-                pathname === "/parent/settings" ? "text-primaryColor" : ""
+                pathname === "/parent/settings" ? "text-primary" : ""
               }`}
             >
               Setting

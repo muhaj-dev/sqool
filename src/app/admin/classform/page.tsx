@@ -14,13 +14,13 @@ const Page = async ({ searchParams }: PageProps) => {
     <div>
       <Link
         href="/admin/compulsory"
-        className="border py-3 px-6 rounded-md text-primaryColor"
+        className="border py-3 px-6 rounded-md text-primary"
       >
         Back
       </Link>
       <ConfigurationForm classType={type} />
     </div>
-  )
+  );
 }
 
 export default Page

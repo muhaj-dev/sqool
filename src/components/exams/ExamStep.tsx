@@ -14,7 +14,7 @@ const ExamSteps = () => {
             key={ind}
             className={`cursor-pointer transition  ${
               activeIndex === ind
-                ? "border-b-[2px] border-primaryColor text-black"
+                ? "border-b-[2px] border-primary text-black"
                 : "text-muted-foreground"
             }`}
           >
@@ -24,7 +24,7 @@ const ExamSteps = () => {
       </section>
       <Separator />
     </div>
-  )
+  );
 }
 
 export default ExamSteps

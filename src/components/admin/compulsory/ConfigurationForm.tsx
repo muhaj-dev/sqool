@@ -220,31 +220,35 @@ const ConfigurationForm = ({ classType }: ConfigurationFormProps) => {
   };
 
   return (
-    <div className='my-4 bg-white px-4 py-8'>
+    <div className="my-4 bg-white px-4 py-8">
       <div className="flex gap-16 rounded-md">
         <div className="w-[30%] flex flex-col gap-4">
           {STEPS.map((step, index) => {
             const isActive = step === activeStep;
             const isDisabled = classType && step !== classType.toLowerCase();
-            
+
             return (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={`flex items-center gap-4 p-2 rounded-md ${
-                  isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                  isDisabled
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
                 }`}
                 onClick={() => !isDisabled && setActiveStep(step)}
               >
                 <span
                   className={`h-8 w-8 flex items-center justify-center rounded-full ${
                     isActive
-                      ? 'bg-primaryColor text-white'
-                      : 'border border-gray-300 text-black dark:text-gray-300'
+                      ? "bg-primary text-white"
+                      : "border border-gray-300 text-black dark:text-gray-300"
                   }`}
                 >
                   {index + 1}
                 </span>
-                <span className={`${isActive ? 'font-medium' : 'text-gray-500'}`}>
+                <span
+                  className={`${isActive ? "font-medium" : "text-gray-500"}`}
+                >
                   {`${step.charAt(0).toUpperCase() + step.slice(1)} Class`}
                 </span>
               </div>
@@ -259,16 +263,19 @@ const ConfigurationForm = ({ classType }: ConfigurationFormProps) => {
                 <p className="text-muted-foreground text-sm">
                   {classType
                     ? `Configure your ${classType} classes`
-                    : 'The following details must be attended to before your account may operate properly.'}
+                    : "The following details must be attended to before your account may operate properly."}
                 </p>
               </div>
-              <Button className="text-primaryColor bg-transparent hover:bg-[#bdbcbc50]">
+              <Button className="text-primary bg-transparent hover:bg-[#bdbcbc50]">
                 <Plus />
                 Add More
               </Button>
             </div>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSaveAndSubmit)} className="space-y-8">
+              <form
+                onSubmit={form.handleSubmit(handleSaveAndSubmit)}
+                className="space-y-8"
+              >
                 <FormField
                   control={form.control}
                   name="classname"
@@ -302,11 +309,11 @@ const ConfigurationForm = ({ classType }: ConfigurationFormProps) => {
                     <FormItem>
                       <FormLabel>Level Type</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="Level type" 
-                          {...field} 
-                          disabled 
-                          value={classType || ''}
+                        <Input
+                          placeholder="Level type"
+                          {...field}
+                          disabled
+                          value={classType || ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -320,22 +327,22 @@ const ConfigurationForm = ({ classType }: ConfigurationFormProps) => {
                     <FormItem>
                       <FormLabel>Class Section (up to 2 characters)</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="Enter section (e.g. 'a', 'ab')" 
+                        <Input
+                          placeholder="Enter section (e.g. 'a', 'ab')"
                           maxLength={2}
-                          {...field} 
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button 
-                  type="submit" 
-                  className="text-white w-full bg-primaryColor hover:bg-primaryColor/90"
+                <Button
+                  type="submit"
+                  className="text-white w-full bg-primary hover:bg-primary/90"
                   disabled={isSubmitting}
                 >
-                  {editingIndex !== null ? 'Update' : 'Save'}
+                  {editingIndex !== null ? "Update" : "Save"}
                 </Button>
               </form>
             </Form>

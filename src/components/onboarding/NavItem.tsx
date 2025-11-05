@@ -33,7 +33,7 @@ const NavItem = ({ section, index }: NavItemProps) => {
         className={cn(
           "transition-all w-fit pb-1 hover:cursor-pointer flex flex-col items-start",
           {
-            "border-b-2 border-primaryColor text-black font-medium": isCurrent,
+            "border-b-2 border-primary text-black font-medium": isCurrent,
             "text-muted-foreground": !isCurrent && !isCompleted,
             "text-green-600": isCompleted && !isCurrent,
             "opacity-50 cursor-not-allowed": isDisabled,
@@ -43,7 +43,7 @@ const NavItem = ({ section, index }: NavItemProps) => {
         <span className="text-sm">{section.label}</span>
         {/* <span className="text-xs text-muted-foreground">{section.text}</span> */}
       </button>
-      
+
       {isCompleted && !isCurrent && (
         <span className="absolute -right-4 text-green-500">✓</span>
       )}

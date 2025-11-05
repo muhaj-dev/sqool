@@ -55,7 +55,7 @@ const ResetPassword = () => {
       "
       >
         <div className="text-center mb-6 ">
-          <h3 className="text-primaryColor text-2xl sm:text-3xl  mb-4">
+          <h3 className="text-primary text-2xl sm:text-3xl  mb-4">
             Change Password
           </h3>
           <p className="text-[#434547] text-[14px] sm:text-xl">
@@ -101,14 +101,14 @@ const ResetPassword = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full py-4 bg-primaryColor text-white">
+            <Button type="submit" className="w-full py-4 bg-primary text-white">
               Change Password
             </Button>
           </form>
         </Form>
       </Wrapper>
     </MaxWidthWrapper>
-  )
+  );
 }
 
 export default ResetPassword

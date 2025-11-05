@@ -141,7 +141,7 @@ const ParentList = () => {
       <div>
         <button
           onClick={handleViewDetails}
-          className="text-[14px] border-[#E9EBEB] border-[1px] text-primaryColor font-medium py-[10px] px-[16px]"
+          className="text-[14px] border-[#E9EBEB] border-[1px] text-primary font-medium py-[10px] px-[16px]"
         >
           View Details
         </button>
@@ -172,9 +172,7 @@ const ParentList = () => {
     { label: "Oldest First", value: "asc" },
   ];
 
-  const statusOptions = [
-    { label: "All", value: "" },
-  ];
+  const statusOptions = [{ label: "All", value: "" }];
 
   if (loading) {
     return <div>Loading parents...</div>;
@@ -196,7 +194,7 @@ const ParentList = () => {
         {/* <section className="w-fit ml-auto mb-2">
           <Link
             href="/admin/parent/add"
-            className="flex items-center text-white text-sm rounded-md bg-primaryColor cursor-pointer hover:bg-white hover:text-primaryColor border-[1px] border-primaryColor py-2 px-6 transition-all"
+            className="flex items-center text-white text-sm rounded-md bg-primary cursor-pointer hover:bg-white hover:text-primary border-[1px] border-primary py-2 px-6 transition-all"
           >
             Add New Parent
           </Link>

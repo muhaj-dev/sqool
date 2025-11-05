@@ -20,7 +20,7 @@ const SettingSteps = () => {
             key={ind}
             className={`cursor-pointer transition  ${
               activeIndex === ind
-                ? "border-b-[2px] border-primaryColor text-black"
+                ? "border-b-[2px] border-primary text-black"
                 : "text-muted-foreground"
             }`}
           >
@@ -30,7 +30,7 @@ const SettingSteps = () => {
       </section>
       <Separator />
     </div>
-  )
+  );
 }
 
 export default SettingSteps

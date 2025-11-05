@@ -52,11 +52,11 @@ const StudentTopBar = () => {
       </Link>
       <div className="w-fit ">
         <Select>
-          <SelectTrigger className="border text-primaryColor py-2 px-4 text-sm w-fit rounded-md outline-none">
+          <SelectTrigger className="border text-primary py-2 px-4 text-sm w-fit rounded-md outline-none">
             <SelectValue placeholder="More Action" />
           </SelectTrigger>
           <SelectContent className="bg-white w-full rounded-md py-3 px-4 flex flex-col gap-4  shadow-md">
-            {SELECTDATA.map(item => (
+            {SELECTDATA.map((item) => (
               <SelectItem
                 value={item.value}
                 key={item.id}
@@ -69,7 +69,7 @@ const StudentTopBar = () => {
         </Select>
       </div>
     </div>
-  )
+  );
 }
 
 export default StudentTopBar

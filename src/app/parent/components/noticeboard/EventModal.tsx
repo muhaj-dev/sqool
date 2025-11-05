@@ -88,7 +88,7 @@ const FormSchema = z.object({
   return (
     <DialogContent className="lg:max-w-[40%] w-[600px] ">
       <DialogClose className="p-1 bg-white rounded-full absolute right-0 -top-10">
-        <X className="text-primaryColor" />
+        <X className="text-primary" />
       </DialogClose>
 
       <div className=" ">
@@ -145,7 +145,7 @@ const FormSchema = z.object({
               </Button>
               <Button
                 type="submit"
-                className=" border-primaryColor text-primaryColor border-[1px] bg-transparent px-5"
+                className=" border-primary text-primary border-[1px] bg-transparent px-5"
               >
                 No
               </Button>

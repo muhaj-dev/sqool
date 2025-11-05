@@ -24,17 +24,19 @@ const Navbar = ({
   isOpen: boolean;
 }) => {
   return (
-    <div className="bg-primaryColor md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
-       <div className="">
+    <div className="bg-primary md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
+      <div className="">
         {/* Hamburger button - toggles sidebar */}
         <button
           className="max-[700px]:block hidden text-3xl focus:outline-none"
           onClick={toggleSidebar}
         >
-          {isOpen ? <HiX  className="text-white"/> : <HiMenu   className="text-white" />}
+          {isOpen ? (
+            <HiX className="text-white" />
+          ) : (
+            <HiMenu className="text-white" />
+          )}
         </button>
-
-    
       </div>
       <div className="hidden md:block w-[45%] relative">
         <Search className="absolute top-2 left-1 text-muted-foreground " />
@@ -62,17 +64,17 @@ const Navbar = ({
       </div>
 
       <Select>
-          <SelectTrigger className="w-[120px] flex md:hidden text-white bg-primaryColor border-none">
-            <SelectValue placeholder="Show stats: " />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-        </Select>
+        <SelectTrigger className="w-[120px] flex md:hidden text-white bg-primary border-none">
+          <SelectValue placeholder="Show stats: " />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
-  )
+  );
 }
 
 export default Navbar

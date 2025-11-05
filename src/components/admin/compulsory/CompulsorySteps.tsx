@@ -16,7 +16,7 @@ const CompulsorySteps = () => {
             key={ind}
             className={`cursor-pointer transition pb-2 w-fit   ${
               activeIndex === ind
-                ? "border-b-[2px] border-primaryColor text-black"
+                ? "border-b-[2px] border-primary text-black"
                 : "text-muted-foreground"
             }`}
           >
@@ -26,7 +26,7 @@ const CompulsorySteps = () => {
       </div>
       <Separator />
     </div>
-  )
+  );
 }
 
 export default CompulsorySteps

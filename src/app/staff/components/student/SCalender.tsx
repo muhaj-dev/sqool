@@ -92,7 +92,7 @@ const SCalender: React.FC = () => {
               </div>
               <div className="ml-4 w-fit px-6 ">{result.class}</div>
               <div className="ml-4">{result.description}</div>
-              <button className="bg-primaryColor text-white px-4 py-2 ml-4 rounded-[80px]">
+              <button className="bg-primary text-white px-4 py-2 ml-4 rounded-[80px]">
                 Download Result
               </button>
               <div className="relative ml-6">

@@ -92,12 +92,12 @@ export function LibraryTable({
         <section className="f">
           <>
             {pathname.startsWith("/student") ? ( // Replace with your specific route
-              <Button className="px-3 bg-primaryColor text-white border border-input">
+              <Button className="px-3 bg-primary text-white border border-input">
                 Download
               </Button>
             ) : (
               <Dialog>
-                <DialogTrigger className="flex items-center text-white rounded-md bg-primaryColor cursor-pointer py-2 px-4">
+                <DialogTrigger className="flex items-center text-white rounded-md bg-primary cursor-pointer py-2 px-4">
                   {/* <Plus /> */}
                   <span>Upload New</span>
                 </DialogTrigger>

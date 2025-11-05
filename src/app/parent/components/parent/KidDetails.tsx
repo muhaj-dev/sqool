@@ -16,14 +16,12 @@ import Details from "./Details";
 
   return (
     <div className="">
-  
-
       <div className="flex justify-between gap-5 border-b-2  border-[#D6DDEB] ">
         <div className="space-x-3">
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "kid1"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("kid1")}
@@ -33,7 +31,7 @@ import Details from "./Details";
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
               activeTab === "kid2"
-                ? "border-b-primaryColor border-b-2 text-[#2E2C34]"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
                 : "text-[#84818A]"
             }`}
             onClick={() => handleTabSwitch("kid2")}
@@ -41,7 +39,6 @@ import Details from "./Details";
             Kid2
           </button>
         </div>
-        
       </div>
 
       <div className="py-4 ">

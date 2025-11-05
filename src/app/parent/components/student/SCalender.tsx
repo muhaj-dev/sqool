@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Pagination from "@/components/ui/pagination";
+import { PaginationControls } from "@/components/PaginationControl";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -92,7 +92,7 @@ const SCalender: React.FC = () => {
               </div>
               <div className="ml-4 w-fit px-6 ">{result.class}</div>
               <div className="ml-4">{result.description}</div>
-              <button className="bg-primaryColor text-white px-4 py-2 ml-4 rounded-[80px]">
+              <button className="bg-primary text-white px-4 py-2 ml-4 rounded-[80px]">
                 Download Result
               </button>
               <div className="relative ml-6">
@@ -116,11 +116,10 @@ const SCalender: React.FC = () => {
       </div>
 
       {/* Pagination component */}
-      <Pagination
-        totalItems={resultsData.length}
-        itemsPerPage={itemsPerPage}
+      <PaginationControls
+        totalPages={resultsData.length}
         currentPage={currentPage}
-        handlePageChange={handlePageChange}
+        onPageChange={handlePageChange}
       />
     </div>
   );

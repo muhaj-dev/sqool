@@ -145,9 +145,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* <div className="h-[100px] flex flex-col items-center ">
-      <p className="text-primaryColor text-5xl">Coming Soon...</p>
+      <p className="text-primary text-5xl">Coming Soon...</p>
       <Link href={'/signin'}
-      className="bg-primaryColor text-white px-12 mt-24 py-5 rounded-lg"
+      className="bg-primary text-white px-12 mt-24 py-5 rounded-lg"
       >
       Sign in to to have access
       </Link>

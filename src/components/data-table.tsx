@@ -47,9 +47,9 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       <Table>
         <TableHeader>
-          {table.getHeaderGroups().map(headerGroup => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
+              {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
                     {header.isPlaceholder
@@ -59,19 +59,19 @@ export function DataTable<TData, TValue>({
                           header.getContext()
                         )}
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map(row => (
+            table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map(cell => (
+                {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
@@ -91,7 +91,7 @@ export function DataTable<TData, TValue>({
         <button
           onClick={() => table.previousPage()}
           className={`py-2 px-4 border outline-none rounded-md ${
-            table.getCanPreviousPage() ? "border-primaryColor" : ""
+            table.getCanPreviousPage() ? "border-primary" : ""
           } `}
         >
           Previous Page
@@ -100,12 +100,12 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
           className={`py-2 px-4 border outline-none rounded-md ${
-            table.getCanNextPage() ? "border-primaryColor" : ""
+            table.getCanNextPage() ? "border-primary" : ""
           } `}
         >
           Next Page
         </button>
       </div>
     </div>
-  )
+  );
 }

@@ -10,7 +10,7 @@ const PaymentTable = () => {
       <div className="bg-white p-0 md:p-2 lg:p-4 rounded-md">
         <section className="w-fit ml-auto mb-2">
           <Dialog>
-            <DialogTrigger className="flex items-center text-white tex-sm rounded-md bg-primaryColor cursor-pointer py-2 px-6">
+            <DialogTrigger className="flex items-center text-white tex-sm rounded-md bg-primary cursor-pointer py-2 px-6">
               {/* <Plus /> */}
               <span>Make payment</span>
             </DialogTrigger>

@@ -353,15 +353,15 @@ export default function Account() {
           <p className="text-2xl font-[600]">Account</p>
         </div>
         <Dialog open={showAccountModal} onOpenChange={setShowAccountModal}>
-          <DialogTrigger 
-            className="flex items-center bg-primaryColor text-white py-2 px-4 text-sm rounded-md cursor-pointer my-4"
+          <DialogTrigger
+            className="flex items-center bg-primary text-white py-2 px-4 text-sm rounded-md cursor-pointer my-4"
             onClick={() => setShowAccountModal(true)}
           >
             <Plus /> <p>Add Bank Account</p>
           </DialogTrigger>
-          <AccountAddModal 
-            setRefresh={setRefresh} 
-            refresh={refresh} 
+          <AccountAddModal
+            setRefresh={setRefresh}
+            refresh={refresh}
             showAccountModal={showAccountModal}
             setShowAccountModal={setShowAccountModal}
           />
@@ -374,12 +374,12 @@ export default function Account() {
           onClick={toggleShowBanks}
           className="text-lg font-medium text-primary hover:text-primary/80 transition-colors"
         >
-          <motion.span 
+          <motion.span
             className="border-b-2 border-primary pb-1"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {showBanks ? 'Hide Available Banks' : 'View Available Banks'}
+            {showBanks ? "Hide Available Banks" : "View Available Banks"}
           </motion.span>
         </button>
       </div>
@@ -397,7 +397,6 @@ export default function Account() {
           </motion.div>
         )}
       </AnimatePresence>
-  
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -413,7 +412,9 @@ export default function Account() {
               {formatCurrency(totalPayments)}
             </div>
             <p className="text-xs text-success/70 mt-1">
-              From {payments.filter(p => p.paymentStatus === 'Success').length} successful payments
+              From{" "}
+              {payments.filter((p) => p.paymentStatus === "Success").length}{" "}
+              successful payments
             </p>
           </CardContent>
         </Card>
@@ -435,34 +436,44 @@ export default function Account() {
           </CardContent>
         </Card>
 
-        <Card className={`bg-gradient-to-br border ${
-          netBalance >= 0 
-            ? 'from-primary/5 to-primary/10 border-primary/20' 
-            : 'from-destructive/5 to-destructive/10 border-destructive/20'
-        }`}>
+        <Card
+          className={`bg-gradient-to-br border ${
+            netBalance >= 0
+              ? "from-primary/5 to-primary/10 border-primary/20"
+              : "from-destructive/5 to-destructive/10 border-destructive/20"
+          }`}
+        >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Net Balance
             </CardTitle>
-            <DollarSign className={`h-4 w-4 ${netBalance >= 0 ? 'text-primary' : 'text-destructive'}`} />
+            <DollarSign
+              className={`h-4 w-4 ${
+                netBalance >= 0 ? "text-primary" : "text-destructive"
+              }`}
+            />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${
-              netBalance >= 0 ? 'text-primary' : 'text-destructive'
-            }`}>
+            <div
+              className={`text-2xl font-bold ${
+                netBalance >= 0 ? "text-primary" : "text-destructive"
+              }`}
+            >
               {formatCurrency(netBalance)}
             </div>
-            <p className={`text-xs mt-1 ${
-              netBalance >= 0 ? 'text-primary/70' : 'text-destructive/70'
-            }`}>
-              {netBalance >= 0 ? 'Positive balance' : 'Negative balance'}
+            <p
+              className={`text-xs mt-1 ${
+                netBalance >= 0 ? "text-primary/70" : "text-destructive/70"
+              }`}
+            >
+              {netBalance >= 0 ? "Positive balance" : "Negative balance"}
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* School Fees Table */}
-       <div className="space-y-4">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">School Fees</h3>
           <div className="flex gap-2">
@@ -477,25 +488,22 @@ export default function Account() {
             </Button>
           </div>
         </div>
-        
+
         <DataTable
           columns={paymentColumns}
           data={payments}
           searchKey="studentName"
-         
           filterOptions={[
             {
-              key: 'paymentStatus',
-              label: 'Status',
+              key: "paymentStatus",
+              label: "Status",
               options: [
-                { label: 'Paid', value: 'paid' },
-                { label: 'Not Paid', value: 'not paid' },
-                { label: 'Processing', value: 'processing' },
+                { label: "Paid", value: "paid" },
+                { label: "Not Paid", value: "not paid" },
+                { label: "Processing", value: "processing" },
               ],
             },
           ]}
-          
-      
         />
       </div>
 
@@ -523,17 +531,24 @@ export default function Account() {
                   <Input
                     id="expense-name"
                     value={expenseForm.name}
-                    onChange={(e) => setExpenseForm(prev => ({...prev, name: e.target.value}))}
+                    onChange={(e) =>
+                      setExpenseForm((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                    }
                     placeholder="e.g., Office Supplies"
                     required
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="expense-category">Category *</Label>
                   <Select
                     value={expenseForm.category}
-                    onValueChange={(value) => setExpenseForm(prev => ({...prev, category: value}))}
+                    onValueChange={(value) =>
+                      setExpenseForm((prev) => ({ ...prev, category: value }))
+                    }
                     required
                   >
                     <SelectTrigger>
@@ -548,7 +563,7 @@ export default function Account() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="expense-amount">Amount (₦) *</Label>
                   <Input
@@ -557,31 +572,41 @@ export default function Account() {
                     step="0.01"
                     min="0"
                     value={expenseForm.amount}
-                    onChange={(e) => setExpenseForm(prev => ({...prev, amount: e.target.value}))}
+                    onChange={(e) =>
+                      setExpenseForm((prev) => ({
+                        ...prev,
+                        amount: e.target.value,
+                      }))
+                    }
                     placeholder="0.00"
                     required
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="expense-date">Date</Label>
                   <Input
                     id="expense-date"
                     type="date"
                     value={expenseForm.date}
-                    onChange={(e) => setExpenseForm(prev => ({...prev, date: e.target.value}))}
+                    onChange={(e) =>
+                      setExpenseForm((prev) => ({
+                        ...prev,
+                        date: e.target.value,
+                      }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex justify-end space-x-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={() => setAddExpenseDialog(false)}
                   >
                     Cancel
                   </Button>
-                  <Button 
+                  <Button
                     type="submit"
                     className="bg-primary hover:bg-primary-hover text-primary-foreground"
                   >
@@ -592,18 +617,18 @@ export default function Account() {
             </DialogContent>
           </Dialog>
         </div>
-        
+
         <DataTable
           columns={expenseColumns}
           data={expenses}
           searchKey="name"
           filterOptions={[
             {
-              key: 'category',
-              label: 'Category',
-              options: expenseCategories.map(cat => ({
+              key: "category",
+              label: "Category",
+              options: expenseCategories.map((cat) => ({
                 label: cat,
-                value: cat
+                value: cat,
               })),
             },
           ]}

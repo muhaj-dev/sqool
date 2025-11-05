@@ -73,8 +73,7 @@ const VerifiedEmail = () => {
       <div className="flex justify-center items-center flex-col w-full mt-20">
         <Dialog>
           <div className="flex flex-col justify-center items-center max-w-[450px] w-full">
-
-      {/* <div className="flex justify-center items-center flex-col w-full h-screen">
+            {/* <div className="flex justify-center items-center flex-col w-full h-screen">
         <Dialog>
           <div className="flex flex-col justify-center items-center w-[500px]"> */}
 
@@ -86,30 +85,23 @@ const VerifiedEmail = () => {
                 height={100}
               />
             </div>
-            <p className="text-2xl text-primaryColor font-bold">
-              Verify your Email
-            </p>
+            <p className="text-2xl text-primary font-bold">Verify your Email</p>
             <span className="text-muted-foreground ">
               We have sent a confirmation email to the address you provided.
               This verification link is only good for 24 hours.
             </span>
             <div className="mt-12 w-full">
               <DialogTrigger asChild>
-
-
-                <Button className="bg-primaryColor font-semibold text-white w-full py-4 shadow-lg">
-
+                <Button className="bg-primary font-semibold text-white w-full py-4 shadow-lg">
                   View Requirement
                 </Button>
               </DialogTrigger>
               <Button
-
                 // onClick={resendHandler}
                 variant={"outline"}
-                className="w-full text-primaryColor mt-4 hover:text-yellow-500"
+                className="w-full text-primary mt-4 hover:text-yellow-500"
               >
                 {resend ? "Resending..." : "Resend Link"}
-
               </Button>
             </div>
           </div>

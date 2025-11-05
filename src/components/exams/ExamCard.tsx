@@ -74,9 +74,8 @@ const ExamCard = ({
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
-           
-                <Button
-              className="w-full text-white bg-primaryColor"
+            <Button
+              className="w-full text-white bg-primary"
               onClick={onApprove}
               disabled={loading}
             >
@@ -90,12 +89,12 @@ const ExamCard = ({
               {loading ? "Rejecting..." : "Reject"}
             </Button>
             <Button
-            className="w-full text-white bg-yellow-600"
-            onClick={onSchedule}
-            disabled={loading}
-          >
-            {loading ? "Scheduling..." : "Schedule"}
-          </Button>
+              className="w-full text-white bg-yellow-600"
+              onClick={onSchedule}
+              disabled={loading}
+            >
+              {loading ? "Scheduling..." : "Schedule"}
+            </Button>
           </CardFooter>
         </>
       )}
@@ -103,10 +102,10 @@ const ExamCard = ({
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
-              {/* {status === "approve" && (
+            {/* {status === "approve" && (
           <>
             <Button
-              className="w-full text-white bg-primaryColor"
+              className="w-full text-white bg-primary"
               onClick={onApprove}
               disabled={loading}
             >
@@ -122,30 +121,26 @@ const ExamCard = ({
             
           </>
         )} */}
-         
-     
-        {status === "reject" && (
-          <Button
-            className="w-full text-white bg-gray-600"
-            disabled
-          >
-            Rejected
-          </Button>
-        )}
-        {status === "scheduled" && (
-          <Button
-            className="w-full text-white bg-yellow-600"
-            onClick={onSchedule}
-            disabled={loading}
-          >
-            {loading ? "Scheduling..." : "Schedule"}
-          </Button>
-        )}
+
+            {status === "reject" && (
+              <Button className="w-full text-white bg-gray-600" disabled>
+                Rejected
+              </Button>
+            )}
+            {status === "scheduled" && (
+              <Button
+                className="w-full text-white bg-yellow-600"
+                onClick={onSchedule}
+                disabled={loading}
+              >
+                {loading ? "Scheduling..." : "Schedule"}
+              </Button>
+            )}
           </CardFooter>
         </>
       )}
     </Card>
-  )
+  );
 }
 
 export default ExamCard

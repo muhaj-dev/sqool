@@ -13,14 +13,14 @@ export const columns: ColumnDef<IStudent>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
       />
     ),
@@ -38,7 +38,7 @@ export const columns: ColumnDef<IStudent>[] = [
           Full Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
     cell: ({ row }) => (
       <div className="lowercase">{row.getValue("fullname")}</div>
@@ -55,7 +55,7 @@ export const columns: ColumnDef<IStudent>[] = [
           Class
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("class")}</div>,
   },
@@ -70,7 +70,7 @@ export const columns: ColumnDef<IStudent>[] = [
           Rate
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("rate")}</div>,
   },
@@ -85,7 +85,7 @@ export const columns: ColumnDef<IStudent>[] = [
           Subject
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </div>
-      )
+      );
     },
     cell: ({ row }) => (
       <div className="lowercase">{row.getValue("subject")}</div>
@@ -97,11 +97,11 @@ export const columns: ColumnDef<IStudent>[] = [
     cell: ({ row }) => (
       <Link
         href="  student/1"
-        className="flex items-center gap-2 text-primaryColor cursor-pointer"
+        className="flex items-center gap-2 text-primary cursor-pointer"
       >
         View Detail
         <MoreHorizontal size={20} className="text-muted-foreground" />
       </Link>
     ),
   },
-]
+];

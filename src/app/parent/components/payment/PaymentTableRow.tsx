@@ -85,22 +85,24 @@ export function PaymentTableRow({
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter(column => column.getCanHide())
-              .map(column => {
+              .filter((column) => column.getCanHide())
+              .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={value => column.toggleVisibility(!!value)}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-       
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="">
@@ -110,24 +112,26 @@ export function PaymentTableRow({
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter(column => column.getCanHide())
-              .map(column => {
+              .filter((column) => column.getCanHide())
+              .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={value => column.toggleVisibility(!!value)}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
         {/* <section className="f">
           <Dialog>
-            <DialogTrigger className="flex items-center text-white rounded-md bg-primaryColor cursor-pointer py-2 px-4">
+            <DialogTrigger className="flex items-center text-white rounded-md bg-primary cursor-pointer py-2 px-4">
              
               <span>Upload New</span>
             </DialogTrigger>

@@ -86,7 +86,7 @@ const handleSchedule = async (examId: string) => {
             key={ind}
             className={`cursor-pointer ${
               activeIndex === ind &&
-              "text-primaryColor border-b-[2px] border-b-primaryColor "
+              "text-primary border-b-[2px] border-b-primary "
             }`}
             onClick={() => setActiveIndex(ind)}
           >

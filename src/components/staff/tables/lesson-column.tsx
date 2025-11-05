@@ -49,9 +49,9 @@ export const columns: ColumnDef<Lesson>[] = [
     accessorKey: "attachment",
     header: "Attachment",
     cell: ({ row }) => (
-      <div className="capitalize text-primaryColor underline cursor-pointer">
+      <div className="capitalize text-primary underline cursor-pointer">
         view link
       </div>
     ),
   },
-]
+];

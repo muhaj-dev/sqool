@@ -25,13 +25,11 @@ const ChangePhonrNumber = () => {
   return (
     <MaxWidthWrapper>
       <div>
-        <span className="text-primaryColor font-bold sm:text-2xl">
-          SQOOLIFY
-        </span>
+        <span className="text-primary font-bold sm:text-2xl">SQOOLIFY</span>
       </div>
       <Wrapper className="h-screen sm:w-[60%] w-full  mx-auto gap-4">
         <div className="text-center">
-          <h2 className="text-primaryColor text-xl mb-3">Edit phone number</h2>
+          <h2 className="text-primary text-xl mb-3">Edit phone number</h2>
           <p className="text-[#515B6F]">
             Cross check your number or enter another phone number to receive
             your OTP.
@@ -54,7 +52,7 @@ const ChangePhonrNumber = () => {
                   </FormItem>
                 )}
               />
-              <Button className="text-white font-semibold bg-primaryColor  w-full mb-4">
+              <Button className="text-white font-semibold bg-primary  w-full mb-4">
                 Resend OTP
               </Button>
             </form>
@@ -65,7 +63,7 @@ const ChangePhonrNumber = () => {
         Terms of service. Having problem with login?
       </p>
     </MaxWidthWrapper>
-  )
+  );
 }
 
 export default ChangePhonrNumber

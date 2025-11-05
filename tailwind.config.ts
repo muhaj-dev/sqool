@@ -15,20 +15,19 @@ const config = {
       padding: "2rem",
       screens: {
         "2xl": "1440px",
-        "medium": '700px',
+        medium: "700px",
       },
     },
     extend: {
       colors: {
-        primaryColor: "#E5B80B",
-        gray: '#FAFAFA',
+        gray: "#FAFAFA",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#E5B80B",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -76,11 +75,11 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       screens: {
-        'tablet': '1190px',
+        tablet: "1190px",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
 export default config

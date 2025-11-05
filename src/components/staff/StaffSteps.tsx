@@ -65,7 +65,7 @@ const StaffSteps = ({ staffId, staff }: StaffStepsProps) => {
             onClick={() => handleTabClick(ind)}
             className={`cursor-pointer transition pb-2 ${
               activeIndex === ind
-                ? "border-b-2 border-primaryColor text-black"
+                ? "border-b-2 border-primary text-black"
                 : "text-muted-foreground"
             }`}
           >
@@ -75,7 +75,11 @@ const StaffSteps = ({ staffId, staff }: StaffStepsProps) => {
       </div>
       <Separator className="my-4" />
       <div className="p-4">
-        <StaffContent activeIndex={activeIndex} staffId={staffId} staff={staff} />
+        <StaffContent
+          activeIndex={activeIndex}
+          staffId={staffId}
+          staff={staff}
+        />
       </div>
     </div>
   );

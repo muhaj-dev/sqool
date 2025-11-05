@@ -162,8 +162,8 @@ export function StaffTimeTable({ toggleTexam }: StaffTimeTableProps) {
         </Select>
         <div className="flex gap-3 items-center">
           <Button
-            variant="primaryBorder"
-            className="px-3 text-primaryColor"
+            variant="default"
+            className="px-3 text-primary"
             onClick={toggleTexam}
           >
             Upload Timetable

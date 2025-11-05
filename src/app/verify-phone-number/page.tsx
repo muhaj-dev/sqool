@@ -45,13 +45,13 @@ export default function VerifyPhoneNumber() {
   return (
     <div style={styles.container}>
       <div className="flex flex-col items-center">
-        <h2 className="text-primaryColor font-bold text-[28px]">
+        <h2 className="text-primary font-bold text-[28px]">
           Verify your Phone number
         </h2>
         <p className="text-[#515B6F] font-normal text-[18px]">
           We sent an OTP to{" "}
-          {tempPhone ? maskPhoneNumber(tempPhone) : "your number"} via SMS
-          and WhatsApp.
+          {tempPhone ? maskPhoneNumber(tempPhone) : "your number"} via SMS and
+          WhatsApp.
         </p>
       </div>
 
@@ -75,14 +75,13 @@ export default function VerifyPhoneNumber() {
           onPaste={(e) => e.preventDefault()}
         />
         <div>
-
-        {error && (
-          <div className="text-red-500 text-sm text-center">{error}</div>
-        )}
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
 
           <Button
             onClick={handleVerify}
-            className="bg-primaryColor mt-4 font-semibold text-white w-full py-4 shadow-lg"
+            className="bg-primary mt-4 font-semibold text-white w-full py-4 shadow-lg"
             disabled={isLoading || otp.length !== 4}
           >
             {isLoading ? "Verifying..." : "Verify"}

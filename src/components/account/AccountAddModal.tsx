@@ -104,7 +104,7 @@ export function AccountAddModal({
             X
           </DialogClose>
           <DialogHeader className="flex flex-col items-center w-[100%] mx-auto my-4">
-            <DialogTitle className="text-primaryColor font-semibold text-xl mb-2">
+            <DialogTitle className="text-primary font-semibold text-xl mb-2">
               Add Bank Account
             </DialogTitle>
             <DialogDescription className="text-center">

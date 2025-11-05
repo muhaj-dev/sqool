@@ -171,7 +171,7 @@ const ParentList = () => {
       <div>
         <button
           onClick={handleViewDetails}
-          className="text-[14px] border-[#E9EBEB] border-[1px] text-primaryColor font-medium py-[10px] px-[16px] rounded hover:bg-primaryColor hover:text-white transition-colors"
+          className="text-[14px] border-[#E9EBEB] border-[1px] text-primary font-medium py-[10px] px-[16px] rounded hover:bg-primary hover:text-white transition-colors"
         >
           View Details
         </button>

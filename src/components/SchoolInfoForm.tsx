@@ -180,11 +180,11 @@ const SchoolInfoForm = () => {
             <div className="grid grid-cols-2 w-[25rem]  gap-4  ">
               {schoolTypes.map((item, i) => {
                 const handleOpen = (e: MouseEvent) => {
-                  e.preventDefault()
-                  setActiveIndex(i)
-                }
+                  e.preventDefault();
+                  setActiveIndex(i);
+                };
 
-                const isOpen = i === activeIndex
+                const isOpen = i === activeIndex;
                 return (
                   <div key={item.label}>
                     <Button
@@ -192,7 +192,7 @@ const SchoolInfoForm = () => {
                       className={cn(
                         "shadow-sm border w-full sm:w-[12rem] text-muted-foreground",
                         {
-                          "bg-[rgba(0,0,0,0.05)] text-primaryColor": isOpen,
+                          "bg-[rgba(0,0,0,0.05)] text-primary": isOpen,
                         }
                       )}
                       variant={isOpen ? "secondary" : "ghost"}
@@ -200,12 +200,12 @@ const SchoolInfoForm = () => {
                       {item.label}
                     </Button>
                   </div>
-                )
+                );
               })}
             </div>
             <Dialog>
               <DialogTrigger>
-                <span className="text-sm text-primaryColor underline cursor-pointer">
+                <span className="text-sm text-primary underline cursor-pointer">
                   View the requirement document we need
                 </span>
               </DialogTrigger>
@@ -326,13 +326,13 @@ const SchoolInfoForm = () => {
                 <FormItem>
                   <FormLabel>State</FormLabel>
                   <Select
-                    onValueChange={state => {
-                      field.onChange(state)
-                      formData.states.forEach(item => {
+                    onValueChange={(state) => {
+                      field.onChange(state);
+                      formData.states.forEach((item) => {
                         if (item.value.toLowerCase() === state.toLowerCase()) {
-                          setLocalGovernment(item.localGovernments)
+                          setLocalGovernment(item.localGovernments);
                         }
-                      })
+                      });
                     }}
                     defaultValue={field.value}
                   >
@@ -342,7 +342,7 @@ const SchoolInfoForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {formData.states.map(state => (
+                      {formData.states.map((state) => (
                         <SelectItem key={state.label} value={state.value}>
                           {state.label}
                         </SelectItem>
@@ -370,7 +370,7 @@ const SchoolInfoForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {localGovernment?.map(item => (
+                      {localGovernment?.map((item) => (
                         <SelectItem key={item.label} value={item.value}>
                           {item.value}
                         </SelectItem>
@@ -393,7 +393,7 @@ const SchoolInfoForm = () => {
         </div>
       </form>
     </Form>
-  )
+  );
 }
 
 export default SchoolInfoForm
