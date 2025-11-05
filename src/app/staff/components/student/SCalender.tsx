@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Pagination from "@/components/ui/pagination";
+import { PaginationControls } from "@/components/PaginationControl";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -116,12 +116,13 @@ const SCalender: React.FC = () => {
       </div>
 
       {/* Pagination component */}
-      <Pagination
-        totalItems={resultsData.length}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        handlePageChange={handlePageChange}
-      />
+      {resultsData.length > 1 && (
+        <PaginationControls
+          totalPages={resultsData.length}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

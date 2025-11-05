@@ -1,8 +1,8 @@
 "use client";
 
-import ADetails from "@/app/staff/components/Attendance/ADetails";
-import { ATable } from "@/app/staff/components/Attendance/ATable";
-import Attendancebar from "@/app/staff/components/Attendance/Attendancebar";
+import ADetails from "@/app/staff/components/attendance/ADetails";
+import { ATable } from "@/app/staff/components/attendance/ATable";
+import Attendancebar from "@/app/staff/components/attendance/Attendancebar";
 import React, { useState } from "react";
 import StudentAttendance from "../../components/StudentAttendance";
 

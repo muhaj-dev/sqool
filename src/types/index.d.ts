@@ -1,5 +1,6 @@
 // src/types.ts
 // Student-related types
+export * from "./attendance";
 export interface IStudent {
   photo: string;
   _id: string;
