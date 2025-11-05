@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Calendar, CheckCheck } from "lucide-react";
+import { Calendar, CheckCheck,PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -41,11 +41,19 @@ export function AttendanceHeader() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Attendance</h1>
-        <p className="text-muted-foreground mt-1">
-          Manage daily attendance for your assigned classes
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="attendance-header">
+          <h1 className="text-3xl font-bold text-foreground">Attendance</h1>
+          <p className="text-muted-foreground mt-1">
+            Manage daily attendance for your assigned classes
+          </p>
+        </div>
+        <div className="flex justify-end">
+          <Button>
+            <PlusIcon className="h-4 w-4 mr-2" />
+            Create Attendance
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -100,12 +108,14 @@ export function AttendanceHeader() {
           Mark All Present
         </Button>
 
-        <Button onClick={() => {
-          toast({
-            title: "Attendance Saved",
-            description: "Attendance records have been updated successfully",
-          });
-        }}>
+        <Button
+          onClick={() => {
+            toast({
+              title: "Attendance Saved",
+              description: "Attendance records have been updated successfully",
+            });
+          }}
+        >
           Save Attendance
         </Button>
       </div>

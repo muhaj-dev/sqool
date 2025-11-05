@@ -1,0 +1,275 @@
+Sqoolify  
+Api for the following:
+
+*-- STAFF DASHBOARD*  
+GET  
+/staff/id/upcoming-lesson  
+Return data :  
+[
+  { subject: "Mathematics", class: "Primary 3", time: "9:00 AM - 10:00 AM", room: "Room 204" },
+  { subject: "Science", class: "Primary 3", time: "10:30 AM - 11:30 AM", room: "Room 204" },
+  { subject: "Mathematics", class: "Primary 5", time: "2:00 PM - 3:00 PM", room: "Room 308" }
+]
+
+GET  
+/staff/id/recent-notices  
+Return data:  
+[
+  {
+    title: "Staff Meeting",
+    description: "Monthly staff meeting scheduled for tomorrow",
+    time: "2 hours ago"
+  },
+  {
+    title: "Exam Schedule Released",
+    description: "Mid-term examination timetable now available",
+    time: "5 hours ago"
+  },
+  {
+    title: "Holiday Reminder",
+    description: "School will be closed next Monday for public holiday",
+    time: "1 day ago"
+  }
+]
+
+GET  
+/staff/id/dashboard-stats  
+Return data:  
+{
+  activeClasss: 5,
+  totalStudent: 156,
+  totalSubject: 2,
+  lessonScheduledToday: 3,
+  attendanceStats: 90
+}
+
+GET  
+/staff/id/upcoming-examinations  
+Return data:  
+[
+  { subject: "Mathematics", class: "Primary 3", date: "Dec 15, 2025", time: "9:00 AM" },
+  { subject: "Science", class: "Primary 5", date: "Dec 16, 2025", time: "10:00 AM" }
+]
+
+---
+
+*-- ATTENDANCE*  
+
+GET  
+/staff/:id/classes  
+Return data:  
+[
+  { "id": "p3-math", "name": "Primary 3 Mathematics" },
+  { "id": "p3-science", "name": "Primary 3 Science" },
+  { "id": "p4-math", "name": "Primary 4 Mathematics" },
+  { "id": "p5-science", "name": "Primary 5 Science" }
+]
+
+GET  
+/staff/:id/attendance/:classId?date=4-11-2025  
+Return data:  
+[
+  {
+    "id": "1",
+    "name": "Adewale Johnson",
+    "rollNumber": "P3/001",
+    "gender": "Male",
+    "attendanceStatus": "absent",
+    "remarks": "",
+    "attendanceRate": 95,
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adewale",
+    "status": "absent"
+  },
+  {
+    "id": "2",
+    "name": "Fatima Ibrahim",
+    "rollNumber": "P3/002",
+    "gender": "Female",
+    "attendanceStatus": "present",
+    "remarks": "On time",
+    "attendanceRate": 92,
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fatima",
+    "status": "absent"
+  }
+]
+
+PATCH  
+/staff/:id/attendance/:classId/:studentId?date=4-11-2025  
+Payload:  
+{
+  "status": "present", // "present" | "absent" | "late" | "excused"
+  "remarks": "Arrived late due to traffic"
+}  
+Return:  
+{
+  "message": "Attendance updated successfully",
+  "student": {
+    "id": "1",
+    "name": "Adewale Johnson",
+    "status": "present",
+    "remarks": "Arrived late due to traffic"
+  }
+}
+
+POST  
+/staff/:id/attendance/:classId/mark-all?date=4-11-2025  
+Payload:  
+{
+  "attendance": [
+    { "studentId": "1", "status": "present" },
+    { "studentId": "2", "status": "absent" },
+    { "studentId": "3", "status": "present" }
+  ]
+}  
+Return:  
+{ "message": "Attendance records updated for all students" }
+
+GET  
+/staff/:id/attendance/summary?date=4-11-2025  
+> NOTE: This groups attendance for all classes handled by the staff (e.g., P3, P4, P5).
+
+Return:  
+{
+  "totalStudents": 30,
+  "present": 25,
+  "absent": 3,
+  "late": 1,
+  "excused": 1,
+  "attendanceRate": 83
+}
+
+---
+
+*-- STUDENTS*  
+
+GET  
+/staff/students 
+Return data: [ 
+{
+  "name": "Adewale Johnson",
+  "class": "Primary 3A",
+  "rollNumber": "P3/001",
+  "email:":"Adewale@gmail.com",
+  "admissionDate:"30/11/2023",
+  "contact":"+23432323232"
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adewale",
+  "attendanceRate": 95
+  ,
+
+},
+{
+  "name": "Adewale Johnson",
+  "class": "Primary 3A",
+  "rollNumber": "P3/001",
+  "email:":"Adewale@gmail.com",
+  "admissionDate:"30/11/2023",
+  "contact":"+23432323232"
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adewale",
+  "attendanceRate": 95
+  ,
+
+},
+]
+
+GET  
+/staff/students?class=p3-mathematics 
+Return data: [ 
+{
+  "name": "Adewale Johnson",
+  "class": "Primary 3A",
+  "rollNumber": "P3/001",
+  "email:":"Adewale@gmail.com",
+  "admissionDate:"30/11/2023",
+  "contact":"+23432323232"
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adewale",
+  "attendanceRate": 95
+  ,
+
+},
+{
+  "name": "Adewale Johnson",
+  "class": "Primary 3A",
+  "rollNumber": "P3/001",
+  "email:":"Adewale@gmail.com",
+  "admissionDate:"30/11/2023",
+  "contact":"+23432323232"
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adewale",
+  "attendanceRate": 95
+  ,
+
+},
+]
+
+GET  
+/staff/students/:classId/:studentId/profile  
+
+Return data:  
+{
+  "id": "AM21-10",
+  "name": "Jerome Bell",
+  "gender": "Female",
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Jerome",
+  "rating": 4.0,
+  "admissionDate": "2023-11-30",
+  "class": "Class 5",
+  "section": "A",
+  "classTeacher": "Mrs. Smith Rose",
+  "contact": {
+    "emails": ["jeromeBell45@gmail.com", "jeromeBell46@gmail.com"],
+    "phone": "+44 123 224 54A",
+    "address": "Lagos, Nigeria"
+  },
+  "learningActivity": {
+    "duration": "this-month",
+    "subjects": [
+      { "subject": "Math", "performance": 80 },
+      { "subject": "English", "performance": 72 },
+      { "subject": "Government", "performance": 90 },
+      { "subject": "Biology", "performance": 76 },
+      { "subject": "Chemistry", "performance": 65 }
+    ]
+  },
+  "results": [
+    {
+      "session": "1st Session 2024",
+      "class": "Class 5A",
+      "description": "Lorem ipsum dolor sit amet consectetur.",
+      "downloadLink": "/results/1st-session-2024.pdf"
+    },
+    {
+      "session": "2nd Session 2034",
+      "class": "Class 5A",
+      "description": "Lorem ipsum dolor sit amet consectetur.",
+      "downloadLink": "/results/2nd-session-2034.pdf"
+    },
+    {
+      "session": "3rd Session 2024",
+      "class": "Class 5A",
+      "description": "Lorem ipsum dolor sit amet consectetur.",
+      "downloadLink": "/results/3rd-session-2024.pdf"
+    }
+  ],
+  "schedules": [
+    {
+      "session": "1st Session 2024",
+      "class": "Class 5A",
+      "description": "Lorem ipsum dolor sit amet consectetur.",
+      "month": "February",
+      "downloadLink": "/schedule/1st-session-2024.pdf"
+    },
+    {
+      "session": "2nd Session 2034",
+      "class": "Class 5A",
+      "description": "Lorem ipsum dolor sit amet consectetur.",
+      "month": "February",
+      "downloadLink": "/schedule/2nd-session-2034.pdf"
+    },
+    {
+      "session": "3rd Session 2024",
+      "class": "Class 5A",
+      "description": "Lorem ipsum dolor sit amet consectetur.",
+      "month": "February",
+      "downloadLink": "/schedule/3rd-session-2024.pdf"
+    }
+  ]
+}
