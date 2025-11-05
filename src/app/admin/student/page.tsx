@@ -1,6 +1,6 @@
-import StudentList from "@/components/student/StudentList"
+import StudentList from '@/components/student/StudentList'
 
-import React from "react"
+import React from 'react'
 
 const page = () => {
   return (

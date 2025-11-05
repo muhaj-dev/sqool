@@ -1,9 +1,9 @@
-"use client"
-import { ReactNode, createContext, useContext } from "react"
-import { useState } from "react"
-import PersonDetail from "@/components/settings/PersonDetail"
-import CompanySetting from "@/components/settings/CompanySetting"
-import PasswordSetting from "@/components/settings/PasswordSetting"
+'use client'
+import { ReactNode, createContext, useContext } from 'react'
+import { useState } from 'react'
+import PersonDetail from '@/components/settings/PersonDetail'
+import CompanySetting from '@/components/settings/CompanySetting'
+import PasswordSetting from '@/components/settings/PasswordSetting'
 
 export const SettingContext = createContext({
   goNextStep: () => {},
@@ -29,13 +29,10 @@ const SettingContextProvider = ({ children }: { children: ReactNode }) => {
   }
   const step = activeIndex < 3 ? activeIndex : 0
   const value = { updateIndex, step: Elements[step], activeIndex, goNextStep }
-  return (
-    <SettingContext.Provider value={value}>{children}</SettingContext.Provider>
-  )
+  return <SettingContext.Provider value={value}>{children}</SettingContext.Provider>
 }
 export function useSetting() {
-  const { step, updateIndex, activeIndex, goNextStep } =
-    useContext(SettingContext)
+  const { step, updateIndex, activeIndex, goNextStep } = useContext(SettingContext)
   return { step, updateIndex, activeIndex, goNextStep }
 }
 export default SettingContextProvider

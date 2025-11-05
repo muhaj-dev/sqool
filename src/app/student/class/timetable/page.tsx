@@ -1,9 +1,8 @@
-
-import CalendarWithCheckboxes from "@/app/parent/components/parent/schedule/CalendarWithCheckboxes";
-import SchedulBar from "@/app/parent/components/parent/schedule/SchedulBar";
-import ScheduleCalendar from "@/app/parent/components/parent/schedule/ScheduleCalender";
-import React from "react";
-import TimeTableBar from "../../components/TimeTable";
+import CalendarWithCheckboxes from '@/app/parent/components/parent/schedule/CalendarWithCheckboxes'
+import SchedulBar from '@/app/parent/components/parent/schedule/SchedulBar'
+import ScheduleCalendar from '@/app/parent/components/parent/schedule/ScheduleCalender'
+import React from 'react'
+import TimeTableBar from '../../components/TimeTable'
 
 const Page = () => {
   return (
@@ -14,7 +13,7 @@ const Page = () => {
         <CalendarWithCheckboxes />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

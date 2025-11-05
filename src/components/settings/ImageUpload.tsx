@@ -1,11 +1,11 @@
-"use client"
-import React, { useRef, useState, ChangeEvent } from "react"
-import { Input } from "../ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+'use client'
+import React, { useRef, useState, ChangeEvent } from 'react'
+import { Input } from '../ui/input'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 const ImageUpload = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [url, setUrl] = useState<string | null>("")
+  const [url, setUrl] = useState<string | null>('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,7 @@ const ImageUpload = () => {
     <div className="flex item-center gap-4 w-full">
       <div className="flex flex-col items-center ">
         <Avatar className="">
-          <AvatarImage src={selectedImage ? url! : ""} alt="@shadcn" />
+          <AvatarImage src={selectedImage ? url! : ''} alt="@shadcn" />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <Input
@@ -44,20 +44,16 @@ const ImageUpload = () => {
             Add Photo
           </span>
         ) : (
-          <span
-            onClick={handleFileRemove}
-            className="text-primary cursor-pointer "
-          >
+          <span onClick={handleFileRemove} className="text-primary cursor-pointer ">
             Change Photo
           </span>
         )}
       </div>
       <span className=" w-[70%]    text-[#515B6F]">
-        we only accept this type of format (PNG, JPG). kindly upload photo not
-        more that 5mb
+        we only accept this type of format (PNG, JPG). kindly upload photo not more that 5mb
       </span>
     </div>
-  );
+  )
 }
 
 export default ImageUpload

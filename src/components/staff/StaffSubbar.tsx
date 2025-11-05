@@ -1,16 +1,15 @@
 'use client'
 
+import { useState } from 'react'
 
-import { useState } from "react"
-
-import { Dialog, DialogTrigger } from "@radix-ui/react-dialog"
-import { Plus } from "lucide-react"
-import React from "react"
-import AddNewStaff from "./AddNewStaff"
+import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
+import { Plus } from 'lucide-react'
+import React from 'react'
+import AddNewStaff from './AddNewStaff'
 
 const StaffSubbar = () => {
-    const [open, setOpen] = useState(false);
-  
+  const [open, setOpen] = useState(false)
+
   return (
     <div className="my-6">
       <div className="flex items-center flex-wrap gap-2 justify-between">
@@ -46,7 +45,7 @@ const StaffSubbar = () => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default StaffSubbar

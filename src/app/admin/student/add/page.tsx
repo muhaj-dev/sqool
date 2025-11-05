@@ -1,5 +1,4 @@
-
-import AddStudentForm from "./Components/AddStudentForm";
+import AddStudentForm from './Components/AddStudentForm'
 
 const Page = () => {
   return (
@@ -11,7 +10,7 @@ const Page = () => {
       </div>
       <AddStudentForm />
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

@@ -1,8 +1,8 @@
-"use client"
-import React from "react"
-import { Select, SelectContent, SelectItem } from "../../ui/select"
-import { SelectTrigger, SelectValue } from "@radix-ui/react-select"
-import { ChevronDown } from "lucide-react"
+'use client'
+import React from 'react'
+import { Select, SelectContent, SelectItem } from '../../ui/select'
+import { SelectTrigger, SelectValue } from '@radix-ui/react-select'
+import { ChevronDown } from 'lucide-react'
 
 const CompulsorySubBar = () => {
   return (
@@ -35,4 +35,3 @@ const CompulsorySubBar = () => {
 }
 
 export default CompulsorySubBar
-

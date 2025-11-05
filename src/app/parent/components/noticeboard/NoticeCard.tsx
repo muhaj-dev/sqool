@@ -1,24 +1,23 @@
-import React, { ReactNode } from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { Phone } from "lucide-react"
-import Link from "next/link"
-
+import React, { ReactNode } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Separator } from '@/components/ui/separator'
+import { Phone } from 'lucide-react'
+import Link from 'next/link'
 
 interface EventCard {
-  id: number;
-  time: string;
-  date: string;
-  title: string;
-  description: string;
+  id: number
+  time: string
+  date: string
+  title: string
+  description: string
   participants: {
-    name: string;
-    role: string;
-  }[];
-  attachments: ReactNode;
-  eventDate: string;
-  eventTime: string;
-  isNew: boolean;
+    name: string
+    role: string
+  }[]
+  attachments: ReactNode
+  eventDate: string
+  eventTime: string
+  isNew: boolean
 }
 const NoticeCard = ({ event }: { event: EventCard }) => {
   return (
@@ -34,9 +33,7 @@ const NoticeCard = ({ event }: { event: EventCard }) => {
           </Avatar>
           <div>
             <p>{`${event?.time} ${event?.date}`} </p>
-            <p className="text-muted-foreground max-w-40 break-words ">
-              {event?.title}
-            </p>
+            <p className="text-muted-foreground max-w-40 break-words ">{event?.title}</p>
           </div>
         </div>
         {/* <span className=" text-[#5542F6] rounded-sm px-4 py-2 bg-[#5542F61A]">

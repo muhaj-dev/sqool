@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { ColumnDef } from "@tanstack/react-table"
-import { CircularProgressbar } from "react-circular-progressbar"
-import "react-circular-progressbar/dist/styles.css"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from '@/components/ui/button'
+import { ColumnDef } from '@tanstack/react-table'
+import { CircularProgressbar } from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 /*
 
@@ -41,21 +41,18 @@ export type OutstandingFee = {
 
 export const performanceColumns: ColumnDef<Performance>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-    footer: "ID",
+    accessorKey: 'id',
+    header: 'ID',
+    footer: 'ID',
   },
   {
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
+      <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
         Name
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    accessorKey: "name",
+    accessorKey: 'name',
     accessorFn: row => `${row.first_name} ${row.last_name}`,
     cell: props => (
       <div className="flex gap-2">
@@ -74,42 +71,36 @@ export const performanceColumns: ColumnDef<Performance>[] = [
     ),
   },
   {
-    accessorKey: "percentage",
-    header: "Percentage",
+    accessorKey: 'percentage',
+    header: 'Percentage',
     cell: props => (
       <div className="flex gap-1 w-[45px] h-[45px] items-center ">
-        <CircularProgressbar
-          strokeWidth={15}
-          value={Number(props.getValue())}
-        />
+        <CircularProgressbar strokeWidth={15} value={Number(props.getValue())} />
         <span>{`${props.getValue()}`}</span>
       </div>
     ),
   },
   {
-    accessorKey: "rank",
-    header: "Rank",
+    accessorKey: 'rank',
+    header: 'Rank',
     cell: props => <p>{`${props.getValue()}`}</p>,
   },
 ]
 
 export const outstandingColumns: ColumnDef<OutstandingFee>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-    footer: "ID",
+    accessorKey: 'id',
+    header: 'ID',
+    footer: 'ID',
   },
   {
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
+      <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
         Name
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    accessorKey: "name",
+    accessorKey: 'name',
     accessorFn: row => `${row.first_name} ${row.last_name}`,
     cell: props => (
       <div className="flex gap-2">
@@ -128,21 +119,19 @@ export const outstandingColumns: ColumnDef<OutstandingFee>[] = [
     ),
   },
   {
-    accessorKey: "fee_type",
-    header: "Fee Type",
+    accessorKey: 'fee_type',
+    header: 'Fee Type',
   },
   {
-    accessorKey: "fee_amount",
-    header: "Fee Amount",
+    accessorKey: 'fee_amount',
+    header: 'Fee Amount',
     cell: props => <p>{`$${props.getValue()}`}</p>,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: 'status',
+    header: 'Status',
     cell: props => (
-      <div className="bg-[rgba(252,52,0,0.10)] py-[10px] px-6 rounded-md text-[#FC3400]">
-        {`${props.getValue()}`}
-      </div>
+      <div className="bg-[rgba(252,52,0,0.10)] py-[10px] px-6 rounded-md text-[#FC3400]">{`${props.getValue()}`}</div>
     ),
   },
 ]

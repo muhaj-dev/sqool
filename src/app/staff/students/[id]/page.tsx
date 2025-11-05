@@ -1,8 +1,8 @@
-import React from "react";
-import Details from "../../components/student/Details";
-import LearningActivity from "../../components/student/LearningActivity";
-import SResult from "../../components/student/SResult";
-import SCalender from "../../components/student/SCalender";
+import React from 'react'
+import Details from '../../components/student/Details'
+import LearningActivity from '../../components/student/LearningActivity'
+import SResult from '../../components/student/SResult'
+import SCalender from '../../components/student/SCalender'
 
 const page = () => {
   return (
@@ -19,9 +19,9 @@ const page = () => {
         </div>
       </div>
       <SResult />
-    <SCalender />
+      <SCalender />
     </div>
-  );
-};
+  )
+}
 
-export default page;
+export default page

@@ -1,12 +1,6 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import React from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import React from 'react'
 
 const AttendanceTable = () => {
   return (
@@ -85,7 +79,6 @@ const AttendanceTable = () => {
             <p>5</p>
           </div>
         </div>
-
       </div>
     </section>
   )

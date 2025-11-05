@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react'
 
 import {
   Select,
@@ -8,7 +8,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select'
 
 type TOption = string
 type TSelectProps = {

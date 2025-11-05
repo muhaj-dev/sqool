@@ -1,14 +1,7 @@
-import { FormControl } from "@/components/ui/form"
-import React, { useState } from "react"
-import { Input } from "./ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select"
+import { FormControl } from '@/components/ui/form'
+import React, { useState } from 'react'
+import { Input } from './ui/input'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 interface CountryCode {
   label: string
@@ -16,10 +9,10 @@ interface CountryCode {
 }
 
 const countryCodes: CountryCode[] = [
-  { label: "+234 (NGN)", value: "+234" },
-  { label: "+1 (US)", value: "+1" },
-  { label: "+44 (UK)", value: "+44" },
-  { label: "+91 (India)", value: "+91" },
+  { label: '+234 (NGN)', value: '+234' },
+  { label: '+1 (US)', value: '+1' },
+  { label: '+44 (UK)', value: '+44' },
+  { label: '+91 (India)', value: '+91' },
   // Add more country codes as needed
 ]
 
@@ -42,12 +35,7 @@ const PhoneNumberInput = ({ field }: { field: any }) => {
       </div>
       <div className="flex-1 w-full">
         <FormControl>
-          <Input
-            placeholder="Enter phone number"
-            {...field}
-            type="number"
-            className="outline-none w-full"
-          />
+          <Input placeholder="Enter phone number" {...field} type="number" className="outline-none w-full" />
         </FormControl>
       </div>
     </div>

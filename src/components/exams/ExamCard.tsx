@@ -1,16 +1,10 @@
-"use client"
-import React from "react"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardTitle,
-} from "@/components/ui/card"
-import Image, { StaticImageData } from "next/image"
-import AttachmentUpload from "../AttachmentUpload"
-import { Button } from "../ui/button"
-import { Separator } from "../ui/separator"
+'use client'
+import React from 'react'
+import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card'
+import Image, { StaticImageData } from 'next/image'
+import AttachmentUpload from '../AttachmentUpload'
+import { Button } from '../ui/button'
+import { Separator } from '../ui/separator'
 
 type TProps = {
   photo: StaticImageData
@@ -43,16 +37,10 @@ const ExamCard = ({
     <Card className="py-4 px-3 my-3">
       <div className="flex justify-between mb-4 ">
         <div className="flex gap-2">
-          <Image
-            src={photo}
-            alt=""
-            className="h-[40px] w-[40px] rounded-full"
-          />
+          <Image src={photo} alt="" className="h-[40px] w-[40px] rounded-full" />
           <div>
             <CardTitle className="text-[16px]">{fullname}</CardTitle>
-            <CardDescription className="w-[150px] text-sm break-words">
-              {email}
-            </CardDescription>
+            <CardDescription className="w-[150px] text-sm break-words">{email}</CardDescription>
           </div>
         </div>
         <div className="text-right">
@@ -70,30 +58,18 @@ const ExamCard = ({
           {/* <AttachmentUpload /> */}
         </div>
       </CardContent>
-      {status === "pending" && (
+      {status === 'pending' && (
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
-            <Button
-              className="w-full text-white bg-primary"
-              onClick={onApprove}
-              disabled={loading}
-            >
-              {loading ? "Approving..." : "Approve"}
+            <Button className="w-full text-white bg-primary" onClick={onApprove} disabled={loading}>
+              {loading ? 'Approving...' : 'Approve'}
             </Button>
-            <Button
-              className="w-full text-white bg-red-600"
-              onClick={onReject}
-              disabled={loading}
-            >
-              {loading ? "Rejecting..." : "Reject"}
+            <Button className="w-full text-white bg-red-600" onClick={onReject} disabled={loading}>
+              {loading ? 'Rejecting...' : 'Reject'}
             </Button>
-            <Button
-              className="w-full text-white bg-yellow-600"
-              onClick={onSchedule}
-              disabled={loading}
-            >
-              {loading ? "Scheduling..." : "Schedule"}
+            <Button className="w-full text-white bg-yellow-600" onClick={onSchedule} disabled={loading}>
+              {loading ? 'Scheduling...' : 'Schedule'}
             </Button>
           </CardFooter>
         </>
@@ -122,25 +98,21 @@ const ExamCard = ({
           </>
         )} */}
 
-            {status === "reject" && (
+            {status === 'reject' && (
               <Button className="w-full text-white bg-gray-600" disabled>
                 Rejected
               </Button>
             )}
-            {status === "scheduled" && (
-              <Button
-                className="w-full text-white bg-yellow-600"
-                onClick={onSchedule}
-                disabled={loading}
-              >
-                {loading ? "Scheduling..." : "Schedule"}
+            {status === 'scheduled' && (
+              <Button className="w-full text-white bg-yellow-600" onClick={onSchedule} disabled={loading}>
+                {loading ? 'Scheduling...' : 'Schedule'}
               </Button>
             )}
           </CardFooter>
         </>
       )}
     </Card>
-  );
+  )
 }
 
 export default ExamCard

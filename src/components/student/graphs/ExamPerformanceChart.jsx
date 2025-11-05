@@ -1,37 +1,24 @@
-"use client"
-import React from "react"
-import { Bar } from "react-chartjs-2"
-import {
-  Chart as ChatJS,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-} from "chart.js"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+'use client'
+import React from 'react'
+import { Bar } from 'react-chartjs-2'
+import { Chart as ChatJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 ChatJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 const ExamPerformanceChart = () => {
   const data = {
-    labels: ["Math", "English", "Government", "Biology", "Chemistry"],
+    labels: ['Math', 'English', 'Government', 'Biology', 'Chemistry'],
     datasets: [
       {
-        label: "exam performance",
+        label: 'exam performance',
         data: [82, 72, 95, 78, 100],
-        backgroundColor: "#E5B80B",
+        backgroundColor: '#E5B80B',
       },
     ],
   }
   const options = {
-    indexAxis: "y",
+    indexAxis: 'y',
     barThickness: 20,
     layout: {
       padding: 18,

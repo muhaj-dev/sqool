@@ -1,11 +1,10 @@
 'use client'
 
-
-import { useState, useEffect } from 'react';
-import { DataTable } from '../ui/data-table';
-import { StatusBadge } from '../ui/status-badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, useEffect } from 'react'
+import { DataTable } from '../ui/data-table'
+import { StatusBadge } from '../ui/status-badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -13,57 +12,43 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Plus, TrendingUp, TrendingDown, DollarSign, ChevronRight } from 'lucide-react';
-import { useToast } from '../ui/use-toast';
-import { getBanks } from "@/utils/api";
-import { IBankAccount, IStudent } from "@/types";
-import { motion, AnimatePresence } from "framer-motion";
-import { AccountAddModal } from './AccountAddModal';
-import { getPayments } from '@/utils/api';
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ColumnDef } from '@tanstack/react-table'
+import { ArrowUpDown, Plus, TrendingUp, TrendingDown, DollarSign, ChevronRight } from 'lucide-react'
+import { useToast } from '../ui/use-toast'
+import { getBanks } from '@/utils/api'
+import { IBankAccount, IStudent } from '@/types'
+import { motion, AnimatePresence } from 'framer-motion'
+import { AccountAddModal } from './AccountAddModal'
+import { getPayments } from '@/utils/api'
 // import { PaymentAddModal } from './PaymentAddModal';
-import { getAllStudents } from '@/utils/api';
+import { getAllStudents } from '@/utils/api'
 
 interface Payment {
-  _id: string;
-  paymentMemo: string;
-  userId: string;
-  paymentDate: string;
-  paymentStatus: 'paid' | 'not paid' | 'processing' | 'Success' | 'Failed' | 'Processing';
-  amount: number;
+  _id: string
+  paymentMemo: string
+  userId: string
+  paymentDate: string
+  paymentStatus: 'paid' | 'not paid' | 'processing' | 'Success' | 'Failed' | 'Processing'
+  amount: number
   student?: {
-    firstName: string;
-    lastName: string;
-  };
+    firstName: string
+    lastName: string
+  }
 }
 
 interface Expense {
-  id: string;
-  name: string;
-  category: string;
-  amount: number;
-  date: string;
+  id: string
+  name: string
+  category: string
+  amount: number
+  date: string
 }
 
-const expenseCategories = [
-  'Staff',
-  'Infrastructure',
-  'Maintenance',
-  'Supplies',
-  'Transport',
-  'Utilities',
-  'Other'
-];
+const expenseCategories = ['Staff', 'Infrastructure', 'Maintenance', 'Supplies', 'Transport', 'Utilities', 'Other']
 
 // Bank Account List Component
 const BankAccountList = ({ banks }: { banks: IBankAccount[] }) => {
@@ -77,17 +62,19 @@ const BankAccountList = ({ banks }: { banks: IBankAccount[] }) => {
       </CardHeader>
       <CardContent className="space-y-2">
         {banks.map((item, ind) => (
-          <Dialog key={ind} open={selectedBank?._id === item._id && deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <Dialog
+            key={ind}
+            open={selectedBank?._id === item._id && deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+          >
             <DialogTrigger asChild>
-              <div 
+              <div
                 className="bg-[#F2F2F280] cursor-pointer flex items-center pr-2 justify-between p-3 rounded-md"
                 onClick={() => setSelectedBank(item)}
               >
                 <div className="flex items-center gap-2">
                   <span>{item.bankName}</span>
-                  <span className="text-[#828282]">
-                    {item.accountNumber}
-                  </span>
+                  <span className="text-[#828282]">{item.accountNumber}</span>
                 </div>
                 <ChevronRight />
               </div>
@@ -95,9 +82,7 @@ const BankAccountList = ({ banks }: { banks: IBankAccount[] }) => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Delete Bank Account</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to delete this bank account?
-                </DialogDescription>
+                <DialogDescription>Are you sure you want to delete this bank account?</DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <p>Account Name: {item.accountName}</p>
@@ -107,9 +92,7 @@ const BankAccountList = ({ banks }: { banks: IBankAccount[] }) => {
                   <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button variant="destructive">
-                    Delete
-                  </Button>
+                  <Button variant="destructive">Delete</Button>
                 </div>
               </div>
             </DialogContent>
@@ -121,82 +104,79 @@ const BankAccountList = ({ banks }: { banks: IBankAccount[] }) => {
 }
 
 export default function Account() {
-  const { toast } = useToast();
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [banks, setBanks] = useState<IBankAccount[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showBanks, setShowBanks] = useState(false);
-  const [addExpenseDialog, setAddExpenseDialog] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [showAccountModal, setShowAccountModal] = useState(false);
+  const { toast } = useToast()
+  const [expenses, setExpenses] = useState<Expense[]>([])
+  const [banks, setBanks] = useState<IBankAccount[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [showBanks, setShowBanks] = useState(false)
+  const [addExpenseDialog, setAddExpenseDialog] = useState(false)
+  const [refresh, setRefresh] = useState(false)
+  const [showAccountModal, setShowAccountModal] = useState(false)
   const [expenseForm, setExpenseForm] = useState({
     name: '',
     category: '',
     amount: '',
-    date: new Date().toISOString().split('T')[0]
-  });
+    date: new Date().toISOString().split('T')[0],
+  })
 
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [students, setStudents] = useState<IStudent[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([])
+  const [students, setStudents] = useState<IStudent[]>([])
 
   // Fetch banks on component mount
   useEffect(() => {
     const fetchBanks = async () => {
       try {
-        setLoading(true);
-        const response = await getBanks();
-        setBanks(response.data);
+        setLoading(true)
+        const response = await getBanks()
+        setBanks(response.data)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch banks');
+        setError(err instanceof Error ? err.message : 'Failed to fetch banks')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchBanks();
-  }, [refresh]);
+    }
+    fetchBanks()
+  }, [refresh])
 
   // Fetch payments and students
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const [paymentsResponse, studentsResponse] = await Promise.all([
-          getPayments(1, 100),
-          getAllStudents(1, 100)
-        ]);
-        
+        const [paymentsResponse, studentsResponse] = await Promise.all([getPayments(1, 100), getAllStudents(1, 100)])
+
         // Adjust based on your actual API response structure
-        setPayments(paymentsResponse.data?.result || paymentsResponse.data || []);
-        setStudents(studentsResponse.data?.result || studentsResponse.data || []);
+        setPayments(paymentsResponse.data?.result || paymentsResponse.data || [])
+        setStudents(studentsResponse.data?.result || studentsResponse.data || [])
       } catch (error) {
         toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch data",
-        });
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to fetch data',
+        })
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
-  }, [refresh, toast]);
+    fetchData()
+  }, [refresh, toast])
 
   const totalPayments = payments
     .filter(p => p.paymentStatus === 'paid' || p.paymentStatus === 'Success')
-    .reduce((sum, p) => sum + p.amount, 0);
+    .reduce((sum, p) => sum + p.amount, 0)
 
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
-  const netBalance = totalPayments - totalExpenses;
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0)
+  const netBalance = totalPayments - totalExpenses
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', {
       style: 'currency',
       currency: 'NGN',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+      minimumFractionDigits: 0,
+    }).format(amount)
+  }
 
   const paymentColumns: ColumnDef<Payment>[] = [
     {
@@ -204,7 +184,7 @@ export default function Account() {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="h-auto p-0 font-medium"
         >
           Date
@@ -212,34 +192,33 @@ export default function Account() {
         </Button>
       ),
       cell: ({ row }) => {
-        const date = new Date(row.original.paymentDate);
-        return <div className="text-sm">{date.toLocaleDateString()}</div>;
+        const date = new Date(row.original.paymentDate)
+        return <div className="text-sm">{date.toLocaleDateString()}</div>
       },
     },
     {
       accessorKey: 'studentName',
       header: 'Student Name',
       cell: ({ row }) => {
-        const payment = row.original;
-        const student = students.find(s => s._id === payment.userId);
-        return <div className="font-medium">{student ? `${student.firstName} ${student.lastName}` : 'Unknown Student'}</div>;
+        const payment = row.original
+        const student = students.find(s => s._id === payment.userId)
+        return (
+          <div className="font-medium">{student ? `${student.firstName} ${student.lastName}` : 'Unknown Student'}</div>
+        )
       },
     },
     {
       accessorKey: 'paymentStatus',
       header: 'Status',
-      cell: ({ row }) => (
-        <StatusBadge status={row?.original?.paymentStatus} />
-      ),
-  // paymentStatus: 'paid' | 'not paid' | 'processing' | 'Success' | 'Failed' | 'Processing';
-
+      cell: ({ row }) => <StatusBadge status={row?.original?.paymentStatus} />,
+      // paymentStatus: 'paid' | 'not paid' | 'processing' | 'Success' | 'Failed' | 'Processing';
     },
     {
       accessorKey: 'amount',
       header: ({ column }) => (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="h-auto p-0 font-medium"
         >
           Amount
@@ -247,33 +226,29 @@ export default function Account() {
         </Button>
       ),
       cell: ({ row }) => {
-        const amount = row.original.amount;
-        return <div className="font-medium">{formatCurrency(amount)}</div>;
+        const amount = row.original.amount
+        return <div className="font-medium">{formatCurrency(amount)}</div>
       },
     },
-  ];
+  ]
 
   const expenseColumns: ColumnDef<Expense>[] = [
     {
       accessorKey: 'name',
       header: 'Expense Name',
-      cell: ({ row }) => (
-        <div className="font-medium">{row.original.name}</div>
-      ),
+      cell: ({ row }) => <div className="font-medium">{row.original.name}</div>,
     },
     {
       accessorKey: 'category',
       header: 'Category',
-      cell: ({ row }) => (
-        <div className="text-sm text-muted-foreground">{row.original.category}</div>
-      ),
+      cell: ({ row }) => <div className="text-sm text-muted-foreground">{row.original.category}</div>,
     },
     {
       accessorKey: 'amount',
       header: ({ column }) => (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="h-auto p-0 font-medium"
         >
           Amount
@@ -281,8 +256,8 @@ export default function Account() {
         </Button>
       ),
       cell: ({ row }) => {
-        const amount = row.original.amount;
-        return <div className="font-medium">{formatCurrency(amount)}</div>;
+        const amount = row.original.amount
+        return <div className="font-medium">{formatCurrency(amount)}</div>
       },
     },
     {
@@ -290,7 +265,7 @@ export default function Account() {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="h-auto p-0 font-medium"
         >
           Date
@@ -298,22 +273,22 @@ export default function Account() {
         </Button>
       ),
       cell: ({ row }) => {
-        const date = new Date(row.original.date);
-        return <div className="text-sm">{date.toLocaleDateString()}</div>;
+        const date = new Date(row.original.date)
+        return <div className="text-sm">{date.toLocaleDateString()}</div>
       },
     },
-  ];
+  ]
 
   const handleAddExpense = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+    e.preventDefault()
+
     if (!expenseForm.name || !expenseForm.category || !expenseForm.amount) {
       toast({
         title: 'Error',
         description: 'Please fill in all required fields',
-        variant: 'destructive'
-      });
-      return;
+        variant: 'destructive',
+      })
+      return
     }
 
     const newExpense: Expense = {
@@ -321,30 +296,30 @@ export default function Account() {
       name: expenseForm.name,
       category: expenseForm.category,
       amount: parseFloat(expenseForm.amount),
-      date: expenseForm.date
-    };
+      date: expenseForm.date,
+    }
 
-    setExpenses([...expenses, newExpense]);
-    setAddExpenseDialog(false);
+    setExpenses([...expenses, newExpense])
+    setAddExpenseDialog(false)
     setExpenseForm({
       name: '',
       category: '',
       amount: '',
-      date: new Date().toISOString().split('T')[0]
-    });
+      date: new Date().toISOString().split('T')[0],
+    })
 
     toast({
       title: 'Success',
       description: 'Expense added successfully',
-    });
-  };
+    })
+  }
 
   const toggleShowBanks = () => {
-    setShowBanks(!showBanks);
-  };
+    setShowBanks(!showBanks)
+  }
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (loading) return <div>Loading...</div>
+  if (error) return <div className="text-red-500">{error}</div>
 
   return (
     <div className="px-6 space-y-6">
@@ -379,7 +354,7 @@ export default function Account() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {showBanks ? "Hide Available Banks" : "View Available Banks"}
+            {showBanks ? 'Hide Available Banks' : 'View Available Banks'}
           </motion.span>
         </button>
       </div>
@@ -389,7 +364,7 @@ export default function Account() {
         {showBanks && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
@@ -402,71 +377,45 @@ export default function Account() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="bg-gradient-to-br from-success/5 to-success/10 border-success/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total School Payments
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total School Payments</CardTitle>
             <TrendingUp className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">
-              {formatCurrency(totalPayments)}
-            </div>
+            <div className="text-2xl font-bold text-success">{formatCurrency(totalPayments)}</div>
             <p className="text-xs text-success/70 mt-1">
-              From{" "}
-              {payments.filter((p) => p.paymentStatus === "Success").length}{" "}
-              successful payments
+              From {payments.filter(p => p.paymentStatus === 'Success').length} successful payments
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 border-destructive/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Expenses
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Expenses</CardTitle>
             <TrendingDown className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">
-              {formatCurrency(totalExpenses)}
-            </div>
-            <p className="text-xs text-destructive/70 mt-1">
-              From {expenses.length} expense entries
-            </p>
+            <div className="text-2xl font-bold text-destructive">{formatCurrency(totalExpenses)}</div>
+            <p className="text-xs text-destructive/70 mt-1">From {expenses.length} expense entries</p>
           </CardContent>
         </Card>
 
         <Card
           className={`bg-gradient-to-br border ${
             netBalance >= 0
-              ? "from-primary/5 to-primary/10 border-primary/20"
-              : "from-destructive/5 to-destructive/10 border-destructive/20"
+              ? 'from-primary/5 to-primary/10 border-primary/20'
+              : 'from-destructive/5 to-destructive/10 border-destructive/20'
           }`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Net Balance
-            </CardTitle>
-            <DollarSign
-              className={`h-4 w-4 ${
-                netBalance >= 0 ? "text-primary" : "text-destructive"
-              }`}
-            />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Net Balance</CardTitle>
+            <DollarSign className={`h-4 w-4 ${netBalance >= 0 ? 'text-primary' : 'text-destructive'}`} />
           </CardHeader>
           <CardContent>
-            <div
-              className={`text-2xl font-bold ${
-                netBalance >= 0 ? "text-primary" : "text-destructive"
-              }`}
-            >
+            <div className={`text-2xl font-bold ${netBalance >= 0 ? 'text-primary' : 'text-destructive'}`}>
               {formatCurrency(netBalance)}
             </div>
-            <p
-              className={`text-xs mt-1 ${
-                netBalance >= 0 ? "text-primary/70" : "text-destructive/70"
-              }`}
-            >
-              {netBalance >= 0 ? "Positive balance" : "Negative balance"}
+            <p className={`text-xs mt-1 ${netBalance >= 0 ? 'text-primary/70' : 'text-destructive/70'}`}>
+              {netBalance >= 0 ? 'Positive balance' : 'Negative balance'}
             </p>
           </CardContent>
         </Card>
@@ -495,12 +444,12 @@ export default function Account() {
           searchKey="studentName"
           filterOptions={[
             {
-              key: "paymentStatus",
-              label: "Status",
+              key: 'paymentStatus',
+              label: 'Status',
               options: [
-                { label: "Paid", value: "paid" },
-                { label: "Not Paid", value: "not paid" },
-                { label: "Processing", value: "processing" },
+                { label: 'Paid', value: 'paid' },
+                { label: 'Not Paid', value: 'not paid' },
+                { label: 'Processing', value: 'processing' },
               ],
             },
           ]}
@@ -521,9 +470,7 @@ export default function Account() {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Add New Expense</DialogTitle>
-                <DialogDescription>
-                  Add a new expense to track your school spending
-                </DialogDescription>
+                <DialogDescription>Add a new expense to track your school spending</DialogDescription>
               </DialogHeader>
               <form onSubmit={handleAddExpense} className="space-y-4">
                 <div>
@@ -531,8 +478,8 @@ export default function Account() {
                   <Input
                     id="expense-name"
                     value={expenseForm.name}
-                    onChange={(e) =>
-                      setExpenseForm((prev) => ({
+                    onChange={e =>
+                      setExpenseForm(prev => ({
                         ...prev,
                         name: e.target.value,
                       }))
@@ -546,16 +493,14 @@ export default function Account() {
                   <Label htmlFor="expense-category">Category *</Label>
                   <Select
                     value={expenseForm.category}
-                    onValueChange={(value) =>
-                      setExpenseForm((prev) => ({ ...prev, category: value }))
-                    }
+                    onValueChange={value => setExpenseForm(prev => ({ ...prev, category: value }))}
                     required
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {expenseCategories.map((category) => (
+                      {expenseCategories.map(category => (
                         <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
@@ -572,8 +517,8 @@ export default function Account() {
                     step="0.01"
                     min="0"
                     value={expenseForm.amount}
-                    onChange={(e) =>
-                      setExpenseForm((prev) => ({
+                    onChange={e =>
+                      setExpenseForm(prev => ({
                         ...prev,
                         amount: e.target.value,
                       }))
@@ -589,8 +534,8 @@ export default function Account() {
                     id="expense-date"
                     type="date"
                     value={expenseForm.date}
-                    onChange={(e) =>
-                      setExpenseForm((prev) => ({
+                    onChange={e =>
+                      setExpenseForm(prev => ({
                         ...prev,
                         date: e.target.value,
                       }))
@@ -599,17 +544,10 @@ export default function Account() {
                 </div>
 
                 <div className="flex justify-end space-x-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setAddExpenseDialog(false)}
-                  >
+                  <Button type="button" variant="outline" onClick={() => setAddExpenseDialog(false)}>
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    className="bg-primary hover:bg-primary-hover text-primary-foreground"
-                  >
+                  <Button type="submit" className="bg-primary hover:bg-primary-hover text-primary-foreground">
                     Add Expense
                   </Button>
                 </div>
@@ -624,9 +562,9 @@ export default function Account() {
           searchKey="name"
           filterOptions={[
             {
-              key: "category",
-              label: "Category",
-              options: expenseCategories.map((cat) => ({
+              key: 'category',
+              label: 'Category',
+              options: expenseCategories.map(cat => ({
                 label: cat,
                 value: cat,
               })),
@@ -635,5 +573,5 @@ export default function Account() {
         />
       </div>
     </div>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import LeftBar from "@/components/staff/LeftBar";
-import LearningActivity from "../staff/components/student/LearningActivity";
-import Studentbar from "./components/Studentbar";
-import Noticeboard from "../staff/components/staff/Noticeboard";
+import LeftBar from '@/components/staff/LeftBar'
+import LearningActivity from '../staff/components/student/LearningActivity'
+import Studentbar from './components/Studentbar'
+import Noticeboard from '../staff/components/staff/Noticeboard'
 
 const Page = () => {
-  const [showPersonalInfo, setShowPersonalInfo] = useState<boolean>(true);
+  const [showPersonalInfo, setShowPersonalInfo] = useState<boolean>(true)
 
   const togglePersonalInfo = () => {
-    setShowPersonalInfo(!showPersonalInfo);
-  };
+    setShowPersonalInfo(!showPersonalInfo)
+  }
 
   return (
     <div>
@@ -29,7 +29,7 @@ const Page = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

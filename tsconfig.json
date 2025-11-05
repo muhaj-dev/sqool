@@ -28,7 +28,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/student/graphs/TestPerformanceChart.jsx",
-    "src/components/student/graphs/ExamPerformanceChart.jsx"
-, "src/components/student/StudentLeftBar.tsx", "src/app/admin/class/componenets/ClassStats.jsx"  ],
+    "src/components/student/graphs/ExamPerformanceChart.jsx",
+    "src/components/student/StudentLeftBar.tsx",
+    "src/app/admin/class/componenets/ClassStats.jsx"
+  ],
   "exclude": ["node_modules"]
 }

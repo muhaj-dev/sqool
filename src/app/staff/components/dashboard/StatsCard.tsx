@@ -1,13 +1,13 @@
-import { LucideIcon } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { LucideIcon } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 interface StatsCardProps {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  icon: LucideIcon;
-  iconClassName?: string;
+  title: string
+  value: string | number
+  subtitle?: string
+  icon: LucideIcon
+  iconClassName?: string
 }
 
 export function StatsCard({ title, value, subtitle, icon: Icon, iconClassName }: StatsCardProps) {
@@ -20,11 +20,11 @@ export function StatsCard({ title, value, subtitle, icon: Icon, iconClassName }:
             <h3 className="text-3xl font-bold text-foreground mb-1">{value}</h3>
             {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
           </div>
-          <div className={cn("p-3 rounded-lg", iconClassName || "bg-primary/10")}>
-            <Icon className={cn("h-6 w-6", iconClassName ? "" : "text-primary")} />
+          <div className={cn('p-3 rounded-lg', iconClassName || 'bg-primary/10')}>
+            <Icon className={cn('h-6 w-6', iconClassName ? '' : 'text-primary')} />
           </div>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

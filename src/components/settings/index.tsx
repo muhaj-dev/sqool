@@ -1,6 +1,6 @@
-"use client"
-import { useSetting } from "@/contexts/setting-context"
-import React from "react"
+'use client'
+import { useSetting } from '@/contexts/setting-context'
+import React from 'react'
 
 const Settings = () => {
   const { step: Component } = useSetting()

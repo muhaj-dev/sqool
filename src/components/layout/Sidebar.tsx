@@ -1,28 +1,27 @@
-'use client';
-import React from 'react';
-import { Separator } from '../ui/separator';
+"use client";
+import React from "react";
+import { Separator } from "../ui/separator";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Landmark, Settings, GraduationCap } from 'lucide-react';
-import Link from 'next/link';
-import { DashboardIcon, PersonIcon, StudentIcon } from '@/utils/icon';
-import { usePathname } from 'next/navigation';
+} from "@/components/ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Landmark, Settings, GraduationCap } from "lucide-react";
+import Link from "next/link";
+import { DashboardIcon, PersonIcon, StudentIcon } from "@/utils/icon";
+import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/zustand/authStore";
 import { useRouter } from "next/navigation";
-
 
 const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const pathname = usePathname();
 
-      const router = useRouter();
-    const { user } = useAuthStore.getState();
+  const router = useRouter();
+  const { user } = useAuthStore.getState();
   console.log(user); // Use school name in your project
-  
+
   return (
     <div className="py-8 bg-white flex flex-col max-h-[200vh]  gap-6 w-[300px]">
       <div>

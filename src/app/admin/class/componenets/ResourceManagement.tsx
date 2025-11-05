@@ -1,16 +1,23 @@
 // components/class-management/ResourceManagement.tsx
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
-import { Class, Resource, ResourceFormData } from './types';
-import { resourceTypes } from './utils';
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
+import { Link as LinkIcon, Plus, Trash2 } from 'lucide-react'
+import { Class, Resource, ResourceFormData } from './types'
+import { resourceTypes } from './utils'
 
 // interface ResourceManagementProps {
 //   classes: Class[];
@@ -18,7 +25,7 @@ import { resourceTypes } from './utils';
 // }
 
 const ResourceManagement = () => {
-// const ResourceManagement = ({ classes, setClasses }: ResourceManagementProps) => {
+  // const ResourceManagement = ({ classes, setClasses }: ResourceManagementProps) => {
   // const [selectedClass, setSelectedClass] = useState<string>('');
   // const [showAddResourceDialog, setShowAddResourceDialog] = useState(false);
   // const [newResource, setNewResource] = useState<ResourceFormData>({
@@ -40,7 +47,7 @@ const ResourceManagement = () => {
   //   };
 
   //   setClasses(
-  //     classes.map(cls => 
+  //     classes.map(cls =>
   //       cls.id === selectedClass
   //         ? { ...cls, resources: [...cls.resources, resource] }
   //         : cls
@@ -54,13 +61,13 @@ const ResourceManagement = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-          <h3 className="text-lg font-medium">Coming Soon</h3>
+        <h3 className="text-lg font-medium">Coming Soon</h3>
 
         {/* <div>
           <h3 className="text-lg font-medium">Class Resources</h3>
           <p className="text-gray-600">Manage learning resources for each class</p>
         </div> */}
-        
+
         {/* <Dialog open={showAddResourceDialog} onOpenChange={setShowAddResourceDialog}>
           <DialogTrigger asChild>
             <Button className="bg-green-600 hover:bg-green-700">
@@ -233,7 +240,7 @@ const ResourceManagement = () => {
         ))}
       </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default ResourceManagement;
+export default ResourceManagement

@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Calendar, Clock } from 'lucide-react'
 
 const exams = [
-  { subject: "Mathematics", class: "Primary 3", date: "Dec 15, 2025", time: "9:00 AM" },
-  { subject: "Science", class: "Primary 5", date: "Dec 16, 2025", time: "10:00 AM" },
-];
+  { subject: 'Mathematics', class: 'Primary 3', date: 'Dec 15, 2025', time: '9:00 AM' },
+  { subject: 'Science', class: 'Primary 5', date: 'Dec 16, 2025', time: '10:00 AM' },
+]
 
 export function ExaminationCard() {
   return (
@@ -15,10 +15,7 @@ export function ExaminationCard() {
       <CardContent>
         <div className="space-y-4">
           {exams.map((exam, index) => (
-            <div
-              key={index}
-              className="flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0"
-            >
+            <div key={index} className="flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0">
               <div className="p-2 bg-warning/10 rounded-lg">
                 <Calendar className="h-4 w-4 text-warning" />
               </div>
@@ -41,5 +38,5 @@ export function ExaminationCard() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

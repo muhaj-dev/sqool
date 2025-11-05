@@ -1,81 +1,78 @@
-import { create } from "zustand";
-import { AttendanceStatus, StudentAttendance } from "@/types";
+import { create } from 'zustand'
+import { AttendanceStatus, StudentAttendance } from '@/types'
 
 interface AttendanceRecord {
-  status: AttendanceStatus;
-  remarks: string;
+  status: AttendanceStatus
+  remarks: string
 }
 
 interface AttendanceStore {
-  selectedDate: Date;
-  selectedClass: string;
-  attendance: Record<string, AttendanceRecord>;
-  students: StudentAttendance[];
-  setDate: (date: Date) => void;
-  setClass: (classId: string) => void;
-  setStudent: (students: StudentAttendance[]) => void;
-  initializeAttendance: (studentIds: string[]) => void;
-  updateAttendance: (
-    studentId: string,
-    record: Partial<AttendanceRecord>
-  ) => void;
-  markAllPresent: () => void;
-  resetAttendance: () => void;
+  selectedDate: Date
+  selectedClass: string
+  attendance: Record<string, AttendanceRecord>
+  students: StudentAttendance[]
+  setDate: (date: Date) => void
+  setClass: (classId: string) => void
+  setStudent: (students: StudentAttendance[]) => void
+  initializeAttendance: (studentIds: string[]) => void
+  updateAttendance: (studentId: string, record: Partial<AttendanceRecord>) => void
+  markAllPresent: () => void
+  resetAttendance: () => void
 }
 
-export const useAttendanceStore = create<AttendanceStore>((set) => ({
+export const useAttendanceStore = create<AttendanceStore>(set => ({
   selectedDate: new Date(),
-  selectedClass: "p3-math",
+  selectedClass: 'p3-math',
   attendance: {},
-  students:[],
+  students: [],
 
-  setDate: (date) => set({ selectedDate: date }),
+  setDate: date => set({ selectedDate: date }),
 
-  setClass: (classId) =>
+  setClass: classId =>
     set({
       selectedClass: classId,
       attendance: {},
     }),
-  setStudent: (students) =>
+  setStudent: students =>
     set({
-      students
+      students,
     }),
 
   initializeAttendance: (studentIds: string[]) =>
-    set((state) => {
-      const newAttendance = { ...state.attendance };
-      studentIds.forEach((id) => {
+    set(state => {
+      const newAttendance = { ...state.attendance }
+      studentIds.forEach(id => {
         if (!newAttendance[id]) {
-          newAttendance[id] = { status: "absent", remarks: "" };
+          newAttendance[id] = { status: 'absent', remarks: '' }
         }
-      });
-      return { attendance: newAttendance };
+      })
+      return { attendance: newAttendance }
     }),
 
   updateAttendance: (studentId, record) =>
-    set((state) => ({
+    set(state => ({
       attendance: {
         ...state.attendance,
         [studentId]: {
           ...state.attendance[studentId],
-          status: state.attendance[studentId]?.status || "absent",
-          remarks: state.attendance[studentId]?.remarks || "",
+          status: state.attendance[studentId]?.status || 'absent',
+          remarks: state.attendance[studentId]?.remarks || '',
           ...record,
         },
       },
     })),
 
   markAllPresent: () =>
-    set((state) => {
-      const updatedAttendance: Record<string, AttendanceRecord> = {};
-      Object.keys(state.attendance).forEach((studentId) => {
+    set(state => {
+      const updatedAttendance: Record<string, AttendanceRecord> = {}
+      Object.keys(state.attendance).forEach(studentId => {
         updatedAttendance[studentId] = {
           ...state.attendance[studentId],
-          status: "present",
-        };
-      });
-      return { attendance: updatedAttendance };
+          status: 'present',
+        }
+      })
+      return { attendance: updatedAttendance }
     }),
 
   resetAttendance: () => set({ attendance: {} }),
-}));
+}))

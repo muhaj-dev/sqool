@@ -1,12 +1,10 @@
-import React from "react"
+import React from 'react'
 
 interface MultiLevelProgressBarProps {
   completionPercent: number
 }
 
-const MultiLevelProgressBar: React.FC<MultiLevelProgressBarProps> = ({
-  completionPercent,
-}) => {
+const MultiLevelProgressBar: React.FC<MultiLevelProgressBarProps> = ({ completionPercent }) => {
   const levels = [1, 2, 3, 4, 5]
 
   return (
@@ -27,7 +25,7 @@ const MultiLevelProgressBar: React.FC<MultiLevelProgressBarProps> = ({
             <div
               key={level}
               className={`flex items-center justify-center h-4 border border-gray-300,
-            ${isCompleted && "bg-[#26A4FF] text-white"}`}
+            ${isCompleted && 'bg-[#26A4FF] text-white'}`}
               style={{ width: `${sectionCompletion}%` }}
             ></div>
           )

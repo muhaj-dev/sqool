@@ -1,5 +1,3 @@
-
-
 // interface PageParams {
 //   studentId: string;
 // }
@@ -20,14 +18,14 @@
 
 // import { use } from 'react'
 // import StudentPageClient from "./StudentPageClient";
- 
+
 // export default function StudentPage({
 //   params,
 // }: {
 //   params: Promise<{ studentId: string }>
 // }) {
 //   const { studentId } = use(params)
- 
+
 //   return (
 //     <div>
 //       <p>{studentId}</p>
@@ -36,10 +34,8 @@
 //   )
 // }
 
-
 // import { notFound } from "next/navigation";
 // import StudentPageClient from "./StudentPageClient";
-
 
 // export default async function Page({
 //   params,
@@ -62,19 +58,15 @@
 //   );
 // }
 
-import StudentPageClient from "./StudentPageClient";
+import StudentPageClient from './StudentPageClient'
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ studentId: string }>
-}) {
+export default async function Page({ params }: { params: Promise<{ studentId: string }> }) {
   try {
-    const { studentId } = await params;
-    
+    const { studentId } = await params
+
     // Validate studentId
     if (!studentId || studentId.trim() === '') {
-      throw new Error('Invalid studentId');
+      throw new Error('Invalid studentId')
     }
 
     return (
@@ -82,9 +74,9 @@ export default async function Page({
         {/* <p>Student ID: {studentId}</p> */}
         <StudentPageClient studentId={studentId} />
       </div>
-    );
+    )
   } catch (error) {
-    console.error('Error in dynamic route:', error);
-    throw error; // This will trigger your error boundary
+    console.error('Error in dynamic route:', error)
+    throw error // This will trigger your error boundary
   }
 }

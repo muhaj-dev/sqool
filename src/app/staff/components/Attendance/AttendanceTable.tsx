@@ -1,64 +1,50 @@
-"use client";
+'use client'
 
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { PaginationControls } from "@/components/PaginationControl";
-import { AttendanceRow } from "./AttendanceRow";
-import { Student } from "@/types/attendance";
-import { useState, useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectValue,
-  SelectItem,
-} from "@/components/ui/select";
-import { Search } from "lucide-react";
-import { StatusFilter,GenderFilter,StudentAttendance } from "@/types";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { PaginationControls } from '@/components/PaginationControl'
+import { AttendanceRow } from './AttendanceRow'
+import { Student } from '@/types/attendance'
+import { useState, useMemo } from 'react'
+import { Input } from '@/components/ui/input'
+import { Select, SelectTrigger, SelectContent, SelectValue, SelectItem } from '@/components/ui/select'
+import { Search } from 'lucide-react'
+import { StatusFilter, GenderFilter, StudentAttendance } from '@/types'
 
 interface AttendanceTableProps {
-  students: StudentAttendance[];
-  isLoading: boolean;
+  students: StudentAttendance[]
+  isLoading: boolean
 }
 
 export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [genderFilter, setGenderFilter] = useState<GenderFilter>("all");
-  
-  const studentsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
+  const [genderFilter, setGenderFilter] = useState<GenderFilter>('all')
+
+  const studentsPerPage = 10
 
   const filteredStudents = useMemo(() => {
-    return students.filter((student) => {
+    return students.filter(student => {
       const matchesSearch =
         student.name.toLowerCase().includes(searchQuery) ||
         student.rollNumber.toLowerCase().includes(searchQuery) ||
         student?.guardianName?.toLowerCase().includes(searchQuery)
 
       const matchesStatus =
-        statusFilter === "all" ||
-        (student.gender?.toLowerCase() && student.gender.toLowerCase() === statusFilter);
+        statusFilter === 'all' || (student.gender?.toLowerCase() && student.gender.toLowerCase() === statusFilter)
       const matchesGender =
-        genderFilter === "all" ||
-        (student.gender?.toLowerCase() && student.gender.toLowerCase() === genderFilter);
+        genderFilter === 'all' || (student.gender?.toLowerCase() && student.gender.toLowerCase() === genderFilter)
 
-      return matchesSearch && matchesStatus && matchesGender;
-    });
-  }, [students, searchQuery, statusFilter,genderFilter]);
+      return matchesSearch && matchesStatus && matchesGender
+    })
+  }, [students, searchQuery, statusFilter, genderFilter])
 
-  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
-  const startIndex = (currentPage - 1) * studentsPerPage;
-  const endIndex = startIndex + studentsPerPage;
-  const currentStudents = filteredStudents.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage)
+  const startIndex = (currentPage - 1) * studentsPerPage
+  const endIndex = startIndex + studentsPerPage
+  const currentStudents = filteredStudents.slice(startIndex, endIndex)
 
   if (isLoading) {
     return (
@@ -74,7 +60,7 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   if (students.length === 0) {
@@ -85,16 +71,12 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
         </CardHeader>
         <CardContent>
           <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              No students found for the selected class.
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Please select a class from the dropdown above.
-            </p>
+            <p className="text-muted-foreground">No students found for the selected class.</p>
+            <p className="text-sm text-muted-foreground mt-2">Please select a class from the dropdown above.</p>
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -104,8 +86,8 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
           <div>
             <CardTitle>Student Attendance</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Showing {startIndex + 1}-{Math.min(endIndex, filteredStudents.length)} of{" "}
-              {filteredStudents.length} students
+              Showing {startIndex + 1}-{Math.min(endIndex, filteredStudents.length)} of {filteredStudents.length}{' '}
+              students
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -115,9 +97,9 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
                 type="text"
                 placeholder="Search by name or roll no."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentPage(1);
+                onChange={e => {
+                  setSearchQuery(e.target.value)
+                  setCurrentPage(1)
                 }}
                 className="pl-8"
               />
@@ -125,9 +107,9 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
 
             <Select
               value={statusFilter}
-              onValueChange={(value) => {
-                setStatusFilter(value as StatusFilter);
-                setCurrentPage(1);
+              onValueChange={value => {
+                setStatusFilter(value as StatusFilter)
+                setCurrentPage(1)
               }}
             >
               <SelectTrigger className="w-[150px]">
@@ -143,9 +125,9 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
             </Select>
             <Select
               value={genderFilter}
-              onValueChange={(value) => {
-                setGenderFilter(value as GenderFilter);
-                setCurrentPage(1);
+              onValueChange={value => {
+                setGenderFilter(value as GenderFilter)
+                setCurrentPage(1)
               }}
             >
               <SelectTrigger className="w-[150px]">
@@ -174,7 +156,7 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentStudents.map((student) => (
+                {currentStudents.map(student => (
                   <AttendanceRow key={student.id} student={student} />
                 ))}
               </TableBody>
@@ -186,10 +168,10 @@ export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
           <PaginationControls
             totalPages={totalPages}
             currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-        />
+            onPageChange={page => setCurrentPage(page)}
+          />
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

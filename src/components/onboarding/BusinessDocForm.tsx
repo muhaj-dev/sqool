@@ -1,30 +1,23 @@
-"use client";
-import { Button } from "../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import AttachmentUpload from "../AttachmentUpload";
-import { Separator } from "../ui/separator";
-import { useOnboarding } from "@/contexts/onboarding-context";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client'
+import { Button } from '../ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import AttachmentUpload from '../AttachmentUpload'
+import { Separator } from '../ui/separator'
+import { useOnboarding } from '@/contexts/onboarding-context'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
   files: z.object({
     cacId: z.instanceof(File).optional(),
     utility: z.instanceof(File).optional(),
   }),
-});
+})
 
 const BusinessDocForm = () => {
-  const { updateCompletionState, goNextPage, updateFormData } = useOnboarding();
-  
+  const { updateCompletionState, goNextPage, updateFormData } = useOnboarding()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,39 +26,33 @@ const BusinessDocForm = () => {
         utility: undefined,
       },
     },
-  });
+  })
 
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    // Prepare the files data
+    const uploadedFiles: File[] = []
 
+    if (data.files.cacId) {
+      uploadedFiles.push(data.files.cacId)
+    }
+    if (data.files.utility) {
+      uploadedFiles.push(data.files.utility)
+    }
 
-function onSubmit(data: z.infer<typeof formSchema>) {
-  // Prepare the files data
-  const uploadedFiles: File[] = [];
-  
-  if (data.files.cacId) {
-    uploadedFiles.push(data.files.cacId);
+    // Update the form data in context (this will append files)
+    updateFormData('UploadedFiles', uploadedFiles)
+
+    console.log('Submitted files:', uploadedFiles)
+    goNextPage()
+    updateCompletionState('Business Documentation')
   }
-  if (data.files.utility) {
-    uploadedFiles.push(data.files.utility);
-  }
-
-  // Update the form data in context (this will append files)
-  updateFormData('UploadedFiles', uploadedFiles);
-  
-  console.log('Submitted files:', uploadedFiles);
-  goNextPage();
-  updateCompletionState("Business Documentation");
-}
 
   return (
     <div className="bg-white rounded-md p-4 mt-8">
       <div className="flex items-center justify-between border-b-2 pb-4 mb-4">
         <div>
-          <h3 className="text-xl font-semibold">
-            Please submit your business documentation
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Ensure the business documentation you are submitting is valid
-          </p>
+          <h3 className="text-xl font-semibold">Please submit your business documentation</h3>
+          <p className="text-sm text-muted-foreground">Ensure the business documentation you are submitting is valid</p>
         </div>
       </div>
 
@@ -77,9 +64,8 @@ function onSubmit(data: z.infer<typeof formSchema>) {
                 <div>
                   <h3 className="text-xl font-semibold">Form CAC7</h3>
                   <p className="text-sm text-muted-foreground w-full md:w-[16rem]">
-                    The Corporate Affairs Commission (CAC) is the statutory body
-                    charged with the administration of the Companies and Allied
-                    Matters Act.
+                    The Corporate Affairs Commission (CAC) is the statutory body charged with the administration of the
+                    Companies and Allied Matters Act.
                   </p>
                 </div>
                 <FormField
@@ -87,13 +73,11 @@ function onSubmit(data: z.infer<typeof formSchema>) {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>
-                        Attach your corporate affairs commission
-                      </FormLabel>
+                      <FormLabel>Attach your corporate affairs commission</FormLabel>
                       <FormControl>
-                        <AttachmentUpload 
+                        <AttachmentUpload
                           {...field}
-                          onChange={(file) => form.setValue('files.cacId', file)}
+                          onChange={file => form.setValue('files.cacId', file)}
                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         />
                       </FormControl>
@@ -107,8 +91,8 @@ function onSubmit(data: z.infer<typeof formSchema>) {
                 <div>
                   <h3 className="text-xl font-semibold">Utility Bills</h3>
                   <p className="text-sm text-muted-foreground w-full md:w-[16rem]">
-                    A utility bill is a monthly statement of the amount a
-                    household or School owes for essential services.
+                    A utility bill is a monthly statement of the amount a household or School owes for essential
+                    services.
                   </p>
                 </div>
                 <FormField
@@ -118,9 +102,9 @@ function onSubmit(data: z.infer<typeof formSchema>) {
                     <FormItem className="w-full col-span-3">
                       <FormLabel>Attach your utility bills</FormLabel>
                       <FormControl>
-                        <AttachmentUpload 
+                        <AttachmentUpload
                           {...field}
-                          onChange={(file) => form.setValue('files.utility', file)}
+                          onChange={file => form.setValue('files.utility', file)}
                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         />
                       </FormControl>
@@ -143,7 +127,7 @@ function onSubmit(data: z.infer<typeof formSchema>) {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BusinessDocForm;
+export default BusinessDocForm

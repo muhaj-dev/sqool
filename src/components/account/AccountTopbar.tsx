@@ -1,7 +1,7 @@
-"use client"
-import { Plus } from "lucide-react"
-import React from "react"
-import { DialogTrigger } from "../ui/dialog"
+'use client'
+import { Plus } from 'lucide-react'
+import React from 'react'
+import { DialogTrigger } from '../ui/dialog'
 
 const AccountTopbar = () => {
   return (
@@ -16,7 +16,7 @@ const AccountTopbar = () => {
         <Plus /> <p>Add Bank Account</p>
       </DialogTrigger>
     </div>
-  );
+  )
 }
 
 export default AccountTopbar

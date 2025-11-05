@@ -1,9 +1,9 @@
 // components/class-management/ClassHeader.tsx
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GraduationCap, Plus, Search } from "lucide-react";
-import CreateClassDialog from "./CreateClassDialog";
-import { Class, Teacher } from "./types";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { GraduationCap, Plus, Search } from 'lucide-react'
+import CreateClassDialog from './CreateClassDialog'
+import { Class, Teacher } from './types'
 
 interface ClassHeaderProps {
   // searchTerm: string;
@@ -11,7 +11,7 @@ interface ClassHeaderProps {
   // teachers: Teacher[];
   // classes: Class[];
   // setClasses: (classes: Class[]) => void;
-  // onRefresh?: () => void; 
+  // onRefresh?: () => void;
 }
 
 const ClassHeader = ({
@@ -29,9 +29,7 @@ const ClassHeader = ({
           {/* <GraduationCap className="h-8 w-8 text-blue-600" /> */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Class Management</h1>
-            <p className="text-gray-600 mt-1">
-              Manage classes, subjects, teachers, and schedules
-            </p>
+            <p className="text-gray-600 mt-1">Manage classes, subjects, teachers, and schedules</p>
           </div>
         </div>
         {/* <div className="flex items-center gap-4 justify-between">
@@ -53,7 +51,7 @@ const ClassHeader = ({
         </div> */}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ClassHeader;
+export default ClassHeader

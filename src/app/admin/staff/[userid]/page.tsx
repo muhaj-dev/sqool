@@ -1,47 +1,47 @@
 // src/app/staff/[staffId]/page.tsx
-"use client";
-import LeftBar from "@/components/staff/LeftBar";
-import StaffSteps from "@/components/staff/StaffSteps";
-import StaffTopbar from "@/components/staff/StaffTopbar";
-import React, { useEffect, useState } from "react"; // Removed ReactNode import
-import { usePathname } from "next/navigation";
-import { getStaffById } from "@/utils/api";
-import { StaffResult, SingleStaffResponse } from "@/types";
+'use client'
+import LeftBar from '@/components/staff/LeftBar'
+import StaffSteps from '@/components/staff/StaffSteps'
+import StaffTopbar from '@/components/staff/StaffTopbar'
+import React, { useEffect, useState } from 'react' // Removed ReactNode import
+import { usePathname } from 'next/navigation'
+import { getStaffById } from '@/utils/api'
+import { StaffResult, SingleStaffResponse } from '@/types'
 
-const Page = () => { // Removed the children prop
-  const pathname = usePathname();
-  const [staffId, setStaffId] = useState("");
-  const [staff, setStaff] = useState<StaffResult | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const Page = () => {
+  // Removed the children prop
+  const pathname = usePathname()
+  const [staffId, setStaffId] = useState('')
+  const [staff, setStaff] = useState<StaffResult | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     // Extract the id from the pathname
-    const pathSegments = pathname?.split("/") ?? [];
-    const extractedStaffId = pathSegments[pathSegments.length - 1];
-    setStaffId(extractedStaffId);
-    console.log("Staff ID:", extractedStaffId);
-  }, [pathname]);
+    const pathSegments = pathname?.split('/') ?? []
+    const extractedStaffId = pathSegments[pathSegments.length - 1]
+    setStaffId(extractedStaffId)
+    console.log('Staff ID:', extractedStaffId)
+  }, [pathname])
 
   useEffect(() => {
     const fetchStaff = async () => {
-      if (!staffId) return; // Skip if staffId is not set
-      setLoading(true);
-      setError(null);
+      if (!staffId) return // Skip if staffId is not set
+      setLoading(true)
+      setError(null)
       try {
-        const response: SingleStaffResponse = await getStaffById(staffId);
-        setStaff(response?.data ?? null);
+        const response: SingleStaffResponse = await getStaffById(staffId)
+        setStaff(response?.data ?? null)
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch staff details";
-        setError(errorMessage);
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch staff details'
+        setError(errorMessage)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchStaff();
-  }, [staffId]);
+    fetchStaff()
+  }, [staffId])
 
   return (
     <>
@@ -54,7 +54,7 @@ const Page = () => { // Removed the children prop
         </div>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

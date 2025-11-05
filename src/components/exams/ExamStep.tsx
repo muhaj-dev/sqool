@@ -1,8 +1,8 @@
-"use client"
-import React, { useState } from "react"
-import { Separator } from "../ui/separator"
-import { useSetting } from "@/contexts/setting-context"
-const tabs = ["Pending Approval", "Approved"]
+'use client'
+import React, { useState } from 'react'
+import { Separator } from '../ui/separator'
+import { useSetting } from '@/contexts/setting-context'
+const tabs = ['Pending Approval', 'Approved']
 const ExamSteps = () => {
   const { activeIndex, updateIndex } = useSetting()
   return (
@@ -13,9 +13,7 @@ const ExamSteps = () => {
             onClick={() => updateIndex(ind)}
             key={ind}
             className={`cursor-pointer transition  ${
-              activeIndex === ind
-                ? "border-b-[2px] border-primary text-black"
-                : "text-muted-foreground"
+              activeIndex === ind ? 'border-b-[2px] border-primary text-black' : 'text-muted-foreground'
             }`}
           >
             {item}
@@ -24,7 +22,7 @@ const ExamSteps = () => {
       </section>
       <Separator />
     </div>
-  );
+  )
 }
 
 export default ExamSteps

@@ -74,13 +74,12 @@ body {
   scrollbar-width: none;
 }
 
-
 ::-webkit-scrollbar {
   width: 4px; /* Width of the scrollbar */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #E5B80B; /* Scrollbar color */
+  background-color: #e5b80b; /* Scrollbar color */
   height: 4px;
   border-radius: 6px; /* Rounded scrollbar */
 }

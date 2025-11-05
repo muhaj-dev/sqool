@@ -1,28 +1,28 @@
-import React, { ChangeEvent, useRef } from "react";
-import { Paperclip } from "lucide-react";
-import { Input } from "./ui/input";
+import React, { ChangeEvent, useRef } from 'react'
+import { Paperclip } from 'lucide-react'
+import { Input } from './ui/input'
 
 interface AttachmentUploadProps {
-  value?: File;
-  onChange: (file: File | undefined) => void;
-  accept?: string;
+  value?: File
+  onChange: (file: File | undefined) => void
+  accept?: string
 }
 
-const AttachmentUpload: React.FC<AttachmentUploadProps> = ({ 
-  value, 
+const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
+  value,
   onChange,
-  accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png"
+  accept = '.pdf,.doc,.docx,.jpg,.jpeg,.png',
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    onChange(file);
-  };
+    const file = e.target.files?.[0]
+    onChange(file)
+  }
 
   const handleClick = () => {
-    inputRef.current?.click();
-  };
+    inputRef.current?.click()
+  }
 
   return (
     <div
@@ -41,15 +41,9 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
         </div>
       )}
 
-      <Input
-        type="file"
-        ref={inputRef}
-        accept={accept}
-        className="hidden"
-        onChange={handleFileChange}
-      />
+      <Input type="file" ref={inputRef} accept={accept} className="hidden" onChange={handleFileChange} />
     </div>
-  );
-};
+  )
+}
 
-export default AttachmentUpload;
+export default AttachmentUpload

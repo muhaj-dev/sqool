@@ -1,29 +1,29 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Check, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface Kid {
-  id: number;
-  name: string;
-  imgSrc: string;
+  id: number
+  name: string
+  imgSrc: string
 }
 
 const kidsList: Kid[] = [
-  { id: 1, name: "Jessie Rose", imgSrc: "/images/kid1.jpg" },
-  { id: 2, name: "Sam Johnson", imgSrc: "/images/kid2.jpg" },
-  { id: 3, name: "Ella Watson", imgSrc: "/images/kid3.jpg" },
-];
+  { id: 1, name: 'Jessie Rose', imgSrc: '/images/kid1.jpg' },
+  { id: 2, name: 'Sam Johnson', imgSrc: '/images/kid2.jpg' },
+  { id: 3, name: 'Ella Watson', imgSrc: '/images/kid3.jpg' },
+]
 
 const KidsDropdown = () => {
-  const [selectedKid, setSelectedKid] = useState<Kid>(kidsList[0]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedKid, setSelectedKid] = useState<Kid>(kidsList[0])
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleSelectKid = (kid: Kid) => {
-    setSelectedKid(kid);
-    setIsOpen(false);
-  };
+    setSelectedKid(kid)
+    setIsOpen(false)
+  }
 
   return (
     <div className="relative w-64">
@@ -47,17 +47,14 @@ const KidsDropdown = () => {
       {/* Dropdown List */}
       {isOpen && (
         <ul className="absolute w-full mt-2 bg-white border border-[#E4E4E4] rounded-lg shadow-lg">
-          {kidsList.map((kid) => (
+          {kidsList.map(kid => (
             <li
               key={kid.id}
               onClick={() => handleSelectKid(kid)}
               className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100"
             >
               <Avatar className="">
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
+                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div>
@@ -69,7 +66,7 @@ const KidsDropdown = () => {
         </ul>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default KidsDropdown;
+export default KidsDropdown

@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   ColumnDef,
   flexRender,
@@ -9,36 +9,23 @@ import {
   getSortedRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  searchKey?: string;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  searchKey?: string
   filterOptions?: Array<{
-    key: string;
-    label: string;
-    options: Array<{ label: string; value: string }>;
-  }>;
+    key: string
+    label: string
+    options: Array<{ label: string; value: string }>
+  }>
 }
 
 export function DataTable<TData, TValue>({
@@ -47,9 +34,9 @@ export function DataTable<TData, TValue>({
   searchKey,
   filterOptions = [],
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
     data,
@@ -71,7 +58,7 @@ export function DataTable<TData, TValue>({
         pageSize: 10,
       },
     },
-  });
+  })
 
   return (
     <div className="space-y-4">
@@ -81,28 +68,24 @@ export function DataTable<TData, TValue>({
           {searchKey && (
             <Input
               placeholder={`Search by ${searchKey}...`}
-              value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-              onChange={(event) =>
-                table.getColumn(searchKey)?.setFilterValue(event.target.value)
-              }
+              value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+              onChange={event => table.getColumn(searchKey)?.setFilterValue(event.target.value)}
               className="max-w-sm"
             />
           )}
-          
-          {filterOptions.map((filter) => (
+
+          {filterOptions.map(filter => (
             <Select
               key={filter.key}
-              value={(table.getColumn(filter.key)?.getFilterValue() as string) ?? ""}
-              onValueChange={(value) =>
-                table.getColumn(filter.key)?.setFilterValue(value === "all" ? "" : value)
-              }
+              value={(table.getColumn(filter.key)?.getFilterValue() as string) ?? ''}
+              onValueChange={value => table.getColumn(filter.key)?.setFilterValue(value === 'all' ? '' : value)}
             >
               <SelectTrigger className="w-40">
                 <SelectValue placeholder={`Filter by ${filter.label}`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All {filter.label}</SelectItem>
-                {filter.options.map((option) => (
+                {filter.options.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -113,8 +96,8 @@ export function DataTable<TData, TValue>({
         </div>
 
         <div className="text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
+          selected.
         </div>
       </div>
 
@@ -122,16 +105,11 @@ export function DataTable<TData, TValue>({
       <div className="rounded-lg border border-red-600 bg-card">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id} className="bg-table-header">
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -139,16 +117,10 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted/50"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+              table.getRowModel().rows.map(row => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'} className="hover:bg-muted/50">
+                  {row.getVisibleCells().map(cell => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
@@ -169,15 +141,15 @@ export function DataTable<TData, TValue>({
           <p className="text-sm font-medium">Rows per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
+            onValueChange={value => {
+              table.setPageSize(Number(value))
             }}
           >
             <SelectTrigger className="h-8 w-16">
               <SelectValue />
             </SelectTrigger>
             <SelectContent side="top">
-              {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+              {[5, 10, 20, 30, 40, 50].map(pageSize => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>
@@ -188,11 +160,11 @@ export function DataTable<TData, TValue>({
 
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex w-100 items-center justify-center text-sm font-medium">
-            Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}
+            Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
             {Math.min(
               (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-              table.getFilteredRowModel().rows.length
-            )}{" "}
+              table.getFilteredRowModel().rows.length,
+            )}{' '}
             of {table.getFilteredRowModel().rows.length} entries
           </div>
           <div className="flex items-center space-x-2">
@@ -205,12 +177,7 @@ export function DataTable<TData, TValue>({
               <ChevronLeft className="h-4 w-4" />
               Previous
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
+            <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
               Next
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -218,5 +185,5 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,28 +1,28 @@
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, Monitor } from "lucide-react";
-import { Class, Subject, Session } from "@/types";
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Calendar, Clock, MapPin, Monitor } from 'lucide-react'
+import { Class, Subject, Session } from '@/types'
 
 interface ExamFormData {
-  subject: string;
-  class: string;
-  examDate: string;
-  startTime: string;
-  endTime: string;
-  venue: string;
-  mode: string;
-  sessionId: string;
+  subject: string
+  class: string
+  examDate: string
+  startTime: string
+  endTime: string
+  venue: string
+  mode: string
+  sessionId: string
 }
 
 interface ExamBasicDetailsFormProps {
-  examData: ExamFormData;
-  setExamData: (data: ExamFormData) => void;
-  classes: any[];
-  subjects: any[];
-  sessions: any[];
-  isLoading: boolean;
-  isEditMode?: boolean; // Add this line
+  examData: ExamFormData
+  setExamData: (data: ExamFormData) => void
+  classes: any[]
+  subjects: any[]
+  sessions: any[]
+  isLoading: boolean
+  isEditMode?: boolean // Add this line
 }
 
 // interface ExamBasicDetailsFormProps {
@@ -40,7 +40,7 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
   classes,
   subjects,
   sessions,
-  isLoading
+  isLoading,
 }) => {
   if (isLoading) {
     return (
@@ -62,7 +62,7 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
           ))}
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -70,16 +70,13 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="subject">Subject *</Label>
-          <Select 
-            value={examData.subject} 
-            onValueChange={(value) => setExamData({...examData, subject: value})}
-          >
+          <Select value={examData.subject} onValueChange={value => setExamData({ ...examData, subject: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select subject" />
             </SelectTrigger>
             <SelectContent>
               {subjects?.length > 0 ? (
-                subjects.map((subject) => (
+                subjects.map(subject => (
                   <SelectItem key={subject?._id} value={subject?._id ?? ''}>
                     {subject?.name ?? 'Unknown Subject'} {subject?.code && `(${subject.code})`}
                   </SelectItem>
@@ -92,22 +89,18 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="class">Class *</Label>
-          <Select 
-            value={examData.class} 
-            onValueChange={(value) => setExamData({...examData, class: value})}
-          >
+          <Select value={examData.class} onValueChange={value => setExamData({ ...examData, class: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select class" />
             </SelectTrigger>
             <SelectContent>
               {classes?.length > 0 ? (
-                classes.map((classItem) => (
+                classes.map(classItem => (
                   <SelectItem key={classItem?._id} value={classItem?._id ?? ''}>
-                    {classItem?.className ?? 'Unknown Class'} 
-                    ({classItem?.shortName})
+                    {classItem?.className ?? 'Unknown Class'}({classItem?.shortName})
                     {classItem?.classSection && ` - ${classItem.classSection}`}
                   </SelectItem>
                 ))
@@ -122,16 +115,13 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
 
         <div className="space-y-2">
           <Label htmlFor="sessionId">Session *</Label>
-          <Select 
-            value={examData.sessionId} 
-            onValueChange={(value) => setExamData({...examData, sessionId: value})}
-          >
+          <Select value={examData.sessionId} onValueChange={value => setExamData({ ...examData, sessionId: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select session" />
             </SelectTrigger>
             <SelectContent>
               {sessions?.length > 0 ? (
-                sessions.map((session) => (
+                sessions.map(session => (
                   <SelectItem key={session?._id} value={session?._id ?? ''}>
                     {session?.session ?? 'Unknown Session'}
                     {session?.isActive && ' (Active)'}
@@ -158,10 +148,10 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
             id="examDate"
             type="date"
             value={examData.examDate}
-            onChange={(e) => setExamData({...examData, examDate: e.target.value})}
+            onChange={e => setExamData({ ...examData, examDate: e.target.value })}
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="startTime" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
@@ -171,10 +161,10 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
             id="startTime"
             type="time"
             value={examData.startTime}
-            onChange={(e) => setExamData({...examData, startTime: e.target.value})}
+            onChange={e => setExamData({ ...examData, startTime: e.target.value })}
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="endTime" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
@@ -184,7 +174,7 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
             id="endTime"
             type="time"
             value={examData.endTime}
-            onChange={(e) => setExamData({...examData, endTime: e.target.value})}
+            onChange={e => setExamData({ ...examData, endTime: e.target.value })}
           />
         </div>
       </div>
@@ -199,19 +189,16 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
             id="venue"
             placeholder="e.g., Room 101, Main Hall"
             value={examData.venue}
-            onChange={(e) => setExamData({...examData, venue: e.target.value})}
+            onChange={e => setExamData({ ...examData, venue: e.target.value })}
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="mode" className="flex items-center gap-2">
             <Monitor className="h-4 w-4" />
             Exam Mode
           </Label>
-          <Select 
-            value={examData.mode} 
-            onValueChange={(value) => setExamData({...examData, mode: value})}
-          >
+          <Select value={examData.mode} onValueChange={value => setExamData({ ...examData, mode: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select mode" />
             </SelectTrigger>
@@ -224,5 +211,5 @@ export const ExamBasicDetailsForm: React.FC<ExamBasicDetailsFormProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

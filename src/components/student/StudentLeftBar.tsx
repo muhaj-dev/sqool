@@ -1,21 +1,12 @@
-import React from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  ChevronRight,
-  Instagram,
-  Mail,
-  Smartphone,
-  Star,
-  Twitter,
-  User,
-} from "lucide-react"
-import { Separator } from "../ui/separator"
-import MultiLevelProgressBar from "../progressbar"
-import { useStudent } from "@/contexts/student-context"
-
+import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { ChevronRight, Instagram, Mail, Smartphone, Star, Twitter, User } from 'lucide-react'
+import { Separator } from '../ui/separator'
+import MultiLevelProgressBar from '../progressbar'
+import { useStudent } from '@/contexts/student-context'
 
 interface StudentLeftBarProps {
-  studentId: string;
+  studentId: string
 }
 
 const StudentLeftBar = ({ studentId }: StudentLeftBarProps) => {
@@ -27,7 +18,7 @@ const StudentLeftBar = ({ studentId }: StudentLeftBarProps) => {
   }
 
   if (error || !studentData) {
-    return <div>Error: {error || "Student data not available"}</div>
+    return <div>Error: {error || 'Student data not available'}</div>
   }
 
   const { firstName, lastName, photo, gender } = studentData
@@ -71,7 +62,6 @@ const StudentLeftBar = ({ studentId }: StudentLeftBarProps) => {
       </div> */}
       {/* <MultiLevelProgressBar completionPercent={70} /> */}
       {/* <Separator /> */}
-      
     </div>
   )
 }

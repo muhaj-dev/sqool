@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 
 interface CardProps {
-  title: string;
-  count: string | number; // Allow string or number to handle API response
+  title: string
+  count: string | number // Allow string or number to handle API response
 }
 
 const Card: React.FC<CardProps> = ({ title, count }) => {
@@ -14,7 +14,7 @@ const Card: React.FC<CardProps> = ({ title, count }) => {
         <p className="text-[20px] font-bold">{count}</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

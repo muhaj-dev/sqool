@@ -1,8 +1,8 @@
-"use client"
-import React from "react"
-import { Separator } from "../ui/separator"
-import { useStudent } from "@/contexts/student-context"
-const tabs = ["Student Profile", "Study Progress", "Attendance", "Fee History"]
+'use client'
+import React from 'react'
+import { Separator } from '../ui/separator'
+import { useStudent } from '@/contexts/student-context'
+const tabs = ['Student Profile', 'Study Progress', 'Attendance', 'Fee History']
 const StudentSteps = () => {
   const { activeIndex, updateIndex } = useStudent()
   return (
@@ -13,9 +13,7 @@ const StudentSteps = () => {
             onClick={() => updateIndex(ind)}
             key={ind}
             className={`cursor-pointer transition pb-2  ${
-              activeIndex === ind
-                ? "border-b-[2px] border-primary text-black"
-                : "text-muted-foreground"
+              activeIndex === ind ? 'border-b-[2px] border-primary text-black' : 'text-muted-foreground'
             }`}
           >
             {item}
@@ -24,7 +22,7 @@ const StudentSteps = () => {
       </section>
       {/* <Separator /> */}
     </div>
-  );
+  )
 }
 
 export default StudentSteps

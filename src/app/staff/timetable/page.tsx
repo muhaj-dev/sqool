@@ -1,39 +1,39 @@
-"use client";
+'use client'
 
 // export const dynamic = 'force-dynamic';
 // export const revalidate = 0;
 
-import { useState, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Loader2 } from "lucide-react";
-import { useTimetable } from "@/hooks/useTimeTable";
-import { ClassSchedule } from "@/types";
+import { useState, useRef, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Calendar, Clock, Loader2 } from 'lucide-react'
+import { useTimetable } from '@/hooks/useTimeTable'
+import { ClassSchedule } from '@/types'
 // import html2pdf from "html2pdf.js";
-import { getSubjectsForStaff } from "@/utils/api";
+import { getSubjectsForStaff } from '@/utils/api'
 
 const Timetable = () => {
-  const { schedules, loading, error, refetch } = useTimetable();
-  const timetableRef = useRef<HTMLDivElement>(null);
+  const { schedules, loading, error, refetch } = useTimetable()
+  const timetableRef = useRef<HTMLDivElement>(null)
 
-  const [staffSubjects, setStaffSubjects] = useState<any[]>([]);
-  const [subjectLoading, setSubjectLoading] = useState(false);
+  const [staffSubjects, setStaffSubjects] = useState<any[]>([])
+  const [subjectLoading, setSubjectLoading] = useState(false)
 
   useEffect(() => {
     const fetchSubjects = async () => {
-      setSubjectLoading(true);
+      setSubjectLoading(true)
       try {
-        const res = await getSubjectsForStaff(1, "");
-        setStaffSubjects(res.data || []);
+        const res = await getSubjectsForStaff(1, '')
+        setStaffSubjects(res.data || [])
       } catch {
-        setStaffSubjects([]);
+        setStaffSubjects([])
       } finally {
-        setSubjectLoading(false);
+        setSubjectLoading(false)
       }
-    };
-    fetchSubjects();
-  }, []);
+    }
+    fetchSubjects()
+  }, [])
 
   // const handleDownloadPDF = () => {
   //   if (timetableRef.current) {
@@ -85,88 +85,72 @@ const Timetable = () => {
 
   // Group schedules by day
   const groupSchedulesByDay = () => {
-    const days = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
-    const grouped: { [key: string]: ClassSchedule[] } = {};
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    const grouped: { [key: string]: ClassSchedule[] } = {}
 
-    days.forEach((day) => {
-      grouped[day] = schedules.filter(
-        (schedule) => schedule.day.toLowerCase() === day.toLowerCase()
-      );
-    });
+    days.forEach(day => {
+      grouped[day] = schedules.filter(schedule => schedule.day.toLowerCase() === day.toLowerCase())
+    })
 
-    return grouped;
-  };
+    return grouped
+  }
 
   // Find current and next classes
   const getCurrentClassesInfo = () => {
-    const now = new Date();
-    const currentDay = now.toLocaleDateString("en-US", { weekday: "long" });
+    const now = new Date()
+    const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
 
-    const todaySchedules = schedules.filter(
-      (schedule) => schedule.day.toLowerCase() === currentDay.toLowerCase()
-    );
+    const todaySchedules = schedules.filter(schedule => schedule.day.toLowerCase() === currentDay.toLowerCase())
 
-    const currentClass = todaySchedules.find((schedule) => {
-      const start = new Date(schedule.startTime);
-      const end = new Date(schedule.endTime);
-      return now >= start && now <= end;
-    });
+    const currentClass = todaySchedules.find(schedule => {
+      const start = new Date(schedule.startTime)
+      const end = new Date(schedule.endTime)
+      return now >= start && now <= end
+    })
 
-    const nextClass = todaySchedules.find((schedule) => {
-      const start = new Date(schedule.startTime);
-      return start > now;
-    });
+    const nextClass = todaySchedules.find(schedule => {
+      const start = new Date(schedule.startTime)
+      return start > now
+    })
 
-    const completedClasses = todaySchedules.filter((schedule) => {
-      const end = new Date(schedule.endTime);
-      return end < now;
-    }).length;
+    const completedClasses = todaySchedules.filter(schedule => {
+      const end = new Date(schedule.endTime)
+      return end < now
+    }).length
 
     return {
       currentClass,
       nextClass,
       completedClasses,
       totalToday: todaySchedules.length,
-    };
-  };
+    }
+  }
 
-  const schedulesByDay = groupSchedulesByDay();
-  const { currentClass, nextClass, completedClasses, totalToday } =
-    getCurrentClassesInfo();
+  const schedulesByDay = groupSchedulesByDay()
+  const { currentClass, nextClass, completedClasses, totalToday } = getCurrentClassesInfo()
 
   const getSubjectColor = (subjectName: string) => {
     const colorMap: { [key: string]: string } = {
-      arabic: "bg-blue-100 text-blue-800 border-blue-200",
-      mathematics: "bg-green-100 text-green-800 border-green-200",
-      physics: "bg-purple-100 text-purple-800 border-purple-200",
-      chemistry: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      english: "bg-red-100 text-red-800 border-red-200",
-      biology: "bg-emerald-100 text-emerald-800 border-emerald-200",
-      science: "bg-orange-100 text-orange-800 border-orange-200",
-      history: "bg-indigo-100 text-indigo-800 border-indigo-200",
-      geography: "bg-pink-100 text-pink-800 border-pink-200",
-    };
-    return (
-      colorMap[subjectName.toLowerCase()] ||
-      "bg-gray-100 text-gray-600 border-gray-200"
-    );
-  };
+      arabic: 'bg-blue-100 text-blue-800 border-blue-200',
+      mathematics: 'bg-green-100 text-green-800 border-green-200',
+      physics: 'bg-purple-100 text-purple-800 border-purple-200',
+      chemistry: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      english: 'bg-red-100 text-red-800 border-red-200',
+      biology: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      science: 'bg-orange-100 text-orange-800 border-orange-200',
+      history: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+      geography: 'bg-pink-100 text-pink-800 border-pink-200',
+    }
+    return colorMap[subjectName.toLowerCase()] || 'bg-gray-100 text-gray-600 border-gray-200'
+  }
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
       hour12: true,
-    });
-  };
+    })
+  }
 
   if (loading) {
     return (
@@ -186,7 +170,7 @@ const Timetable = () => {
           <span className="ml-2">Loading timetable...</span>
         </div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -209,7 +193,7 @@ const Timetable = () => {
           </Button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -262,15 +246,11 @@ const Timetable = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Current Class</p>
-              <p className="text-lg font-semibold">
-                {currentClass ? currentClass.subject.name : "No class"}
-              </p>
+              <p className="text-lg font-semibold">{currentClass ? currentClass.subject.name : 'No class'}</p>
               <p className="text-sm text-primary">
                 {currentClass
-                  ? `${formatTime(currentClass.startTime)} - ${formatTime(
-                      currentClass.endTime
-                    )}`
-                  : "Free period"}
+                  ? `${formatTime(currentClass.startTime)} - ${formatTime(currentClass.endTime)}`
+                  : 'Free period'}
               </p>
             </div>
             <Clock className="h-8 w-8 text-primary" />
@@ -281,13 +261,9 @@ const Timetable = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Next Class</p>
-              <p className="text-lg font-semibold">
-                {nextClass ? nextClass.subject.name : "No more classes"}
-              </p>
+              <p className="text-lg font-semibold">{nextClass ? nextClass.subject.name : 'No more classes'}</p>
               <p className="text-sm text-orange-500">
-                {nextClass
-                  ? `Starts at ${formatTime(nextClass.startTime)}`
-                  : "Day ended"}
+                {nextClass ? `Starts at ${formatTime(nextClass.startTime)}` : 'Day ended'}
               </p>
             </div>
             <Calendar className="h-8 w-8 text-orange-500" />
@@ -299,13 +275,9 @@ const Timetable = () => {
             <div>
               <p className="text-sm text-muted-foreground">Classes Today</p>
               <p className="text-2xl font-bold">{totalToday}</p>
-              <p className="text-sm text-green-500">
-                {completedClasses} Completed
-              </p>
+              <p className="text-sm text-green-500">{completedClasses} Completed</p>
             </div>
-            <Badge variant={currentClass ? "default" : "outline"}>
-              {currentClass ? "Active" : "Inactive"}
-            </Badge>
+            <Badge variant={currentClass ? 'default' : 'outline'}>{currentClass ? 'Active' : 'Inactive'}</Badge>
           </div>
         </Card>
       </div>
@@ -326,19 +298,16 @@ const Timetable = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {periods.map((period) => (
+                    {periods.map(period => (
                       <div
                         key={period._id}
                         className={`p-4 rounded-lg border bg-card hover:shadow-md transition-shadow`}
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h4 className="font-medium capitalize">
-                              {period.subject.name}
-                            </h4>
+                            <h4 className="font-medium capitalize">{period.subject.name}</h4>
                             <p className="text-sm text-muted-foreground capitalize">
-                              {period.teacher?.userId?.firstName}{" "}
-                              {period.teacher?.userId?.lastName}
+                              {period.teacher?.userId?.firstName} {period.teacher?.userId?.lastName}
                             </p>
                           </div>
                         </div>
@@ -346,8 +315,7 @@ const Timetable = () => {
                           <div className="flex items-center gap-2 text-sm">
                             <Clock className="h-3 w-3 text-muted-foreground" />
                             <span>
-                              {formatTime(period.startTime)} -{" "}
-                              {formatTime(period.endTime)}
+                              {formatTime(period.startTime)} - {formatTime(period.endTime)}
                             </span>
                           </div>
                         </div>
@@ -369,11 +337,11 @@ const Timetable = () => {
             <div className="text-muted-foreground">Loading subjects...</div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-              {staffSubjects.map((subject) => (
+              {staffSubjects.map(subject => (
                 <div
                   key={subject._id}
                   className={`px-2 py-1 rounded text-xs font-medium border text-center ${getSubjectColor(
-                    subject.name
+                    subject.name,
                   )}`}
                 >
                   <div className="font-semibold capitalize">{subject.name}</div>
@@ -386,7 +354,7 @@ const Timetable = () => {
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default Timetable;
+export default Timetable

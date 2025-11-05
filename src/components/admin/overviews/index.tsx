@@ -1,28 +1,26 @@
-'use client' 
+'use client'
 
-import React, { useEffect, useState } from "react"
-import Topbar from "../../layout/Navbar"
-import { Separator } from "@/components/ui/separator"
-import OverviewSubBar from "./OverviewSubBar"
-import Card from "./Card"
-import StackedBarChart from "./charts/StackedBarChart"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import CustomPieChart from "./charts/PieChartPlot"
+import React, { useEffect, useState } from 'react'
+import Topbar from '../../layout/Navbar'
+import { Separator } from '@/components/ui/separator'
+import OverviewSubBar from './OverviewSubBar'
+import Card from './Card'
+import StackedBarChart from './charts/StackedBarChart'
+import { Checkbox } from '@/components/ui/checkbox'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label'
+import CustomPieChart from './charts/PieChartPlot'
 
-import { outstandingColumns, performanceColumns } from "./tables/column"
-import outstanding from "../../../data/outstanding_fees.json"
-import performance from "../../../data/performance.json"
-import OutstandingTable from "./tables/OutstandinfTable"
-import StudentPerformance from "./tables/StudentPerformance"
-import TopTeachers from "./TopTeachers"
-import { getDashboardData } from '@/utils/api';
-import { DashboardData } from "@/types"
-
+import { outstandingColumns, performanceColumns } from './tables/column'
+import outstanding from '../../../data/outstanding_fees.json'
+import performance from '../../../data/performance.json'
+import OutstandingTable from './tables/OutstandinfTable'
+import StudentPerformance from './tables/StudentPerformance'
+import TopTeachers from './TopTeachers'
+import { getDashboardData } from '@/utils/api'
+import { DashboardData } from '@/types'
 
 const Overview = () => {
-
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     genderDistribution: { totalStudents: 0, totalMale: 0, totalFemale: 0 },
     schoolUsersCount: {
@@ -32,37 +30,37 @@ const Overview = () => {
       totalTeachingStaff: 0,
       totalStaffs: 0,
     },
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const data = await getDashboardData();
-        setDashboardData(data);
-        setError(null);
+        setLoading(true)
+        const data = await getDashboardData()
+        setDashboardData(data)
+        setError(null)
       } catch (err) {
-        console.error('Failed to fetch dashboard data:', err);
-        setError('Failed to load dashboard data');
+        console.error('Failed to fetch dashboard data:', err)
+        setError('Failed to load dashboard data')
         // Keep the fallback data that was initialized in useState
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
-  }, []); // Empty dependency array means this runs once on mount
+    fetchData()
+  }, []) // Empty dependency array means this runs once on mount
 
-  const { schoolUsersCount, genderDistribution } = dashboardData;
+  const { schoolUsersCount, genderDistribution } = dashboardData
 
   if (loading) {
     return (
       <div className="w-full py-5 px-0 md:px-9 flex justify-center items-center h-[80vh]">
         <div>Loading dashboard data...</div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -73,7 +71,7 @@ const Overview = () => {
         </div>
         {/* Continue rendering with fallback data */}
       </div>
-    );
+    )
   }
   return (
     <div className="w-full  py-5 px-0 md:px-9">
@@ -117,10 +115,7 @@ const Overview = () => {
             <OutstandingTable columns={outstandingColumns} data={outstanding} />
           </div>
           <div className="mb-8">
-            <StudentPerformance
-              columns={performanceColumns}
-              data={performance}
-            />
+            <StudentPerformance columns={performanceColumns} data={performance} />
           </div>
         </div>
         <div className="w-full lg:w-[38%]">
@@ -129,7 +124,7 @@ const Overview = () => {
             <div className=" h-[300px]">
               {/* <CustomPieChart /> */}
               <CustomPieChart
-              totalStudents={schoolUsersCount?.totalStudents}
+                totalStudents={schoolUsersCount?.totalStudents}
                 maleCount={genderDistribution.totalMale}
                 femaleCount={genderDistribution.totalFemale}
               />

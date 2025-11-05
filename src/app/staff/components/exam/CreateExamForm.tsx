@@ -1,71 +1,70 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
-import { Plus, FileEdit, Loader2 } from "lucide-react";
-import { ExamBasicDetailsForm } from "./ExamBasicDetailsForm";
-import { QuestionsFileUpload } from "./QuestionsFileUpload";
-import { useExamData } from "@/hooks/useExamData";
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { useToast } from '@/components/ui/use-toast'
+import { Plus, FileEdit, Loader2 } from 'lucide-react'
+import { ExamBasicDetailsForm } from './ExamBasicDetailsForm'
+import { QuestionsFileUpload } from './QuestionsFileUpload'
+import { useExamData } from '@/hooks/useExamData'
 
 interface ExamFormData {
-  subject: string;
-  class: string;
-  examDate: string;
-  startTime: string;
-  endTime: string;
-  venue: string;
-  mode: string;
-  sessionId: string;
+  subject: string
+  class: string
+  examDate: string
+  startTime: string
+  endTime: string
+  venue: string
+  mode: string
+  sessionId: string
 }
 
 interface CreateExamFormProps {
-  onCreateExam: (examData: ExamFormData, questionsFile: File | null) => void;
-  isLoading: boolean;
+  onCreateExam: (examData: ExamFormData, questionsFile: File | null) => void
+  isLoading: boolean
 }
 
-export const CreateExamForm: React.FC<CreateExamFormProps> = ({
-  onCreateExam,
-  isLoading: formLoading
-}) => {
+export const CreateExamForm: React.FC<CreateExamFormProps> = ({ onCreateExam, isLoading: formLoading }) => {
   const [examData, setExamData] = useState<ExamFormData>({
-    subject: "",
-    class: "",
-    examDate: "",
-    startTime: "",
-    endTime: "",
-    venue: "",
-    mode: "online",
-    sessionId: ""
-  });
-  
-  const [questionsFile, setQuestionsFile] = useState<File | null>(null);
-  const { toast } = useToast();
-  
+    subject: '',
+    class: '',
+    examDate: '',
+    startTime: '',
+    endTime: '',
+    venue: '',
+    mode: 'online',
+    sessionId: '',
+  })
+
+  const [questionsFile, setQuestionsFile] = useState<File | null>(null)
+  const { toast } = useToast()
+
   // Fetch classes, subjects, and sessions using the custom hook
-  const { classes, subjects, sessions, loading: dataLoading, error } = useExamData();
+  const { classes, subjects, sessions, loading: dataLoading, error } = useExamData()
 
   const isFormValid = () => {
-    return examData.subject && 
-           examData.class && 
-           examData.examDate && 
-           examData.startTime && 
-           examData.endTime && 
-           examData.sessionId && 
-           questionsFile;
-  };
+    return (
+      examData.subject &&
+      examData.class &&
+      examData.examDate &&
+      examData.startTime &&
+      examData.endTime &&
+      examData.sessionId &&
+      questionsFile
+    )
+  }
 
   const handleSubmit = () => {
     if (!isFormValid()) {
       toast({
-        title: "Missing required fields",
-        description: "Please fill all required fields and upload a questions file.",
-        variant: "destructive"
-      });
-      return;
+        title: 'Missing required fields',
+        description: 'Please fill all required fields and upload a questions file.',
+        variant: 'destructive',
+      })
+      return
     }
-    onCreateExam(examData, questionsFile);
-  };
+    onCreateExam(examData, questionsFile)
+  }
 
   if (error) {
     return (
@@ -73,17 +72,13 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({
         <CardContent className="py-6">
           <div className="text-center text-red-500">
             <p>Error loading exam data: {error}</p>
-            <Button 
-              variant="outline" 
-              className="mt-4"
-              onClick={() => window.location.reload()}
-            >
+            <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
               Retry
             </Button>
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -93,30 +88,25 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({
           <FileEdit className="h-5 w-5" />
           Create New Examination
         </CardTitle>
-        <CardDescription>
-          Set up examination details and upload questions file
-        </CardDescription>
+        <CardDescription>Set up examination details and upload questions file</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <ExamBasicDetailsForm 
-          examData={examData} 
+        <ExamBasicDetailsForm
+          examData={examData}
           setExamData={setExamData}
           classes={classes}
           subjects={subjects}
           sessions={sessions}
           isLoading={dataLoading}
         />
-        
-        <QuestionsFileUpload 
-          questionsFile={questionsFile} 
-          setQuestionsFile={setQuestionsFile} 
-        />
-        
+
+        <QuestionsFileUpload questionsFile={questionsFile} setQuestionsFile={setQuestionsFile} />
+
         <Separator />
-        
-        <Button 
-          onClick={handleSubmit} 
-          className="w-full" 
+
+        <Button
+          onClick={handleSubmit}
+          className="w-full"
           size="lg"
           disabled={!isFormValid() || formLoading || dataLoading}
         >
@@ -132,7 +122,7 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({
             </>
           )}
         </Button>
-        
+
         {!isFormValid() && (
           <p className="text-sm text-muted-foreground text-center">
             Please fill all required fields (*) to create examination
@@ -140,5 +130,5 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}

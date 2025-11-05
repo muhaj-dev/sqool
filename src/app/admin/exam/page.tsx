@@ -1,6 +1,6 @@
-import Exam from "@/components/exams"
-import ExamTopBar from "@/components/exams/ExamTopBar"
-import React from "react"
+import Exam from '@/components/exams'
+import ExamTopBar from '@/components/exams/ExamTopBar'
+import React from 'react'
 
 const page = () => {
   return (
@@ -9,7 +9,7 @@ const page = () => {
 
       <Exam />
     </div>
-)
+  )
 }
 
 export default page
