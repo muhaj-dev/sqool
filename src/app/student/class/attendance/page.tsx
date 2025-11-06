@@ -1,10 +1,8 @@
 'use client'
-
-import ADetails from '@/app/staff/components/attendance/ADetails'
-import { ATable } from '@/app/staff/components/attendance/ATable'
-import Attendancebar from '@/app/staff/components/attendance/Attendancebar'
 import React, { useState } from 'react'
 import StudentAttendance from '../../components/StudentAttendance'
+import ADetails from '@/app/parent/components/Attendance/ADetails'
+import Attendancebar from '@/app/parent/components/Attendance/Attendancebar'
 
 const Page = () => {
   const [activeComponent, setActiveComponent] = useState<'attendance' | 'library'>('attendance')
