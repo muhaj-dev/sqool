@@ -10,7 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Landmark, Settings, GraduationCap } from "lucide-react";
 import Link from "next/link";
-import { DashboardIcon, PersonIcon, StudentIcon } from "@/utils/icon";
+import { DashboardIcon, ExamIcon, PersonIcon, StudentIcon } from "@/utils/icon";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/zustand/authStore";
 import { useRouter } from "next/navigation";
@@ -227,9 +227,10 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
             "/admin/exam"
           )}`}
         >
-          <Landmark
-            className={`text-[#515B6F] ${
-              pathname.startsWith("/admin/exam") ? "text-primary" : ""
+          <ExamIcon
+            size={24}
+            color={`${
+              pathname.startsWith("/admin/exam") ? "#E5B80B" : "#515B6F"
             }`}
           />
           <p
@@ -238,7 +239,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
               pathname.startsWith("/admin/exam") ? "text-primary" : ""
             }`}
           >
-            Exam
+            Examinations
           </p>
         </Link>
         <Link
