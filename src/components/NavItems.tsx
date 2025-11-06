@@ -1,6 +1,6 @@
-"use client"
-import NavItem from "./NavItem"
-import { NavbarProps } from "./Navbar"
+'use client'
+import NavItem from './NavItem'
+import { NavbarProps } from './Navbar'
 
 const NavItems = ({ sections, activeIndex, setActiveIndex }: NavbarProps) => {
   return (
@@ -12,12 +12,7 @@ const NavItems = ({ sections, activeIndex, setActiveIndex }: NavbarProps) => {
 
         const current = i === activeIndex
         return (
-          <NavItem
-            category={category}
-            tabChangeHandler={handleCurrentTab}
-            isCurrent={current}
-            key={category.label}
-          />
+          <NavItem category={category} tabChangeHandler={handleCurrentTab} isCurrent={current} key={category.label} />
         )
       })}
     </div>

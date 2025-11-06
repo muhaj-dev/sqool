@@ -1,14 +1,8 @@
-import { MoveLeft } from "lucide-react";
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Link from "next/link";
-import { GreaterThan } from "@/utils/icon";
+import { MoveLeft } from 'lucide-react'
+import React from 'react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Link from 'next/link'
+import { GreaterThan } from '@/utils/icon'
 
 const Paymentbar = () => {
   return (
@@ -37,7 +31,7 @@ const Paymentbar = () => {
         </Select>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Paymentbar;
+export default Paymentbar

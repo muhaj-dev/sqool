@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,70 +9,56 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
-import { X } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { toast } from '@/components/ui/use-toast'
+import { X } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const FormSchema = z.object({
   username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: 'Username must be at least 2 characters.',
   }),
   email: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: 'Username must be at least 2 characters.',
   }),
-});
+})
 
 export function AddPaymentCard() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
-      email: "",
+      username: '',
+      email: '',
     },
-  });
+  })
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
-      title: "You submitted the following values:",
+      title: 'You submitted the following values:',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    });
+    })
   }
 
   return (
     <DialogContent className="sm:max-w-[40%] ">
       <DialogClose className="p-1 bg-white rounded-full absolute right-0 -top-10">
-        <X className="text-primaryColor" />
+        <X className="text-primary" />
       </DialogClose>
       <DialogHeader className="w-full flex flex-col items-center ">
-        <DialogTitle className="text-primaryColor">Payment</DialogTitle>
+        <DialogTitle className="text-primary">Payment</DialogTitle>
         <DialogDescription className="text-center text-[#515B6F]">
-          Lorem ipsum dolor sit amet consectetur. Sollicitudin mauris sit
-          egestas gravida nisl nunc diam libero amet. Aliquam nunc.
+          Lorem ipsum dolor sit amet consectetur. Sollicitudin mauris sit egestas gravida nisl nunc diam libero amet.
+          Aliquam nunc.
         </DialogDescription>
       </DialogHeader>
       <Form {...form}>
@@ -83,10 +69,7 @@ export function AddPaymentCard() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bank Name</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select level" />
@@ -158,7 +141,7 @@ export function AddPaymentCard() {
             )}
           />
 
-<FormField
+          <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
@@ -178,10 +161,7 @@ export function AddPaymentCard() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Type</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select level" />
@@ -205,5 +185,5 @@ export function AddPaymentCard() {
         </form>
       </Form>
     </DialogContent>
-  );
+  )
 }

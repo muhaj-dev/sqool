@@ -1,5 +1,5 @@
-"use client"
-import React from "react"
+'use client'
+import React from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,19 +7,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "../ui/button"
-import Link from "next/link"
+} from '../ui/dropdown-menu'
+import { MoreHorizontal } from 'lucide-react'
+import { Button } from '../ui/button'
+import Link from 'next/link'
 
 const Action = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="border-none outline-none">
-        <Button
-          variant="ghost"
-          className="h-8 w-8 p-0 outline-none border-none"
-        >
+        <Button variant="ghost" className="h-8 w-8 p-0 outline-none border-none">
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>

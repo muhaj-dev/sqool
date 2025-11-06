@@ -1,14 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { CheckCircle2 } from "lucide-react";
-import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { CheckCircle2 } from 'lucide-react'
+import Link from 'next/link'
 
-interface AttendanceOverviewProps{
-  attendanceRate:number;
+interface AttendanceOverviewProps {
+  attendanceRate: number
 }
 
-export function AttendanceOverview({attendanceRate}:AttendanceOverviewProps) {
-
+export function AttendanceOverview({ attendanceRate }: AttendanceOverviewProps) {
   return (
     <Card>
       <CardHeader>
@@ -18,15 +17,7 @@ export function AttendanceOverview({attendanceRate}:AttendanceOverviewProps) {
         <div className="flex flex-col items-center justify-center py-6">
           <div className="relative w-32 h-32 mb-4">
             <svg className="w-full h-full transform -rotate-90">
-              <circle
-                cx="64"
-                cy="64"
-                r="56"
-                stroke="currentColor"
-                strokeWidth="8"
-                fill="none"
-                className="text-muted"
-              />
+              <circle cx="64" cy="64" r="56" stroke="currentColor" strokeWidth="8" fill="none" className="text-muted" />
               <circle
                 cx="64"
                 cy="64"
@@ -46,13 +37,13 @@ export function AttendanceOverview({attendanceRate}:AttendanceOverviewProps) {
           </div>
           <p className="text-sm text-muted-foreground mb-4">This week</p>
           <Button className="w-full">
-            <Link href={"/staff/attendance"} className="flex items-center">
+            <Link href={'/staff/attendance'} className="flex items-center">
               <CheckCircle2 className="mr-2 h-4 w-4" />
               Mark Attendance
             </Link>
-            </Button>
+          </Button>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

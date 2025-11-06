@@ -1,23 +1,22 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-
-import Examinations from "../components/exam/Examinations";
+import Examinations from '../components/exam/Examinations'
 
 const Page = () => {
-  const [showPersonalInfo, setShowPersonalInfo] = useState<boolean>(true);
+  const [showPersonalInfo, setShowPersonalInfo] = useState<boolean>(true)
 
   const togglePersonalInfo = () => {
-    setShowPersonalInfo(!showPersonalInfo);
-  };
+    setShowPersonalInfo(!showPersonalInfo)
+  }
 
   return (
     <div>
       {/* <Staffbar /> */}
       <Examinations />
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

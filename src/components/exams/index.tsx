@@ -1,80 +1,79 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import ExamCard from "./ExamCard";
-import avatar from "../../assets/avatar.png";
-import { Separator } from "../ui/separator";
-import FilterBar from "./Filterbar";
-import { SchoolSession } from "./SchoolSession";
-import { getAllExaminations, updateExaminationStatus } from "@/utils/api";
+'use client'
+import React, { useState, useEffect } from 'react'
+import ExamCard from './ExamCard'
+import avatar from '../../assets/avatar.png'
+import { Separator } from '../ui/separator'
+import FilterBar from './Filterbar'
+import { SchoolSession } from './SchoolSession'
+import { getAllExaminations, updateExaminationStatus } from '@/utils/api'
 
 // Removed static Department array
 
-const STEPS = ["Pending Approval", "Approved", "Rejected"];
+const STEPS = ['Pending Approval', 'Approved', 'Rejected']
 
-const STATUS_OPTIONS = ["approve", "reject", "pending", "scheduled"];
+const STATUS_OPTIONS = ['approve', 'reject', 'pending', 'scheduled']
 
 const Exam = () => {
-  const [exams, setExams] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [exams, setExams] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   // Fetch exams from API
   const fetchExams = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const res = await getAllExaminations(1, 50);
-      setExams(res.data || []);
+      const res = await getAllExaminations(1, 50)
+      setExams(res.data || [])
     } catch {
-      setExams([]);
+      setExams([])
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  console.log(exams);
+  console.log(exams)
   useEffect(() => {
-    fetchExams();
-  }, []);
+    fetchExams()
+  }, [])
 
   // Filter exams by status
-  const filteredExams = exams.filter((exam) => {
-    if (STEPS[activeIndex] === "Pending Approval")
-      return exam.status === "pending";
-    if (STEPS[activeIndex] === "Approved") return exam.status === "approve";
-    if (STEPS[activeIndex] === "Rejected") return exam.status === "reject";
-    return true;
-  });
+  const filteredExams = exams.filter(exam => {
+    if (STEPS[activeIndex] === 'Pending Approval') return exam.status === 'pending'
+    if (STEPS[activeIndex] === 'Approved') return exam.status === 'approve'
+    if (STEPS[activeIndex] === 'Rejected') return exam.status === 'reject'
+    return true
+  })
 
   // Handle approve
-const handleApprove = async (examId: string) => {
-  setLoading(true);
-  try {
-    await updateExaminationStatus(examId, "approve");
-    fetchExams();
-  } finally {
-    setLoading(false);
+  const handleApprove = async (examId: string) => {
+    setLoading(true)
+    try {
+      await updateExaminationStatus(examId, 'approve')
+      fetchExams()
+    } finally {
+      setLoading(false)
+    }
   }
-};
 
-const handleReject = async (examId: string) => {
-  setLoading(true);
-  try {
-    await updateExaminationStatus(examId, "reject");
-    fetchExams();
-  } finally {
-    setLoading(false);
+  const handleReject = async (examId: string) => {
+    setLoading(true)
+    try {
+      await updateExaminationStatus(examId, 'reject')
+      fetchExams()
+    } finally {
+      setLoading(false)
+    }
   }
-};
 
-const handleSchedule = async (examId: string) => {
-  setLoading(true);
-  try {
-    await updateExaminationStatus(examId, "scheduled");
-    fetchExams();
-  } finally {
-    setLoading(false);
+  const handleSchedule = async (examId: string) => {
+    setLoading(true)
+    try {
+      await updateExaminationStatus(examId, 'scheduled')
+      fetchExams()
+    } finally {
+      setLoading(false)
+    }
   }
-};
   return (
     <section>
       <div className="flex justify-end">
@@ -84,10 +83,7 @@ const handleSchedule = async (examId: string) => {
         {STEPS.map((item, ind) => (
           <div
             key={ind}
-            className={`cursor-pointer ${
-              activeIndex === ind &&
-              "text-primaryColor border-b-[2px] border-b-primaryColor "
-            }`}
+            className={`cursor-pointer ${activeIndex === ind && 'text-primary border-b-[2px] border-b-primary '}`}
             onClick={() => setActiveIndex(ind)}
           >
             {item}
@@ -116,7 +112,7 @@ const handleSchedule = async (examId: string) => {
         </div>
       ))} */}
 
-      {filteredExams.map((exam) => (
+      {filteredExams.map(exam => (
         <ExamCard
           key={exam._id}
           fullname={`${exam.creator.details.firstName} ${exam.creator.details.lastName}`}
@@ -124,7 +120,7 @@ const handleSchedule = async (examId: string) => {
           subject={exam.subject.name}
           total={exam.students}
           photo={avatar}
-          approved={exam.status === "approve"}
+          approved={exam.status === 'approve'}
           status={exam.status}
           onApprove={() => handleApprove(exam._id)}
           onReject={() => handleReject(exam._id)}
@@ -133,7 +129,7 @@ const handleSchedule = async (examId: string) => {
         />
       ))}
     </section>
-  );
-};
+  )
+}
 
-export default Exam;
+export default Exam

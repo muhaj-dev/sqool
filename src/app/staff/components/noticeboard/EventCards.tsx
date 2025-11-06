@@ -1,30 +1,30 @@
-'use client';
+'use client'
 
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { EventModal } from "./EventModal";
-import { getStaffNotices } from "@/utils/api";
+import React, { useEffect, useState } from 'react'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { EventModal } from './EventModal'
+import { getStaffNotices } from '@/utils/api'
 
 const EventCards = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-const [events, setEvents] = useState<any[]>([]);
-const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [events, setEvents] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-  const fetchNotices = async () => {
-    setLoading(true);
-    try {
-      const res = await getStaffNotices(searchTerm, 20);
-    
-      setEvents(res.data.result || []);
-    } catch {
-      setEvents([]);
-    } finally {
-      setLoading(false);
+    const fetchNotices = async () => {
+      setLoading(true)
+      try {
+        const res = await getStaffNotices(searchTerm, 20)
+
+        setEvents(res.data.result || [])
+      } catch {
+        setEvents([])
+      } finally {
+        setLoading(false)
+      }
     }
-  };
-  fetchNotices();
-}, [searchTerm]);
+    fetchNotices()
+  }, [searchTerm])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -33,7 +33,7 @@ const [loading, setLoading] = useState(false);
       ) : events.length === 0 ? (
         <div className="col-span-full text-center py-8">No notices found.</div>
       ) : (
-        events.map((event) => (
+        events.map(event => (
           <Dialog key={event._id}>
             <DialogTrigger className="text-left w-full">
               <div className="border border-[#E4E4E4] p-4 hover:border-[#E5B80B] hover:shadow-lg hover:shadow-[#E5B80B] rounded-lg w-[300px] max-w-md">
@@ -42,21 +42,18 @@ const [loading, setLoading] = useState(false);
                     <div className="text-[#A7A9AD] text-sm flex justify-between items-center">
                       <span>
                         {event.expirationDate
-                          ? new Date(event.expirationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                          : ""}
+                          ? new Date(event.expirationDate).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
+                          : ''}
                       </span>
-                      <span>
-                        {event.expirationDate
-                          ? new Date(event.expirationDate).toLocaleDateString()
-                          : ""}
-                      </span>
+                      <span>{event.expirationDate ? new Date(event.expirationDate).toLocaleDateString() : ''}</span>
                     </div>
                     <h2 className="font-bold">{event.title}</h2>
                   </div>
                   {event.isPinned && (
-                    <span className="h-fit text-[8px] bg-green-500 text-white px-1 py-[0.95px] rounded">
-                      PINNED
-                    </span>
+                    <span className="h-fit text-[8px] bg-green-500 text-white px-1 py-[0.95px] rounded">PINNED</span>
                   )}
                 </div>
                 <p className="mt-5 text-sm">{event.content}</p>
@@ -67,23 +64,19 @@ const [loading, setLoading] = useState(false);
                   </p>
                 </div>
                 <div className="mt-4 text-sm">
-              {event.resources && event.resources.length > 0 && (
-  <a
-    href={event.resources[0]}
-    className="text-blue-400 underline hover:text-blue-600"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Click here to view the resource
-  </a>
-)}
+                  {event.resources && event.resources.length > 0 && (
+                    <a
+                      href={event.resources[0]}
+                      className="text-blue-400 underline hover:text-blue-600"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Click here to view the resource
+                    </a>
+                  )}
                 </div>
                 <div className="mt-4 text-sm flex justify-between">
-                  <span>
-                    {event.expirationDate
-                      ? new Date(event.expirationDate).toLocaleDateString()
-                      : ""}
-                  </span>
+                  <span>{event.expirationDate ? new Date(event.expirationDate).toLocaleDateString() : ''}</span>
                 </div>
               </div>
             </DialogTrigger>
@@ -93,25 +86,21 @@ const [loading, setLoading] = useState(false);
                 participants: [],
                 time: event.expirationDate
                   ? new Date(event.expirationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                  : "",
-                date: event.expirationDate
-                  ? new Date(event.expirationDate).toLocaleDateString()
-                  : "",
+                  : '',
+                date: event.expirationDate ? new Date(event.expirationDate).toLocaleDateString() : '',
                 description: event.content,
                 attachments: event.resources || [],
-                eventDate: event.expirationDate
-                  ? new Date(event.expirationDate).toLocaleDateString()
-                  : "",
+                eventDate: event.expirationDate ? new Date(event.expirationDate).toLocaleDateString() : '',
                 eventTime: event.expirationDate
                   ? new Date(event.expirationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                  : "",
+                  : '',
               }}
             />
           </Dialog>
         ))
       )}
     </div>
-  );
-};
+  )
+}
 
-export default EventCards;
+export default EventCards

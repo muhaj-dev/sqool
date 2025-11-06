@@ -1,8 +1,8 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import { Separator } from "../ui/separator"
-import { getStaffById } from "@/utils/api"
-import { StaffResult, SingleStaffResponse } from "@/types"
+'use client'
+import React, { useEffect, useState } from 'react'
+import { Separator } from '../ui/separator'
+import { getStaffById } from '@/utils/api'
+import { StaffResult, SingleStaffResponse } from '@/types'
 
 console.log()
 const TeacherDetail = ({ staffId }: { staffId: string }) => {
@@ -19,7 +19,7 @@ const TeacherDetail = ({ staffId }: { staffId: string }) => {
         console.log(response)
         setStaff(response?.data ?? null)
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to fetch staff details"
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch staff details'
         setError(errorMessage)
       } finally {
         setLoading(false)
@@ -38,12 +38,12 @@ const TeacherDetail = ({ staffId }: { staffId: string }) => {
   if (error || !staff) {
     return (
       <div className="bg-white min-w-[25%] py-8 px-4 max-h-screen">
-        <p className="text-red-500">{error || "Staff not found"}</p>
+        <p className="text-red-500">{error || 'Staff not found'}</p>
       </div>
     )
   }
 
-  const fullName = staff.userId ? `${staff.userId?.firstName} ${staff.userId?.lastName}` : "Unknown Staff"
+  const fullName = staff.userId ? `${staff.userId?.firstName} ${staff.userId?.lastName}` : 'Unknown Staff'
   const address = staff.address ?? '-- --'
   const aboutMe = staff.aboutMe ?? '-- --'
 
@@ -62,8 +62,7 @@ const TeacherDetail = ({ staffId }: { staffId: string }) => {
         <div className="flex flex-col  max-w-[300px]">
           <p className="text-muted-foreground">Date of Birth</p>
           <p>
-            March 23, 1995{" "}
-            <span className="text-muted-foreground">(26 y.o)</span>{" "}
+            March 23, 1995 <span className="text-muted-foreground">(26 y.o)</span>{' '}
           </p>
         </div>
         <div className="flex flex-col  max-w-[300px]">
@@ -79,9 +78,7 @@ const TeacherDetail = ({ staffId }: { staffId: string }) => {
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-semibold">More Details</h2>
         <p className="text-muted-foreground">About Me</p>
-        <p>
-         {aboutMe}
-        </p>
+        <p>{aboutMe}</p>
         <div className="flex gap-8">
           <div className="flex flex-col  max-w-[200px]">
             <p className="text-muted-foreground">Employed Date</p>

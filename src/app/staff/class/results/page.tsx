@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState } from 'react';
-import Resultbar from '../../components/class/result/Resultbar';
-import Texam from '../../components/class/result/Texam';
-import { Upload } from '../../components/class/result/Upload';
+import React, { useState } from 'react'
+import Resultbar from '../../components/class/result/Resultbar'
+import Texam from '../../components/class/result/Texam'
+import { Upload } from '../../components/class/result/Upload'
 
 const Page = () => {
-  const [showTexam, setShowTexam] = useState<boolean>(false);
+  const [showTexam, setShowTexam] = useState<boolean>(false)
 
   return (
     <div>
@@ -19,7 +19,7 @@ const Page = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

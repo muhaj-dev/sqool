@@ -187,14 +187,14 @@
 //           </div>
 
 //           <div className="flex justify-end space-x-2">
-//             <Button 
-//               type="button" 
-//               variant="outline" 
+//             <Button
+//               type="button"
+//               variant="outline"
 //               onClick={() => setOpen(false)}
 //             >
 //               Cancel
 //             </Button>
-//             <Button 
+//             <Button
 //               type="submit"
 //               className="bg-primary hover:bg-primary-hover text-white"
 //               disabled={loading || !selectedFile}
@@ -208,7 +208,7 @@
 //   );
 // }
 
-import React from "react"
+import React from 'react'
 
 const PaymentAddModal = () => {
   return (

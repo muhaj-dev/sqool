@@ -1,67 +1,48 @@
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Notice } from "@/types";
-import { Plus, Trash2 } from "lucide-react";
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Notice } from '@/types'
+import { Plus, Trash2 } from 'lucide-react'
 
 const noticeSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  content: z.string().min(10, "Content must be at least 10 characters"),
-  body: z.string().min(10, "Body must be at least 10 characters"),
-  visibility: z.enum(["parent", "staff", "everyone"]),
-  resources: z.array(z.string().url("Must be a valid URL")).default([]),
+  title: z.string().min(3, 'Title must be at least 3 characters'),
+  content: z.string().min(10, 'Content must be at least 10 characters'),
+  body: z.string().min(10, 'Body must be at least 10 characters'),
+  visibility: z.enum(['parent', 'staff', 'everyone']),
+  resources: z.array(z.string().url('Must be a valid URL')).default([]),
   expirationDate: z.string(),
   notificationDate: z.string(),
-});
+})
 
-type NoticeFormValues = z.infer<typeof noticeSchema>;
+type NoticeFormValues = z.infer<typeof noticeSchema>
 
 interface NoticeDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  notice: Notice | null;
-  onSave: (notice: Notice) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  notice: Notice | null
+  onSave: (notice: Notice) => void
 }
 
 export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialogProps) {
   const form = useForm<NoticeFormValues>({
     resolver: zodResolver(noticeSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      body: "",
-      visibility: "everyone",
+      title: '',
+      content: '',
+      body: '',
+      visibility: 'everyone',
       resources: [],
-      expirationDate: "",
+      expirationDate: '',
       notificationDate: new Date().toISOString().slice(0, 16),
     },
-  });
+  })
 
   useEffect(() => {
     if (notice) {
@@ -73,19 +54,19 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
         resources: notice.resources,
         expirationDate: notice.expirationDate.slice(0, 16),
         notificationDate: notice.notificationDate.slice(0, 16),
-      });
+      })
     } else {
       form.reset({
-        title: "",
-        content: "",
-        body: "",
-        visibility: "everyone",
+        title: '',
+        content: '',
+        body: '',
+        visibility: 'everyone',
         resources: [],
-        expirationDate: "",
+        expirationDate: '',
         notificationDate: new Date().toISOString().slice(0, 16),
-      });
+      })
     }
-  }, [notice, form]);
+  }, [notice, form])
 
   const onSubmit = (data: NoticeFormValues) => {
     const noticeData: any = {
@@ -97,25 +78,28 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
       expirationDate: new Date(data.expirationDate).toISOString(),
       notificationDate: new Date(data.notificationDate).toISOString(),
       id: notice?.id,
-    };
-    onSave(noticeData);
-  };
+    }
+    onSave(noticeData)
+  }
 
   const addResource = () => {
-    const currentResources = form.getValues("resources");
-    form.setValue("resources", [...currentResources, ""]);
-  };
+    const currentResources = form.getValues('resources')
+    form.setValue('resources', [...currentResources, ''])
+  }
 
   const removeResource = (index: number) => {
-    const currentResources = form.getValues("resources");
-    form.setValue("resources", currentResources.filter((_, i) => i !== index));
-  };
+    const currentResources = form.getValues('resources')
+    form.setValue(
+      'resources',
+      currentResources.filter((_, i) => i !== index),
+    )
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{notice ? "Edit Notice" : "Create Notice"}</DialogTitle>
+          <DialogTitle>{notice ? 'Edit Notice' : 'Create Notice'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -140,15 +124,9 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
                 <FormItem>
                   <FormLabel>Content (Summary)</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Brief summary of the notice"
-                      className="min-h-[80px]"
-                      {...field}
-                    />
+                    <Textarea placeholder="Brief summary of the notice" className="min-h-[80px]" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    A short summary that will be displayed in the notice list
-                  </FormDescription>
+                  <FormDescription>A short summary that will be displayed in the notice list</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -161,15 +139,9 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
                 <FormItem>
                   <FormLabel>Body (Full Details)</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Full details of the notice"
-                      className="min-h-[120px]"
-                      {...field}
-                    />
+                    <Textarea placeholder="Full details of the notice" className="min-h-[120px]" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    The complete notice content with all details
-                  </FormDescription>
+                  <FormDescription>The complete notice content with all details</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -236,7 +208,7 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
                   Add Resource
                 </Button>
               </div>
-              {form.watch("resources").map((_, index) => (
+              {form.watch('resources').map((_, index) => (
                 <div key={index} className="flex gap-2">
                   <FormField
                     control={form.control}
@@ -250,12 +222,7 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
                       </FormItem>
                     )}
                   />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeResource(index)}
-                  >
+                  <Button type="button" variant="outline" size="icon" onClick={() => removeResource(index)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -266,13 +233,11 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button type="submit">
-                {notice ? "Update" : "Create"} Notice
-              </Button>
+              <Button type="submit">{notice ? 'Update' : 'Create'} Notice</Button>
             </div>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

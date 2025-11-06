@@ -1143,3 +1143,13 @@ export interface PaymentResponse {
   data: Payment;
   message: string;
 }
+
+export interface StudentAttendance extends Partial<ISingleStudent> {
+  id: string;
+  status: StatusFilter;
+  name: string;
+  rollNumber;
+  age: number;
+  guardianName: string;
+  attendanceRate: number;
+}

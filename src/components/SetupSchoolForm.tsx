@@ -1,13 +1,6 @@
-"use client"
-import { Button } from "./ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form"
+'use client'
+import { Button } from './ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import {
   Select,
   SelectContent,
@@ -16,36 +9,27 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import DatePicker from "./DatePicker"
-import AttachmentUpload from "./AttachmentUpload"
-import { useState } from "react"
-import { Plus } from "lucide-react"
-import { Separator } from "./ui/separator"
+} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import DatePicker from './DatePicker'
+import AttachmentUpload from './AttachmentUpload'
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Separator } from './ui/separator'
 
 const formSchema = z.object({
-  firstname: z
-    .string({ required_error: "first name is required" })
-    .min(2)
-    .max(50),
-  lastname: z
-    .string({ required_error: "last name is required" })
-    .min(2)
-    .max(50),
-  phone: z
-    .string({ required_error: "phone number is required" })
-    .min(2)
-    .max(50),
-  gender: z.string({ required_error: "gender is required" }),
-  dob: z.date({ required_error: "Please select a date" }),
-  nationality: z.string({ required_error: "nationality is required" }),
-  address: z.string({ required_error: "residential address is required" }),
+  firstname: z.string({ required_error: 'first name is required' }).min(2).max(50),
+  lastname: z.string({ required_error: 'last name is required' }).min(2).max(50),
+  phone: z.string({ required_error: 'phone number is required' }).min(2).max(50),
+  gender: z.string({ required_error: 'gender is required' }),
+  dob: z.date({ required_error: 'Please select a date' }),
+  nationality: z.string({ required_error: 'nationality is required' }),
+  address: z.string({ required_error: 'residential address is required' }),
   formofID: z.string(),
-  idNumber: z.string({ required_error: "ID is required" }),
+  idNumber: z.string({ required_error: 'ID is required' }),
 })
 
 const SetupSchoolForm = () => {
@@ -59,15 +43,15 @@ const SetupSchoolForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
-      phone: "",
+      firstname: '',
+      lastname: '',
+      phone: '',
       dob: new Date(),
-      nationality: "",
-      address: "",
-      formofID: "",
-      idNumber: "",
-      gender: "",
+      nationality: '',
+      address: '',
+      formofID: '',
+      idNumber: '',
+      gender: '',
     },
   })
   function onSubmit(data: z.infer<typeof formSchema>) {
@@ -80,11 +64,9 @@ const SetupSchoolForm = () => {
       <div className="flex items-center justify-between border-b-2 pb-4 mb-4">
         <div>
           <h3 className="text-xl font-semibold">Setup your school system</h3>
-          <p className="text-sm text-muted-foreground">
-            This information that you can update anytime.
-          </p>
+          <p className="text-sm text-muted-foreground">This information that you can update anytime.</p>
         </div>
-        <Button className="bg-primaryColor text-white" onClick={openForm}>
+        <Button className="bg-primary text-white" onClick={openForm}>
           Add School Owner
         </Button>
       </div>
@@ -98,20 +80,14 @@ const SetupSchoolForm = () => {
         </div>
         <div className="w-[60%]">
           <Form {...form}>
-            <form
-              action=""
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-4"
-            >
+            <form action="" onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="firstname"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Upload School Logo</FormLabel>
-                    <FormControl>
-                      {/* <AttachmentUpload /> */}
-                    </FormControl>
+                    <FormControl>{/* <AttachmentUpload /> */}</FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -124,10 +100,7 @@ const SetupSchoolForm = () => {
                     <FormItem className="w-full grid">
                       <FormLabel>Founding Date</FormLabel>
                       <FormControl>
-                        <DatePicker 
-                          selected={field.value}
-  onSelect={field.onChange}
-                        />
+                        <DatePicker selected={field.value} onSelect={field.onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -140,11 +113,7 @@ const SetupSchoolForm = () => {
                     <FormItem className="w-full">
                       <FormLabel>School Short Name</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter firstname"
-                          {...field}
-                          type="text"
-                        />
+                        <Input placeholder="Enter firstname" {...field} type="text" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -158,11 +127,7 @@ const SetupSchoolForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>School Moto</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter firstname"
-                        {...field}
-                        type="text"
-                      />
+                      <Input placeholder="Enter firstname" {...field} type="text" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -187,12 +152,7 @@ const SetupSchoolForm = () => {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                        <Input
-                          placeholder="Phone Number"
-                          {...field}
-                          className="rounded-l-none"
-                          type="text"
-                        />
+                        <Input placeholder="Phone Number" {...field} className="rounded-l-none" type="text" />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -207,11 +167,7 @@ const SetupSchoolForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>School Email Address</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter school email address"
-                        {...field}
-                        type="email"
-                      />
+                      <Input placeholder="Enter school email address" {...field} type="email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -224,11 +180,7 @@ const SetupSchoolForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>School Address</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter school address"
-                        {...field}
-                        type="text"
-                      />
+                      <Input placeholder="Enter school address" {...field} type="text" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,22 +193,15 @@ const SetupSchoolForm = () => {
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>LGA</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select ID" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="national_id">
-                            National ID
-                          </SelectItem>
-                          <SelectItem value="voter's_card">
-                            Voter&apos;s Card
-                          </SelectItem>
+                          <SelectItem value="national_id">National ID</SelectItem>
+                          <SelectItem value="voter's_card">Voter&apos;s Card</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -269,22 +214,15 @@ const SetupSchoolForm = () => {
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Country</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select ID" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="national_id">
-                            National ID
-                          </SelectItem>
-                          <SelectItem value="voter's_card">
-                            Voter&apos;s Card
-                          </SelectItem>
+                          <SelectItem value="national_id">National ID</SelectItem>
+                          <SelectItem value="voter's_card">Voter&apos;s Card</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -299,11 +237,7 @@ const SetupSchoolForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>School Website</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter address"
-                        {...field}
-                        type="text"
-                      />
+                      <Input placeholder="Enter address" {...field} type="text" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -318,11 +252,9 @@ const SetupSchoolForm = () => {
       <div className="flex sm:w-[95%] justify-between mt-4">
         <div>
           <h3 className="text-xl font-semibold">School Brands</h3>
-          <p className="text-sm text-muted-foreground  w-[16rem]">
-            if your school don&apos;t have a brands ignore.
-          </p>
+          <p className="text-sm text-muted-foreground  w-[16rem]">if your school don&apos;t have a brands ignore.</p>
         </div>
-        <Button className="text-primaryColor bg-white hover:bg-gray-200">
+        <Button className="text-primary bg-white hover:bg-gray-200">
           <Plus /> Add Brands
         </Button>
       </div>

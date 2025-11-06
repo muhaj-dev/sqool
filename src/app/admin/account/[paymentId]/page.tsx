@@ -1,18 +1,13 @@
-
-import AdminPaymentDetail from "../components/AdminPaymentDetail";
+import AdminPaymentDetail from '../components/AdminPaymentDetail'
 
 interface PageParams {
-  paymentId: string;
+  paymentId: string
 }
 
-const Page = async ({
-  params,
-}: {
-  params: Promise<PageParams>;
-}) => {
-  const { paymentId } = await params;
+const Page = async ({ params }: { params: Promise<PageParams> }) => {
+  const { paymentId } = await params
 
-  return <AdminPaymentDetail paymentId={paymentId} />;
-};
+  return <AdminPaymentDetail paymentId={paymentId} />
+}
 
-export default Page;
+export default Page

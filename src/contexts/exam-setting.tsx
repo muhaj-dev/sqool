@@ -1,9 +1,9 @@
-"use client"
-import { ReactNode, createContext, useContext } from "react"
-import { useState } from "react"
-import PersonDetail from "@/components/settings/PersonDetail"
-import CompanySetting from "@/components/settings/CompanySetting"
-import PasswordSetting from "@/components/settings/PasswordSetting"
+'use client'
+import { ReactNode, createContext, useContext } from 'react'
+import { useState } from 'react'
+import PersonDetail from '@/components/settings/PersonDetail'
+import CompanySetting from '@/components/settings/CompanySetting'
+import PasswordSetting from '@/components/settings/PasswordSetting'
 
 export const ExamContext = createContext({
   updateIndex: (index: number): void => {},

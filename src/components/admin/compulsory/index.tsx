@@ -1,6 +1,6 @@
-"use client"
-import { useCompulsory } from "@/contexts/compulsory-context"
-import React from "react"
+'use client'
+import { useCompulsory } from '@/contexts/compulsory-context'
+import React from 'react'
 const Compulsory = () => {
   const { step: Component } = useCompulsory()
   return (

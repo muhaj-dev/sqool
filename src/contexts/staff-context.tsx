@@ -1,10 +1,10 @@
-"use client"
-import { ReactNode, createContext, useContext, useState, useEffect } from "react"
-import TeacherDetail from "@/components/staff/TeacherDetail"
-import { TimeTable } from "@/components/staff/tables/timetable"
-import { LessonTable } from "@/components/staff/tables/lesson-table"
-import { getStaffs, addStaff } from "@/utils/api"
-import { StaffResult, AddStaffPayload, StaffResponse } from "@/types"
+'use client'
+import { ReactNode, createContext, useContext, useState, useEffect } from 'react'
+import TeacherDetail from '@/components/staff/TeacherDetail'
+import { TimeTable } from '@/components/staff/tables/timetable'
+import { LessonTable } from '@/components/staff/tables/lesson-table'
+import { getStaffs, addStaff } from '@/utils/api'
+import { StaffResult, AddStaffPayload, StaffResponse } from '@/types'
 
 // interface StaffContextType {
 //   updateIndex: (index: number) => void;
@@ -17,14 +17,14 @@ import { StaffResult, AddStaffPayload, StaffResponse } from "@/types"
 //   error: string | null;
 // }
 interface StaffContextType {
-  updateIndex: (index: number) => void;
-  step: (props: { staffId: string }) => JSX.Element; // <-- Update here
-  activeIndex: number;
-  staffData: StaffResult[];
-  refreshStaff: () => void;
-  mutate: (data: AddStaffPayload) => Promise<{ message: string }>;
-  loading: boolean;
-  error: string | null;
+  updateIndex: (index: number) => void
+  step: (props: { staffId: string }) => JSX.Element // <-- Update here
+  activeIndex: number
+  staffData: StaffResult[]
+  refreshStaff: () => void
+  mutate: (data: AddStaffPayload) => Promise<{ message: string }>
+  loading: boolean
+  error: string | null
 }
 
 export const StaffContext = createContext<StaffContextType>({
@@ -33,7 +33,7 @@ export const StaffContext = createContext<StaffContextType>({
   activeIndex: 0,
   staffData: [],
   refreshStaff: () => {},
-  mutate: async (data: AddStaffPayload) => ({ message: "" }),
+  mutate: async (data: AddStaffPayload) => ({ message: '' }),
   loading: false,
   error: null,
 })
@@ -53,7 +53,7 @@ const StaffContextProvider = ({ children }: { children: ReactNode }) => {
       const response: StaffResponse = await getStaffs(10, 1)
       setStaffData(response?.data?.result ?? [])
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch staff"
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch staff'
       setError(errorMessage)
     } finally {
       setLoading(false)
@@ -65,17 +65,17 @@ const StaffContextProvider = ({ children }: { children: ReactNode }) => {
   }, [refreshKey])
 
   const refreshStaff = () => {
-    setRefreshKey((prev) => prev + 1) // Trigger re-fetch
+    setRefreshKey(prev => prev + 1) // Trigger re-fetch
   }
 
   const mutate = async (data: AddStaffPayload) => {
     setLoading(true)
     try {
       const response = await addStaff(data)
-      setRefreshKey((prev) => prev + 1) // Trigger re-fetch after mutation
-      return { message: "Staff created successfully" } // Adjust based on actual API response
+      setRefreshKey(prev => prev + 1) // Trigger re-fetch after mutation
+      return { message: 'Staff created successfully' } // Adjust based on actual API response
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to add staff"
+      const errorMessage = err instanceof Error ? err.message : 'Failed to add staff'
       setError(errorMessage)
       throw err
     } finally {
@@ -88,15 +88,15 @@ const StaffContextProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const step = activeIndex < 3 ? activeIndex : 2
-  const value = { 
-    updateIndex, 
-    step: Elements[step], 
-    activeIndex, 
-    staffData, 
+  const value = {
+    updateIndex,
+    step: Elements[step],
+    activeIndex,
+    staffData,
     refreshStaff,
     mutate,
     loading,
-    error 
+    error,
   }
 
   return <StaffContext.Provider value={value}>{children}</StaffContext.Provider>

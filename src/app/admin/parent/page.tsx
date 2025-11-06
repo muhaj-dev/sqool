@@ -1,11 +1,11 @@
-import ParentList from "@/components/student/ParentList"
+import ParentList from '@/components/student/ParentList'
 
-import React from "react"
+import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <ParentList /> 
+      <ParentList />
     </div>
   )
 }

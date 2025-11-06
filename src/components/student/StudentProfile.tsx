@@ -1,28 +1,23 @@
-import React from "react";
-import { Separator } from "../ui/separator";
-import { useStudent } from "@/contexts/student-context";
+import React from 'react'
+import { Separator } from '../ui/separator'
+import { useStudent } from '@/contexts/student-context'
 // import { ISingleStudent } from "@/types"
-import { calculateAge, formatDate } from "@/utils/lib";
+import { calculateAge, formatDate } from '@/utils/lib'
 
 const StudentProfile = () => {
-  const {
-    studentId: contextStudentId,
-    studentData,
-    loading,
-    error,
-  } = useStudent();
+  const { studentId: contextStudentId, studentData, loading, error } = useStudent()
 
   if (loading) {
-    return <div>Loading student data...</div>;
+    return <div>Loading student data...</div>
   }
 
   if (error || !studentData) {
-    return <div>Error: {error || "Student data not available"}</div>;
+    return <div>Error: {error || 'Student data not available'}</div>
   }
 
-  console.log(studentData);
+  console.log(studentData)
 
-  const { firstName, lastName, gender, hobbies } = studentData;
+  const { firstName, lastName, gender, hobbies } = studentData
 
   return (
     <div className="flex flex-col gap-4">
@@ -34,20 +29,18 @@ const StudentProfile = () => {
         </div>
         <div className="capitalize flex flex-col max-w-[300px]">
           <p className="text-muted-foreground">Gender</p>
-          <p>{gender || "Not specified"}</p>
+          <p>{gender || 'Not specified'}</p>
         </div>
         <div className="capitalize flex flex-col max-w-[300px]">
           <p className="text-muted-foreground">Date of Birth</p>
           <p>
             {studentData.dateOfBirth ? (
               <>
-                {formatDate(studentData.dateOfBirth)}{" "}
-                <span className="text-muted-foreground">
-                  ({calculateAge(studentData.dateOfBirth)} y.o)
-                </span>
+                {formatDate(studentData.dateOfBirth)}{' '}
+                <span className="text-muted-foreground">({calculateAge(studentData.dateOfBirth)} y.o)</span>
               </>
             ) : (
-              "No birth date available"
+              'No birth date available'
             )}
           </p>
         </div>
@@ -79,10 +72,7 @@ const StudentProfile = () => {
           <p className="text-muted-foreground mb-2">Hobbies</p>
           <div className="flex items-center gap-4">
             {hobbies.map((hobby, index) => (
-              <p
-                key={index}
-                className="bg-[#F8F8FD] py-2 px-4 text-[#4640DE] capitalize"
-              >
+              <p key={index} className="bg-[#F8F8FD] py-2 px-4 text-[#4640DE] capitalize">
                 {hobby}
               </p>
             ))}
@@ -90,7 +80,7 @@ const StudentProfile = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default StudentProfile;
+export default StudentProfile

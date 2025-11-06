@@ -1,89 +1,75 @@
-"use client";
+'use client'
 
-import React, { PropsWithChildren, useState } from "react";
-import {
-  Calendar,
-  momentLocalizer,
-  View,
-  ToolbarProps,
-  EventProps,
-  NavigateAction,
-  SlotInfo,
-} from "react-big-calendar";
-import moment from "moment";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ChevronDown } from "lucide-react";
-import KidsDropdown from "./KidsDropdown";
+import React, { PropsWithChildren, useState } from 'react'
+import { Calendar, momentLocalizer, View, ToolbarProps, EventProps, NavigateAction, SlotInfo } from 'react-big-calendar'
+import moment from 'moment'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { ChevronDown } from 'lucide-react'
+import KidsDropdown from './KidsDropdown'
 
 // Setup the localizer for react-big-calendar
-const localizer = momentLocalizer(moment);
+const localizer = momentLocalizer(moment)
 
 interface Event {
-  id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  teacher: string;
+  id: number
+  title: string
+  start: Date
+  end: Date
+  teacher: string
 }
 
 const events: Event[] = [
   {
     id: 1,
-    title: "Physical studies class",
+    title: 'Physical studies class',
     start: new Date(2024, 1, 16, 9, 0),
     end: new Date(2024, 1, 16, 10, 20),
-    teacher: "Mrs Edon",
+    teacher: 'Mrs Edon',
   },
   {
     id: 2,
-    title: "Physical studies class",
+    title: 'Physical studies class',
     start: new Date(2024, 1, 16, 10, 30),
     end: new Date(2024, 1, 16, 11, 50),
-    teacher: "Mrs Edon",
+    teacher: 'Mrs Edon',
   },
   {
     id: 3,
-    title: "Physical studies class",
+    title: 'Physical studies class',
     start: new Date(2024, 1, 16, 12, 30),
     end: new Date(2024, 1, 16, 13, 50),
-    teacher: "Mrs Edon",
+    teacher: 'Mrs Edon',
   },
   {
     id: 4,
-    title: "Physical studies class",
+    title: 'Physical studies class',
     start: new Date(2024, 1, 16, 14, 30),
     end: new Date(2024, 1, 16, 15, 50),
-    teacher: "Mrs Edon",
+    teacher: 'Mrs Edon',
   },
-];
+]
 
-const ColoredDateCellWrapper: React.FC<PropsWithChildren<{}>> = ({
-  children,
-}) => <div style={{ backgroundColor: "white" }}>{children}</div>;
+const ColoredDateCellWrapper: React.FC<PropsWithChildren<{}>> = ({ children }) => (
+  <div style={{ backgroundColor: 'white' }}>{children}</div>
+)
 
 const CustomToolbar: React.FC<ToolbarProps<Event>> = ({ onNavigate, date }) => {
   const goToBack = () => {
-    onNavigate("PREV");
-  };
+    onNavigate('PREV')
+  }
 
   const goToNext = () => {
-    onNavigate("NEXT");
-  };
+    onNavigate('NEXT')
+  }
 
   const goToCurrent = () => {
-    onNavigate("TODAY");
-  };
+    onNavigate('TODAY')
+  }
 
   const label = () => {
-    return <span>{moment(date).format("MMMM DD YYYY")}</span>;
-  };
+    return <span>{moment(date).format('MMMM DD YYYY')}</span>
+  }
 
   return (
     <div className="flex flex-col items-start mb-4">
@@ -96,30 +82,27 @@ const CustomToolbar: React.FC<ToolbarProps<Event>> = ({ onNavigate, date }) => {
           {/* <button onClick={goToBack}>{'<'}</button>
                 <button onClick={goToCurrent}>Today</button>
                 <button onClick={goToNext}>{'>'}</button> */}
-          <span className="ml-4 mr-2">{moment(date).format("MMMM")}</span>
+          <span className="ml-4 mr-2">{moment(date).format('MMMM')}</span>
           <ChevronDown size={20} />
-          <button className="ml-4 bg-primaryColor text-white px-4 py-2 rounded">
-            Export
-          </button>
+          <button className="ml-4 bg-primary text-white px-4 py-2 rounded">Export</button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const EventComponent: React.FC<EventProps<Event>> = ({ event }) => (
   <div className="bg-purple-200 p-1 rounded text-xs">
     <div className="font-bold">{event.title}</div>
     <div>Teacher: {event.teacher}</div>
     <div>
-      {moment(event.start).format("HH:mm")} -{" "}
-      {moment(event.end).format("HH:mm")}
+      {moment(event.start).format('HH:mm')} - {moment(event.end).format('HH:mm')}
     </div>
   </div>
-);
+)
 
 const ScheduleCalendar: React.FC = () => {
-  const [date] = useState<Date>(new Date(2024, 1, 16));
+  const [date] = useState<Date>(new Date(2024, 1, 16))
 
   return (
     <div className="container mx-auto p-1 overflow-auto">
@@ -131,7 +114,7 @@ const ScheduleCalendar: React.FC = () => {
           endAccessor="end"
           defaultDate={date}
           defaultView="week"
-          views={["week"]}
+          views={['week']}
           min={new Date(2024, 1, 16, 9, 0)}
           max={new Date(2024, 1, 16, 18, 0)}
           timeslots={2}
@@ -146,7 +129,7 @@ const ScheduleCalendar: React.FC = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ScheduleCalendar;
+export default ScheduleCalendar

@@ -1,17 +1,11 @@
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
+import React from 'react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Image from 'next/image'
 
 interface UploadProps {
-  toggleTexam: () => void;
+  toggleTexam: () => void
 }
 
 export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
@@ -39,9 +33,7 @@ export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
             </SelectContent>
           </Select>
         </div>
-        <Button 
-         onClick={toggleTexam}
-        className="text-white">
+        <Button onClick={toggleTexam} className="text-white">
           View Results
         </Button>
       </div>
@@ -54,54 +46,41 @@ export const UploadTimetable: React.FC<UploadProps> = ({ toggleTexam }) => {
               <UploadIcon />
             </div>
             <h2 className="text-lg font-semibold text-center mx-auto ">
-              Drag & drop files or{" "}
-              <span className="text-primaryColor underline">Browse</span>
+              Drag & drop files or <span className="text-primary underline">Browse</span>
             </h2>
-            <p className="text-center text-[12px] mt-3 text-[#676767]">
-              Supported formates: PDF, Word, PPT, XLSX
-            </p>
+            <p className="text-center text-[12px] mt-3 text-[#676767]">Supported formates: PDF, Word, PPT, XLSX</p>
           </div>
 
           <div className="my-2 space-y-2">
-            <h3 className="text-md font-semibold text-[#676767] mx-auto ">
-              Uploading
-            </h3>
+            <h3 className="text-md font-semibold text-[#676767] mx-auto ">Uploading</h3>
 
             <div className="border-[1.5px] overflow-hidden border-[#E3E3E3] rounded-md">
               <p className="text-[12px] py-2 px-3">1st-term-2024-result.PDF</p>
-              <div className="w-[50%] h-1 bg-primaryColor" />
+              <div className="w-[50%] h-1 bg-primary" />
             </div>
           </div>
 
           <div className="my-2.5 space-y-2">
-            <h3 className="text-md font-semibold text-[#676767] mx-auto ">
-              Uploaded
-            </h3>
+            <h3 className="text-md font-semibold text-[#676767] mx-auto ">Uploaded</h3>
 
             <div className="border-[1.5px] overflow-hidden border-[#E3E3E3] rounded-md">
               <p className="text-[12px] py-2 px-3">1st-term-2024-result.PDF</p>
-              {/* <div className="w-[50%] h-1 bg-primaryColor" /> */}
+              {/* <div className="w-[50%] h-1 bg-primary" /> */}
             </div>
           </div>
 
           <Button type="submit" className=" w-full my-5 text-white">
-          UPLOAD FILES
-        </Button>
+            UPLOAD FILES
+          </Button>
         </form>
       </div>
     </div>
-  );
+  )
 }
 
 const UploadIcon = () => {
   return (
-    <svg
-      width="70"
-      height="60"
-      viewBox="0 0 70 60"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="70" height="60" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M36.6364 14.7458L36.7287 14.7733L36.7327 14.7688C37.1703 14.8481 37.6045 14.586 37.7331 14.1519C38.9047 10.2152 42.5958 7.46504 46.7082 7.46504C47.1951 7.46504 47.59 7.07016 47.59 6.5833C47.59 6.09643 47.1951 5.70156 46.7082 5.70156C41.6541 5.70156 37.4069 9.06665 36.0432 13.6493C35.904 14.1162 36.1699 14.6067 36.6364 14.7458Z"
         fill="#E5B80B"
@@ -131,5 +110,5 @@ const UploadIcon = () => {
         stroke-width="0.3"
       />
     </svg>
-  );
-};
+  )
+}

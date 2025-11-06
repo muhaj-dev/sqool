@@ -1,17 +1,9 @@
-"use client"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import User from "../../../../assets/User.png"
-import Image, { StaticImageData } from "next/image"
-import { MoveDown } from "lucide-react"
-import { useState } from "react"
+'use client'
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import User from '../../../../assets/User.png'
+import Image, { StaticImageData } from 'next/image'
+import { MoveDown } from 'lucide-react'
+import { useState } from 'react'
 
 type Student = {
   name: string
@@ -27,59 +19,59 @@ interface TableRowProps {
 }
 const payments: TableRowProps[] = [
   {
-    id: "INV001",
+    id: 'INV001',
     student: {
-      name: "Melitensis Roselia",
-      class: "SS3 B",
+      name: 'Melitensis Roselia',
+      class: 'SS3 B',
       photo: User,
     },
-    feeType: "First term",
-    feeAmount: "25,000",
-    status: "Outstanding",
+    feeType: 'First term',
+    feeAmount: '25,000',
+    status: 'Outstanding',
   },
   {
-    id: "INV002",
+    id: 'INV002',
     student: {
-      name: "Barakat Johnson",
-      class: "SS3 B",
+      name: 'Barakat Johnson',
+      class: 'SS3 B',
       photo: User,
     },
-    feeType: "First term",
-    feeAmount: "25,000",
-    status: "Outstanding",
+    feeType: 'First term',
+    feeAmount: '25,000',
+    status: 'Outstanding',
   },
   {
-    id: "INV003",
+    id: 'INV003',
     student: {
-      name: "Zaphira Condolense",
-      class: "SS3 B",
+      name: 'Zaphira Condolense',
+      class: 'SS3 B',
       photo: User,
     },
-    feeType: "First term",
-    feeAmount: "25,000",
-    status: "Outstanding",
+    feeType: 'First term',
+    feeAmount: '25,000',
+    status: 'Outstanding',
   },
   {
-    id: "INV004",
+    id: 'INV004',
     student: {
-      name: "Kyne Wessem",
-      class: "SS3 B",
+      name: 'Kyne Wessem',
+      class: 'SS3 B',
       photo: User,
     },
-    feeType: "First term",
-    feeAmount: "25,000",
-    status: "Outstanding",
+    feeType: 'First term',
+    feeAmount: '25,000',
+    status: 'Outstanding',
   },
   {
-    id: "INV005",
+    id: 'INV005',
     student: {
-      name: "Adedas Blessed",
-      class: "SS3 B",
+      name: 'Adedas Blessed',
+      class: 'SS3 B',
       photo: User,
     },
-    feeType: "First term",
-    feeAmount: "25,000",
-    status: "Outstanding",
+    feeType: 'First term',
+    feeAmount: '25,000',
+    status: 'Outstanding',
   },
 ]
 
@@ -93,25 +85,18 @@ export function FeeTable() {
     //   return 0
 
     // Sorting the items based on the 'name' property
-    const sortedData = [...data]
-      .slice()
-      .sort((a, b) => a.student.name.localeCompare(b.student.name))
+    const sortedData = [...data].slice().sort((a, b) => a.student.name.localeCompare(b.student.name))
     console.log(sortData)
     setData(sortedData)
   }
 
   return (
     <Table>
-      <TableCaption className="text-left text-lg text-black">
-        Outstanding Fee
-      </TableCaption>
+      <TableCaption className="text-left text-lg text-black">Outstanding Fee</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead
-            className="flex items-center cursor-pointer"
-            onClick={() => sortData("id")}
-          >
+          <TableHead className="flex items-center cursor-pointer" onClick={() => sortData('id')}>
             <p>Name</p> <MoveDown className="h-4" />
           </TableHead>
           <TableHead>Fee Type</TableHead>
@@ -136,9 +121,7 @@ export function FeeTable() {
             <TableCell>{person.feeType}</TableCell>
             <TableCell>{person.feeAmount}</TableCell>
             <TableCell className="text-right text-[#FC3400] ">
-              <span className="bg-[rgba(252,52,0,0.10)] py-[10px] px-6 rounded-md">
-                {person.status}
-              </span>
+              <span className="bg-[rgba(252,52,0,0.10)] py-[10px] px-6 rounded-md">{person.status}</span>
             </TableCell>
           </TableRow>
         ))}

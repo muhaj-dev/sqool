@@ -1,51 +1,38 @@
 // src/app/admin/student/add/Components/AddStudentForm.tsx
-'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { toast } from '@/components/ui/use-toast';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { addStudent, searchParents, getClasses, addParent } from '@/utils/api';
+'use client'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { toast } from '@/components/ui/use-toast'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
+import { addStudent, searchParents, getClasses, addParent } from '@/utils/api'
 
 // Define the payload type for addStudent based on your API
 interface AddStudentPayload {
-  firstName: string;
-  lastName: string;
-  gender: 'male' | 'female';
-  class: string;
-  parent: string;
-  language: string;
-  dateOfBirth: string;
-  address: string;
-  aboutMe: string;
-  hobbies: string[];
-  enrolmentDate: string;
+  firstName: string
+  lastName: string
+  gender: 'male' | 'female'
+  class: string
+  parent: string
+  language: string
+  dateOfBirth: string
+  address: string
+  aboutMe: string
+  hobbies: string[]
+  enrolmentDate: string
 }
 
 // Define the parent type for the dropdown based on the new API response
 interface ParentOption {
-  parentId: string;
-  name: string;
-  email?: string;
-  occupation: string;
+  parentId: string
+  name: string
+  email?: string
+  occupation: string
 }
 
 // Form validation schema - SIMPLIFIED
@@ -53,8 +40,8 @@ const FormSchema = z.object({
   // Student fields
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters.' }),
   lastName: z.string().min(2, { message: 'Last name must be at least 2 characters.' }),
-  gender: z.enum(['male', 'female'], { 
-    required_error: 'Gender is required.' 
+  gender: z.enum(['male', 'female'], {
+    required_error: 'Gender is required.',
   }),
   class: z.string().min(1, { message: 'Class is required.' }),
   language: z.string().min(1, { message: 'Language is required.' }),
@@ -63,21 +50,21 @@ const FormSchema = z.object({
   aboutMe: z.string().min(1, { message: 'About me is required.' }),
   hobbies: z.string().min(1, { message: 'Hobbies are required.' }),
   enrolmentDate: z.string().min(1, { message: 'Enrolment date is required.' }),
-  
+
   // Parent selection - this is the only parent field needed when selecting existing parent
   parentId: z.string().min(1, { message: 'Please select or create a parent.' }),
-  
+
   // New parent fields (optional - only needed if creating new parent)
   newParentFirstName: z.string().optional(),
   newParentLastName: z.string().optional(),
   newParentEmail: z.string().email({ message: 'Invalid email address.' }).optional().or(z.literal('')),
   newParentOccupation: z.string().optional(),
-});
+})
 
-type FormData = z.infer<typeof FormSchema>;
+type FormData = z.infer<typeof FormSchema>
 
 export default function AddStudentForm() {
-  const router = useRouter();
+  const router = useRouter()
   const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -97,145 +84,145 @@ export default function AddStudentForm() {
       newParentEmail: '',
       newParentOccupation: '',
     },
-  });
+  })
 
-  const [parents, setParents] = useState<ParentOption[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [classes, setClasses] = useState<any[]>([]);
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [classLoading, setClassLoading] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [parents, setParents] = useState<ParentOption[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [classes, setClasses] = useState<any[]>([])
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [classLoading, setClassLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Watch form values
-  const formValues = form.watch();
-  const selectedParentId = form.watch('parentId');
+  const formValues = form.watch()
+  const selectedParentId = form.watch('parentId')
 
   // Debug: Log form values and validation state
   useEffect(() => {
-    console.log('Form values:', formValues);
-    console.log('Form errors:', form.formState.errors);
-    console.log('Is form valid:', form.formState.isValid);
-    console.log('Selected parent ID:', selectedParentId);
-  }, [formValues, form.formState.errors, form.formState.isValid, selectedParentId]);
+    console.log('Form values:', formValues)
+    console.log('Form errors:', form.formState.errors)
+    console.log('Is form valid:', form.formState.isValid)
+    console.log('Selected parent ID:', selectedParentId)
+  }, [formValues, form.formState.errors, form.formState.isValid, selectedParentId])
 
   useEffect(() => {
     const fetchClasses = async () => {
-      setClassLoading(true);
+      setClassLoading(true)
       try {
-        const response = await getClasses('1', '40');
-        setClasses(response.data.result);
+        const response = await getClasses('1', '40')
+        setClasses(response.data.result)
       } catch (err) {
-        console.error('Failed to fetch classes:', err);
+        console.error('Failed to fetch classes:', err)
         toast({
           title: 'Error',
           description: 'Failed to load classes',
           variant: 'destructive',
-        });
+        })
       } finally {
-        setClassLoading(false);
+        setClassLoading(false)
       }
-    };
-    fetchClasses();
-  }, []);
+    }
+    fetchClasses()
+  }, [])
 
   useEffect(() => {
     const fetchParents = async () => {
       if (!searchQuery.trim()) {
-        setParents([]);
-        return;
+        setParents([])
+        return
       }
-      
-      setSearchLoading(true);
+
+      setSearchLoading(true)
       try {
-        const response = await searchParents(searchQuery, 1);
-        console.log('Parent search response:', response);
-        
+        const response = await searchParents(searchQuery, 1)
+        console.log('Parent search response:', response)
+
         // Map the API response to ParentOption
         const parentData: ParentOption[] = response.data.result.map((parent: any) => ({
           parentId: parent._id, // Use _id as parentId
           name: `${parent.user.firstName} ${parent.user.lastName}`,
           email: parent.user.email,
           occupation: parent.occupation || 'Not specified',
-        }));
-        
-        setParents(parentData);
-        console.log('Mapped parent data:', parentData);
+        }))
+
+        setParents(parentData)
+        console.log('Mapped parent data:', parentData)
       } catch (err) {
-        console.error('Failed to search parents:', err);
+        console.error('Failed to search parents:', err)
         toast({
           title: 'Search Error',
           description: 'Failed to search for parents',
           variant: 'destructive',
-        });
-        setParents([]);
+        })
+        setParents([])
       } finally {
-        setSearchLoading(false);
+        setSearchLoading(false)
       }
-    };
+    }
 
-    const timeoutId = setTimeout(fetchParents, 500);
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+    const timeoutId = setTimeout(fetchParents, 500)
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery])
 
   const handleReset = () => {
-    form.reset();
-    setSearchQuery('');
-    setParents([]);
-  };
+    form.reset()
+    setSearchQuery('')
+    setParents([])
+  }
 
   const handleCancel = () => {
-    router.push('/admin/student');
-  };
+    router.push('/admin/student')
+  }
 
   const onSubmit = async (data: FormData) => {
-    console.log('Form submitted with data:', data);
-    console.log('Form validation state:', form.formState.isValid);
-    
-    setIsSubmitting(true);
-    
+    console.log('Form submitted with data:', data)
+    console.log('Form validation state:', form.formState.isValid)
+
+    setIsSubmitting(true)
+
     try {
-      let parentId = data.parentId;
+      let parentId = data.parentId
 
       // If parentId starts with "new_", it means we need to create a new parent
       if (parentId.startsWith('new_')) {
-        console.log('Creating new parent...');
-        
+        console.log('Creating new parent...')
+
         const parentPayload = {
           firstName: data.newParentFirstName!,
           lastName: data.newParentLastName!,
           occupation: data.newParentOccupation!,
           email: data.newParentEmail!,
-        };
+        }
 
-        console.log('Parent payload:', parentPayload);
+        console.log('Parent payload:', parentPayload)
 
         try {
-          const newParentResponse = await addParent(parentPayload);
-          console.log('Parent creation response:', newParentResponse);
-          
-          const parentId = newParentResponse.data?.parentId;
-          
+          const newParentResponse = await addParent(parentPayload)
+          console.log('Parent creation response:', newParentResponse)
+
+          const parentId = newParentResponse.data?.parentId
+
           if (!parentId) {
-            throw new Error('Failed to get parent ID from response');
+            throw new Error('Failed to get parent ID from response')
           }
-          
-          console.log('New parent created with ID:', parentId);
-          
+
+          console.log('New parent created with ID:', parentId)
+
           toast({
             title: 'Parent Created',
             description: 'New parent account created successfully',
-          });
+          })
         } catch (parentError) {
-          console.error('Error creating parent:', parentError);
+          console.error('Error creating parent:', parentError)
           toast({
             title: 'Parent Creation Failed',
             description: 'Failed to create parent account',
             variant: 'destructive',
-          });
-          return;
+          })
+          return
         }
       } else {
-        console.log('Using existing parent ID:', parentId);
+        console.log('Using existing parent ID:', parentId)
       }
 
       // Prepare student data
@@ -249,67 +236,69 @@ export default function AddStudentForm() {
         dateOfBirth: data.dateOfBirth,
         address: data.address,
         aboutMe: data.aboutMe,
-        hobbies: data.hobbies.split(',').map((hobby) => hobby.trim()).filter(hobby => hobby.length > 0),
+        hobbies: data.hobbies
+          .split(',')
+          .map(hobby => hobby.trim())
+          .filter(hobby => hobby.length > 0),
         enrolmentDate: data.enrolmentDate,
-      };
+      }
 
-      console.log('Submitting student data:', JSON.stringify(studentData, null, 2));
+      console.log('Submitting student data:', JSON.stringify(studentData, null, 2))
 
       // Add student
       try {
         // const response = await addStudent(studentData);
-        const response = await addStudent(studentData as any);
-        console.log('Student creation response:', response);
-        
+        const response = await addStudent(studentData as any)
+        console.log('Student creation response:', response)
+
         toast({
           title: 'Success!',
           description: response?.message || 'Student added successfully',
-        });
-        
-        handleReset();
-        router.push('/admin/student');
+        })
+
+        handleReset()
+        router.push('/admin/student')
       } catch (studentError) {
-        console.error('Error creating student:', studentError);
+        console.error('Error creating student:', studentError)
         toast({
           title: 'Student Creation Failed',
           description: studentError instanceof Error ? studentError?.message : 'Failed to create student',
           variant: 'destructive',
-        });
+        })
       }
-      
     } catch (error) {
-      console.error('Unexpected error in form submission:', error);
+      console.error('Unexpected error in form submission:', error)
       toast({
         title: 'Error',
         description: 'An unexpected error occurred',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const handleParentSelect = (parentId: string) => {
-    console.log('Parent selected:', parentId);
-    form.setValue('parentId', parentId, { shouldValidate: true });
+    console.log('Parent selected:', parentId)
+    form.setValue('parentId', parentId, { shouldValidate: true })
     // Clear new parent fields when selecting existing parent
     if (parentId && !parentId.startsWith('new_')) {
-      form.setValue('newParentFirstName', '');
-      form.setValue('newParentLastName', '');
-      form.setValue('newParentEmail', '');
-      form.setValue('newParentOccupation', '');
+      form.setValue('newParentFirstName', '')
+      form.setValue('newParentLastName', '')
+      form.setValue('newParentEmail', '')
+      form.setValue('newParentOccupation', '')
     }
-  };
+  }
 
   const handleCreateNewParent = () => {
     // Set a special value to indicate new parent creation
-    form.setValue('parentId', 'new_parent', { shouldValidate: true });
-    setSearchQuery('');
-    setParents([]);
-  };
+    form.setValue('parentId', 'new_parent', { shouldValidate: true })
+    setSearchQuery('')
+    setParents([])
+  }
 
   // Check if form is ready for submission
-  const isFormValid = form.formState.isValid;
+  const isFormValid = form.formState.isValid
 
   return (
     <Form {...form}>
@@ -317,9 +306,8 @@ export default function AddStudentForm() {
         {/* Debug info - remove in production */}
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
           <p className="text-sm text-yellow-800">
-            <strong>Debug Info:</strong> Form valid: {form.formState.isValid ? 'Yes' : 'No'}, 
-            Parent selected: {selectedParentId ? 'Yes' : 'No'}, 
-            Ready to submit: {isFormValid ? 'Yes' : 'No'}
+            <strong>Debug Info:</strong> Form valid: {form.formState.isValid ? 'Yes' : 'No'}, Parent selected:{' '}
+            {selectedParentId ? 'Yes' : 'No'}, Ready to submit: {isFormValid ? 'Yes' : 'No'}
           </p>
         </div>
 
@@ -394,18 +382,14 @@ export default function AddStudentForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Class *</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                      disabled={classLoading}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={classLoading}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={classLoading ? "Loading classes..." : "Select a class"} />
+                          <SelectValue placeholder={classLoading ? 'Loading classes...' : 'Select a class'} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {classes.map((cls) => (
+                        {classes.map(cls => (
                           <SelectItem key={cls._id} value={cls._id}>
                             {cls.className}
                           </SelectItem>
@@ -449,15 +433,10 @@ export default function AddStudentForm() {
                   <FormItem>
                     <FormLabel>Hobbies *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="reading, swimming, drawing" 
-                        {...field} 
-                      />
+                      <Input placeholder="reading, swimming, drawing" {...field} />
                     </FormControl>
                     <FormMessage />
-                    <p className="text-xs text-muted-foreground">
-                      Separate multiple hobbies with commas
-                    </p>
+                    <p className="text-xs text-muted-foreground">Separate multiple hobbies with commas</p>
                   </FormItem>
                 )}
               />
@@ -501,7 +480,7 @@ export default function AddStudentForm() {
           {/* Parent Information */}
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="font-medium mb-4 text-lg">Parent Information</h3>
-            
+
             {/* Search Existing Parent */}
             <div className="mb-6">
               <FormField
@@ -516,7 +495,7 @@ export default function AddStudentForm() {
                           <Input
                             placeholder="Search by parent name..."
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={e => setSearchQuery(e.target.value)}
                             disabled={!!selectedParentId}
                             className="flex-1"
                           />
@@ -529,24 +508,20 @@ export default function AddStudentForm() {
                             Create New
                           </Button>
                         </div>
-                        
-                        {searchLoading && (
-                          <p className="text-sm text-muted-foreground">Searching parents...</p>
-                        )}
-                        
+
+                        {searchLoading && <p className="text-sm text-muted-foreground">Searching parents...</p>}
+
                         {parents.length > 0 && !selectedParentId && (
                           <Select onValueChange={handleParentSelect} value={field.value}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select a parent from results" />
                             </SelectTrigger>
                             <SelectContent>
-                              {parents.map((parent) => (
+                              {parents.map(parent => (
                                 <SelectItem key={parent.parentId} value={parent.parentId}>
                                   <div className="flex flex-col">
                                     <span className="font-medium">{parent.name}</span>
-                                    <span className="text-xs text-muted-foreground">
-                                      {parent.occupation}
-                                    </span>
+                                    <span className="text-xs text-muted-foreground">{parent.occupation}</span>
                                   </div>
                                 </SelectItem>
                               ))}
@@ -564,8 +539,8 @@ export default function AddStudentForm() {
                               variant="link"
                               className="p-0 h-auto text-sm text-green-600"
                               onClick={() => {
-                                form.setValue('parentId', '');
-                                setSearchQuery('');
+                                form.setValue('parentId', '')
+                                setSearchQuery('')
                               }}
                             >
                               Change parent
@@ -592,10 +567,7 @@ export default function AddStudentForm() {
                       <FormItem>
                         <FormLabel>First Name *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="First Name" 
-                            {...field} 
-                          />
+                          <Input placeholder="First Name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -608,10 +580,7 @@ export default function AddStudentForm() {
                       <FormItem>
                         <FormLabel>Last Name *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Last Name" 
-                            {...field}
-                          />
+                          <Input placeholder="Last Name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -625,10 +594,7 @@ export default function AddStudentForm() {
                         <FormItem>
                           <FormLabel>Email *</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="john.doe@example.com" 
-                              {...field}
-                            />
+                            <Input placeholder="john.doe@example.com" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -643,10 +609,7 @@ export default function AddStudentForm() {
                         <FormItem>
                           <FormLabel>Occupation *</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="Engineer, Teacher, etc." 
-                              {...field}
-                            />
+                            <Input placeholder="Engineer, Teacher, etc." {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -661,31 +624,21 @@ export default function AddStudentForm() {
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-4 pt-6 border-t">
-          <Button
-            type="button"
-            onClick={handleCancel}
-            variant="outline"
-            className="px-6 py-2"
-          >
+          <Button type="button" onClick={handleCancel} variant="outline" className="px-6 py-2">
             Cancel
           </Button>
-          <Button
-            type="button"
-            onClick={handleReset}
-            variant="outline"
-            className="px-6 py-2"
-          >
+          <Button type="button" onClick={handleReset} variant="outline" className="px-6 py-2">
             Reset
           </Button>
           <Button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className="px-6 py-2 bg-primaryColor text-white hover:bg-primaryColor/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-primary text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Saving...' : 'Save Student'}
           </Button>
         </div>
       </form>
     </Form>
-  );
+  )
 }

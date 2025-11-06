@@ -1,13 +1,7 @@
-import { color } from "framer-motion";
+import { color } from 'framer-motion'
 
 const PersonIcon = ({ color }: { color?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
     <g clip-path="url(#clip0_381_3447)">
       <path
         d="M13.17 4L18 8.83V20H6V4H13.17ZM14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14ZM16 17.43C16 16.62 15.52 15.9 14.78 15.58C13.93 15.21 12.99 15 12 15C11.01 15 10.07 15.21 9.22 15.58C8.48 15.9 8 16.62 8 17.43V18H16V17.43Z"
@@ -20,16 +14,10 @@ const PersonIcon = ({ color }: { color?: string }) => (
       </clipPath>
     </defs>
   </svg>
-);
+)
 
 const StudentIcon = ({ color }: { color?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
     <g clip-path="url(#clip0_381_3441)">
       <path
         d="M21 7.28V5C21 3.9 20.1 3 19 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V16.72C21.59 16.37 22 15.74 22 15V9C22 8.26 21.59 7.63 21 7.28ZM20 9V15H13V9H20ZM5 19V5H19V7H13C11.9 7 11 7.9 11 9V15C11 16.1 11.9 17 13 17H19V19H5Z"
@@ -46,16 +34,10 @@ const StudentIcon = ({ color }: { color?: string }) => (
       </clipPath>
     </defs>
   </svg>
-);
+)
 
 const DashboardIcon = ({ color }: { color?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="28"
-    height="28"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
     <g clip-path="url(#clip0_381_3429)">
       <path
         d="M6.5 10H4.5V17H6.5V10ZM12.5 10H10.5V17H12.5V10ZM21 19H2V21H21V19ZM18.5 10H16.5V17H18.5V10ZM11.5 3.26L16.71 6H6.29L11.5 3.26ZM11.5 1L2 6V8H21V6L11.5 1Z"
@@ -68,15 +50,9 @@ const DashboardIcon = ({ color }: { color?: string }) => (
       </clipPath>
     </defs>
   </svg>
-);
+)
 const ClassIcon = ({ color }: { color?: string }) => (
-  <svg
-    width="30"
-    height="30"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="8" r="2.5" stroke={`${color}`} stroke-linecap="round" />
     <path
       d="M13.7679 6.5C13.9657 6.15743 14.2607 5.88121 14.6154 5.70625C14.9702 5.5313 15.3689 5.46548 15.7611 5.51711C16.1532 5.56874 16.5213 5.73551 16.8187 5.99632C17.1161 6.25713 17.3295 6.60028 17.4319 6.98236C17.5342 7.36445 17.521 7.76831 17.3939 8.14288C17.2667 8.51745 17.0313 8.8459 16.7175 9.08671C16.4037 9.32751 16.0255 9.46985 15.6308 9.49572C15.2361 9.52159 14.8426 9.42983 14.5 9.23205"
@@ -100,16 +76,10 @@ const ClassIcon = ({ color }: { color?: string }) => (
       fill={`${color}`}
     />
   </svg>
-);
+)
 
 const NoticeboardIcon = ({ color }: { color?: string }) => (
-  <svg
-    width="30"
-    height="30"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M17.5 19.0052V4.99481C17.5 4.35586 16.7879 3.97474 16.2562 4.32917L14.9867 5.17551C14.6969 5.36876 14.3153 5.3522 14.0432 5.13457L12.4998 3.8998C12.2076 3.66606 11.7924 3.66607 11.5002 3.89981L9.95679 5.13457C9.68475 5.3522 9.30314 5.36876 9.01327 5.17551L7.74376 4.32917C7.21212 3.97474 6.5 4.35586 6.5 4.99481V19.0052C6.5 19.6441 7.21212 20.0253 7.74376 19.6708L9.01327 18.8245C9.30314 18.6312 9.68475 18.6478 9.95679 18.8654L11.5002 20.1002C11.7924 20.3339 12.2076 20.3339 12.4998 20.1002L14.0432 18.8654C14.3153 18.6478 14.6969 18.6312 14.9867 18.8245L16.2562 19.6708C16.7879 20.0253 17.5 19.6441 17.5 19.0052Z"
       stroke={`${color}`}
@@ -118,16 +88,10 @@ const NoticeboardIcon = ({ color }: { color?: string }) => (
     <path d="M9.5 12H14.5" stroke={`${color}`} stroke-linecap="round" />
     <path d="M9.5 14.5H14.5" stroke={`${color}`} stroke-linecap="round" />
   </svg>
-);
+)
 
 const ThreeDotsIcon = ({ color }: { color?: string }) => (
-  <svg
-    width="25"
-    height="24"
-    viewBox="0 0 25 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_1069_24605)">
       <path
         d="M5.06445 13C5.61674 13 6.06445 12.5523 6.06445 12C6.06445 11.4477 5.61674 11 5.06445 11C4.51217 11 4.06445 11.4477 4.06445 12C4.06445 12.5523 4.51217 13 5.06445 13Z"
@@ -153,28 +117,17 @@ const ThreeDotsIcon = ({ color }: { color?: string }) => (
     </g>
     <defs>
       <clipPath id="clip0_1069_24605">
-        <rect
-          width="24"
-          height="24"
-          fill="white"
-          transform="translate(0.0644531)"
-        />
+        <rect width="24" height="24" fill="white" transform="translate(0.0644531)" />
       </clipPath>
     </defs>
   </svg>
-);
+)
 
 const GreaterThan = ({ color }: { color?: string }) => (
-  <svg
-    width="8"
-    height="12"
-    viewBox="0 0 8 12"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M1.25 0.5L6.75 6L1.25 11.5" stroke="#E5B80B" />
   </svg>
-);
+)
 
 const ExamIcon = ({ color, size }: { color?: string; size?: number }) => (
   <svg
@@ -183,7 +136,7 @@ const ExamIcon = ({ color, size }: { color?: string; size?: number }) => (
     viewBox="0 0 48 48"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    stroke={color ?? "#515B6F"}
+    stroke={color ?? '#515B6F'}
   >
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g
@@ -194,37 +147,23 @@ const ExamIcon = ({ color, size }: { color?: string; size?: number }) => (
       stroke-width="0.8640000000000001"
     ></g>
     <g id="SVGRepo_iconCarrier">
-      {" "}
-      <path d="M10 29V26H13V29H10Z" fill="#fff"></path>{" "}
+      {' '}
+      <path d="M10 29V26H13V29H10Z" fill="#fff"></path>{' '}
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
         d="M32 44H8C5.79086 44 4 42.2091 4 40V8C4 5.79086 5.79086 4 8 4H32C34.2091 4 36 5.79086 36 8V40C36 42.2091 34.2091 44 32 44ZM18 13C18 12.4477 18.4477 12 19 12H31C31.5523 12 32 12.4477 32 13C32 13.5523 31.5523 14 31 14H19C18.4477 14 18 13.5523 18 13ZM19 16C18.4477 16 18 16.4477 18 17C18 17.5523 18.4477 18 19 18H31C31.5523 18 32 17.5523 32 17C32 16.4477 31.5523 16 31 16H19ZM15.7071 12.2929C16.0976 12.6834 16.0976 13.3166 15.7071 13.7071L11 18.4142L8.29289 15.7071C7.90237 15.3166 7.90237 14.6834 8.29289 14.2929C8.68342 13.9024 9.31658 13.9024 9.70711 14.2929L11 15.5858L14.2929 12.2929C14.6834 11.9024 15.3166 11.9024 15.7071 12.2929ZM19 24C18.4477 24 18 24.4477 18 25C18 25.5523 18.4477 26 19 26H31C31.5523 26 32 25.5523 32 25C32 24.4477 31.5523 24 31 24H19ZM18 29C18 28.4477 18.4477 28 19 28H31C31.5523 28 32 28.4477 32 29C32 29.5523 31.5523 30 31 30H19C18.4477 30 18 29.5523 18 29ZM14 24H9C8.44772 24 8 24.4477 8 25V30C8 30.5523 8.44772 31 9 31H14C14.5523 31 15 30.5523 15 30V25C15 24.4477 14.5523 24 14 24Z"
         fill="#fff"
-      ></path>{" "}
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M44 40L41 44L38 40V22H44V40Z"
-        fill="#fff"
-      ></path>{" "}
+      ></path>{' '}
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M44 40L41 44L38 40V22H44V40Z" fill="#fff"></path>{' '}
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
         d="M40 15H42C43.1046 15 44 15.8954 44 17V21H38V17C38 15.8954 38.8954 15 40 15Z"
         fill="#fff"
-      ></path>{" "}
+      ></path>{' '}
     </g>
   </svg>
-);
+)
 
-export {
-  ExamIcon,
-  GreaterThan,
-  ThreeDotsIcon,
-  PersonIcon,
-  StudentIcon,
-  DashboardIcon,
-  ClassIcon,
-  NoticeboardIcon,
-};
+export { ExamIcon, GreaterThan, ThreeDotsIcon, PersonIcon, StudentIcon, DashboardIcon, ClassIcon, NoticeboardIcon }

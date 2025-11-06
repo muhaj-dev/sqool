@@ -1,23 +1,14 @@
-import { MoveLeft } from "lucide-react";
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Link from "next/link";
-import { GreaterThan } from "@/utils/icon";
+import { MoveLeft } from 'lucide-react'
+import React from 'react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Link from 'next/link'
+import { GreaterThan } from '@/utils/icon'
 
 const Studentbar = () => {
   return (
     <>
       <div className="flex items-center justify-between my-4  ">
-        <div
-       
-          className="space-y-2 cursor-pointer hover:bg-slate-100 rounded-md"
-        >
+        <div className="space-y-2 cursor-pointer hover:bg-slate-100 rounded-md">
           <h2 className="text-2xl font-semibold">Student</h2>
           <div className="flex items-center gap-3 text-[#84818A] text-sm">
             Home
@@ -37,7 +28,7 @@ const Studentbar = () => {
         </Select>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Studentbar;
+export default Studentbar

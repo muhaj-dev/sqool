@@ -1,22 +1,10 @@
 'use client'
 
-import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar, Clock, Plus, Edit, Trash2 } from "lucide-react";
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Calendar, Clock, Plus, Edit, Trash2 } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -24,85 +12,85 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createClassSchedule, getClassSchedule, updateClassSchedule, deleteClassSchedule } from "@/utils/api";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { createClassSchedule, getClassSchedule, updateClassSchedule, deleteClassSchedule } from '@/utils/api'
 
-const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 interface ClassSchedulesProps {
-  classData: any;
+  classData: any
 }
 
 interface SchedulePeriod {
-  _id: string;
-  day: string;
+  _id: string
+  day: string
   subject: {
-    _id: string;
-    name: string;
-  };
+    _id: string
+    name: string
+  }
   teacher: {
-    _id: string;
+    _id: string
     userId: {
-      firstName: string;
-      lastName: string;
-    };
-  };
-  startTime: string;
-  endTime: string;
-  room?: string;
+      firstName: string
+      lastName: string
+    }
+  }
+  startTime: string
+  endTime: string
+  room?: string
 }
 
 export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
-  const [selectedWeek, setSelectedWeek] = useState("current");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [schedules, setSchedules] = useState<SchedulePeriod[]>([]);
-  const [loadingSchedules, setLoadingSchedules] = useState(true);
-  const [editingSchedule, setEditingSchedule] = useState<SchedulePeriod | null>(null);
-  const [deletingSchedule, setDeletingSchedule] = useState<SchedulePeriod | null>(null);
-  const [deleting, setDeleting] = useState(false);
+  const [selectedWeek, setSelectedWeek] = useState('current')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [schedules, setSchedules] = useState<SchedulePeriod[]>([])
+  const [loadingSchedules, setLoadingSchedules] = useState(true)
+  const [editingSchedule, setEditingSchedule] = useState<SchedulePeriod | null>(null)
+  const [deletingSchedule, setDeletingSchedule] = useState<SchedulePeriod | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   // Form state for new/edited schedule
   const [scheduleForm, setScheduleForm] = useState({
-    dayOfWeek: "",
-    startTime: "",
-    endTime: "",
+    dayOfWeek: '',
+    startTime: '',
+    endTime: '',
     // room: "",
-    subject: "",
-    teacher: "",
-  });
+    subject: '',
+    teacher: '',
+  })
 
-  const subjects = classData?.subjects || [];
+  const subjects = classData?.subjects || []
   const teachers =
     classData?.tutors?.map((t: any) => ({
       id: t.teacher?._id,
       name: `${t.teacher?.userId?.firstName} ${t.teacher?.userId?.lastName}`,
-    })) || [];
+    })) || []
 
   // Fetch schedules on component mount
   useEffect(() => {
-    fetchSchedules();
-  }, [classData]);
+    fetchSchedules()
+  }, [classData])
 
   const fetchSchedules = async () => {
-    if (!classData?._id) return;
-    
-    setLoadingSchedules(true);
+    if (!classData?._id) return
+
+    setLoadingSchedules(true)
     try {
-      const response = await getClassSchedule(classData._id);
-      setSchedules(response.data || []);
+      const response = await getClassSchedule(classData._id)
+      setSchedules(response.data || [])
     } catch (error: any) {
-      console.error("Failed to fetch schedules:", error);
+      console.error('Failed to fetch schedules:', error)
     } finally {
-      setLoadingSchedules(false);
+      setLoadingSchedules(false)
     }
-  };
+  }
 
   const openEditModal = (schedule: SchedulePeriod) => {
-    setEditingSchedule(schedule);
+    setEditingSchedule(schedule)
     setScheduleForm({
       dayOfWeek: schedule.day,
       startTime: formatTimeForInput(schedule.startTime),
@@ -110,64 +98,70 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
       // room: schedule.room || "",
       subject: schedule.subject._id,
       teacher: schedule.teacher._id,
-    });
-    setModalOpen(true);
-  };
+    })
+    setModalOpen(true)
+  }
 
   const openDeleteModal = (schedule: SchedulePeriod) => {
-    setDeletingSchedule(schedule);
-    setDeleteModalOpen(true);
-  };
+    setDeletingSchedule(schedule)
+    setDeleteModalOpen(true)
+  }
 
   const closeModal = () => {
-    setModalOpen(false);
-    setEditingSchedule(null);
+    setModalOpen(false)
+    setEditingSchedule(null)
     setScheduleForm({
-      dayOfWeek: "",
-      startTime: "",
-      endTime: "",
+      dayOfWeek: '',
+      startTime: '',
+      endTime: '',
       // room: "",
-      subject: "",
-      teacher: "",
-    });
-  };
+      subject: '',
+      teacher: '',
+    })
+  }
 
   const closeDeleteModal = () => {
-    setDeleteModalOpen(false);
-    setDeletingSchedule(null);
-  };
+    setDeleteModalOpen(false)
+    setDeletingSchedule(null)
+  }
 
   // Group schedules by day
-  const groupedSchedules = schedules.reduce((acc, schedule) => {
-    const day = schedule.day;
-    if (!acc[day]) {
-      acc[day] = [];
-    }
-    acc[day].push(schedule);
-    return acc;
-  }, {} as Record<string, SchedulePeriod[]>);
+  const groupedSchedules = schedules.reduce(
+    (acc, schedule) => {
+      const day = schedule.day
+      if (!acc[day]) {
+        acc[day] = []
+      }
+      acc[day].push(schedule)
+      return acc
+    },
+    {} as Record<string, SchedulePeriod[]>,
+  )
 
   // Ensure all week days are present in the grouped schedules
-  const weeklySchedule = weekDays.reduce((acc, day) => {
-    acc[day] = groupedSchedules[day] || [];
-    return acc;
-  }, {} as Record<string, SchedulePeriod[]>);
+  const weeklySchedule = weekDays.reduce(
+    (acc, day) => {
+      acc[day] = groupedSchedules[day] || []
+      return acc
+    },
+    {} as Record<string, SchedulePeriod[]>,
+  )
 
   function toISOTime(time: string) {
-    const [hours, minutes] = time.split(":");
-    const date = new Date();
-    date.setHours(Number(hours), Number(minutes), 0, 0);
-    return date.toISOString();
+    const [hours, minutes] = time.split(':')
+    const date = new Date()
+    date.setHours(Number(hours), Number(minutes), 0, 0)
+    return date.toISOString()
   }
 
   function formatTime(isoTime: string) {
-    const date = new Date(isoTime);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const date = new Date(isoTime)
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
   function formatTimeForInput(isoTime: string) {
-    const date = new Date(isoTime);
-    return date.toTimeString().slice(0, 5);
+    const date = new Date(isoTime)
+    return date.toTimeString().slice(0, 5)
   }
 
   const handleSubmitSchedule = async () => {
@@ -178,10 +172,10 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
       !scheduleForm.subject ||
       !scheduleForm.teacher
     ) {
-      return;
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
     try {
       if (editingSchedule) {
         // Update existing schedule - only send required fields
@@ -191,8 +185,8 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
           teacher: scheduleForm.teacher,
           startTime: toISOTime(scheduleForm.startTime),
           endTime: toISOTime(scheduleForm.endTime),
-          id: editingSchedule._id
-        });
+          id: editingSchedule._id,
+        })
       } else {
         // Create new schedule - send all required fields including class ID
         await createClassSchedule({
@@ -203,40 +197,39 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
           startTime: toISOTime(scheduleForm.startTime),
           endTime: toISOTime(scheduleForm.endTime),
           // room: scheduleForm.room || undefined,
-        });
+        })
       }
 
-      closeModal();
-      fetchSchedules();
+      closeModal()
+      fetchSchedules()
     } catch (error: any) {
-      console.error("Failed to save schedule:", error);
+      console.error('Failed to save schedule:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleDeleteSchedule = async () => {
-    if (!deletingSchedule) return;
+    if (!deletingSchedule) return
 
-    setDeleting(true);
+    setDeleting(true)
     try {
-      await deleteClassSchedule(classData._id, deletingSchedule._id);
-      closeDeleteModal();
-      fetchSchedules();
-      
+      await deleteClassSchedule(classData._id, deletingSchedule._id)
+      closeDeleteModal()
+      fetchSchedules()
     } catch (error: any) {
-      console.error("Failed to delete schedule:", error);
+      console.error('Failed to delete schedule:', error)
     } finally {
-      setDeleting(false);
+      setDeleting(false)
     }
-  };
+  }
 
   if (loadingSchedules) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-lg">Loading schedule...</div>
       </div>
-    );
+    )
   }
 
   return (
@@ -256,9 +249,7 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
               </Button>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Weekly schedule for {classData?.className}
-          </p>
+          <p className="text-sm text-muted-foreground">Weekly schedule for {classData?.className}</p>
         </CardHeader>
       </Card>
 
@@ -266,27 +257,21 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
       <Dialog open={modalOpen} onOpenChange={closeModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {editingSchedule ? "Edit Schedule Period" : "Add Schedule Period"}
-            </DialogTitle>
-            <CardDescription>
-              {editingSchedule ? "Edit" : "Add"} schedule for class subjects
-            </CardDescription>
+            <DialogTitle>{editingSchedule ? 'Edit Schedule Period' : 'Add Schedule Period'}</DialogTitle>
+            <CardDescription>{editingSchedule ? 'Edit' : 'Add'} schedule for class subjects</CardDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
               <Label>Day of Week</Label>
               <Select
                 value={scheduleForm.dayOfWeek}
-                onValueChange={(value) =>
-                  setScheduleForm({ ...scheduleForm, dayOfWeek: value })
-                }
+                onValueChange={value => setScheduleForm({ ...scheduleForm, dayOfWeek: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a day" />
                 </SelectTrigger>
                 <SelectContent>
-                  {weekDays.map((day) => (
+                  {weekDays.map(day => (
                     <SelectItem key={day} value={day}>
                       {day}
                     </SelectItem>
@@ -298,9 +283,7 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
               <Label>Subject</Label>
               <Select
                 value={scheduleForm.subject}
-                onValueChange={(value) =>
-                  setScheduleForm({ ...scheduleForm, subject: value })
-                }
+                onValueChange={value => setScheduleForm({ ...scheduleForm, subject: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a subject" />
@@ -318,25 +301,23 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
               <Label>Teacher</Label>
               <Select
                 value={scheduleForm.teacher}
-                onValueChange={(value) =>
-                  setScheduleForm({ ...scheduleForm, teacher: value })
-                }
+                onValueChange={value => setScheduleForm({ ...scheduleForm, teacher: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a teacher" />
                 </SelectTrigger>
                 <SelectContent>
                   {teachers.length > 0 ? (
-  teachers.map((teacher: any) => (
-    <SelectItem key={teacher.id} value={teacher.id}>
-      {teacher.name}
-    </SelectItem>
-  ))
-) : (
-  <SelectItem value="no-teacher" disabled className="text-muted-foreground italic">
-    No Teacher has been assigned to this class yet, please assign teacher to this class
-  </SelectItem>
-)}
+                    teachers.map((teacher: any) => (
+                      <SelectItem key={teacher.id} value={teacher.id}>
+                        {teacher.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-teacher" disabled className="text-muted-foreground italic">
+                      No Teacher has been assigned to this class yet, please assign teacher to this class
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -346,7 +327,7 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                 <Input
                   type="time"
                   value={scheduleForm.startTime}
-                  onChange={(e) =>
+                  onChange={e =>
                     setScheduleForm({
                       ...scheduleForm,
                       startTime: e.target.value,
@@ -359,7 +340,7 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                 <Input
                   type="time"
                   value={scheduleForm.endTime}
-                  onChange={(e) =>
+                  onChange={e =>
                     setScheduleForm({
                       ...scheduleForm,
                       endTime: e.target.value,
@@ -380,19 +361,14 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                 />
               </div>
             )} */}
-            <Button 
-              onClick={handleSubmitSchedule} 
-              className="w-full text-white"
-              disabled={loading}
-            >
-              {loading 
-                ? editingSchedule 
-                  ? "Updating..." 
-                  : "Creating..." 
-                : editingSchedule 
-                  ? "Update Schedule" 
-                  : "Create Schedule"
-              }
+            <Button onClick={handleSubmitSchedule} className="w-full text-white" disabled={loading}>
+              {loading
+                ? editingSchedule
+                  ? 'Updating...'
+                  : 'Creating...'
+                : editingSchedule
+                  ? 'Update Schedule'
+                  : 'Create Schedule'}
             </Button>
           </div>
         </DialogContent>
@@ -414,17 +390,12 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                   <p className="text-sm text-muted-foreground">
                     {formatTime(deletingSchedule.startTime)} - {formatTime(deletingSchedule.endTime)}
                   </p>
-                 
                 </div>
               )}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={closeDeleteModal}
-              disabled={deleting}
-            >
+            <Button variant="outline" onClick={closeDeleteModal} disabled={deleting}>
               Cancel
             </Button>
             <Button
@@ -433,7 +404,7 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
               onClick={handleDeleteSchedule}
               disabled={deleting}
             >
-              {deleting ? "Deleting..." : "Delete Schedule"}
+              {deleting ? 'Deleting...' : 'Delete Schedule'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -455,11 +426,8 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {periods.map((period) => (
-                      <div
-                        key={period._id}
-                        className="p-4 rounded-lg border bg-card hover:shadow-md transition-shadow"
-                      >
+                    {periods.map(period => (
+                      <div key={period._id} className="p-4 rounded-lg border bg-card hover:shadow-md transition-shadow">
                         <div className="flex items-start justify-between mb-2">
                           <div>
                             <h4 className="font-medium capitalize">{period.subject.name}</h4>
@@ -468,15 +436,11 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                             </p>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => openEditModal(period)}
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => openEditModal(period)}>
                               <Edit className="h-3 w-3" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => openDeleteModal(period)}
                               disabled={deleting}
@@ -493,7 +457,6 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
                               {formatTime(period.startTime)} - {formatTime(period.endTime)}
                             </span>
                           </div>
-                       
                         </div>
                       </div>
                     ))}
@@ -505,5 +468,5 @@ export const ScheduleManagement = ({ classData }: ClassSchedulesProps) => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

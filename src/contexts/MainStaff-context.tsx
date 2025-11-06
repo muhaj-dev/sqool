@@ -1,13 +1,12 @@
-
-"use client"
-import { ReactNode, createContext, useContext } from "react"
-import { useState } from "react"
-import PersonDetail from "@/components/settings/PersonDetail"
-import CompanySetting from "@/components/settings/CompanySetting"
-import PasswordSetting from "@/components/settings/PasswordSetting"
-import TeacherDetail from "@/components/staff/TeacherDetail"
-import { TimeTable } from "@/components/staff/tables/timetable"
-import { LessonTable } from "@/components/staff/tables/lesson-table"
+'use client'
+import { ReactNode, createContext, useContext } from 'react'
+import { useState } from 'react'
+import PersonDetail from '@/components/settings/PersonDetail'
+import CompanySetting from '@/components/settings/CompanySetting'
+import PasswordSetting from '@/components/settings/PasswordSetting'
+import TeacherDetail from '@/components/staff/TeacherDetail'
+import { TimeTable } from '@/components/staff/tables/timetable'
+import { LessonTable } from '@/components/staff/tables/lesson-table'
 
 export const MainStaffContext = createContext({
   updateIndex: (index: number): void => {},

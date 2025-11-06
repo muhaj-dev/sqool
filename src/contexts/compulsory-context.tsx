@@ -1,9 +1,9 @@
-"use client"
-import { BankInfoForm } from "@/components/admin/compulsory/BankInfoForm"
-import ClassConfiguration from "@/components/admin/compulsory/ClassConfiguration"
-import { TermAndSessionForm } from "@/components/admin/compulsory/TermAndSessionForm"
-import { ReactNode, createContext, useContext } from "react"
-import { useState } from "react"
+'use client'
+import { BankInfoForm } from '@/components/admin/compulsory/BankInfoForm'
+import ClassConfiguration from '@/components/admin/compulsory/ClassConfiguration'
+import { TermAndSessionForm } from '@/components/admin/compulsory/TermAndSessionForm'
+import { ReactNode, createContext, useContext } from 'react'
+import { useState } from 'react'
 
 export const CompulsoryContext = createContext({
   updateIndex: (index: number): void => {},
@@ -24,15 +24,10 @@ const CompulsoryContextProvider = ({ children }: { children: ReactNode }) => {
   }
   const step = activeIndex < 3 ? activeIndex : 0
   const value = { updateIndex, step: Elements[step], activeIndex, goNextStep }
-  return (
-    <CompulsoryContext.Provider value={value}>
-      {children}
-    </CompulsoryContext.Provider>
-  )
+  return <CompulsoryContext.Provider value={value}>{children}</CompulsoryContext.Provider>
 }
 export function useCompulsory() {
-  const { step, updateIndex, activeIndex, goNextStep } =
-    useContext(CompulsoryContext)
+  const { step, updateIndex, activeIndex, goNextStep } = useContext(CompulsoryContext)
   return { step, updateIndex, activeIndex, goNextStep }
 }
 export default CompulsoryContextProvider

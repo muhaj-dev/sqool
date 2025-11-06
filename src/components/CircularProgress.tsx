@@ -1,5 +1,5 @@
 // CircularProgress.tsx
-import React from "react"
+import React from 'react'
 
 interface CircularProgressProps {
   value: number
@@ -29,12 +29,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({ value }) => {
           cx="80"
           cy="80"
         />
-        <text
-          x="50%"
-          y="50%"
-          className="text-center text-lg text-blue-500 dark:text-gray-300"
-          dy=".3em"
-        >
+        <text x="50%" y="50%" className="text-center text-lg text-blue-500 dark:text-gray-300" dy=".3em">
           {value}%
         </text>
       </svg>

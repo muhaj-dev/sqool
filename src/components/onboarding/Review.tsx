@@ -1,48 +1,44 @@
-import React, { useState } from "react";
-import OwnerInfoForm from "./OwnerInfoForm";
-import { Check, Trash2 } from "lucide-react";
-import { Checkbox } from "../ui/checkbox";
-import { Button } from "../ui/button";
-import { useOnboarding } from "@/contexts/onboarding-context";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react'
+import OwnerInfoForm from './OwnerInfoForm'
+import { Check, Trash2 } from 'lucide-react'
+import { Checkbox } from '../ui/checkbox'
+import { Button } from '../ui/button'
+import { useOnboarding } from '@/contexts/onboarding-context'
+import { useRouter } from 'next/navigation'
 
 const Ownerinfo = () => {
-  const navigation = useRouter();
-  const [isChecked, setIsChecked] = useState(false);
-  const { onboarding, submitApplication } = useOnboarding();
-  const [isSubmitting, setIsSubmitting] = useState(false); // Renamed for clarity
+  const navigation = useRouter()
+  const [isChecked, setIsChecked] = useState(false)
+  const { onboarding, submitApplication } = useOnboarding()
+  const [isSubmitting, setIsSubmitting] = useState(false) // Renamed for clarity
 
   const submitHandler = async () => {
-    if (!isChecked) return;
-    
-    setIsSubmitting(true);
+    if (!isChecked) return
+
+    setIsSubmitting(true)
     try {
-      await submitApplication();
+      await submitApplication()
       // If successful, the context will handle navigation and toast
     } catch (error) {
       // Error is already handled by the context, we just need to stop loading
-      console.error("Submission error:", error);
+      console.error('Submission error:', error)
     } finally {
-      setIsSubmitting(false); // Ensure loading state is always reset
+      setIsSubmitting(false) // Ensure loading state is always reset
     }
-  };
+  }
 
   return (
     <div className="py-4 ">
       <div>
         <h3>Review your Application</h3>
         <p className="text-muted-foreground">
-          This is the final look at your application. Make sure you met all the
-          registration requirement.
+          This is the final look at your application. Make sure you met all the registration requirement.
         </p>
       </div>
       <div className="bg-white rounded-md py-4 mt-8">
         <div className="flex flex-col gap-4">
-          {onboarding.map((item) => (
-            <div
-              key={item.label}
-              className="flex gap-2 md:gap-4 items-center w-full p-4 rounded-sm border"
-            >
+          {onboarding.map(item => (
+            <div key={item.label} className="flex gap-2 md:gap-4 items-center w-full p-4 rounded-sm border">
               {!item.isCompleted && (
                 <div className=" rounded-full p-3 md:p-4 bg-[#f6513b48]">
                   <Trash2 className="text-red-600 size-4 md:size-6" />
@@ -55,9 +51,7 @@ const Ownerinfo = () => {
               )}
               <div className="flex flex-col">
                 <h3 className="text-sm md:text-[18px]">{item.label}</h3>
-                <span className="text-[12px] md:text-sm text-muted-foreground">
-                  {item.text}
-                </span>
+                <span className="text-[12px] md:text-sm text-muted-foreground">{item.text}</span>
               </div>
             </div>
           ))}
@@ -65,9 +59,9 @@ const Ownerinfo = () => {
             <Checkbox
               id="terms1"
               checked={isChecked}
-              onCheckedChange={(checked) => setIsChecked(checked as boolean)}
+              onCheckedChange={checked => setIsChecked(checked as boolean)}
               className=" border-muted-foreground  
-            data-[state=checked]:bg-transparent data-[state=checked]:text-primaryColor
+            data-[state=checked]:bg-transparent data-[state=checked]:text-primary
             "
             />
             <div className="grid gap-1.5 leading-none">
@@ -78,19 +72,19 @@ const Ownerinfo = () => {
           </div>
           <div className="w-full">
             <div className="mx-auto w-full md:w-[40%] mt-6">
-            <Button 
-            onClick={submitHandler} 
-            className="text-white w-full disabled:cursor-not-allowed"
-            disabled={!isChecked || isSubmitting}
-          >
-            {isSubmitting ? "Submitting Application..." : "Submit Application"}
-          </Button>
+              <Button
+                onClick={submitHandler}
+                className="text-white w-full disabled:cursor-not-allowed"
+                disabled={!isChecked || isSubmitting}
+              >
+                {isSubmitting ? 'Submitting Application...' : 'Submit Application'}
+              </Button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Ownerinfo;
+export default Ownerinfo

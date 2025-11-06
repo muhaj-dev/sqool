@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Instagram, Mail, Smartphone, Star, Twitter } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
-import { format } from "date-fns";
+import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Instagram, Mail, Smartphone, Star, Twitter } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
+import { useState } from 'react'
+import { format } from 'date-fns'
 
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import { DayPicker } from 'react-day-picker'
+import 'react-day-picker/dist/style.css'
 
 const ADetails = () => {
-  const [selected, setSelected] = useState<Date>();
+  const [selected, setSelected] = useState<Date>()
 
-  let footer = <p>Please pick a day.</p>;
+  let footer = <p>Please pick a day.</p>
   if (selected) {
-    footer = <p>You picked {format(selected, "PP")}.</p>;
+    footer = <p>You picked {format(selected, 'PP')}.</p>
   }
 
   return (
@@ -25,7 +25,7 @@ const ADetails = () => {
           mode="single"
           selected={selected}
           onSelect={setSelected}
-        //   footer={footer}
+          //   footer={footer}
         />
       </div>
 
@@ -58,7 +58,7 @@ const ADetails = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ADetails;
+export default ADetails

@@ -1,7 +1,7 @@
 // import { sections } from "../app/onboarding/page"
-import { sections } from "@/lib/sections"
+import { sections } from '@/lib/sections'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 type Category = (typeof sections)[number]
 interface NavItemProps {
@@ -14,8 +14,8 @@ const NavItem = ({ category, isCurrent, tabChangeHandler }: NavItemProps) => {
     <div className="relative flex items-center">
       <div
         onClick={tabChangeHandler}
-        className={cn("transition-all text-muted-foreground pb-1", {
-          "border-b-2 border-primaryColor text-black ": isCurrent,
+        className={cn('transition-all text-muted-foreground pb-1', {
+          'border-b-2 border-primary text-black ': isCurrent,
         })}
       >
         {category.label}

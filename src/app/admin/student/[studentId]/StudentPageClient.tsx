@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import StudentLeftBar from "@/components/student/StudentLeftBar";
-import StudentSteps from "@/components/student/StudentSteps";
-import StudentTopBar from "@/components/student/StudentTopBar";
-import { Separator } from "@/components/ui/separator";
-import StudentContextProvider from "@/contexts/student-context";
-import React from "react";
-import { useStudent } from "@/contexts/student-context";
+import StudentLeftBar from '@/components/student/StudentLeftBar'
+import StudentSteps from '@/components/student/StudentSteps'
+import StudentTopBar from '@/components/student/StudentTopBar'
+import { Separator } from '@/components/ui/separator'
+import StudentContextProvider from '@/contexts/student-context'
+import React from 'react'
+import { useStudent } from '@/contexts/student-context'
 
 const StudentContent = ({ studentId }: { studentId: string }) => {
-  const { StepComponent, studentData, loading, error } = useStudent();
+  const { StepComponent, studentData, loading, error } = useStudent()
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
 
   return (
     <>
@@ -27,15 +27,15 @@ const StudentContent = ({ studentId }: { studentId: string }) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
 const StudentPageClient = ({ studentId }: { studentId: string }) => {
   return (
     <StudentContextProvider studentId={studentId}>
       <StudentContent studentId={studentId} />
     </StudentContextProvider>
-  );
-};
+  )
+}
 
-export default StudentPageClient;
+export default StudentPageClient

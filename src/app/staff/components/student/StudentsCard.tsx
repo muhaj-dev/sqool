@@ -1,9 +1,9 @@
-import React from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 // import { Separator } from "../ui/separator"
-import { Phone } from "lucide-react"
-import Link from "next/link"
-import { Separator } from "@/components/ui/separator"
+import { Phone } from 'lucide-react'
+import Link from 'next/link'
+import { Separator } from '@/components/ui/separator'
 
 type TStudent = {
   item: {
@@ -32,14 +32,10 @@ const StudentsCard = ({ item }: TStudent) => {
           </Avatar>
           <div>
             <p>{`${item.first_name} ${item.last_name}`} </p>
-            <p className="text-muted-foreground max-w-40 text-[14px] break-words ">
-              {item.email}
-            </p>
+            <p className="text-muted-foreground max-w-40 text-[14px] break-words ">{item.email}</p>
           </div>
         </div>
-        <span className=" text-[#5542F6] text-[12px] rounded-sm px-4 py-2 bg-[#5542F61A]">
-          View More
-        </span>
+        <span className=" text-[#5542F6] text-[12px] rounded-sm px-4 py-2 bg-[#5542F61A]">View More</span>
       </div>
       <Separator className="my-4" />
       <div className="flex flex-col gap-4 text-sm">
@@ -54,8 +50,7 @@ const StudentsCard = ({ item }: TStudent) => {
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">ADDMISSION DATE</p>
           <p className="flex items-center gap-1">
-            <span className="w-2 h-2 bg-green-600 rounded-sm"></span>{" "}
-            <span>{item.addmissin_date}</span>
+            <span className="w-2 h-2 bg-green-600 rounded-sm"></span> <span>{item.addmissin_date}</span>
           </p>
         </div>
         <div className="flex items-center justify-between">
@@ -67,7 +62,7 @@ const StudentsCard = ({ item }: TStudent) => {
         </div>
       </div>
     </Link>
-  );
+  )
 }
 
 export default StudentsCard

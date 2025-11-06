@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { GreaterThan } from "@/utils/icon";
+import { Button } from "../ui/button";
 
 const Navbar = ({
   toggleSidebar,
@@ -27,10 +28,10 @@ const Navbar = ({
   isOpen: boolean;
 }) => {
   return (
-    <div className="bg-primaryColor md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
+    <div className="bg-primary md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
       <div className="">
         {/* Hamburger button - toggles sidebar */}
-        <button
+        <Button
           className="max-[700px]:block hidden text-3xl focus:outline-none"
           onClick={toggleSidebar}
         >
@@ -39,7 +40,7 @@ const Navbar = ({
           ) : (
             <HiMenu className="text-white" />
           )}
-        </button>
+        </Button>
       </div>
       <div className="hidden md:block w-[45%] relative">
         <Search className="absolute top-2 left-1 text-muted-foreground " />
@@ -67,7 +68,7 @@ const Navbar = ({
       </div>
 
       <Select>
-        <SelectTrigger className="w-[120px] flex md:hidden text-white bg-primaryColor border-none">
+        <SelectTrigger className="w-[120px] flex md:hidden text-white bg-primary border-none">
           <SelectValue placeholder="Show stats: " />
         </SelectTrigger>
         <SelectContent>

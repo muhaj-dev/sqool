@@ -1,6 +1,6 @@
-import React from "react"
-import TestPerformanceChart from "./TestPerformanceChart"
-import ExamPerformanceChart from "./ExamPerformanceChart"
+import React from 'react'
+import TestPerformanceChart from './TestPerformanceChart'
+import ExamPerformanceChart from './ExamPerformanceChart'
 
 const StudyProgress = () => {
   return (

@@ -1,21 +1,18 @@
 'use client'
 
-import React, { useState } from 'react';
-import KidsBar from '../components/parent/KidBar';
-import KidsDetails from '../components/parent/KidDetails';
+import React, { useState } from 'react'
+import KidsBar from '../components/parent/KidBar'
+import KidsDetails from '../components/parent/KidDetails'
 
 const Page = () => {
-
   return (
     <div>
       <KidsBar />
       <div className="w-full mt-8 bg-white py-5 px-0 md:px-9">
-
-          <KidsDetails />
-      
+        <KidsDetails />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

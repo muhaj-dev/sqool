@@ -1,13 +1,13 @@
-import React from "react";
-import { AvatarFallback, AvatarImage, Avatar } from "../ui/avatar";
-import { CheckCircle2, Video } from "lucide-react";
+import React from 'react'
+import { AvatarFallback, AvatarImage, Avatar } from '../ui/avatar'
+import { CheckCircle2, Video } from 'lucide-react'
 
 const Sidebar = () => {
   return (
     <div className="border-r-2 h-screen pl-3 pt-3 bg-white">
       <div className="flex flex-col justify-between h-[70%] pr-6 ">
         <div className="flex flex-col gap-4 items-center">
-          <h2 className="text-3xl text-primaryColor font-bold">SQOOLIFY</h2>
+          <h2 className="text-3xl text-primary font-bold">SQOOLIFY</h2>
           <div className="flex items-center bg-white py-2 px-6 rounded-md shadow-sm gap-2 w-full">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -30,21 +30,19 @@ const Sidebar = () => {
               <span>make Show you Upload Correct Images</span>
             </div>
             <div className="flex items-center gap-4 text-sm bg-white p-2 rounded">
-              <Video className="text-primaryColor    rounded-full " />
-              <span className="text-primaryColor">
-                Watch how to fill the form
-              </span>
+              <Video className="text-primary    rounded-full " />
+              <span className="text-primary">Watch how to fill the form</span>
             </div>
           </div>
         </div>
         <div className="bg-white w-full p-4 flex flex-col gap-2">
           <p>Nees Help?</p>
-          <p className="text-primaryColor text-sm">Call us on 070122344654</p>
-          <p className="text-primaryColor text-sm">Send Us Email</p>
+          <p className="text-primary text-sm">Call us on 070122344654</p>
+          <p className="text-primary text-sm">Send Us Email</p>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

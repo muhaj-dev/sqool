@@ -1,9 +1,8 @@
 'use client'
-import React, { useEffect, useState } from "react";
-import { libraryData } from "@/components/student/student-data";
-import { libraryColumns } from "./libraryColumn";
-import { LibraryTable } from "./LibraryTable";
-
+import React, { useEffect, useState } from 'react'
+import { libraryData } from '@/components/student/student-data'
+import { libraryColumns } from './libraryColumn'
+import { LibraryTable } from './LibraryTable'
 
 const LibraryList = () => {
   return (
@@ -12,7 +11,7 @@ const LibraryList = () => {
         <LibraryTable data={libraryData} columns={libraryColumns} />
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default LibraryList;
+export default LibraryList

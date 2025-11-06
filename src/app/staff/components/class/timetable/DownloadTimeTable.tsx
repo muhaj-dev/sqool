@@ -1,19 +1,12 @@
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
-import { TimetableView } from '@/types';
-
+import React from 'react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Image from 'next/image'
+import { TimetableView } from '@/types'
 
 interface DownloadTimeTable {
-  toggleView: (view: TimetableView) => void;
+  toggleView: (view: TimetableView) => void
 }
 
 export const DownloadTimeTable: React.FC<DownloadTimeTable> = ({ toggleView }) => {
@@ -41,37 +34,27 @@ export const DownloadTimeTable: React.FC<DownloadTimeTable> = ({ toggleView }) =
             </SelectContent>
           </Select>
         </div>
-        <Button 
-         onClick={() => toggleView('result')}
-        className="text-white">
+        <Button onClick={() => toggleView('result')} className="text-white">
           View Results
         </Button>
       </div>
 
       <div className=" mx-auto my-4 p-8 max-w-[519px] w-[95%]">
         <h2 className="text-xl font-semibold text-center mx-auto ">Download</h2>
-    
-        <p className="text-center text-[12px] mt-3 text-[#676767]">
-             Click below to download your result
-            </p>
 
-          <Button type="submit" className=" w-full my-5 text-white">
+        <p className="text-center text-[12px] mt-3 text-[#676767]">Click below to download your result</p>
+
+        <Button type="submit" className=" w-full my-5 text-white">
           Download Result
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 const UploadIcon = () => {
   return (
-    <svg
-      width="70"
-      height="60"
-      viewBox="0 0 70 60"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="70" height="60" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M36.6364 14.7458L36.7287 14.7733L36.7327 14.7688C37.1703 14.8481 37.6045 14.586 37.7331 14.1519C38.9047 10.2152 42.5958 7.46504 46.7082 7.46504C47.1951 7.46504 47.59 7.07016 47.59 6.5833C47.59 6.09643 47.1951 5.70156 46.7082 5.70156C41.6541 5.70156 37.4069 9.06665 36.0432 13.6493C35.904 14.1162 36.1699 14.6067 36.6364 14.7458Z"
         fill="#E5B80B"
@@ -101,5 +84,5 @@ const UploadIcon = () => {
         stroke-width="0.3"
       />
     </svg>
-  );
-};
+  )
+}

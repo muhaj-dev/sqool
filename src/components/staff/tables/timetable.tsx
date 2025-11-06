@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,63 +10,50 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+} from '@tanstack/react-table'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 const data: Period[] = [
   {
     id: 1,
-    time: "9:40 am - 10: 20 am",
-    subject: "Physics",
-    topic: "Nuclear Boom",
-    class: "SS1",
-    status: "Attend",
+    time: '9:40 am - 10: 20 am',
+    subject: 'Physics',
+    topic: 'Nuclear Boom',
+    class: 'SS1',
+    status: 'Attend',
   },
   {
     id: 2,
-    time: "9:40 am - 10: 20 am",
-    subject: "Physics",
-    topic: "Nuclear Boom",
-    class: "SS1",
-    status: "Attend",
+    time: '9:40 am - 10: 20 am',
+    subject: 'Physics',
+    topic: 'Nuclear Boom',
+    class: 'SS1',
+    status: 'Attend',
   },
   {
     id: 3,
-    time: "9:40 am - 10: 20 am",
-    subject: "Physics",
-    topic: "Nuclear Boom",
-    class: "SS1",
-    status: "Cancel",
+    time: '9:40 am - 10: 20 am',
+    subject: 'Physics',
+    topic: 'Nuclear Boom',
+    class: 'SS1',
+    status: 'Cancel',
   },
   {
     id: 4,
-    time: "9:40 am - 10: 20 am",
-    subject: "Physics",
-    topic: "Nuclear Boom",
-    class: "SS1",
-    status: "Up coming",
+    time: '9:40 am - 10: 20 am',
+    subject: 'Physics',
+    topic: 'Nuclear Boom',
+    class: 'SS1',
+    status: 'Up coming',
   },
   {
     id: 5,
-    time: "9:40 am - 10: 20 am",
-    subject: "Physics",
-    topic: "Nuclear Boom",
-    class: "SS1",
-    status: "Up coming",
+    time: '9:40 am - 10: 20 am',
+    subject: 'Physics',
+    topic: 'Nuclear Boom',
+    class: 'SS1',
+    status: 'Up coming',
   },
 ]
 
@@ -76,54 +63,48 @@ export type Period = {
   subject: string
   topic: string
   class: string
-  status: "Attend" | "Cancel" | "Up coming"
+  status: 'Attend' | 'Cancel' | 'Up coming'
 }
 
 export const columns: ColumnDef<Period>[] = [
   {
-    accessorKey: "time",
-    header: "Time",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("time")}</div>,
+    accessorKey: 'time',
+    header: 'Time',
+    cell: ({ row }) => <div className="capitalize">{row.getValue('time')}</div>,
   },
   {
-    accessorKey: "subject",
-    header: "Subject",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("subject")}</div>
-    ),
+    accessorKey: 'subject',
+    header: 'Subject',
+    cell: ({ row }) => <div className="capitalize">{row.getValue('subject')}</div>,
   },
   {
-    accessorKey: "topic",
-    header: "Topic",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("topic")}</div>
-    ),
+    accessorKey: 'topic',
+    header: 'Topic',
+    cell: ({ row }) => <div className="capitalize">{row.getValue('topic')}</div>,
   },
   {
-    accessorKey: "class",
-    header: "Class",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("class")}</div>
-    ),
+    accessorKey: 'class',
+    header: 'Class',
+    cell: ({ row }) => <div className="capitalize">{row.getValue('class')}</div>,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: 'status',
+    header: 'Status',
     cell: ({ row }) => {
-      const status = row.getValue("status")
+      const status = row.getValue('status')
       return (
         <>
-          {status === "Attend" ? (
+          {status === 'Attend' ? (
             <div className="capitalize bg-[#20C9AC1A] text-[#20C9AC] p-2 rounded-md flex justify-center items-center">
-              {row.getValue("status")}
+              {row.getValue('status')}
             </div>
-          ) : status === "Cancel" ? (
+          ) : status === 'Cancel' ? (
             <div className="capitalize bg-[#FC34001A] text-[#FC3400] p-2 rounded-md flex justify-center items-center">
-              {row.getValue("status")}
+              {row.getValue('status')}
             </div>
           ) : (
             <div className="capitalize bg-[#00A5FF1A] text-[#00A5FF] p-2 rounded-md flex justify-center items-center">
-              {row.getValue("status")}
+              {row.getValue('status')}
             </div>
           )}
         </>
@@ -169,19 +150,11 @@ export function TimeTable() {
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
-              <TableRow
-                className="bg-[#F2F2F2] hover:bg-[#F2F2F2]"
-                key={headerGroup.id}
-              >
+              <TableRow className="bg-[#F2F2F2] hover:bg-[#F2F2F2]" key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   )
                 })}
@@ -191,26 +164,15 @@ export function TimeTable() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map(row => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

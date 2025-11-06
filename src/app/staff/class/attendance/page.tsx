@@ -1,26 +1,26 @@
-"use client";
-export const dynamic = 'force-dynamic';
+'use client'
+export const dynamic = 'force-dynamic'
 
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Calendar, Save, Users, UserCheck, UserX } from "lucide-react";
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
+import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/switch'
+import { Calendar, Save, Users, UserCheck, UserX } from 'lucide-react'
 
 const Attendance = () => {
   const students = [
-    { id: "ADM221-10", name: "Tyrus McVity", present: true },
-    { id: "ADM221-11", name: "Sarah Johnson", present: true },
-    { id: "ADM221-12", name: "Michael Brown", present: false },
-    { id: "ADM221-13", name: "Emily Davis", present: true },
-    { id: "ADM221-14", name: "James Wilson", present: true },
-  ];
+    { id: 'ADM221-10', name: 'Tyrus McVity', present: true },
+    { id: 'ADM221-11', name: 'Sarah Johnson', present: true },
+    { id: 'ADM221-12', name: 'Michael Brown', present: false },
+    { id: 'ADM221-13', name: 'Emily Davis', present: true },
+    { id: 'ADM221-14', name: 'James Wilson', present: true },
+  ]
 
-  const presentCount = students.filter(s => s.present).length;
-  const absentCount = students.length - presentCount;
+  const presentCount = students.filter(s => s.present).length
+  const absentCount = students.length - presentCount
 
   return (
     <div className="space-y-6">
@@ -40,7 +40,7 @@ const Attendance = () => {
           <Card className="dashboard-card">
             <div className="space-y-6">
               <h3 className="text-lg font-semibold">Mark Attendance</h3>
-              
+
               {/* Selection Form */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
@@ -103,7 +103,7 @@ const Attendance = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {students.map((student) => (
+                      {students.map(student => (
                         <tr key={student.id}>
                           <td>{student.id}</td>
                           <td className="font-medium">{student.name}</td>
@@ -121,10 +121,7 @@ const Attendance = () => {
                             )}
                           </td>
                           <td>
-                            <Switch 
-                              checked={student.present}
-                              onCheckedChange={() => {}}
-                            />
+                            <Switch checked={student.present} onCheckedChange={() => {}} />
                           </td>
                           <td>
                             <Button variant="ghost" size="sm" className="text-muted-foreground">
@@ -206,7 +203,7 @@ const Attendance = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Attendance;
+export default Attendance
