@@ -19,7 +19,20 @@ export interface AttendanceRecord {
   remarks?: string
 }
 
-export type StatusColorKey = 'present' | 'absent' | 'late' | 'excused'
+export type StatusColorKey = AttendanceStatus;
 
-export type StatusFilter = 'all' | StatusColorKey
-export type GenderFilter = 'male' | 'female' | 'all'
+export type StatusFilter = "all" | StatusColorKey;
+export type GenderFilter = "male" | "female" | "all";
+
+export interface CreateAttendancePayload {
+  classId: string;
+  startDate: string;
+  endDate: string;
+  frequency: "week" | "month" | "term" | "custom";
+}
+
+export type Term = "first" | "second" | "third";
+
+export interface TermDateRange {
+  termDates: Partial<Record<Term, { start: string; end: string }>>;
+}
