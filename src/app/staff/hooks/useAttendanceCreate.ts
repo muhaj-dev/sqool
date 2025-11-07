@@ -3,20 +3,21 @@
 import { useState } from "react";
 import { CreateAttendancePayload } from "@/types";
 import { toast } from "@/components/ui/use-toast";
+import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
+import { format } from "date-fns";
 
 export function useAttendanceCreate() {
   const [open, setOpen] = useState(false);
-  const [selectedClass, setSelectedClass] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [frequency, setFrequency] = useState<
     "week" | "month" | "term" | "custom" | ""
   >("");
-  const [range, setRange] = useState<{ start: string; end: string } | null>(
-    null
-  );
+  const { selectedClass } = useAttendanceStore();
+  const [range, setRange] = useState<{ from: string; to: string } | null>(null);
+
+  console.log({ range });
 
   const reset = () => {
-    setSelectedClass("");
     setFrequency("");
     setRange(null);
   };
@@ -27,15 +28,15 @@ export function useAttendanceCreate() {
       setLoading(false);
       setOpen(false);
       reset();
-    toast({
-        title:"Success Attendance",
-        description:"Attendance was created successfully"
-    })
+      toast({
+        title: "Success Attendance",
+        description: "Attendance was created successfully",
+      });
     }, 3000);
     const payload: CreateAttendancePayload = {
       classId: selectedClass,
-      startDate: range?.start!,
-      endDate: range?.end!,
+      startDate: format(range?.from!, "yyyy-MM-dd"),
+      endDate: format(range?.to!, "yyyy-MM-dd"),
       frequency: frequency as any,
     };
 
@@ -56,8 +57,6 @@ export function useAttendanceCreate() {
     open,
     setOpen,
     loading,
-    selectedClass,
-    setSelectedClass,
     frequency,
     setFrequency,
     range,

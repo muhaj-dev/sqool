@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, CheckCheck, PlusIcon } from "lucide-react";
+import { Calendar, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -22,7 +22,7 @@ import { toast } from "@/components/ui/use-toast";
 import { CreateAttendanceButton } from "./CreateAttendanceButton";
 import CreateAttendanceDialog from "./CreateAttendanceDialog";
 import { useAttendanceCreate } from "../../hooks/useAttendanceCreate";
-import LoadingStateAttendance from "./LoadingStateAttendance";
+import LoadingStateAttendance from "@/components/LoadingState";
 
 const classes = [
   { id: "p3-math", name: "Primary 3 - Mathematics" },
@@ -150,7 +150,7 @@ export function AttendanceHeader() {
           Save Attendance
         </Button>
       </div>
-      {attendanceCreate.loading && <LoadingStateAttendance/>}
+      {attendanceCreate.loading && <LoadingStateAttendance title="Creating attendance..."/>}
       <CreateAttendanceDialog
         controller={controller}
         students={students}

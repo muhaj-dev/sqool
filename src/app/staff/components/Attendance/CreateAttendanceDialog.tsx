@@ -30,9 +30,7 @@ import {
 } from "date-fns";
 import { Term, TermDateRange } from "@/types";
 import { CancelAttendanceButton } from "./CreateAttendanceButton";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
-import { Spinner } from "@/components/ui/spinner";
-import LoadingStateAttendance from "./LoadingStateAttendance";
+import LoadingStateAttendance from "@/components/LoadingState";
 
 interface CreateAttendanceDialogProps {
   controller: any;
@@ -137,7 +135,7 @@ export default function CreateAttendanceDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {loading && <LoadingStateAttendance />}
+        {loading && <LoadingStateAttendance  title="Creating attendance..."/>}
 
         <Tabs
           value={tab}
