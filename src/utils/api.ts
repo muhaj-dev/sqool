@@ -900,10 +900,20 @@ export const createNotice = async (payload: {
 }
 
 // Get all notices with search, filter, and limit
-export const getAllNotices = async (search: string = '', filter: string = '', limit: number = 20) => {
+export const getAllNotices = async (
+  search: string = '', 
+  filter: string = '', 
+  page: number = 1, 
+  limit: number = 20
+) => {
   try {
     const response = await api.get('/v1/admin/notices', {
-      params: { search, filter, limit },
+      params: { 
+        search, 
+        filter, 
+        page,
+        limit 
+      },
     })
     return response.data
   } catch (error) {

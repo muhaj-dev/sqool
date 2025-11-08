@@ -44,7 +44,9 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   const classId = classData?._id
 
   // Get current teacher IDs in class (by their _id)
-  const currentTeacherIds = classTutors.map((tutor: any) => tutor.teacher?.userId?._id).filter(Boolean)
+  // const currentTeacherIds = classTutors.map((tutor: any) => tutor.teacher?.userId?._id).filter(Boolean)
+  const currentTeacherIds = classTutors.map((tutor: any) => tutor.teacher?._id).filter(Boolean)
+
 
   // Fetch all staff (teachers)
   useEffect(() => {
@@ -76,7 +78,12 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   }, [subjectSearch, refresh])
 
   // Filter out teachers already assigned to this class
-  const availableTeachers = staffs.filter(teacher => !currentTeacherIds.includes(teacher._id))
+  // const availableTeachers = staffs.filter(teacher => !currentTeacherIds.includes(teacher._id))
+    // Filter out teachers already assigned to this class
+  const availableTeachers = staffs.filter(teacher => 
+    !currentTeacherIds.includes(teacher._id) && 
+    teacher._id !== currentClassTeacherObj?._id // Also exclude current class teacher
+  )
 
   // Get all subject IDs already assigned in classData
   const assignedSubjectIds = (classData?.subjects || []).map((s: any) => s._id)

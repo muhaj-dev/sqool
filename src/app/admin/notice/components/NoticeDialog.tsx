@@ -46,14 +46,27 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
 
   useEffect(() => {
     if (notice) {
+      // Safe date formatting with null checks
+      const formatDateForInput = (dateString: string | Date | undefined | null): string => {
+        if (!dateString) return new Date().toISOString().slice(0, 16);
+        
+        try {
+          const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+          if (isNaN(date.getTime())) return new Date().toISOString().slice(0, 16);
+          return date.toISOString().slice(0, 16);
+        } catch {
+          return new Date().toISOString().slice(0, 16);
+        }
+      };
+
       form.reset({
-        title: notice.title,
-        content: notice.content,
-        body: notice.body,
-        visibility: notice.visibility,
-        resources: notice.resources,
-        expirationDate: notice.expirationDate.slice(0, 16),
-        notificationDate: notice.notificationDate.slice(0, 16),
+        title: notice.title || '',
+        content: notice.content || '',
+        body: notice.body || '',
+        visibility: notice.visibility || 'everyone',
+        resources: notice.resources || [],
+        expirationDate: formatDateForInput(notice.expirationDate),
+        notificationDate: formatDateForInput(notice.notificationDate),
       })
     } else {
       form.reset({
@@ -66,7 +79,7 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
         notificationDate: new Date().toISOString().slice(0, 16),
       })
     }
-  }, [notice, form])
+  }, [notice, form, open]) // Added 'open' to dependencies to reset when dialog opens
 
   const onSubmit = (data: NoticeFormValues) => {
     const noticeData: any = {

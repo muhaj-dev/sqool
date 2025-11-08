@@ -11,7 +11,6 @@ import { getAllExaminations, updateExaminationStatus } from '@/utils/api'
 
 const STEPS = ['Pending Approval', 'Approved', 'Rejected']
 
-const STATUS_OPTIONS = ['approve', 'reject', 'pending', 'scheduled']
 
 const Exam = () => {
   const [exams, setExams] = useState<any[]>([])
@@ -112,22 +111,33 @@ const Exam = () => {
         </div>
       ))} */}
 
-      {filteredExams.map(exam => (
-        <ExamCard
-          key={exam._id}
-          fullname={`${exam.creator.details.firstName} ${exam.creator.details.lastName}`}
-          email={exam.creator.details.email}
-          subject={exam.subject.name}
-          total={exam.students}
-          photo={avatar}
-          approved={exam.status === 'approve'}
-          status={exam.status}
-          onApprove={() => handleApprove(exam._id)}
-          onReject={() => handleReject(exam._id)}
-          onSchedule={() => handleSchedule(exam._id)}
-          loading={loading}
-        />
-      ))}
+
+{filteredExams.length === 0 ? (
+  <div className="flex flex-col items-center justify-center py-12">
+    <p className="text-muted-foreground text-lg">
+      {STEPS[activeIndex] === 'Pending Approval' && 'No pending exams to review'}
+      {STEPS[activeIndex] === 'Approved' && 'No approved exams yet'}
+      {STEPS[activeIndex] === 'Rejected' && 'No rejected exams'}
+    </p>
+  </div>
+) : (
+  filteredExams.map(exam => (
+    <ExamCard
+      key={exam._id}
+      fullname={`${exam.creator.details.firstName} ${exam.creator.details.lastName}`}
+      email={exam.creator.details.email}
+      subject={exam.subject.name}
+      total={exam.students}
+      photo={avatar}
+      approved={exam.status === 'approve'}
+      status={exam.status}
+      onApprove={() => handleApprove(exam._id)}
+      onReject={() => handleReject(exam._id)}
+      onSchedule={() => handleSchedule(exam._id)}
+      loading={loading}
+    />
+  ))
+)}
     </section>
   )
 }
