@@ -1,5 +1,5 @@
-import { AttendanceHeader } from "../components/attendance/AttendanceHeader";
-import StatsOverview from "../components/attendance/StatsOverview";
+import { AttendanceHeader } from "../components/Attendance/AttendanceHeader";
+import StatsOverview from "../components/Attendance/StatsOverview";
 
 export default function Attendance() {
   return (
