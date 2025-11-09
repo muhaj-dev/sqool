@@ -1,6 +1,7 @@
 // src/types.ts
 // Student-related types
 export * from "./attendance";
+export * from "./payment";
 export interface IStudent {
   photo: string;
   _id: string;
@@ -30,11 +31,11 @@ export interface ISingleStudent {
   parent: string;
   class: string;
   school?: string;
-  gender?: 'male' | 'female';
+  gender?: "male" | "female";
   hobbies: string[];
   photo?: string;
   language?: string;
-  dateOfBirth?: string ;
+  dateOfBirth?: string;
   address?: string;
   aboutMe?: string;
   enrolmentDate?: string;
@@ -166,23 +167,23 @@ export interface ClassSearchResponse {
 export interface IClassConfiguration {
   className: string;
   shortName: string;
-  levelType: 'nursery' | 'primary' | 'secondary';
+  levelType: "nursery" | "primary" | "secondary";
   classSection?: string;
 }
 
 export interface IClassConfigurationResponse extends IClassConfiguration {
   _id: string;
-   className: string;
-   shortName: string;
-   levelType: string;
-   classSection?: string;
-   classTeacher: any[]; // Array of teacher IDs
-   classSchedule: any[];
-   resources: any[];
-   tutors: IClassTutor[];
-   subjects: IClassSubject[];
-   students: string[];
-  message?: string; 
+  className: string;
+  shortName: string;
+  levelType: string;
+  classSection?: string;
+  classTeacher: any[]; // Array of teacher IDs
+  classSchedule: any[];
+  resources: any[];
+  tutors: IClassTutor[];
+  subjects: IClassSubject[];
+  students: string[];
+  message?: string;
 }
 
 export interface ClassPaginationResponse {
@@ -220,7 +221,7 @@ export interface StaffResult {
   _id: string;
   level: string;
   userId: UserId;
-   subjects: Subject[];
+  subjects: Subject[];
   role: string;
   primarySubject: string;
   isActive: boolean;
@@ -312,7 +313,7 @@ export interface IPayment {
   action: string;
 }
 
-export type TimetableView = 'result' | 'upload' | 'download';
+export type TimetableView = "result" | "upload" | "download";
 
 export interface ISessionAndTerm {
   session: string;
@@ -324,8 +325,14 @@ export interface ISessionAndTerm {
   thirdTermEndDate: string;
 }
 
-export const ROLES = ['superAdmin', 'admin', 'teacher', 'parent', 'student'] as const;
-export type Role = typeof ROLES[number];
+export const ROLES = [
+  "superAdmin",
+  "admin",
+  "teacher",
+  "parent",
+  "student",
+] as const;
+export type Role = (typeof ROLES)[number];
 
 export function isRole(role: string): role is Role {
   return ROLES.includes(role as Role);
@@ -364,9 +371,9 @@ export interface LoginSecondResponse {
     firstName: string;
     lastName: string;
     email: string;
-      phoneId:{
-    phoneNumber?: string; // Made optional
-  }
+    phoneId: {
+      phoneNumber?: string; // Made optional
+    };
     // phoneNumber?: string;
     isVerify: boolean;
     isBlock: boolean;
@@ -412,7 +419,6 @@ export interface ISubjectResponse extends ISubject {
   updatedAt?: string;
 }
 
-
 export interface ISubject {
   _id: string;
   name: string;
@@ -429,9 +435,6 @@ export interface ISubjectResponse extends ISubject {
   createdAt?: string;
   updatedAt?: string;
 }
-
-
-
 
 export interface ParentUser {
   _id: string;
@@ -472,9 +475,7 @@ export interface AddParentPayload {
   email: string;
 }
 
-
-//staff  
-
+//staff
 
 export interface StaffProfileResponse {
   data: {
@@ -482,7 +483,7 @@ export interface StaffProfileResponse {
     firstName: string;
     lastName: string;
     email: string;
-    phoneId:{
+    phoneId: {
       phoneNumber: string;
     };
     level: string;
@@ -532,7 +533,6 @@ export interface CreateExamResponse {
   message?: string;
 }
 
-
 // Add these types
 // export interface Class {
 //   _id: string;
@@ -568,7 +568,6 @@ export interface Session {
     endDate: string;
   };
 }
-
 
 // In your types.ts file, update the Class interface:
 export interface Class {
@@ -617,9 +616,6 @@ export interface SessionsResponse {
   };
   message?: string;
 }
-
-
-
 
 // Exam-related types
 export interface ExamCreator {
@@ -681,12 +677,18 @@ export interface Exam {
     className: string;
   };
   creator: ExamCreator;
-  status: 'pending' | 'approve' | 'completed' | 'cancelled' | 'reject' | 'scheduled';
+  status:
+    | "pending"
+    | "approve"
+    | "completed"
+    | "cancelled"
+    | "reject"
+    | "scheduled";
   examDate: string;
   startTime: string;
   endTime: string;
   venue: string;
-  mode: 'online' | 'offline' | 'hybrid';
+  mode: "online" | "offline" | "hybrid";
   session: Session; // Changed from sessionId to session object
   students: number;
   createdAt?: string;
@@ -710,7 +712,6 @@ export interface PaginationInfo {
   totalItems: number;
   itemsPerPage: number;
 }
-
 
 // types/timetable.ts
 export interface Subject {
@@ -759,7 +760,6 @@ export interface TimetableResponse {
   message: string;
 }
 
-
 export interface Notice {
   id?: string;
   title: string;
@@ -774,7 +774,6 @@ export interface Notice {
 }
 
 export type NoticeFormData = Omit<Notice, "id" | "createdAt" | "updatedAt">;
-
 
 // types/index.ts
 export interface ParentDashboardResponse {
@@ -819,7 +818,6 @@ export interface Expense {
   status: string;
   category: string;
 }
-
 
 // Fee-related types
 export type TermBreakdown = Record<string, number>;
@@ -882,13 +880,13 @@ export interface CreateFeeData {
   class: string; // class ID
   session: string; // session ID
   totalAmount: number;
-  terms: Omit<FeeTerm, '_id'>[];
+  terms: Omit<FeeTerm, "_id">[];
   // isActive: boolean;
 }
 
 export interface UpdateFeeData {
   totalAmount?: number;
-  terms?: Omit<FeeTerm, '_id'>[];
+  terms?: Omit<FeeTerm, "_id">[];
   isActive?: boolean;
 }
 
@@ -900,7 +898,6 @@ export interface GetFeesParams {
   class?: string;
   session?: string;
 }
-
 
 // Add to your existing types
 
@@ -1019,7 +1016,6 @@ export interface SessionInfo {
   thirdTerm: SessionTerm;
 }
 
-
 export interface FeeStructure {
   _id: string;
   school: string;
@@ -1050,13 +1046,13 @@ export interface CreateFeeData {
   class: string; // class ID
   session: string; // session ID
   totalAmount: number;
-  terms: Omit<FeeTerm, '_id'>[];
+  terms: Omit<FeeTerm, "_id">[];
   // removed isActive
 }
 
 export interface UpdateFeeData {
   totalAmount?: number;
-  terms?: Omit<FeeTerm, '_id'>[];
+  terms?: Omit<FeeTerm, "_id">[];
   // removed isActive
 }
 
@@ -1068,7 +1064,6 @@ export interface GetFeesParams {
   class?: string;
   session?: string;
 }
-
 
 // In your types file
 export interface FeeStructure {
@@ -1108,7 +1103,6 @@ export interface PaymentRecord {
   transactionId?: string;
 }
 
-
 // types/payment.ts
 export interface Parent {
   _id: string;
@@ -1127,7 +1121,7 @@ export interface Student {
 export interface Payment {
   _id: string;
   paymentDate: string;
-  paymentStatus: 'paid' | 'pending' | 'overdue' | string;
+  paymentStatus: "paid" | "pending" | "overdue" | string;
   amountPaid: number;
   userId: string | null;
   paymentMethod: string;
@@ -1153,3 +1147,16 @@ export interface StudentAttendance extends Partial<ISingleStudent> {
   guardianName: string;
   attendanceRate: number;
 }
+
+declare function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait?: number,
+  options?: {
+    leading?: boolean;
+    trailing?: boolean;
+    maxWait?: number;
+  }
+): T & {
+  cancel(): void;
+  flush(): ReturnType<T>;
+};

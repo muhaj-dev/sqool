@@ -15,9 +15,10 @@ import { StatusFilter, GenderFilter, StudentAttendance } from '@/types'
 interface AttendanceTableProps {
   students: StudentAttendance[]
   isLoading: boolean
+  performDeepSearch:(searchQuery:string,performSearch:boolean)=>void
 }
 
-export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
+export function AttendanceTable({ students, isLoading,performDeepSearch }: AttendanceTableProps) {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
