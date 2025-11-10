@@ -276,7 +276,7 @@ export default function CreateAttendanceDialog({
         </Tabs>
 
         <DialogFooter className="max-h-5 ">
-          <CancelAttendanceButton onClick={() => {setOpen(false);reset}} />
+          <CancelAttendanceButton onClick={() => {setOpen(false);reset}} disabled={loading}/>
         </DialogFooter>
       </DialogContent>
     </Dialog>
