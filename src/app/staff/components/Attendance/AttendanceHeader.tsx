@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Calendar, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,25 +24,57 @@ import { CreateAttendanceButton } from "./CreateAttendanceButton";
 import CreateAttendanceDialog from "./CreateAttendanceDialog";
 import { useAttendanceCreate } from "../../hooks/useAttendanceCreate";
 import LoadingStateAttendance from "@/components/LoadingState";
+import { useAuthStore } from "@/zustand/authStore";
+import { useQuery } from "@tanstack/react-query";
+import { getStaffClasses } from "@/utils/api/index";
+import { useEffect } from "react";
+import { useStaffClassesStore } from "@/zustand/staff/staffStore";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
+import { getSessionsForStaff } from "@/utils/api";
+import { normalizeSessionTermsData } from "@/utils/lib";
 
-const classes = [
-  { id: "p3-math", name: "Primary 3 - Mathematics" },
-  { id: "p3-science", name: "Primary 3 - Science" },
-  { id: "p4-math", name: "Primary 4 - Mathematics" },
-  { id: "p5-science", name: "Primary 5 - Science" },
-];
 
-const academicSessions = ["2023/2024", "2024/2025", "2025/2026"];
+// const academicSessions = ["2023/2024", "2024/2025", "2025/2026"];//TODO: Fetch from API
 
-const termRanges = {
-  termDates: {
-    first: { start: "2025-09-10", end: "2025-12-05" },
-    second: { start: "2026-01-10", end: "2026-03-31" },
-    third: { start: "2026-04-15", end: "2026-07-20" },
-  },
-};
+// const termRanges = {
+//   termDates: {
+//     first: { start: "2025-09-10", end: "2025-12-05" },
+//     second: { start: "2026-01-10", end: "2026-03-31" },
+//     third: { start: "2026-04-15", end: "2026-07-20" },
+//   },
+// };//TODO: Fetch from API
 
 export function AttendanceHeader() {
+  const {user} = useAuthStore()
+  const {setClasses} = useStaffClassesStore();
+  const [academicSessions,setAcademicSessions] =  React.useState<string[]>([]);
+  const [termRanges,setTermRanges] =  React.useState<any>({});
+
+  const staffId = user?._id;
+
+  useAuthRedirect();
+  const classQuery = useQuery({
+    queryKey: ["staff-classes", staffId],
+    queryFn: async () => {
+      const res = await getStaffClasses(1, 15);
+      return res.data.result;
+    },
+    enabled: !!staffId && user?.role === "teacher",
+    staleTime: 2 * 60 * 60 * 1000, // 2 hours
+    gcTime: 10 * 60 * 1000,       // 10 minutes
+  });
+
+  const sessionsTermsQuery = useQuery({
+    queryKey: ["sessions-terms", staffId],
+    queryFn: async () => {
+      const res = await getSessionsForStaff("1", "15");
+      return res.data?.result;
+    },
+    enabled: !!staffId && user?.role === "teacher",
+    staleTime: 2 * 60 * 60 * 1000, // 2 hours
+    gcTime: 10 * 60 * 1000,       // 10 minutes
+  });
+
   const {
     selectedDate,
     selectedClass,
@@ -65,6 +98,21 @@ export function AttendanceHeader() {
     setSelectedTerm: setTerm,
   };
 
+
+
+   useEffect(() => {
+    if (classQuery.data) {
+      setClasses(classQuery.data);
+      setClass(classQuery.data[0]?._id || "");
+    }
+  }, [classQuery.data, setClasses]);
+  useEffect(() => {
+    if (sessionsTermsQuery.data) {
+     const {academicSessions,termRanges} = normalizeSessionTermsData(sessionsTermsQuery.data);
+      setAcademicSessions(academicSessions);
+      setTermRanges(termRanges);
+    }}, [sessionsTermsQuery.data]);
+  
   const handleMarkAllPresent = () => {
     markAllPresent();
     toast({
@@ -83,7 +131,7 @@ export function AttendanceHeader() {
           </p>
         </div>
         <div className="flex justify-end">
-          <CreateAttendanceButton onClick={() => controller.setOpen(true)} />
+          <CreateAttendanceButton disabled={classQuery.isPending} onClick={() => controller.setOpen(true)} />
         </div>
       </div>
 
@@ -92,6 +140,7 @@ export function AttendanceHeader() {
         <Popover>
           <PopoverTrigger asChild>
             <Button
+              disabled={classQuery.isPending}
               variant="outline"
               className={cn(
                 "w-[240px] justify-start text-left font-normal",
@@ -119,13 +168,14 @@ export function AttendanceHeader() {
 
         {/* Class Selector */}
         <Select value={selectedClass} onValueChange={setClass}>
-          <SelectTrigger className="w-[280px]">
+          <SelectTrigger disabled={classQuery.isPending} className="w-[280px]">
             <SelectValue placeholder="Select a class" />
           </SelectTrigger>
           <SelectContent>
-            {classes.map((cls) => (
-              <SelectItem key={cls.id} value={cls.id}>
-                {cls.name}
+            {classQuery.data && 
+            classQuery.data?.map((cls) => (
+              <SelectItem key={cls._id} value={cls._id}>
+                {cls.className} - {cls.shortName}
               </SelectItem>
             ))}
           </SelectContent>
@@ -134,12 +184,13 @@ export function AttendanceHeader() {
         <div className="flex-1" />
 
         {/* Action Buttons */}
-        <Button variant="outline" onClick={handleMarkAllPresent}>
+        <Button disabled={classQuery.isPending} variant="outline" onClick={handleMarkAllPresent}>
           <CheckCheck className="mr-2 h-4 w-4" />
           Mark All Present
         </Button>
 
         <Button
+          disabled={classQuery.isPending}
           onClick={() => {
             toast({
               title: "Attendance Saved",
@@ -154,7 +205,7 @@ export function AttendanceHeader() {
       <CreateAttendanceDialog
         controller={controller}
         students={students}
-        classOptions={classes}
+        classOptions={classQuery.data?.map(item=>({id:item._id,name:`${item.className } -(${item.shortName})`})) || []}
         academicSessions={academicSessions}
         termRanges={termRanges}
       />

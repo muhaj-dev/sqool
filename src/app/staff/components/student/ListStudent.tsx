@@ -1,47 +1,23 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ListFilter } from "lucide-react";
+import React, { useMemo, useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import student from "../../../../data/student.json";
-// import StaffSubbar from "./StaffSubbar"
 import { Dialog } from "@radix-ui/react-dialog";
-import StudentsCard from "./StudentsCard";
+import StudentsCard, { StudentsCardSkeleton } from "./StudentsCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAllStudents } from "@/utils/api/index";
 import { PAGE_SIZE } from "@/constants";
-// import { Separator } from "../ui/separator"
-
-type TStudent = {
-  _id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  ID: string;
-  class: string;
-  phone: string;
-  addmissin_date: string;
-  contact: string;
-};
+import { IStudent } from "@/types";
 
 interface ListStudentProps {
   staffId: string;
 }
 const ListStudent: React.FC<ListStudentProps> = ({ staffId }) => {
-  const [data, setData] = useState<TStudent[]>(student);
   const [searchQuery, setSearchQuery] = useState<string>("");
-
+  //TODO: should only fetch students assigned to the staff currenlty logged in. for now it fetching all students data
   const query = useInfiniteQuery({
     queryKey: ["staffs-students", staffId],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery);
-      console.log({ dataItem: res.data });
       return res.data;
     },
     getNextPageParam: (lastPage) => {
@@ -59,15 +35,17 @@ const ListStudent: React.FC<ListStudentProps> = ({ staffId }) => {
   // Flatten pages
   const students = useMemo(
     () =>
-      query.data?.pages
+      (query.data?.pages
         .flatMap((page) => page.result)
         .filter(
           (item, index, self) =>
             index === self.findIndex((t) => t._id === item._id)
-        ) ?? [],
+        ) ?? []) as unknown as (IStudent & {
+        address: string;
+        enrolmentDate: string;
+      })[],
     [query.data]
   );
-  console.log({ students }); //TODO: expect paginated object response from server and continue
 
   return (
     <Dialog>
@@ -76,11 +54,17 @@ const ListStudent: React.FC<ListStudentProps> = ({ staffId }) => {
         <div className="w-[98%] mx-auto py-4">
           <h3 className="text-xl font-semibold">My Students</h3>
           <div className="flex items-center justify-between my-4 "></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 ">
-            {data.map((student) => (
-              <StudentsCard key={student._id} item={student} />
-            ))}
-          </div>
+          {
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {query.isPending
+                ? Array.from({ length: 6 }).map((_, i) => (
+                    <StudentsCardSkeleton key={i} />
+                  ))
+                : students.map((student) => (
+                    <StudentsCard key={student._id} item={student} />
+                  ))}
+            </div>
+          }
         </div>
       </div>
     </Dialog>

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState } from "react";
 import { AttendanceStatsCard } from "./AttendanceStatsCard";
 import { AttendanceTable } from "./AttendanceTable";
-import { useAttendanceData } from "@/app/staff/hooks/useAttendanceData";
 import { useAttendanceStats } from "@/app/staff/hooks/useAttendanceStats";
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,17 +15,16 @@ import { mapStudentToAttendance } from "@/utils/lib";
 import debounce from "lodash.debounce";
 
 export default function StatsOverview() {
-  // const { data: studentData, isLoading } = useAttendanceData();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { user } = useAuthStore();
-  if (user?.role !== "teacher") return;
+  const {selectedClass} = useAttendanceStore();
 
-  const staffId = user._id;
+  const staffId = user?._id;
+
   const query = useInfiniteQuery({
-    queryKey: ["staffs-attendance-students", staffId],
+    queryKey: ["staffs-attendance-students", staffId,selectedClass],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery);
-      console.log({ dataItem: res.data });
       return res.data;
     },
     getNextPageParam: (lastPage) => {
@@ -38,10 +36,8 @@ export default function StatsOverview() {
     initialPageParam: 1,
     staleTime: 2 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    enabled: !!staffId,
+    enabled: !!staffId && !!selectedClass && user?.role === "teacher",
   });
-
-  console.log({data:query.data})
 
   // Flatten pages
   const studentData = useMemo(
@@ -81,6 +77,8 @@ export default function StatsOverview() {
   useEffect(() => {
     return () => debouncedSearch.cancel();
   }, [debouncedSearch]);
+
+  if (user?.role !== "teacher") return;
 
   return (
     <div className="space-y-10">

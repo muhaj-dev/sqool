@@ -12,6 +12,7 @@ export interface IStudent {
     userId: {
       firstName: string;
       lastName: string;
+      email: string;
     };
     isActive: boolean;
   };

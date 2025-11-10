@@ -3,6 +3,7 @@ import React from 'react'
 import { Bar } from 'react-chartjs-2'
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Skeleton } from "@/components/ui/skeleton";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
@@ -56,3 +57,55 @@ const LearningActivity = () => {
 }
 
 export default LearningActivity
+
+const LearningActivitySkeleton = () => {
+  return (
+    <div className="w-full animate-pulse">
+      {/* Header */}
+      <div className="flex justify-between items-center mt-8 w-full">
+        <Skeleton className="h-6 w-40" />
+
+        {/* Select Skeleton */}
+        <Skeleton className="h-10 w-[180px] rounded-md" />
+      </div>
+
+      {/* Chart Skeleton */}
+      <div className="mt-6 space-y-4">
+        {/* Fake bars mimicking horizontal bar chart */}
+        <div className="flex flex-col gap-4">
+          {/* Bar 1 */}
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-20" /> {/* Label */}
+            <Skeleton className="h-4 flex-1" /> {/* Bar */}
+          </div>
+
+          {/* Bar 2 */}
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-4 flex-1" />
+          </div>
+
+          {/* Bar 3 */}
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 flex-1" />
+          </div>
+
+          {/* Bar 4 */}
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 flex-1" />
+          </div>
+
+          {/* Bar 5 */}
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-36" />
+            <Skeleton className="h-4 flex-1" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export { LearningActivitySkeleton };
