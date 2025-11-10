@@ -16,6 +16,7 @@ import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 const page = () => {
   const { id: studentId } = useParams();
+  console.log("studentId", studentId);
   useAuthRedirect();
   const { user } = useAuthStore();
   const studentDetailsQuery = useQuery({
@@ -25,8 +26,7 @@ const page = () => {
       return res.data;
     },
     enabled: !!studentId,
-    staleTime: 2 * 60 * 60 * 1000, // 2 hours
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 0,
   });
 
   if (studentDetailsQuery.isError) {
@@ -39,6 +39,8 @@ const page = () => {
     );
   }
 
+  console.log({ studentDetailsQuery: studentDetailsQuery.data });
+
   return (
     <div>
       <div className="grid grid-cols-1 tablet:grid-cols-3 gap-6 mb-6">
@@ -48,7 +50,7 @@ const page = () => {
           ) : (
             <Details
               user={user!}
-              student={studentDetailsQuery.data?.students?.[0]!}
+              student={studentDetailsQuery.data?.student!}
             />
           )}
         </div>

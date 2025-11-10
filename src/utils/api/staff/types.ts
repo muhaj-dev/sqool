@@ -34,7 +34,7 @@ export interface FeesCurrentPastFuture {
 }
 
 export type StudentDetailsReturnType = {
-  students: ISingleStudent[];
+  student: ISingleStudent;
   studentFee: FeesCurrentPastFuture;
 };
 

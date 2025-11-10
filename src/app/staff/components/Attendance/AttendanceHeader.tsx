@@ -33,17 +33,6 @@ import useAuthRedirect from "@/hooks/useAuthRedirect";
 import { getSessionsForStaff } from "@/utils/api";
 import { normalizeSessionTermsData } from "@/utils/lib";
 
-
-// const academicSessions = ["2023/2024", "2024/2025", "2025/2026"];//TODO: Fetch from API
-
-// const termRanges = {
-//   termDates: {
-//     first: { start: "2025-09-10", end: "2025-12-05" },
-//     second: { start: "2026-01-10", end: "2026-03-31" },
-//     third: { start: "2026-04-15", end: "2026-07-20" },
-//   },
-// };//TODO: Fetch from API
-
 export function AttendanceHeader() {
   const {user} = useAuthStore()
   const {setClasses} = useStaffClassesStore();
@@ -85,6 +74,7 @@ export function AttendanceHeader() {
     setDate,
     setClass,
     markAllPresent,
+    attendance,
     students,
   } = useAttendanceStore();
   const attendanceCreate = useAttendanceCreate();
@@ -106,6 +96,7 @@ export function AttendanceHeader() {
       setClass(classQuery.data[0]?._id || "");
     }
   }, [classQuery.data, setClasses]);
+
   useEffect(() => {
     if (sessionsTermsQuery.data) {
      const {academicSessions,termRanges} = normalizeSessionTermsData(sessionsTermsQuery.data);
@@ -120,6 +111,14 @@ export function AttendanceHeader() {
       description: "All students marked as present",
     });
   };
+
+  const handleSaveAttendance = async () => {
+    console.log({attendance});
+     toast({
+        title: "Attendance Saved",
+        description: "Attendance records have been updated successfully",
+      });
+  }
 
   return (
     <div className="space-y-4">
@@ -191,12 +190,7 @@ export function AttendanceHeader() {
 
         <Button
           disabled={classQuery.isPending}
-          onClick={() => {
-            toast({
-              title: "Attendance Saved",
-              description: "Attendance records have been updated successfully",
-            });
-          }}
+          onClick={handleSaveAttendance }
         >
           Save Attendance
         </Button>

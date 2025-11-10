@@ -1,13 +1,6 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  Instagram,
-  Mail,
-  Smartphone,
-  Star,
-  Twitter,
-  LocateIcon,
-} from "lucide-react";
+import { Mail, Smartphone, Star, LocateIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ISingleStudent } from "@/types";
@@ -19,6 +12,9 @@ interface DetailsProps {
   user: AuthUser;
 }
 const Details: React.FC<DetailsProps> = ({ student, user }) => {
+  if (!student || !user) {
+    return <DetailsSkeleton />;
+  }
   return (
     <div className="min-w-[25%] flex flex-col gap-4">
       <div className="flex items-center gap-4">
