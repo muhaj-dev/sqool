@@ -23,6 +23,8 @@ export function StudentInfoDialog({ student, open, onOpenChange }: StudentInfoDi
     .join('')
     .toUpperCase()
 
+    console.log("Student Info Dialog Rendered:", student);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">

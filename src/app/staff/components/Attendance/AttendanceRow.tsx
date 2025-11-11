@@ -32,7 +32,6 @@ export function AttendanceRow({ student }: AttendanceRowProps) {
     status: student.status as AttendanceStatus,
     remarks: '',
   }
-  console.log(record.status, 'status')
 
   const handleStatusChange = (status: AttendanceStatus) => {
     updateAttendance(student.id, { status })

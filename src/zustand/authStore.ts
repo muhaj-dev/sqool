@@ -20,21 +20,21 @@ export function ToValidSchool(school: { schoolId: { _id: string; name: string };
     : null
 }
 
-interface AuthUser {
-  _id?: string
-  firstName?: string
-  lastName?: string
-  email: string
-  password?: string
+export interface AuthUser {
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  password?: string;
   phoneId: {
-    phoneNumber?: string
-  }
-  verificationCode?: string
-  role?: Role
+    phoneNumber?: string;
+  };
+  verificationCode?: string;
+  role?: Role;
   school?: {
-    _id: string
-    name: string
-  }
+    _id: string;
+    name: string;
+  };
 }
 
 interface LoginResponse {

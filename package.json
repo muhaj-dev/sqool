@@ -38,6 +38,7 @@
     "@tanstack/react-query": "^5.90.6",
     "@tanstack/react-query-devtools": "^5.90.2",
     "@tanstack/react-table": "^8.11.7",
+    "@types/qs": "^6.14.0",
     "@types/react-select": "^5.0.1",
     "axios": "^1.8.4",
     "chart.js": "^4.4.2",
@@ -46,10 +47,12 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^12.23.12",
     "html2pdf.js": "^0.12.1",
+    "lodash.debounce": "^4.0.8",
     "loglevel": "^1.9.2",
     "lucide-react": "^0.300.0",
     "moment": "^2.30.1",
     "next": "14.1.0",
+    "qs": "^6.14.0",
     "react": "^18",
     "react-big-calendar": "^1.14.1",
     "react-chartjs-2": "^5.2.0",
@@ -70,6 +73,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20.16.10",
     "@types/react": "^18.3.11",
     "@types/react-big-calendar": "^1.8.11",
