@@ -357,17 +357,17 @@ export const TeacherTimeTable = ({ staffId }: { staffId: string }) => {
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h4 className="font-medium capitalize">{period.subject.name}</h4>
-                            <p className="text-sm text-muted-foreground capitalize">
+                            <h4 className="font-medium capitalize">{period?.subject?.name}</h4>
+                            {/* <p className="text-sm text-muted-foreground capitalize">
                               {period?.classLevel?.name || 'N/A'}
-                            </p>
+                            </p> */}
                           </div>
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center gap-2 text-sm">
                             <Clock className="h-3 w-3 text-muted-foreground" />
                             <span>
-                              {formatTime(period.startTime)} - {formatTime(period.endTime)}
+                              {formatTime(period?.startTime)} - {formatTime(period?.endTime)}
                             </span>
                           </div>
                         </div>
