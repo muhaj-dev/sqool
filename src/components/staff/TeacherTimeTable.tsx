@@ -359,7 +359,7 @@ export const TeacherTimeTable = ({ staffId }: { staffId: string }) => {
                           <div>
                             <h4 className="font-medium capitalize">{period.subject.name}</h4>
                             <p className="text-sm text-muted-foreground capitalize">
-                              {period?.classLevel?.name || 'N/A'}
+                              "period?.classLevel?.name "- 'N/A'
                             </p>
                           </div>
                         </div>
