@@ -59,8 +59,8 @@ const ClassManagement = ({
     fetchClass()
   }, [classId, refresh]) // <-- add refresh here
 
-  if (loading) return <div>Loading...</div>
-  if (!classData) return <div>Class not found</div>
+  // if (loading) return <div>Loading...</div>
+  // if (!classData) return <div>Class not found</div>
 
   // Optionally filter classes if you want search to work
   // const filteredClasses = filterClasses(classes, searchTerm);

@@ -20,7 +20,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
 
   const router = useRouter();
   const { user } = useAuthStore.getState();
-  console.log(user); // Use school name in your project
+  // console.log(user); // Use school name in your project
 
   return (
     <div className="py-8 bg-white flex flex-col max-h-[200vh]  gap-6 w-[300px]">
