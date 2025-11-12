@@ -50,11 +50,11 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
         title: notice.title,
         content: notice.content,
         body: notice.body,
-        visibility: notice.visibility,
+        visibility: notice.visibility as "everyone",
         resources: notice.resources,
         expirationDate: notice.expirationDate.slice(0, 16),
-        notificationDate: notice.notificationDate.slice(0, 16),
-      })
+        notificationDate: notice.notificationDate?.slice(0, 16),
+      });
     } else {
       form.reset({
         title: '',
@@ -77,8 +77,8 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
       resources: data.resources,
       expirationDate: new Date(data.expirationDate).toISOString(),
       notificationDate: new Date(data.notificationDate).toISOString(),
-      id: notice?.id,
-    }
+      id: notice?._id,
+    };
     onSave(noticeData)
   }
 

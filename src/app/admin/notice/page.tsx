@@ -52,55 +52,55 @@ const Page = () => {
   }
 
   const handleDelete = async (noticeId: string) => {
-    if (!confirm('Are you sure you want to delete this notice?')) return
-    setLoading(true)
+    if (!confirm("Are you sure you want to delete this notice?")) return;
+    setLoading(true);
     try {
-      await deleteNotice(noticeId)
-      setNotices(notices.filter(n => n.id !== noticeId))
+      await deleteNotice(noticeId);
+      setNotices(notices.filter((n) => n.id !== noticeId));
       toast({
-        title: 'Success',
-        description: 'Notice deleted successfully',
-      })
-      fetchNotices()
+        title: "Success",
+        description: "Notice deleted successfully",
+      });
+      fetchNotices();
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to delete notice',
-        variant: 'destructive',
-      })
+        title: "Error",
+        description: "Failed to delete notice",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSave = async (noticeData: Notice) => {
-    setLoading(true)
+    setLoading(true);
     try {
       if (editingNotice?.id) {
-        await updateNotice(editingNotice.id, noticeData)
+        await updateNotice(editingNotice.id, noticeData);
         toast({
-          title: 'Success',
-          description: 'Notice updated successfully',
-        })
+          title: "Success",
+          description: "Notice updated successfully",
+        });
       } else {
-        await createNotice(noticeData)
+        await createNotice(noticeData);
         toast({
-          title: 'Success',
-          description: 'Notice created successfully',
-        })
+          title: "Success",
+          description: "Notice created successfully",
+        });
       }
-      setIsDialogOpen(false)
-      fetchNotices()
+      setIsDialogOpen(false);
+      fetchNotices();
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to save notice',
-        variant: 'destructive',
-      })
+        title: "Error",
+        description: "Failed to save notice",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filteredNotices = notices.filter(
     notice =>

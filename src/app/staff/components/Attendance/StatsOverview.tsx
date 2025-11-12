@@ -17,14 +17,18 @@ import debounce from "lodash.debounce";
 export default function StatsOverview() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { user } = useAuthStore();
-  const {selectedClass} = useAttendanceStore();
+  const {selectedClass,startDate,endDate} = useAttendanceStore();
 
   const staffId = user?._id;
 
   const query = useInfiniteQuery({
-    queryKey: ["staffs-attendance-students", staffId,selectedClass],
+    queryKey: ["staffs-attendance-students", staffId,selectedClass, startDate, endDate],
     queryFn: async ({ pageParam = 1 }) => {
-      const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery);
+      const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery,{
+        include: "Attendance",
+        startDate,
+        endDate
+      });
       return res.data;
     },
     getNextPageParam: (lastPage) => {
@@ -36,7 +40,7 @@ export default function StatsOverview() {
     initialPageParam: 1,
     staleTime: 2 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    enabled: !!staffId && !!selectedClass && user?.role === "teacher",
+    enabled:!!startDate && !!staffId && !!selectedClass && user?.role === "teacher",
   });
 
   // Flatten pages
