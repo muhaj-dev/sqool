@@ -417,10 +417,10 @@ const AdminPaymentHistory = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExport}>
+            {/* <Button variant="outline" onClick={handleExport}>
               <Download className="h-4 w-4 mr-2" />
               Export
-            </Button>
+            </Button> */}
             <Dialog open={isAddPaymentOpen} onOpenChange={setIsAddPaymentOpen}>
               <DialogTrigger asChild>
                 <Button>
