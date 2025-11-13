@@ -7,45 +7,45 @@ import TeacherSettings from './TeacherSettings'
 import TeacherProfile from './TecherProfile'
 import { LessonBook } from './LessonBook'
 import { TeacherTimeTable } from './TeacherTimeTable'
-import { StaffResult } from '@/types'
+import { StaffResult, StaffSchedule } from '@/types'
 
-const tabs = ['Teacher profile', 'Lesson books', 'Timetable', 'Reviews', 'Setting'] as const
+const tabs = ['Teacher profile', 'Timetable', 'Setting'] as const
 
-type TabIndex = 0 | 1 | 2 | 3 | 4
+type TabIndex = 0 | 1 | 2 | 3
 
 interface StaffContentProps {
   activeIndex: TabIndex
   staffId: string
-  staff: StaffResult | null // Add staff prop
+  staff: StaffResult | null 
+  staffSchedules: StaffSchedule[]
 }
 
 interface StaffStepsProps {
   staffId: string
-  staff: StaffResult | null // Add staff prop
+  staff: StaffResult | null
+  staffSchedules: StaffSchedule[]
 }
 
-const StaffSteps = ({ staffId, staff }: StaffStepsProps) => {
+const StaffSteps = ({ staffId, staff, staffSchedules }: StaffStepsProps) => {
   const [activeIndex, setActiveIndex] = useState<TabIndex>(0)
 
-  const StaffContent = ({ activeIndex, staffId, staff }: StaffContentProps) => {
+  const StaffContent = ({ activeIndex, staffId, staff, staffSchedules }: StaffContentProps) => {
     switch (activeIndex) {
       case 0:
         return <TeacherProfile staffId={staffId} staff={staff} />
       case 1:
-        return <LessonBook staffId={staffId} />
+        return <TeacherTimeTable staffId={staffId} staffSchedules={staffSchedules} />
       case 2:
-        return <TeacherTimeTable staffId={staffId} />
-      case 3:
-        return <Review staffId={staffId} />
-      case 4:
         return <TeacherSettings staffId={staffId} />
+        // case 3:
+        // return <Review staffId={staffId} />
       default:
         return null
     }
   }
 
   const handleTabClick = (index: number) => {
-    if (index >= 0 && index <= 4) {
+    if (index >= 0 && index <= 3) {
       setActiveIndex(index as TabIndex)
     }
   }
@@ -67,7 +67,12 @@ const StaffSteps = ({ staffId, staff }: StaffStepsProps) => {
       </div>
       <Separator className="my-4" />
       <div className="p-4">
-        <StaffContent activeIndex={activeIndex} staffId={staffId} staff={staff} />
+        <StaffContent 
+          activeIndex={activeIndex} 
+          staffId={staffId} 
+          staff={staff} 
+          staffSchedules={staffSchedules} 
+        />
       </div>
     </div>
   )

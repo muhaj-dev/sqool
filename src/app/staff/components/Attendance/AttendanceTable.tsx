@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PaginationControls } from '@/components/PaginationControl'
 import { AttendanceRow } from './AttendanceRow'
-import { Student } from '@/types/attendance'
 import { useState, useMemo } from 'react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectTrigger, SelectContent, SelectValue, SelectItem } from '@/components/ui/select'
@@ -15,9 +14,10 @@ import { StatusFilter, GenderFilter, StudentAttendance } from '@/types'
 interface AttendanceTableProps {
   students: StudentAttendance[]
   isLoading: boolean
+  performDeepSearch:(searchQuery:string,performSearch:boolean)=>void
 }
 
-export function AttendanceTable({ students, isLoading }: AttendanceTableProps) {
+export function AttendanceTable({ students, isLoading,performDeepSearch }: AttendanceTableProps) {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')

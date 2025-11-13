@@ -44,10 +44,10 @@ import {
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 // Create axios instance with default config
-const api = axios.create({
+export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {},
-})
+});
 
 // Add request interceptor to inject token
 api.interceptors.request.use(
@@ -527,6 +527,28 @@ export const removeTutorOrSubjectFromClass = async (
     throw new Error('Failed to remove tutor or subject from class')
   }
 }
+
+export const deleteClassTeacher = async (
+  classId: string,
+  payload: { teacherId: string }
+) => {
+  console.log(classId, payload);
+  try {
+    const response = await api.patch(
+      `/v1/admin/classes/${classId}/teacher/remove`,
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to remove stafffrom class";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to remove staff from class");
+  }
+};
 
 export const createClassSchedule = async (payload: {
   class: string
@@ -1282,5 +1304,15 @@ export const getPaymentById = async (paymentId: string): Promise<PaymentResponse
       throw new Error(errorMessage)
     }
     throw new Error('Failed to fetch payment details')
+  }
+}
+
+
+export const getPaymentStatistics = async () => {
+  try {
+    const response = await api.get('/v1/admin/payment/stat')
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to fetch payment statistics')
   }
 }

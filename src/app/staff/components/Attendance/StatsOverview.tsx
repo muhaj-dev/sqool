@@ -1,31 +1,89 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { AttendanceStatsCard } from './AttendanceStatsCard'
-import { AttendanceTable } from './AttendanceTable'
-import { useAttendanceData } from '@/app/staff/hooks/useAttendanceData'
-import { useAttendanceStats } from '@/app/staff/hooks/useAttendanceStats'
-import { useAttendanceStore } from '@/zustand/staff/useAttendanceStore'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Users, CheckCircle, XCircle, TrendingUp } from 'lucide-react'
+import React, {useEffect, useMemo, useState } from "react";
+import { AttendanceStatsCard } from "./AttendanceStatsCard";
+import { AttendanceTable } from "./AttendanceTable";
+import { useAttendanceStats } from "@/app/staff/hooks/useAttendanceStats";
+import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Users, CheckCircle, XCircle, TrendingUp } from "lucide-react";
+import { PAGE_SIZE } from "@/constants";
+import { getAllStudents } from "@/utils/api/index";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/zustand/authStore";
+import { mapStudentToAttendance } from "@/utils/lib";
+import debounce from "lodash.debounce";
 
 export default function StatsOverview() {
-  const { data: studentData, isLoading } = useAttendanceData()
-  const { initializeAttendance, setStudent, students } = useAttendanceStore()
-  const stats = useAttendanceStats(studentData || [])
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const { user } = useAuthStore();
+  const {selectedClass} = useAttendanceStore();
+
+  const staffId = user?._id;
+
+  const query = useInfiniteQuery({
+    queryKey: ["staffs-attendance-students", staffId,selectedClass],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery);
+      return res.data;
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.pagination?.hasNextPage) {
+        return lastPage.pagination.nextPage;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+    staleTime: 2 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: !!staffId && !!selectedClass && user?.role === "teacher",
+  });
+
+  // Flatten pages
+  const studentData = useMemo(
+    () =>
+      query.data?.pages
+        .flatMap((page) => page.result)
+        .filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t._id === item._id)
+        ) ?? [],
+    [query.data]
+  );
+
+  const studentsAttendance = studentData.map((student, index) =>
+    mapStudentToAttendance(student, index)
+  );
+
+  const { initializeAttendance, setStudent, students } = useAttendanceStore();
+  const stats = useAttendanceStats(studentsAttendance || []);
 
   // Initialize attendance records when students load
   useEffect(() => {
     if (studentData) {
-      setStudent(studentData)
-      initializeAttendance(studentData.map(s => s.id))
+      setStudent(studentsAttendance);
+      initializeAttendance(studentsAttendance.map((s) => s.id));
     }
-  }, [studentData, initializeAttendance, setStudent])
+  }, [studentData, initializeAttendance, setStudent]);
+
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearchQuery(value);
+      }, 500),
+    []
+  );
+
+  useEffect(() => {
+    return () => debouncedSearch.cancel();
+  }, [debouncedSearch]);
+
+  if (user?.role !== "teacher") return;
 
   return (
     <div className="space-y-10">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {isLoading ? (
+        {query.isPending ? (
           <>
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-32 rounded-lg" />
@@ -63,7 +121,15 @@ export default function StatsOverview() {
           </>
         )}
       </div>
-      <AttendanceTable students={students ?? []} isLoading={isLoading} />
+      <AttendanceTable
+        students={students ?? []}
+        isLoading={query.isPending}
+        performDeepSearch={(query, shouldSearch) => {
+          if (shouldSearch) {
+            debouncedSearch(query);
+          }
+        }}
+      />
     </div>
-  )
+  );
 }

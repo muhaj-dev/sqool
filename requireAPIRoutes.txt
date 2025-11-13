@@ -94,7 +94,7 @@ Return data:
 ]
 
 PATCH  
-/staff/:id/attendance/:classId/:studentId?date=4-11-2025  
+/staff/:id/attendance/:classId/:studentId?date=4-11-2025  **** not to be implemented at the moment *****
 Payload:  
 {
   "status": "present", // "present" | "absent" | "late" | "excused"
@@ -116,9 +116,9 @@ POST
 Payload:  
 {
   "attendance": [
-    { "studentId": "1", "status": "present" },
-    { "studentId": "2", "status": "absent" },
-    { "studentId": "3", "status": "present" }
+    { "studentId": "1", "status": "present",remarks:"" },
+    { "studentId": "2", "status": "absent" ,remarks:"" },
+    { "studentId": "3", "status": "present",remarks:""  }
   ]
 }  
 Return:  

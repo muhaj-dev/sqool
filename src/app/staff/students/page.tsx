@@ -1,15 +1,20 @@
 'use client'
 
-import React, { useState } from 'react'
-import Studentbar from '../components/student/studentbar'
-import ListStudent from '../components/student/ListStudent'
+import React from "react";
+import ListStudent from "../components/student/ListStudent";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
+import { useAuthStore } from "@/zustand/authStore";
 
 const Page = () => {
+  const { user } = useAuthStore();
+  const staffId = user?._id;
+  useAuthRedirect();
+  if (!staffId || user?.role !== "teacher") return null;
   return (
     <div className="">
-      <ListStudent />
+      <ListStudent staffId={staffId!} />
     </div>
-  )
-}
+  );
+};
 
 export default Page

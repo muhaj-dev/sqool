@@ -66,10 +66,10 @@ const Sidebar = () => {
         <div className="flex flex-col gap-10 w-[90%] mx-auto">
           {/* Student */}
 
-          <Link href="/parent" className={`flex items-center gap-3 pl-4 ${pathname.startsWith('/parent') ? '' : ''}`}>
-            <DashboardIcon color={`${pathname.startsWith('/parent') ? '#E5B80B' : '#515B6F'}`} />
-            <p className={`text-[#515B6F] ${pathname.startsWith('/parent') ? 'text-primary' : ''}`}>Dashboard</p>
-          </Link>
+       <Link href="/parent" className={`flex items-center gap-3 pl-4 ${pathname === '/parent' ? '' : ''}`}>
+  <DashboardIcon color={`${pathname === '/parent' ? '#E5B80B' : '#515B6F'}`} />
+  <p className={`text-[#515B6F] ${pathname === '/parent' ? 'text-primary' : ''}`}>Dashboard</p>
+</Link>
 
           <Accordion type="multiple" className="w-[100%] -my-6 hover:outline-none">
             <AccordionItem value="item-1" className="border-b-0">
@@ -92,10 +92,7 @@ const Sidebar = () => {
                           className={`hover:text-primary text-[#515B6F] cursor-pointer`}
                           onClick={() => router.push(`/parent/kid/${child._id}`)}
                         >
-                          {child.firstName}{' '}
-                          <span className="ml-1 hover:text-primary  text-muted-foreground">
-                            {formatLastName(child.lastName)}
-                          </span>
+                          {child?.firstName}{' '}{formatLastName(child.lastName)}
                         </button>
                       </div>
                     ))
