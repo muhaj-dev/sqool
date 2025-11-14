@@ -26,9 +26,8 @@ const LeftBar = ({ staffId, staff, loading, error }: LeftBarProps) => {
     )
   }
 
-  console.log('Staff in LeftBar:', staff)
-  const fullName = staff?.userId ? `${staff?.userId?.firstName} ${staff?.userId?.lastName}` : 'NA'
-  const email = staff?.userId ? `${staff?.userId?.email}` : 'NA'// Email not available in StaffResult
+  const fullName = staff.userId ? `${staff.userId?.firstName} ${staff.userId?.lastName}` : 'Unknown Staff'
+  const email = 'No email provided' // Email not available in StaffResult
   const phone = staff?.address ? `+${staff.address?.split(',')?.[0]?.trim()}` : '+44 1245 572 135'
   const address = staff?.address ? `${staff.address}` : '43 awayewaserere street ejigun ayetoro itele ogun state'
   const instagram = staff?.aboutMe
@@ -78,25 +77,38 @@ const LeftBar = ({ staffId, staff, loading, error }: LeftBarProps) => {
         </div>
       </div>
 
-      <Separator />
+      {/* <Separator />
       <div className="flex flex-col gap-4">
         <p className="text-xl">Contact</p>
         <div className="flex gap-6">
           <Mail className="text-muted-foreground" size={20} />
           <div>
             <p className="text-muted-foreground">Email</p>
-            <p className="text-[14px]">{email ?? 'Not available'}</p>
+            <p className="text-[14px]">{staff?.email ?? 'Not available'}</p>
           </div>
         </div>
-        {/* <div className="flex gap-6">
+        <div className="flex gap-6">
           <Smartphone className="text-muted-foreground" size={23} />
           <div>
             <p className="text-muted-foreground">Phone</p>
             <p className="text-[14px]">{phone}</p>
           </div>
-        </div> */}
-
-      </div>
+        </div>
+        <div className="flex gap-6">
+          <Instagram className="text-muted-foreground" size={20} />
+          <div>
+            <p className="text-muted-foreground">Instagram</p>
+            <p className="text-[14px]">{instagram}</p>
+          </div>
+        </div>
+        <div className="flex gap-6">
+          <Twitter className="text-muted-foreground" size={22} />
+          <div>
+            <p className="text-muted-foreground">Twitter</p>
+            <p className="text-[14px]">{twitter}</p>
+          </div>
+        </div>
+      </div> */}
     </div>
   )
 }
