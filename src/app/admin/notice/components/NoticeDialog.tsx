@@ -63,7 +63,7 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
         title: notice.title || '',
         content: notice.content || '',
         body: notice.body || '',
-        visibility: notice.visibility || 'everyone',
+        visibility: notice.visibility as "everyone" || 'everyone',
         resources: notice.resources || [],
         expirationDate: formatDateForInput(notice.expirationDate),
         notificationDate: formatDateForInput(notice.notificationDate),
@@ -90,8 +90,8 @@ export function NoticeDialog({ open, onOpenChange, notice, onSave }: NoticeDialo
       resources: data.resources,
       expirationDate: new Date(data.expirationDate).toISOString(),
       notificationDate: new Date(data.notificationDate).toISOString(),
-      id: notice?.id,
-    }
+      id: notice?._id,
+    };
     onSave(noticeData)
   }
 

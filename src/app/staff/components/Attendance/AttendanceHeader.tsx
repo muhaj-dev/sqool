@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Calendar, CheckCheck } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -10,15 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { format } from "date-fns";
+
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
-import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import { CreateAttendanceButton } from "./CreateAttendanceButton";
 import CreateAttendanceDialog from "./CreateAttendanceDialog";
@@ -32,6 +25,7 @@ import { useStaffClassesStore } from "@/zustand/staff/staffStore";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import { getSessionsForStaff } from "@/utils/api";
 import { normalizeSessionTermsData } from "@/utils/lib";
+import { AttendanceDatePicker } from "./AttendanceDatePicker";
 
 export function AttendanceHeader() {
   const {user} = useAuthStore()
@@ -65,13 +59,11 @@ export function AttendanceHeader() {
   });
 
   const {
-    selectedDate,
     selectedClass,
     selectedSession,
     setSession,
     selectedTerm,
     setTerm,
-    setDate,
     setClass,
     markAllPresent,
     attendance,
@@ -136,34 +128,7 @@ export function AttendanceHeader() {
 
       <div className="flex flex-wrap items-center gap-3">
         {/* Date Picker */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              disabled={classQuery.isPending}
-              variant="outline"
-              className={cn(
-                "w-[240px] justify-start text-left font-normal",
-                !selectedDate && "text-muted-foreground"
-              )}
-            >
-              <Calendar className="mr-2 h-4 w-4" />
-              {selectedDate ? (
-                format(selectedDate, "PPP")
-              ) : (
-                <span>Pick a date</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <CalendarComponent
-              mode="single"
-              selected={selectedDate}
-              onSelect={(date) => date && setDate(date)}
-              initialFocus
-              className="p-3 pointer-events-auto"
-            />
-          </PopoverContent>
-        </Popover>
+        <AttendanceDatePicker/>
 
         {/* Class Selector */}
         <Select value={selectedClass} onValueChange={setClass}>

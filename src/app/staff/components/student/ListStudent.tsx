@@ -13,7 +13,6 @@ interface ListStudentProps {
 }
 const ListStudent: React.FC<ListStudentProps> = ({ staffId }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  //TODO: should only fetch students assigned to the staff currenlty logged in. for now it fetching all students data
   const query = useInfiniteQuery({
     queryKey: ["staffs-students", staffId],
     queryFn: async ({ pageParam = 1 }) => {

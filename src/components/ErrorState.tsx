@@ -3,12 +3,15 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle } from "lucide-react"
+import { cn } from "@/lib/utils";
 
 interface ErrorStateProps {
-  error: string | Error
-  onRetry: () => void
-  title?: string
-  description?: string
+  error: string | Error;
+  onRetry: () => void;
+  title?: string;
+  description?: string;
+  variant?: "full" | "compact";
+  className?: string;
 }
 
 const ErrorState: React.FC<ErrorStateProps> = ({
@@ -16,28 +19,56 @@ const ErrorState: React.FC<ErrorStateProps> = ({
   onRetry,
   title = "Something went wrong",
   description = "An unexpected issue occurred. Please try again.",
+  variant = "full",
+  className,
 }) => {
-  const message = typeof error === "string" ? error : error?.message
+  const message = typeof error === "string" ? error : error?.message;
+
+  const isCompact = variant === "compact";
 
   return (
-    <div className="flex flex-col items-center justify-center h-[50vh] min-h-[300px] text-center px-6 py-10 space-y-3">
-      <AlertTriangle className="h-14 w-14 text-red-500 mb-4" />
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center text-center transition-all",
+        isCompact
+          ? "p-3 space-y-2 rounded-lg border border-border bg-muted/20"
+          : "h-[50vh] min-h-[300px] px-6 py-10 space-y-3",
+        className
+      )}
+    >
+      <AlertTriangle
+        className={cn(
+          "text-red-500",
+          isCompact ? "h-6 w-6 mb-1" : "h-14 w-14 mb-4"
+        )}
+      />
 
-      <h2 className="text-2xl font-semibold mb-2">{title}</h2>
+      {!isCompact && <h2 className="text-2xl font-semibold mb-1">{title}</h2>}
 
-      <p className="text-muted-foreground max-w-md mb-2">{description}</p>
+      {!isCompact && (
+        <p className="text-muted-foreground text-sm max-w-md">{description}</p>
+      )}
 
       {message && (
-        <p className="text-sm text-red-600 max-w-md bg-red-100 px-3 py-2 rounded-md mb-4 border border-red-200">
+        <p
+          className={cn(
+            "text-sm text-red-600 bg-red-100 border border-red-200 rounded-md",
+            isCompact ? "px-2 py-1" : "px-3 py-2 max-w-md mb-2"
+          )}
+        >
           {message}
         </p>
       )}
 
-      <Button onClick={onRetry} className="bg-primary text-white px-6">
+      <Button
+        variant={isCompact ? "outline" : "default"}
+        size={isCompact ? "sm" : "default"}
+        onClick={onRetry}
+      >
         Retry
       </Button>
     </div>
-  )
-}
+  );
+};
 
 export default ErrorState

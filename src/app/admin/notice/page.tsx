@@ -64,7 +64,7 @@ const Page = () => {
   const fetchNotices = async () => {
     setLoading(true);
     try {
-      const data = await getAllNotices(searchTerm, "", currentPage, pagination.pageSize);
+      const data = await getAllNotices(searchTerm, "", pagination.pageSize);
       setNotices(data?.data?.result || []);
       setPagination(data?.data?.pagination || {
         total: 0,

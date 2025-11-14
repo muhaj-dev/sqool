@@ -1,38 +1,61 @@
-import { ClassPaginationResponse, StudentPaginationResponse } from "@/types";
+import {
+  ClassPaginationResponse,
+  StudentPaginationResponse,
+  ExamsResponse,
+  StaffStatResponse,
+} from "@/types";
 import axios from "axios";
 import { api } from "@/utils/api";
 import { StaffStudentResponse } from "./types";
 import qs from "qs";
+import { format } from "date-fns";
 
-const buildStaffQueryUrl = (filters: any, extendUrl?: string) => {
+interface DateRange {
+  startDate?: string;
+  endDate?: string;
+}
+
+interface StudentFilters extends Record<string, any>, DateRange {
+  include?: string; // e.g. "Attendance"
+}
+
+const buildStaffQueryUrl = (
+  basePath: string,
+  filters: StudentFilters = {},
+  extendUrl?: string
+): string => {
+  const fullPath = `/v1/staff${extendUrl ?? ""}${basePath ?? ""}`;
   const queryString = qs.stringify(filters, {
     skipNulls: true,
     arrayFormat: "repeat",
   });
-
-  return `/v1/staff${extendUrl ?? ""}${queryString ? `?${queryString}` : ""}`;
+  return queryString ? `${fullPath}?${queryString}` : fullPath;
 };
 
 export const getAllStudents = async (
-  page: number,
+  page: number = 1,
   limit: number = 10,
   search?: string,
-  filter?: string,
-  hasAttendance?: boolean
+  filter?: Record<string, any>,
+  options?: {
+    hasAttendance?: boolean;
+    startDate?: string;
+    endDate?: string;
+  }
 ): Promise<StudentPaginationResponse> => {
   try {
-    const url = buildStaffQueryUrl(
-      filter,
-      `/student${hasAttendance ? "?include=Attendance" : ""}`
-    );
-    const response = await api.get<StudentPaginationResponse>(url, {
-      params: {
-        page,
-        limit,
-        search,
-        filter,
-      },
-    });
+    const filters: StudentFilters = {
+      ...filter,
+      page,
+      limit,
+      search,
+      ...(options?.startDate && { startDate: options.startDate }),
+      ...(options?.endDate && { endDate: options.endDate }),
+      ...(options?.hasAttendance && { include: "Attendance" }),
+    };
+    const url = buildStaffQueryUrl("/student", filters);
+
+    const response = await api.get<StudentPaginationResponse>(url);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -51,7 +74,7 @@ export const getStaffClasses = async (
 ): Promise<ClassPaginationResponse> => {
   try {
     const response = await api.get<ClassPaginationResponse>(
-      "/v1/staff/classes",
+      "/v1/staff/classes/own",
       {
         params: {
           page,
@@ -87,5 +110,49 @@ export const getStudentById = async (
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch student");
+  }
+};
+
+//********************* DASHBOARD **********************************/
+
+export const getStaffUpcomingExam = async (
+  page: number = 1,
+  limit: number = 4
+): Promise<ExamsResponse> => {
+  try {
+    const response = await api.get(`/v1/staff/examination`, {
+      params: {
+        limit,
+        page,
+        startDate: format(
+          new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          "yyyy-MM-dd"
+        ),
+        endDate: format(new Date(), "yyyy-MM-dd"),
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch upcoming exams";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to fetch upcoming exams");
+  }
+};
+export const getStaffDashboardStats = async (): Promise<StaffStatResponse> => {
+  try {
+    const response = await api.get(`/v1/staff/stat`);
+    return response.data.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to dashboard stats";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to dashboard stats");
   }
 };
