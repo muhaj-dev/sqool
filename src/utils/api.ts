@@ -1046,7 +1046,6 @@ export const getClassScheduleForStaff =
       const response = await api.get<TimetableResponse>(
         "/v1/staff/class/schedule"
       );
-      console.log(response,"getClassScheduleForStaff")
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

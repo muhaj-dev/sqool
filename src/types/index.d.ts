@@ -698,6 +698,20 @@ export interface ExamsResponse {
   pagination: Pagination;
 }
 
+export interface StaffStatResponse {
+  activeClasss: number;
+  totalStudent: number;
+  totalSubject: number;
+  lessonScheduledToday: number;
+  attendanceStats: Array<ClassAttendanceStat>;
+}
+
+export interface ClassAttendanceStat {
+  classId: string;
+  className: string;
+  stats: number;
+}
+
 export interface PaginationInfo {
   currentPage: number;
   totalPages: number;
@@ -739,7 +753,7 @@ export interface Teacher {
 
 export interface ClassSchedule {
   _id: string;
-  class: string;
+  class: string | ClassInfo;
   day: string;
   subject: Subject;
   teacher: Teacher;

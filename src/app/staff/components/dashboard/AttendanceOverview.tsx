@@ -1,30 +1,45 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ClassAttendanceStat } from "@/types";
 
 interface AttendanceOverviewProps {
-  attendanceRate: number;
+  data: Array<ClassAttendanceStat>;
 }
 
-export function AttendanceOverview({
-  attendanceRate,
-}: AttendanceOverviewProps) {
-  // Determine color gradient based on attendance rate
+export function AttendanceOverview({ data }: AttendanceOverviewProps) {
+  const [selectedClassId, setSelectedClassId] = useState(data[0]?.classId);
+
+  const selectedClass = data.find((c) => c.classId === selectedClassId);
+
+  const attendanceRate = selectedClass?.stats ?? 0;
+
+  useEffect(() => {
+    setSelectedClassId(data[0]?.classId);
+  }, [data.length]);
+
   const getColorClass = (rate: number) => {
-    if (rate >= 90) return "text-green-500"; // Excellent
-    if (rate >= 75) return "text-emerald-400"; // Good
-    if (rate >= 50) return "text-yellow-400"; // Average
-    if (rate >= 30) return "text-orange-400"; // Below average
-    return "text-red-500"; // Poor
+    if (rate >= 90) return "text-green-500";
+    if (rate >= 75) return "text-emerald-400";
+    if (rate >= 50) return "text-yellow-400";
+    if (rate >= 30) return "text-orange-400";
+    return "text-red-500";
   };
 
   const colorClass = getColorClass(attendanceRate);
 
-  // Background gradient to subtly reflect state
   const gradientBg = cn(
     "flex flex-col items-center justify-center py-6 transition-colors duration-500 rounded-lg",
     attendanceRate >= 90
@@ -38,13 +53,27 @@ export function AttendanceOverview({
     <Card className="hover:shadow-md transition-shadow duration-300">
       <CardHeader>
         <CardTitle className="text-lg">Attendance Overview</CardTitle>
+
+        {/* Class selector */}
+        <Select value={selectedClassId} onValueChange={setSelectedClassId}>
+          <SelectTrigger className="mt-3">
+            <SelectValue placeholder="Select class" />
+          </SelectTrigger>
+          <SelectContent>
+            {data.map((item) => (
+              <SelectItem key={item.classId} value={item.classId}>
+                {item.className}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </CardHeader>
+
       <CardContent>
         <div className={gradientBg}>
           {/* Circular Progress */}
           <div className="relative w-32 h-32 mb-4">
             <svg className="w-full h-full transform -rotate-90">
-              {/* Background circle */}
               <circle
                 cx="64"
                 cy="64"
@@ -54,7 +83,7 @@ export function AttendanceOverview({
                 fill="none"
                 className="text-muted transition-colors duration-300"
               />
-              {/* Progress circle */}
+
               <circle
                 cx="64"
                 cy="64"
@@ -71,7 +100,6 @@ export function AttendanceOverview({
               />
             </svg>
 
-            {/* Center Text */}
             <div className="absolute inset-0 flex items-center justify-center">
               <span
                 className={cn(
@@ -85,11 +113,16 @@ export function AttendanceOverview({
           </div>
 
           {/* Subtitle */}
-          <p className="text-sm text-muted-foreground mb-4">This week</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            {selectedClass?.className}, Today.
+          </p>
 
           {/* Button */}
           <Button className="w-full">
-            <Link href="/staff/attendance" className="flex items-center">
+            <Link
+              href={`/staff/attendance/${selectedClass?.classId}`}
+              className="flex items-center"
+            >
               <CheckCircle2 className="mr-2 h-4 w-4" />
               Mark Attendance
             </Link>

@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getClassScheduleForStaff } from "@/utils/api";
 import ErrorState from "@/components/ErrorState";
 import { format } from "date-fns";
-import { ClassSchedule } from "@/types";
+import { ClassInfo, ClassSchedule } from "@/types";
 import Link from "next/link";
 import { AuthUser } from "@/zustand/authStore";
 
@@ -20,7 +20,6 @@ export function UpcomingLessons({ staffId, user }: UpcomingLessonsProps) {
     queryKey: ["staff-upcoming-lessons", staffId],
     queryFn: async () => {
       const res = await getClassScheduleForStaff();
-      console.log("getClassScheduleForStaff Response:", res);
       return res.data;
     },
     enabled: !!staffId && user?.role === "teacher",
@@ -96,7 +95,7 @@ export function UpcomingLessons({ staffId, user }: UpcomingLessonsProps) {
                       {lesson.subject?.name || "Unnamed Subject"}
                     </h4>
                     <span className="text-xs text-muted-foreground">
-                      {lesson.class || "—"}
+                      {(lesson.class as ClassInfo).className || "—"}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground mb-1">

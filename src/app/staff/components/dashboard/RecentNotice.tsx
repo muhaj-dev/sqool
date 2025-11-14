@@ -95,7 +95,7 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
                 <div
                   key={notice._id}
                   className={cn(
-                    "flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0",
+                    "flex items-start gap-4 pb-4 last:pb-0 border-b border-b-black/15 last:border-0",
                     !notice.isActive && "opacity-50"
                   )}
                 >

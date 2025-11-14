@@ -2,6 +2,7 @@ import {
   ClassPaginationResponse,
   StudentPaginationResponse,
   ExamsResponse,
+  StaffStatResponse,
 } from "@/types";
 import axios from "axios";
 import { api } from "@/utils/api";
@@ -139,5 +140,19 @@ export const getStaffUpcomingExam = async (
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch upcoming exams");
+  }
+};
+export const getStaffDashboardStats = async (): Promise<StaffStatResponse> => {
+  try {
+    const response = await api.get(`/v1/staff/stat`);
+    return response.data.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to dashboard stats";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to dashboard stats");
   }
 };
