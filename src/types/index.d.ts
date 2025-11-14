@@ -255,15 +255,24 @@ export interface ScheduleTeacher {
   isActive: boolean;
 }
 
-export interface StaffSchedule {
-  _id: string;
-  class: string;
-  day: string;
-  subject: ScheduleSubject;
-  teacher: ScheduleTeacher;
-  startTime: string;
-  endTime: string;
+export interface ScheduleClass {
+  _id: string
+  className: string
+  shortName: string
+  levelType: string
+  classSection: string
 }
+
+export interface StaffSchedule {
+  _id: string
+  class: ScheduleClass  
+  day: string
+  subject: ScheduleSubject
+  teacher: ScheduleTeacher
+  startTime: string
+  endTime: string
+}
+
 
 export interface SingleStaffResponse {
   data: {

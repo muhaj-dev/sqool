@@ -4,8 +4,11 @@ import React from 'react'
 
 const AttendanceTable = () => {
   return (
-    <section className="flex flex-col gap-4 overflow-auto">
-      <div className="flex items-center justify-between">
+    // <section className="flex flex-col gap-4 overflow-auto">
+    <section className="">
+      <p className="font-bold text-3xl text-center mt--6">Comming Soon...</p>
+
+      {/* <div className="flex items-center justify-between">
         <p>Total Attendance</p>
         <Select>
           <SelectTrigger className="w-[120px]">
@@ -79,7 +82,7 @@ const AttendanceTable = () => {
             <p>5</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   )
 }

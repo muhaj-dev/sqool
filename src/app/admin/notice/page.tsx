@@ -333,7 +333,7 @@ const Page = () => {
 
         {/* Notices List */}
         <div className="grid gap-4 mb-6">
-          {notices.length === 0 ? (
+          {notices?.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Bell className="h-12 w-12 text-muted-foreground mb-4" />
@@ -381,7 +381,7 @@ const Page = () => {
                           Expires: {safeFormat(notice.expirationDate)}
                         </span>
                       </div>
-                      {notice.resources.length > 0 && (
+                      {/* {notice.resources.length > 0 && (
                         <div className="mb-3">
                           <p className="text-sm font-medium mb-2">Resources:</p>
                           <div className="grid gap-2">
@@ -399,7 +399,7 @@ const Page = () => {
                             ))}
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <div className="flex items-center gap-2 ml-4">
                       <Button
