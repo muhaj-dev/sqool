@@ -292,7 +292,7 @@ export const TeacherTimeTable = ({ staffId, staffSchedules }: TeacherTimeTablePr
                         <div className="flex items-start justify-between mb-2">
   <div className="min-w-0 flex-1"> {/* Added this container */}
     <p className="text-lg font-bold text-muted-foreground break-words whitespace-normal max-w-[160px]">
-      {period?.class?.className || 'N/A'} {' '} {period?.class?.classSection || 'N/A'}
+      Class: {period?.class?.className || 'N/A'} {' '} {period?.class?.classSection || 'N/A'}
     </p>
     <h4 className="font-medium capitalize">
       {period.subject?.name || 'Unknown Subject'}
