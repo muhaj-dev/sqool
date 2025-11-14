@@ -9,7 +9,8 @@ interface AttendanceRecord {
 }
 
 interface AttendanceStore {
-  selectedDate: Date;
+  startDate: Date;
+  endDate: Date;
   selectedClass: string;
   selectedSession: string;
   selectedTerm: TermDateRange;
@@ -17,7 +18,7 @@ interface AttendanceStore {
   students: StudentAttendance[];
 
   // setters
-  setDate: (date: Date) => void;
+  setDate: (startDate?: Date, endDate?: Date) => void;
   setClass: (classId: string) => void;
   setSession: (session: string) => void;
   setTerm: (term: TermDateRange) => void;
@@ -36,17 +37,19 @@ interface AttendanceStore {
   clearLocalStorage: () => void;
 }
 
-// --- Load from localStorage --- //
+/* -----------------------------
+    Load from localStorage
+----------------------------- */
 const loadInitialState = (): Partial<AttendanceStore> => {
   try {
     const stored = localStorage.getItem(ATTENDANCE_STORAGE_KEY);
     if (!stored) return {};
+
     const parsed = JSON.parse(stored);
 
-    // revive Date type
-    if (parsed.selectedDate) {
-      parsed.selectedDate = new Date(parsed.selectedDate);
-    }
+    // revive date objects if they exist
+    if (parsed.startDate) parsed.startDate = new Date(parsed.startDate);
+    if (parsed.endDate) parsed.endDate = new Date(parsed.endDate);
 
     return parsed;
   } catch {
@@ -54,10 +57,13 @@ const loadInitialState = (): Partial<AttendanceStore> => {
   }
 };
 
-// --- Persist to localStorage --- //
+/* -----------------------------
+    Persist to localStorage
+----------------------------- */
 const persist = (state: AttendanceStore) => {
   const toStore = {
-    selectedDate: state.selectedDate,
+    startDate: state.startDate,
+    endDate: state.endDate,
     selectedClass: state.selectedClass,
     selectedSession: state.selectedSession,
     selectedTerm: state.selectedTerm,
@@ -68,96 +74,108 @@ const persist = (state: AttendanceStore) => {
   localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(toStore));
 };
 
-export const useAttendanceStore = create<AttendanceStore>((set, get) => ({
-  // DEFAULT STATE + HYDRATED STATE
-  selectedDate: new Date(),
-  selectedClass: "",
-  selectedSession: getDefaultSchoolSession(),
-  selectedTerm: { termDates: { first: generateBusinessDayDates(7) } },
-  attendance: {},
-  students: [],
+/* -----------------------------
+    Zustand Store
+----------------------------- */
+export const useAttendanceStore = create<AttendanceStore>((set, get) => {
+  const defaultState = {
+    startDate: new Date(),
+    endDate: new Date(),
+    selectedClass: "",
+    selectedSession: getDefaultSchoolSession(),
+    selectedTerm: { termDates: { first: generateBusinessDayDates(7) } },
+    attendance: {},
+    students: [],
+  };
 
-  // overwrite defaults with stored values
-  ...(typeof window !== "undefined" ? loadInitialState() : {}),
+  const initialState =
+    typeof window !== "undefined"
+      ? { ...defaultState, ...loadInitialState() }
+      : defaultState;
 
-  // SETTERS
-  setDate: (date) => {
-    set({ selectedDate: date });
-    persist(get());
-  },
 
-  setClass: (classId) => {
-    set({ selectedClass: classId });
-    persist(get());
-  },
+  return {
+    ...initialState,
 
-  setSession: (session) => {
-    set({ selectedSession: session });
-    persist(get());
-  },
+    // Updates both start + end dates
+    setDate: (startDate, endDate) => {
+      const safeStart = startDate ?? new Date();
+      const safeEnd = endDate ?? safeStart;
+      set({ startDate: safeStart, endDate: safeEnd });
+      persist(get());
+    },
 
-  setTerm: (term) => {
-    set({ selectedTerm: term });
-    persist(get());
-  },
+    setClass: (classId) => {
+      set({ selectedClass: classId });
+      persist(get());
+    },
 
-  setStudent: (students) => {
-    set({ students });
-    persist(get());
-  },
+    setSession: (session) => {
+      set({ selectedSession: session });
+      persist(get());
+    },
 
-  // ATTENDANCE
-  initializeAttendance: (studentIds) =>
-    set((state) => {
-      const updated = { ...state.attendance };
+    setTerm: (term) => {
+      set({ selectedTerm: term });
+      persist(get());
+    },
 
-      studentIds.forEach((id) => {
-        if (!updated[id]) {
-          updated[id] = { status: "absent", remarks: "" };
-        }
-      });
+    setStudent: (students) => {
+      set({ students });
+      persist(get());
+    },
 
-      const newState = { attendance: updated };
-      persist({ ...get(), ...newState });
-      return newState;
-    }),
+    initializeAttendance: (studentIds) =>
+      set((state) => {
+        const updated = { ...state.attendance };
 
-  updateAttendance: (studentId, record) =>
-    set((state) => {
-      const newAttendance = {
-        ...state.attendance,
-        [studentId]: {
-          status: state.attendance[studentId]?.status || "absent",
-          remarks: state.attendance[studentId]?.remarks || "",
-          ...record,
-        },
-      };
+        studentIds.forEach((id) => {
+          if (!updated[id]) {
+            updated[id] = { status: "absent", remarks: "" };
+          }
+        });
 
-      const newState = { attendance: newAttendance };
-      persist({ ...get(), ...newState });
-      return newState;
-    }),
+        const newState = { attendance: updated };
+        persist({ ...get(), ...newState });
+        return newState;
+      }),
 
-  markAllPresent: () =>
-    set((state) => {
-      const updated: Record<string, AttendanceRecord> = {};
+    updateAttendance: (studentId, record) =>
+      set((state) => {
+        const newAttendance = {
+          ...state.attendance,
+          [studentId]: {
+            status: state.attendance[studentId]?.status || "absent",
+            remarks: state.attendance[studentId]?.remarks || "",
+            ...record,
+          },
+        };
 
-      Object.keys(state.attendance).forEach((id) => {
-        updated[id] = { ...state.attendance[id], status: "present" };
-      });
+        const newState = { attendance: newAttendance };
+        persist({ ...get(), ...newState });
+        return newState;
+      }),
 
-      const newState = { attendance: updated };
-      persist({ ...get(), ...newState });
-      return newState;
-    }),
+    markAllPresent: () =>
+      set((state) => {
+        const updated: Record<string, AttendanceRecord> = {};
 
-  resetAttendance: () => {
-    set({ attendance: {} });
-    persist(get());
-  },
+        Object.keys(state.attendance).forEach((id) => {
+          updated[id] = { ...state.attendance[id], status: "present" };
+        });
 
-  // CLEAR LOCAL STORAGE ONLY AFTER API SUCCESS
-  clearLocalStorage: () => {
-    localStorage.removeItem(ATTENDANCE_STORAGE_KEY);
-  },
-}));
+        const newState = { attendance: updated };
+        persist({ ...get(), ...newState });
+        return newState;
+      }),
+
+    resetAttendance: () => {
+      set({ attendance: {} });
+      persist(get());
+    },
+
+    clearLocalStorage: () => {
+      localStorage.removeItem(ATTENDANCE_STORAGE_KEY);
+    },
+  };
+});

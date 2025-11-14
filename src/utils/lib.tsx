@@ -296,3 +296,10 @@ export const getInitials = (name: string): string => {
 
   return initials.toUpperCase();
 };
+
+  export const formatTime = (d: string) =>
+    new Date(d).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });

@@ -25,19 +25,19 @@ export const useExams = (options: UseExamsOptions = {}) => {
         setLoading(true)
         const response = await getAllExams(pagination.currentPage, limit)
 
-        setExams(response.data || [])
+        setExams(response.result || []);
 
         // If your API returns pagination info, update these:
         // Note: Your current ExamsResponse doesn't include pagination fields
         // You'll need to update the ExamsResponse type if the API returns pagination data
-        setPagination(prev => ({
+        setPagination((prev) => ({
           ...prev,
           // These fields might not exist in your current API response
           // totalPages: response.totalPages || 1,
           // totalItems: response.total || 0
           totalPages: 1, // Default until API provides pagination
-          totalItems: response.data?.length || 0,
-        }))
+          totalItems: response.result?.length || 0,
+        }));
 
         setError(null)
       } catch (err) {
@@ -57,13 +57,13 @@ export const useExams = (options: UseExamsOptions = {}) => {
       const pageToFetch = newPage !== undefined ? newPage : pagination.currentPage
       const response = await getAllExams(pageToFetch, limit)
 
-      setExams(response.data || [])
+      setExams(response.result || []);
 
-      setPagination(prev => ({
+      setPagination((prev) => ({
         ...prev,
         currentPage: pageToFetch,
-        totalItems: response.data?.length || 0,
-      }))
+        totalItems: response.result?.length || 0,
+      }));
 
       setError(null)
     } catch (err) {

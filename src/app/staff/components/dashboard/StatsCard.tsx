@@ -9,6 +9,10 @@ interface StatsCardProps {
   icon: LucideIcon
   iconClassName?: string
 }
+interface StatsCardSkeletonProps {
+  count?: number;
+  className?: string;
+}
 
 export function StatsCard({ title, value, subtitle, icon: Icon, iconClassName }: StatsCardProps) {
   return (
@@ -27,4 +31,38 @@ export function StatsCard({ title, value, subtitle, icon: Icon, iconClassName }:
       </CardContent>
     </Card>
   )
+}
+
+export function StatsCardSkeleton({
+  count = 1,
+  className,
+}: StatsCardSkeletonProps) {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, index) => (
+        <Card
+          key={index}
+          className={cn(
+            "hover:shadow-md transition-shadow animate-pulse",
+            className
+          )}
+        >
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 space-y-3">
+                {/* Title placeholder */}
+                <div className="h-3 w-24 bg-muted rounded" />
+                {/* Value placeholder */}
+                <div className="h-6 w-16 bg-muted rounded" />
+                {/* Subtitle placeholder */}
+                <div className="h-2 w-20 bg-muted rounded" />
+              </div>
+              {/* Icon placeholder */}
+              <div className="p-3 rounded-lg bg-muted h-10 w-10" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </>
+  );
 }

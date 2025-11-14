@@ -630,11 +630,6 @@ export interface ExamCreator {
   };
 }
 
-export interface ExamSubject {
-  name: string;
-  _id?: string;
-}
-
 // types/index.ts
 export interface ExamSubject {
   _id: string;
@@ -698,13 +693,23 @@ export interface Exam {
 
 // types/index.ts
 export interface ExamsResponse {
-  data: Exam[];
+  result: Exam[];
   message: string;
-  // Add these if your API returns pagination data
-  total?: number;
-  page?: number;
-  limit?: number;
-  totalPages?: number;
+  pagination: Pagination;
+}
+
+export interface StaffStatResponse {
+  activeClasss: number;
+  totalStudent: number;
+  totalSubject: number;
+  lessonScheduledToday: number;
+  attendanceStats: Array<ClassAttendanceStat>;
+}
+
+export interface ClassAttendanceStat {
+  classId: string;
+  className: string;
+  stats: number;
 }
 
 export interface PaginationInfo {
@@ -748,7 +753,7 @@ export interface Teacher {
 
 export interface ClassSchedule {
   _id: string;
-  class: string;
+  class: string | ClassInfo;
   day: string;
   subject: Subject;
   teacher: Teacher;
@@ -762,16 +767,28 @@ export interface TimetableResponse {
 }
 
 export interface Notice {
+  _id: string;
   id?: string;
   title: string;
   content: string;
+  visibility: string;
   body: string;
-  visibility: "parent" | "staff" | "everyone";
+  notificationDate: string;
+  notificationType:
+    | "general"
+    | "urgent"
+    | "reminder"
+    | "event"
+    | "announcement";
+  isActive: boolean;
+  isPinned: boolean;
   resources: string[];
   expirationDate: string;
-  notificationDate: string;
-  createdAt?: string;
-  updatedAt?: string;
+}
+
+export interface NoticesResponse {
+  result: Notice[];
+  pagination: Pagination;
 }
 
 export type NoticeFormData = Omit<Notice, "id" | "createdAt" | "updatedAt">;
@@ -798,19 +815,6 @@ export interface Child {
   gender: string;
   createdAt: string;
 }
-
-export interface Notice {
-  _id: string;
-  title: string;
-  content: string;
-  visibility: string;
-  notificationType: string;
-  isActive: boolean;
-  isPinned: boolean;
-  resources: string[];
-  expirationDate: string;
-}
-
 export interface Expense {
   _id: string;
   description: string;
