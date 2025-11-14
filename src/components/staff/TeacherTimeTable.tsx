@@ -345,7 +345,54 @@ export const TeacherTimeTable = ({ staffId, staffSchedules }: TeacherTimeTablePr
         </Card>
       )}
 
-     
+      {/* Attendance Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Today's Schedule</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center p-4 justify-between flex-wrap gap-3">
+            <div className="flex gap-3 items-center">
+              <p className="text-[#25324B] text-sm">Total Attendance</p>
+              <p className="font-semibold text-[#25324B] text-sm">100/79</p>
+            </div>
+          </div>
+          <div className="rounded-md">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <TableRow className="bg-[#F2F2F2] hover:bg-[#F2F2F2]" key={headerGroup.id}>
+                    {headerGroup.headers.map(header => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        </TableHead>
+                      )
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow key={row.id} data-state={row.getIsSelected() ? 'selected' : undefined}>
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
