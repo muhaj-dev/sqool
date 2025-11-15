@@ -1500,3 +1500,14 @@ export const getPaymentById = async (paymentId: string): Promise<PaymentResponse
     throw new Error('Failed to fetch payment details')
   }
 }
+
+
+
+export const getPaymentStatistics = async () => {
+  try {
+    const response = await api.get('/v1/admin/payment/stat')
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to fetch payment statistics')
+  }
+}

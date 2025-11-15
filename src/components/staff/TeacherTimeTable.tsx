@@ -292,7 +292,7 @@ export const TeacherTimeTable = ({ staffId, staffSchedules }: TeacherTimeTablePr
                         <div className="flex items-start justify-between mb-2">
   <div className="min-w-0 flex-1"> {/* Added this container */}
     <p className="text-lg font-bold text-muted-foreground break-words whitespace-normal max-w-[160px]">
-      Class: {period?.class?.className || 'N/A'} {' '} {period?.class?.classSection || 'N/A'}
+     {period?.class?.className || 'N/A'} {' '} {period?.class?.classSection || 'N/A'}
     </p>
     <h4 className="font-medium capitalize">
       {period.subject?.name || 'Unknown Subject'}
@@ -346,7 +346,7 @@ export const TeacherTimeTable = ({ staffId, staffSchedules }: TeacherTimeTablePr
       )}
 
       {/* Attendance Table */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Today's Schedule</CardTitle>
         </CardHeader>
@@ -392,8 +392,12 @@ export const TeacherTimeTable = ({ staffId, staffSchedules }: TeacherTimeTablePr
             </Table>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   )
 }
 
+// /admin/stduent/studenId - full display
+// /admin/staff/staffId - full display on timetable
+// /admin/notice -  Notice
+// /admin/account -  Payment history card display()
