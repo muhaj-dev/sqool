@@ -640,7 +640,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                       }}
                       disabled={!teacher.isActive}
                     >
-                      Assign to Class
+                      Assign subject(s)
                     </Button>
                   </div>
                 ))

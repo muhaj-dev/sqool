@@ -1,198 +1,195 @@
 // components/class-management/CreateClassDialog.tsx
+'use client'
 import { useState } from 'react'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { Plus } from 'lucide-react'
-import { Class, ClassFormData, Teacher } from './types'
-import { basicClasses, secondaryClasses, secondaryStreams } from './utils'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { createClasses } from '@/utils/api'
+import { IClassConfiguration } from '@/types'
+import { toast } from '@/components/ui/use-toast'
+
+// Form schema for class creation
+const formSchema = z.object({
+  classname: z.string().min(3, 'Class name must be at least 3 characters').max(50),
+  shortname: z.string().min(1, 'Short name is required').max(25),
+  leveltype: z.string().min(1, 'Level type is required'),
+  classSection: z.string().max(2, 'Section must be at most 2 characters'),
+})
 
 interface CreateClassDialogProps {
-  teachers: Teacher[]
-  classes: Class[]
-  setClasses: (classes: Class[]) => void
-  onRefresh?: () => void // <-- Add onRefresh prop
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onClassCreated: () => void
 }
 
-const CreateClassDialog = ({ teachers, classes, setClasses, onRefresh }: CreateClassDialogProps) => {
-  const [open, setOpen] = useState(false)
-  const [newClass, setNewClass] = useState<ClassFormData>({
-    name: '',
-    level: '',
-    stream: '',
-    description: '',
-    capacity: '',
-    classTeacherId: '',
+const CreateClassDialog = ({
+  open,
+  onOpenChange,
+  onClassCreated
+}: CreateClassDialogProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      classname: '',
+      shortname: '',
+      leveltype: 'primary',
+      classSection: '',
+    },
   })
 
-  const handleCreateClass = () => {
-    if (newClass.name && newClass.level && newClass.description && newClass.capacity) {
-      const classTeacher = teachers.find(t => t.id === newClass.classTeacherId) || null
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setIsSubmitting(true)
 
-      const classData: Class = {
-        id: Date.now().toString(),
-        name: newClass.name,
-        level: newClass.level,
-        stream: newClass?.stream || undefined,
-        description: newClass.description,
-        capacity: parseInt(newClass.capacity),
-        classTeacher,
-        subjects: [],
-        schedules: [],
-        resources: [],
-        createdAt: new Date().toISOString().split('T')[0],
+      const classData: IClassConfiguration = {
+        className: values.classname,
+        shortName: values.shortname,
+        levelType: values.leveltype.toLowerCase() as 'nursery' | 'primary' | 'secondary',
+        classSection: values.classSection,
       }
 
-      setClasses([...classes, classData])
-      setNewClass({
-        name: '',
-        level: '',
-        stream: '',
-        description: '',
-        capacity: '',
-        classTeacherId: '',
-      })
-      setOpen(false)
-      if (onRefresh) onRefresh()
+      await createClasses(classData)
+      toast({ title: "Class created successfully" })
+      
+      form.reset()
+      onClassCreated()
+      
+    } catch (error) {
+      console.error('Error creating class:', error)
+      const errorMessage = error instanceof Error ? error.message : "Failed to create class"
+      toast({ title: errorMessage, variant: "destructive" })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      form.reset()
+    }
+    onOpenChange(open)
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-primary text-white hover:bg-primary/55">
-          <Plus className="h-4 w-4 mr-2" />
-          Create Class
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create New Class</DialogTitle>
-          <DialogDescription>Add a new class following the Nigerian education system structure.</DialogDescription>
+          <DialogDescription>
+            Add a new class to your school. Fill in the details below.
+          </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 pt-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="classLevel">Education Level</Label>
-              <Select
-                value={newClass.level}
-                onValueChange={value => setNewClass({ ...newClass, level: value, stream: '' })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="basic">Basic Education</SelectItem>
-                  <SelectItem value="secondary">Secondary Education</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="className">Class Name</Label>
-              <Select
-                value={newClass.name}
-                onValueChange={value => setNewClass({ ...newClass, name: value })}
-                disabled={!newClass.level}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select class" />
-                </SelectTrigger>
-                <SelectContent>
-                  {newClass.level === 'basic' &&
-                    basicClasses.map(cls => (
-                      <SelectItem key={cls} value={cls}>
-                        {cls}
-                      </SelectItem>
-                    ))}
-                  {newClass.level === 'secondary' &&
-                    secondaryClasses.map(cls => (
-                      <SelectItem key={cls} value={cls}>
-                        {cls}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {newClass.level === 'secondary' && (
-            <div>
-              <Label htmlFor="classStream">Stream</Label>
-              <Select value={newClass.stream} onValueChange={value => setNewClass({ ...newClass, stream: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select stream" />
-                </SelectTrigger>
-                <SelectContent>
-                  {secondaryStreams.map(stream => (
-                    <SelectItem key={stream.value} value={stream.value}>
-                      {stream.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          <div>
-            <Label htmlFor="classDescription">Description</Label>
-            <Textarea
-              id="classDescription"
-              placeholder="Brief description of the class"
-              value={newClass.description}
-              onChange={e =>
-                setNewClass({
-                  ...newClass,
-                  description: e.target.value,
-                })
-              }
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="classCapacity">Class Capacity</Label>
-              <Input
-                id="classCapacity"
-                type="number"
-                placeholder="Maximum students"
-                value={newClass.capacity}
-                onChange={e => setNewClass({ ...newClass, capacity: e.target.value })}
+        
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="classname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Class Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter class name (e.g., Primary 1)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              
+              <FormField
+                control={form.control}
+                name="shortname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Short Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter short name (e.g., P1)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="leveltype"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Level Type</FormLabel>
+                      <Select 
+                        value={field.value} 
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select level" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="nursery">Nursery</SelectItem>
+                          <SelectItem value="primary">Primary</SelectItem>
+                          <SelectItem value="secondary">Secondary</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="classSection"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Section</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="A, B, etc."
+                          maxLength={2}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="classTeacher">Class Teacher</Label>
-              <Select
-                value={newClass.classTeacherId}
-                onValueChange={value => setNewClass({ ...newClass, classTeacherId: value })}
+            
+            <DialogFooter>
+              <Button 
+                type="button"
+                variant="outline" 
+                onClick={() => handleOpenChange(false)}
+                disabled={isSubmitting}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select teacher" />
-                </SelectTrigger>
-                <SelectContent>
-                  {teachers.map(teacher => (
-                    <SelectItem key={teacher.id} value={teacher.id}>
-                      {teacher.firstName} {teacher.lastName} - {teacher.specialization}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Button onClick={handleCreateClass} className="w-full text-white">
-            Create Class
-          </Button>
-        </div>
+                Cancel
+              </Button>
+              <Button 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Creating...' : 'Create Class'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

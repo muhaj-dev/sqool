@@ -125,8 +125,8 @@ const Overview = () => {
               {/* <CustomPieChart /> */}
               <CustomPieChart
                 totalStudents={schoolUsersCount?.totalStudents}
-                maleCount={genderDistribution.totalMale}
-                femaleCount={genderDistribution.totalFemale}
+                maleCount={genderDistribution?.totalMale}
+                femaleCount={genderDistribution?.totalFemale}
               />
             </div>
             <div className="w-[80%] mx-auto">
@@ -135,14 +135,14 @@ const Overview = () => {
                   <span className="bg-[#5542F6] h-[8px] w-[8px] rounded-full"></span>
                   <span>Female</span>
                 </div>
-                <span>{genderDistribution.totalFemale}</span>
+                <span>{genderDistribution?.totalFemale}</span>
               </div>
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-1">
                   <span className="bg-[#FFA043] h-[8px] w-[8px] rounded-full"></span>
                   <span>Male</span>
                 </div>
-                <span>{genderDistribution.totalMale}</span>
+                <span>{genderDistribution?.totalMale}</span>
               </div>
             </div>
           </div>

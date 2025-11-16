@@ -396,8 +396,3 @@ export const TeacherTimeTable = ({ staffId, staffSchedules }: TeacherTimeTablePr
     </div>
   )
 }
-
-// /admin/stduent/studenId - full display
-// /admin/staff/staffId - full display on timetable
-// /admin/notice -  Notice
-// /admin/account -  Payment history card display()

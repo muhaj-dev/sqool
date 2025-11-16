@@ -4,12 +4,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-
 import { Input } from '@/components/ui/input'
-// import { Checkbox } from "@/components/ui/checkbox";
 import { Class, ISubject, SubjectAssignmentPayload } from './types'
-
-// import {} from "./types";
 import { assignSubjectToClass, deAssignSubjectToClass, getClasses, getSubjects } from '@/utils/api'
 import { useToast } from '@/components/ui/use-toast'
 import SubjectList from './SubjectList'
@@ -24,69 +20,62 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
   const [classes, setClasses] = useState<Class[]>([])
   const [subjects, setSubjects] = useState<ISubject[]>([])
   const [selectedClass, setSelectedClass] = useState<string>(classData?._id || '')
-  // const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(classData?.subjects?.map((s: any) => s._id) || [])
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
-
   const [removeModalOpen, setRemoveModalOpen] = useState(false)
   const [subjectsToRemove, setSubjectsToRemove] = useState<string[]>([])
-
-  // console.log(classData)
 
   const [initialSubjectIds, setInitialSubjectIds] = useState<string[]>(
     classData?.subjects?.map((s: any) => s._id) || [],
   )
 
+  // Refresh data when classData changes
   useEffect(() => {
     setInitialSubjectIds(classData?.subjects?.map((s: any) => s._id) || [])
     setSelectedSubjects(classData?.subjects?.map((s: any) => s._id) || [])
+    setSelectedClass(classData?._id || '')
   }, [classData])
-  // Fetch classes and subjects on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const classesRes = await getClasses('1', '40')
-        const subjectsRes = await getSubjects(1, '')
 
-        // Transform API response to match your Class type
-        const transformedClasses =
-          classesRes.data?.result.map(cls => ({
-            id: cls._id,
-            name: cls.className,
-            level: cls.levelType,
-            section: cls.classSection,
-            // ... map other properties as needed
-          })) || []
+  // Fetch classes and subjects
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+      const classesRes = await getClasses('1', '40')
+      const subjectsRes = await getSubjects(1, '')
 
-        setClasses(transformedClasses as any)
-        setSubjects(subjectsRes.data?.result || [])
-      } catch (error) {
-        toast({
-          title: 'Error',
-          description: 'Failed to fetch data',
-          variant: 'destructive',
-        })
-      } finally {
-        setLoading(false)
-      }
+      // Transform API response to match your Class type
+      const transformedClasses =
+        classesRes.data?.result.map(cls => ({
+          id: cls._id,
+          name: cls.className,
+          level: cls.levelType,
+          section: cls.classSection,
+        })) || []
+
+      setClasses(transformedClasses as any)
+      setSubjects(subjectsRes.data?.result || [])
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch data',
+        variant: 'destructive',
+      })
+    } finally {
+      setLoading(false)
     }
+  }
+
+  // Initial data fetch
+  useEffect(() => {
     fetchData()
   }, [toast])
 
-  // Prepare classes data for SubjectList component
-  // const subjectListClasses = classes.map(cls => ({
-  //   id: cls._id,
-  //   name: `${cls.className}${cls.classSection ? ` (${cls.classSection})` : ""} - ${cls.level}`
-  // }));
   const subjectListClasses = classes.map(cls => ({
     id: cls.id,
     name: `${cls.name}${cls.section ? ` (${cls.section})` : ''} - ${cls.level}`,
   }))
 
-  console.log(subjectListClasses)
-  // Filter subjects based on search query
   const filteredSubjects = subjects.filter(
     subject =>
       subject.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -107,7 +96,6 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
       return
     }
 
-    // Only send subjects that are newly selected (not in initialSubjectIds)
     const newSubjectIds = selectedSubjects.filter(id => !initialSubjectIds.includes(id))
 
     if (newSubjectIds.length === 0) {
@@ -131,13 +119,51 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
         title: 'Success',
         description: response?.data?.message,
       })
+      
+      // Call parent refresh - the parent will refetch classData and pass it down
       onRefresh()
+      
+      // Reset selected subjects to match the current classData
+      // The parent will update classData which will trigger our useEffect
+      setSelectedSubjects(classData?.subjects?.map((s: any) => s._id) || [])
+      
     } catch (error: any) {
       toast({
         title: 'Error',
         description: error?.message,
+        variant: 'destructive',
       })
-      // ...existing error handling...
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRemoveSubjects = async () => {
+    try {
+      setLoading(true)
+      await deAssignSubjectToClass({
+        classId: classData._id,
+        subjectIds: subjectsToRemove,
+      })
+      toast({
+        title: 'Success',
+        description: 'Subjects removed successfully',
+      })
+      setRemoveModalOpen(false)
+      setSubjectsToRemove([])
+      
+      // Call parent refresh - the parent will refetch classData and pass it down
+      onRefresh()
+      
+      // Reset selected subjects - the parent will update classData which will trigger our useEffect
+      setSelectedSubjects(classData?.subjects?.map((s: any) => s._id) || [])
+      
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error?.message,
+        variant: 'destructive',
+      })
     } finally {
       setLoading(false)
     }
@@ -149,13 +175,12 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Assign Subjects to {classData?.className}</CardTitle>
+            <CardTitle className='text-xl'>Assign Subjects to  {classData?.shortName} {classData?.classSection}</CardTitle>
             <CardDescription>Select a class and multiple subjects to assign</CardDescription>
           </div>
 
           <Button
-            // variant="destructive"
-            className=" text-white"
+            className="text-white"
             variant="default"
             onClick={() => setRemoveModalOpen(true)}
             disabled={classData?.subjects?.length === 0}
@@ -164,28 +189,6 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Class Selection */}
-          {/* <div className="space-y-2">
-            <Label htmlFor="class">Select Class</Label>
-            <Select
-  value={selectedClass}
-  onValueChange={setSelectedClass}
-  disabled={loading}
->
-  <SelectTrigger>
-    <SelectValue placeholder="Choose a class" />
-  </SelectTrigger>
-  <SelectContent>
-    {classes.map((cls) => (
-      <SelectItem key={cls.id} value={cls.id}>
-        {cls.name}
-        {cls.section ? ` (${cls.section})` : ""} - {cls.level}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-          </div> */}
-
           {/* Subject Selection */}
           <div className="space-y-2">
             <Label htmlFor="subjects">Select Subjects</Label>
@@ -201,7 +204,7 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
                 filteredSubjects.map(subject => (
                   <div key={subject._id} className="flex items-center space-x-2 border-[#c3c3c3] border-b-[2px]">
                     <input
-                      type="checkbox" // Fixed typo from "check" to "checkbox"
+                      type="checkbox"
                       id={subject._id}
                       className="accent-primary text-white"
                       checked={selectedSubjects.includes(subject._id)}
@@ -210,7 +213,7 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
                     />
                     <label
                       htmlFor={subject._id}
-                      className="text-sm my-2  font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm my-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {subject.code} - {subject.name}
                     </label>
@@ -268,33 +271,10 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
               </Button>
               <Button
                 className="text-white"
-                disabled={subjectsToRemove.length === 0}
-                onClick={async () => {
-                  try {
-                    setLoading(true)
-                    await deAssignSubjectToClass({
-                      classId: classData._id,
-                      subjectIds: subjectsToRemove,
-                    })
-                    toast({
-                      title: 'Success',
-                      description: 'Subjects removed successfully',
-                    })
-                    setRemoveModalOpen(false)
-                    setSubjectsToRemove([])
-                    // Optionally refresh classData here
-                  } catch (error: any) {
-                    toast({
-                      title: 'Error',
-                      description: error?.message,
-                      variant: 'destructive',
-                    })
-                  } finally {
-                    setLoading(false)
-                  }
-                }}
+                disabled={subjectsToRemove.length === 0 || loading}
+                onClick={handleRemoveSubjects}
               >
-                Remove Selected
+                {loading ? 'Removing...' : 'Remove Selected'}
               </Button>
             </div>
           </div>

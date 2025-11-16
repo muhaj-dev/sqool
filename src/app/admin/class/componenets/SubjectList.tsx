@@ -53,7 +53,7 @@ const SubjectList = ({ classes = [], classData, onRefresh }: SubjectListProps) =
       }
     }
     fetchSubjects()
-  }, [subjectSearch])
+  }, [subjectSearch, classData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -147,9 +147,9 @@ const SubjectList = ({ classes = [], classData, onRefresh }: SubjectListProps) =
                 )}
               </div>
               {/* Selected Classes */}
-              {form.classes.length > 0 && (
+              {form?.classes?.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {form.classes.map(classId => {
+                  {form?.classes?.map(classId => {
                     const cls = classes.find(c => c.id === classId)
                     return (
                       <Badge key={classId} variant="secondary" className="flex items-center gap-2">
@@ -178,16 +178,16 @@ const SubjectList = ({ classes = [], classData, onRefresh }: SubjectListProps) =
       <CardContent>
         <ScrollArea className=" h-[480px]">
           <div className="space-y-4 h-fit overflow-auto">
-            {subjects.map(subject => (
-              <div key={subject._id} className="p-4 border border-[#c3c3c3] rounded-lg space-y-3">
+            {subjects?.map(subject => (
+              <div key={subject?._id} className="p-4 border border-[#c3c3c3] rounded-lg space-y-3">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <h4 className="font-medium">{subject.name}</h4>
-                    <p className="text-sm text-muted-foreground">{subject.code}</p>
-                    <p className="text-sm text-muted-foreground">{subject.description}</p>
+                    <h4 className="font-medium capitalize">{subject?.name}</h4>
+                    <p className="text-sm text-muted-foreground">{subject?.code}</p>
+                    <p className="text-sm text-muted-foreground">{subject?.description}</p>
                   </div>
                   <div className="gap-2 flex flex-col justify-between">
-                    <p className="text-sm text-muted-foreground">{subject.category}</p>
+                    <p className="text-sm text-muted-foreground">{subject?.category}</p>
                   </div>
                 </div>
               </div>

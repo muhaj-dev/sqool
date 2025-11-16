@@ -1,15 +1,10 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ClassHeader from './ClassHeader'
 import ClassStats from './ClassStats'
 import ClassTable from './ClassTable'
-import SubjectAssignment from './SubjectAssignment'
-// import TeacherManagement from "./TeacherManagement";
-// import ScheduleManagement from "./ScheduleManagement";
-import ResourceManagement from './ResourceManagement'
-import { Class, Teacher, Subject } from './types'
+
 import { getClasses } from '@/utils/api'
 import { IClassConfigurationResponse } from '@/types'
 import { useToast } from '@/components/ui/use-toast' // <-- Import useToast
@@ -26,8 +21,6 @@ const ClassList = ({
   //   initialClasses,
 }: ClassManagementProps) => {
   const [classes, setClasses] = useState<IClassConfigurationResponse[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [activeTab, setActiveTab] = useState('overview')
   const [refresh, setRefresh] = useState(false)
 
   const { toast } = useToast()
@@ -61,6 +54,7 @@ const ClassList = ({
       // teachers={teachers}
       // classes={classes}
       // setClasses={setClasses}
+      onRefresh={handleRefresh}
       />
 
       <div className="p-6">

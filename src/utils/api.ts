@@ -123,6 +123,43 @@ export const createClasses = async (
   }
 };
 
+export const editClasses = async (
+  id: string,
+  classData: IClassConfiguration
+): Promise<IClassConfigurationResponse> => {
+  try {
+    const response = await api.patch<IClassConfigurationResponse>(
+      `/v1/admin/classes/${id}`,
+      classData
+    );
+    return response?.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to update class";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to update class");
+  }
+};
+
+export const deleteClasses = async (
+  id: string
+): Promise<void> => {
+  try {
+    await api.delete(`/v1/admin/classes/${id}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to delete class";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to delete class");
+  }
+};
+
 export const getClasses = async (page: string = "1", limit: string = "10") => {
   try {
     const response = await api.get<ClassPaginationResponse>(
