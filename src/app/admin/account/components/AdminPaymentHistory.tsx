@@ -33,8 +33,10 @@ import {
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from '@/components/ui/use-toast'
-import { adminCreatePayment, getAllStudents, getAllPayments } from '@/utils/api'
-import { CreatePaymentRequest, IStudent } from '@/types'
+import { adminCreatePayment, getAllStudents, getAllPayments, getPaymentStatistics } from '@/utils/api'
+import { CreatePaymentRequest, IStudent, PaymentStatistics } from '@/types'
+
+
 
 interface PaymentRecord {
   _id: string
@@ -64,6 +66,7 @@ const AdminPaymentHistory = () => {
   const [isAddPaymentOpen, setIsAddPaymentOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [paymentsLoading, setPaymentsLoading] = useState(true)
+ const [statsLoading, setStatsLoading] = useState(true)
 
   // Student search state
   const [students, setStudents] = useState<IStudent[]>([])
@@ -74,6 +77,12 @@ const AdminPaymentHistory = () => {
 
   // Payment data state
   const [paymentRecords, setPaymentRecords] = useState<PaymentRecord[]>([])
+    const [paymentStats, setPaymentStats] = useState<PaymentStatistics>({
+    totalPaid: 0,
+    totalPending: 0,
+    totalOverdue: 0
+  })
+
   const [pagination, setPagination] = useState({
     total: 0,
     currentPage: 1,
@@ -95,6 +104,28 @@ const AdminPaymentHistory = () => {
     paymentMemo: null as File | null,
     userId: '',
   })
+
+   // Fetch payment statistics
+  useEffect(() => {
+    const fetchPaymentStats = async () => {
+      setStatsLoading(true)
+      try {
+        const response = await getPaymentStatistics()
+        setPaymentStats(response.data)
+      } catch (error) {
+        console.error('Failed to fetch payment statistics:', error)
+        toast({
+          title: 'Failed to fetch statistics',
+          description: 'Please try again later',
+          variant: 'destructive',
+        })
+      } finally {
+        setStatsLoading(false)
+      }
+    }
+
+    fetchPaymentStats()
+  }, [refresh])
 
   // Fetch payments data with pagination
   useEffect(() => {
@@ -185,16 +216,16 @@ const AdminPaymentHistory = () => {
     setStudents([])
   }
 
-  // Calculate totals from real data
-  const totalPaid = paymentRecords
+   // Calculate totals from real data (fallback if API fails)
+  const totalPaid = paymentStats.totalPaid || paymentRecords
     .filter(p => p.paymentStatus === 'paid' || p.paymentStatus === 'Success')
     .reduce((sum, p) => sum + p.amountPaid, 0)
 
-  const totalPending = paymentRecords
+  const totalPending = paymentStats.totalPending || paymentRecords
     .filter(p => p.paymentStatus === 'pending' || p.paymentStatus === 'Processing')
     .reduce((sum, p) => sum + p.amountPaid, 0)
 
-  const totalOverdue = paymentRecords
+  const totalOverdue = paymentStats.totalOverdue || paymentRecords
     .filter(p => p.paymentStatus === 'overdue' || p.paymentStatus === 'Failed')
     .reduce((sum, p) => sum + p.amountPaid, 0)
 
@@ -589,38 +620,29 @@ const AdminPaymentHistory = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Total Paid</CardDescription>
-              <CardTitle className="text-2xl text-green-600">{formatCurrency(totalPaid)}</CardTitle>
+              <CardTitle className="text-2xl text-green-600">
+                {statsLoading ? 'Loading...' : formatCurrency(totalPaid)}
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {paymentRecords.filter(p => p.paymentStatus === 'paid' || p.paymentStatus === 'Success').length}{' '}
-                transactions
-              </p>
-            </CardContent>
+            
           </Card>
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Total Pending</CardDescription>
-              <CardTitle className="text-2xl text-yellow-600">{formatCurrency(totalPending)}</CardTitle>
+              <CardTitle className="text-2xl text-yellow-600">
+                {statsLoading ? 'Loading...' : formatCurrency(totalPending)}
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {paymentRecords.filter(p => p.paymentStatus === 'pending' || p.paymentStatus === 'Processing').length}{' '}
-                transactions
-              </p>
-            </CardContent>
+            
           </Card>
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Total Overdue</CardDescription>
-              <CardTitle className="text-2xl text-red-600">{formatCurrency(totalOverdue)}</CardTitle>
+              <CardTitle className="text-2xl text-red-600">
+                {statsLoading ? 'Loading...' : formatCurrency(totalOverdue)}
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {paymentRecords.filter(p => p.paymentStatus === 'overdue' || p.paymentStatus === 'Failed').length}{' '}
-                transactions
-              </p>
-            </CardContent>
+           
           </Card>
         </div>
 

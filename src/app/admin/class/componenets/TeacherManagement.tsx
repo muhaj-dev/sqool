@@ -28,9 +28,42 @@ import {
   removeTutorOrSubjectFromClass,
   deleteClassTeacher,
 } from "@/utils/api";
-import { X } from "lucide-react";
+import { X, RefreshCw } from "lucide-react";
 import { RemoveStaffDialog } from "./RemoveStaffDialog";
 import { toast } from "@/components/ui/use-toast";
+
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+}
+
+interface Teacher {
+  _id: string;
+  userId: User;
+  level: string;
+  qualification: string;
+  isActive: boolean;
+}
+
+interface ClassTeacher {
+  _id: string;
+  userId: User;
+}
+
+interface Tutor {
+  _id: string;
+  teacher: Teacher;
+  subject: any[];
+}
+
+interface Subject {
+  _id: string;
+  name: string;
+  code: string;
+}
+
 
 export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,6 +82,10 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   const [removalSubjects, setRemovalSubjects] = useState<string[]>([]);
   const [removalTutor, setRemovalTutor] = useState<any>(null);
 
+  // Modal state for confirming tutor removal
+  const [removeTutorModalOpen, setRemoveTutorModalOpen] = useState(false);
+  const [tutorToRemove, setTutorToRemove] = useState<any>(null);
+
   const [changingTeacher, setChangingTeacher] = useState(false);
   const [newClassTeacher, setNewClassTeacher] = useState("");
 
@@ -63,8 +100,10 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
     };
   } | null>(null);
 
-  const currentClassTeacherObj = classData.classTeacher?.[0];
-  const [allTeachers, setAllTeachers] = useState<any>(classData.classTeacher);
+  const currentClassTeacherObj = classData?.classTeacher?.[0];
+  // const [allTeachers, setAllTeachers] = useState<any>(classData?.classTeacher);
+    const [allTeachers, setAllTeachers] = useState<ClassTeacher[]>(classData?.classTeacher || []);
+  
   const currentClassTeacher = currentClassTeacherObj?.userId;
 
   // Tutors from classData
@@ -106,6 +145,10 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   }, [subjectSearch, refresh]);
 
   useEffect(() => {
+    setAllTeachers(classData?.classTeacher || []);
+  }, [classData?.classTeacher]);
+
+  useEffect(() => {
     if (selectedStaff) setRemoveOpen(true);
   }, [selectedStaff]);
 
@@ -116,6 +159,16 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
 
   // Get all subject IDs already assigned in classData
   const assignedSubjectIds = (classData?.subjects || []).map((s: any) => s._id);
+
+  // Refresh data function
+  const handleRefresh = () => {
+    onRefresh();
+    toast({
+      title: "Refreshed",
+      description: "Data has been updated",
+      variant: "default",
+    });
+  };
 
   // Assign tutor and subjects to class
   const handleAssignSubjectsToTutor = async () => {
@@ -130,28 +183,17 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
       setModalOpen(false);
       setSelectedSubjects([]);
       setSelectedTeacher(null);
-    } catch (error) {
-      // handle error (toast, etc.)
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Remove a subject from a tutor
-  const handleRemoveSubjectFromTutor = async (
-    tutorId: string,
-    subjectId: string
-  ) => {
-    try {
-      setLoading(true);
-      await removeTutorOrSubjectFromClass(classId, {
-        tutor: tutorId,
-        subjects: [subjectId],
+      toast({
+        title: "Success",
+        description: "Subjects assigned successfully",
+        variant: "default",
       });
-      onRefresh();
-      // Optionally refresh data here
     } catch (error) {
-      // handle error
+      toast({
+        title: "Error",
+        description: "Failed to assign subjects",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -170,8 +212,17 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
       setRemoveModalOpen(false);
       setRemovalSubjects([]);
       setRemovalTutor(null);
+      toast({
+        title: "Success",
+        description: "Subjects removed successfully",
+        variant: "default",
+      });
     } catch (error) {
-      // handle error
+      toast({
+        title: "Error",
+        description: "Failed to remove subjects",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -186,12 +237,28 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         subjects: subjectIds,
       });
       onRefresh();
-      // Optionally refresh data here
+      setRemoveTutorModalOpen(false);
+      setTutorToRemove(null);
+      toast({
+        title: "Success",
+        description: "Tutor removed successfully",
+        variant: "default",
+      });
     } catch (error) {
-      // handle error
+      toast({
+        title: "Error",
+        description: "Failed to remove tutor",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
+  };
+
+  // Open confirmation modal for tutor removal
+  const confirmRemoveTutor = (tutor: any) => {
+    setTutorToRemove(tutor);
+    setRemoveTutorModalOpen(true);
   };
 
   const handleChangeClassTeacher = async () => {
@@ -199,16 +266,23 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
     setChangingTeacher(true);
     try {
       const payload: any = { newTeacher: newClassTeacher };
-      // Only add oldTeacher if it exists
       if (currentClassTeacherObj?._id) {
         payload.oldTeacher = currentClassTeacherObj._id;
       }
       await changeClassTeacher(classId, payload);
       onRefresh();
       setNewClassTeacher("");
-      // Optionally refresh data or show a toast
+      toast({
+        title: "Success",
+        description: "Class teacher updated successfully",
+        variant: "default",
+      });
     } catch (error) {
-      // handle error (toast, etc.)
+      toast({
+        title: "Error",
+        description: "Failed to update class teacher",
+        variant: "destructive",
+      });
     } finally {
       setChangingTeacher(false);
     }
@@ -230,7 +304,6 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         description: "Staff removed successfully",
         variant: "default",
       });
-
       setRemoveOpen(false);
     } catch (err) {
       toast({
@@ -245,6 +318,19 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
 
   return (
     <div className="space-y-6">
+      {/* Refresh Button */}
+      <div className="flex justify-end">
+        <Button
+          onClick={handleRefresh}
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Refresh
+        </Button>
+      </div>
+
       {/* Assign New Teacher */}
       <Card>
         <CardHeader>
@@ -252,51 +338,39 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
             {currentClassTeacher ? "Assign Class Teacher" : "Add Class Teacher"}
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Select and assign teachers to {classData.className}
+            Select and assign teachers to {classData?.className}
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-4">
             <label className="text-sm font-medium">Current Class Teacher</label>
-            {allTeachers.length &&
-              // @ts-expect-error userId types
-              allTeachers.map(({ userId, _id }) => {
-                return (
-                  <div>
-                    <div className="p-2 border rounded bg-muted mt-1 flex items-center justify-between">
-                      {`${userId.firstName} ${userId.lastName}`}
-                      <Button
-                        onClick={() => {
-                          setSelectedStaff({
-                            teacherId: _id,
-                            classId,
-                            className: classData.className,
-                            userId: {
-                              firstName: userId.firstName,
-                              lastName: userId.lastName,
-                            },
-                          });
-                          setRemoveOpen((prev) => !prev);
-                        }}
-                        className="bg-destructive text-white p-0.5 px-2 hover:bg-transparent hover:text-black hover:border"
-                      >
-                        <X className="h-3 w-3" /> Remove
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-
-            {/* {currentClassTeacher && (
-              <div>
-                <label className="text-sm font-medium">
-                  Current Class Teacher
-                </label>
-                <div className="p-2 border rounded bg-muted mt-1">
-                  {`${currentClassTeacher.firstName} ${currentClassTeacher.lastName}`}
-                </div>
-              </div>
-            )} */}
+             {allTeachers?.length > 0 &&
+    allTeachers?.map(({ userId, _id }: ClassTeacher) => {
+      return (
+        <div key={_id}>
+          <div className="p-2 border rounded bg-muted mt-1 flex items-center justify-between">
+            {`${userId?.firstName} ${userId?.lastName}`}
+            <Button
+              onClick={() => {
+                setSelectedStaff({
+                  teacherId: _id,
+                  classId,
+                  className: classData?.className,
+                  userId: {
+                    firstName: userId?.firstName,
+                    lastName: userId?.lastName,
+                  },
+                });
+                setRemoveOpen((prev) => !prev);
+              }}
+              className="bg-destructive text-white p-0.5 px-2 hover:bg-transparent hover:text-black hover:border"
+            >
+              <X className="h-3 w-3" /> Remove
+            </Button>
+          </div>
+        </div>
+      );
+    })}
             <div>
               <label className="text-sm font-medium">
                 {currentClassTeacher
@@ -335,7 +409,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                     ? "Changing..."
                     : "Adding..."
                   : currentClassTeacher
-                  ? "Add Class Teacher"
+                  ? "Change Class Teacher"
                   : "Add Class Teacher"}
               </Button>
             </div>
@@ -343,8 +417,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         </CardContent>
       </Card>
 
-      {/* delete staff from class dialog */}
-
+      {/* Delete staff from class dialog */}
       <RemoveStaffDialog
         open={removeOpen && !!selectedStaff}
         setOpen={(v) => {
@@ -434,7 +507,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                Current Teachers
+                Subject Teachers
               </CardTitle>
               <Badge variant="outline">{classTutors.length} assigned</Badge>
             </div>
@@ -485,7 +558,6 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                       <Button
                         size="sm"
                         className="text-white"
-                        // variant="destructive"
                         onClick={() => {
                           setRemovalTutor(tutor);
                           setRemovalSubjects([]);
@@ -495,15 +567,9 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                         Edit Subject(s)
                       </Button>
                       <Button
-                        className="text-white"
+                        className="text-white bg-destructive hover:bg-destructive/90"
                         size="sm"
-                        // variant="destructive"
-                        onClick={() =>
-                          handleRemoveTutor(
-                            tutor.teacher?._id,
-                            tutor.subject.map((s: any) => s._id)
-                          )
-                        }
+                        onClick={() => confirmRemoveTutor(tutor)}
                       >
                         Remove Tutor
                       </Button>
@@ -514,6 +580,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
             </div>
           </CardContent>
         </Card>
+
         {/* Available Teachers */}
         <Card>
           <CardHeader>
@@ -573,7 +640,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                       }}
                       disabled={!teacher.isActive}
                     >
-                      Assign to Class
+                      Assign subject(s)
                     </Button>
                   </div>
                 ))
@@ -583,15 +650,16 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         </Card>
       </div>
 
+      {/* Remove Subjects Modal */}
       <Dialog open={removeModalOpen} onOpenChange={setRemoveModalOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Remove Subject(s) from {removalTutor?.teacher?.userId?.firstName}{" "}
+              Edit Subjects for {removalTutor?.teacher?.userId?.firstName}{" "}
               {removalTutor?.teacher?.userId?.lastName}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-2">
+          <div className="space-y-4">
             <div className="space-y-2 h-[180px] overflow-y-auto p-2 border border-[#c3c3c3] rounded">
               {removalTutor?.subject?.length > 0 ? (
                 removalTutor.subject.map((sub: any) => (
@@ -620,14 +688,65 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                 </p>
               )}
             </div>
-            <Button
-              onClick={handleRemoveSelectedSubjects}
-              className="w-full text-white"
-              disabled={removalSubjects.length === 0 || loading}
-              // variant="destructive"
-            >
-              {loading ? "Removing..." : "Remove Selected Subjects"}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleRefresh}
+                variant="outline"
+                className="flex-1 flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </Button>
+              <Button
+                onClick={handleRemoveSelectedSubjects}
+                className="flex-1 text-white bg-destructive hover:bg-destructive/90"
+                disabled={removalSubjects.length === 0 || loading}
+              >
+                {loading ? "Removing..." : "Remove Selected Subjects"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Remove Tutor Confirmation Modal */}
+      <Dialog open={removeTutorModalOpen} onOpenChange={setRemoveTutorModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Removal</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>
+              Are you sure you want to remove{" "}
+              <strong>
+                {tutorToRemove?.teacher?.userId?.firstName}{" "}
+                {tutorToRemove?.teacher?.userId?.lastName}
+              </strong>{" "}
+              as a tutor from this class?
+            </p>
+            <p className="text-sm text-muted-foreground">
+              This action will remove all subjects assigned to this tutor.
+            </p>
+            <div className="flex gap-2 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setRemoveTutorModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-destructive text-white hover:bg-destructive/90"
+                onClick={() =>
+                  handleRemoveTutor(
+                    tutorToRemove?.teacher?._id,
+                    tutorToRemove?.subject?.map((s: any) => s._id) || []
+                  )
+                }
+                disabled={loading}
+              >
+                {loading ? "Removing..." : "Yes, Remove Tutor"}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

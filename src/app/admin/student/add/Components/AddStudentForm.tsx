@@ -304,12 +304,12 @@ export default function AddStudentForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Debug info - remove in production */}
-        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+        {/* <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
           <p className="text-sm text-yellow-800">
             <strong>Debug Info:</strong> Form valid: {form.formState.isValid ? 'Yes' : 'No'}, Parent selected:{' '}
             {selectedParentId ? 'Yes' : 'No'}, Ready to submit: {isFormValid ? 'Yes' : 'No'}
           </p>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Student Information */}
