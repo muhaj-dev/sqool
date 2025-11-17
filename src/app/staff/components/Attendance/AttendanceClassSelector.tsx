@@ -1,21 +1,21 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ReusableSelect } from "@/components/select-resuable";
 
-export function AttendanceClassSelector({ classes, value, onChange }: any) {
+interface AttendanceClassSelectorProps {
+  classes: { id: string; name: string }[];
+  value: string | undefined;
+  onChange: (val: string) => void;
+}
+
+export function AttendanceClassSelector({ classes, value, onChange }: AttendanceClassSelectorProps) {
   return (
-    <div className="space-y-2">
-      <p className="font-medium text-sm">Select Class</p>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger><SelectValue placeholder="Choose class…" /></SelectTrigger>
-        <SelectContent>
-          {classes.map((cls: any) => (
-            <SelectItem key={cls.id} value={cls.id}>
-              {cls.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    <ReusableSelect
+      label="Select Class"
+      value={value}
+      onChange={onChange}
+      options={classes.map((c) => ({ label: c.name, value: c.id }))}
+      placeholder="Choose class…"
+    />
   );
 }

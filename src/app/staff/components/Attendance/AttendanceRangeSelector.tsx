@@ -4,29 +4,27 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  startOfWeek,
   endOfWeek,
-  startOfMonth,
   endOfMonth,
   addDays,
-  isBefore,
   isAfter,
   eachDayOfInterval,
   isWeekend,
 } from "date-fns";
 import { generateBusinessDayDates } from "@/utils/lib";
-import { TermDateRange, Term } from "@/types";
+import { Term, AcademicSessionTerms } from "@/types";
 import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
 
 interface AttendanceRangeSelectorProps {
   frequency: string;
-  termRange?: TermDateRange | null;
+  termRange?: AcademicSessionTerms | null;
   currentRange: {
     from: Date | null;
     to: Date | null;
     validDays?: Date[];
   } | null;
   selectedTerm: Term;
+  selectedSession: string;
 
   onFrequencyChange: (frequency: string) => void;
   onSelectRange: (range: { from: Date; to: Date; validDays: Date[] }) => void;
@@ -39,14 +37,14 @@ export function AttendanceRangeSelector({
   onSelectRange,
   termRange,
   selectedTerm,
+  selectedSession,
 }: AttendanceRangeSelectorProps) {
   const [customRange, setCustomRange] = useState<any>(null);
   const today = new Date();
-
-  const term = termRange?.termDates[selectedTerm];
+  const term = termRange?.[selectedSession]?.termDates?.[selectedTerm];
   const sessionRange = {
-    from: new Date(termRange?.termDates.first?.start ?? new Date()),
-    to: new Date(termRange?.termDates.third?.end ?? new Date()),
+    from: new Date(term?.start ?? new Date()),
+    to: new Date(term?.end ?? new Date()),
   };
 
   // Sync parent → local

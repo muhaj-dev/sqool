@@ -26,12 +26,13 @@ import useAuthRedirect from "@/hooks/useAuthRedirect";
 import { getSessionsForStaff } from "@/utils/api";
 import { normalizeSessionTermsData } from "@/utils/lib";
 import { AttendanceDatePicker } from "./AttendanceDatePicker";
+import { AcademicSessionTerms } from "@/types";
 
 export function AttendanceHeader() {
   const {user} = useAuthStore()
   const {setClasses} = useStaffClassesStore();
   const [academicSessions,setAcademicSessions] =  React.useState<string[]>([]);
-  const [termRanges,setTermRanges] =  React.useState<any>({});
+  const [termRanges,setTermRanges] =  React.useState<AcademicSessionTerms>({});
 
   const staffId = user?._id;
 
@@ -92,7 +93,12 @@ export function AttendanceHeader() {
   useEffect(() => {
     if (sessionsTermsQuery.data) {
      const {academicSessions,termRanges} = normalizeSessionTermsData(sessionsTermsQuery.data);
+     console.log({academicSessions,termRanges}, "normalized sessions terms");
       setAcademicSessions(academicSessions);
+      //default to first session
+      if(academicSessions.length>0){
+        setSession(academicSessions[0]);
+      }
       setTermRanges(termRanges);
     }}, [sessionsTermsQuery.data]);
   

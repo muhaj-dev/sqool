@@ -1,0 +1,85 @@
+"use client";
+
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { AlertTriangle, Info, XCircle } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+
+/**
+ * Reusable Message Dialog
+ * - Supports error, warning, info
+ * - Bold emphasized message
+ * - For critical errors, warning notices, or general system messages
+ */
+
+export type MessageDialogType = "error" | "warning" | "info";
+
+interface MessageDialogProps {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  type?: MessageDialogType;
+  title?: string;
+  message: string;
+  description?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}
+
+const iconMap = {
+  error: <XCircle className="w-6 h-6 text-red-600" />, 
+  warning: <AlertTriangle className="w-6 h-6 text-yellow-600" />, 
+  info: <Info className="w-6 h-6 text-blue-600" />, 
+};
+
+export default function MessageDialog({
+  open,
+  onOpenChange,
+  type = "warning",
+  title,
+  message,
+  description,
+  actionLabel = "Okay",
+  onAction,
+}: MessageDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader className="flex flex-row items-center gap-3">
+          {iconMap[type]}
+          <div>
+            <DialogTitle>{title || type.toUpperCase()}</DialogTitle>
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </div>
+        </DialogHeader>
+
+        <ScrollArea className="max-h-[40vh] mt-4 pr-3">
+          <p className="text-sm leading-relaxed">
+            <strong className="font-semibold">{message}</strong>
+          </p>
+        </ScrollArea>
+
+        <DialogFooter className="mt-4">
+          <Button
+            variant={type === "error" ? "destructive" : "default"}
+            onClick={() => {
+              onAction && onAction();
+              onOpenChange(false);
+            }}
+          >
+            {actionLabel}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

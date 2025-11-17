@@ -36,3 +36,10 @@ export type Term = "first" | "second" | "third";
 export interface TermDateRange {
   termDates: Partial<Record<Term, { start: string; end: string }>>;
 }
+
+export interface AcademicSessionTerms {
+  [academicYear: string]: {
+    session: string;
+    termDates: Partial<Record<Term, { start: string; end: string }>>;
+  };
+}
