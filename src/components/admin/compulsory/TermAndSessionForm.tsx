@@ -44,33 +44,50 @@ export function TermAndSessionForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const formattedData = {
-        session: values.session,
-        firstTermStartDate: format(values.firstTermStartDate, 'yyyy-MM-dd'),
-        firstTermEndDate: format(values.firstTermEndDate, 'yyyy-MM-dd'),
-        secondTermStartDate: format(values.secondTermStartDate, 'yyyy-MM-dd'),
-        secondTermEndDate: format(values.secondTermEndDate, 'yyyy-MM-dd'),
-        thirdTermStartDate: format(values.thirdTermStartDate, 'yyyy-MM-dd'),
-        thirdTermEndDate: format(values.thirdTermEndDate, 'yyyy-MM-dd'),
-      }
-
-      await createSessionAndTerms(formattedData)
-
-      toast({
-        variant: 'default',
-        title: 'Success',
-        description: 'Session and terms submitted successfully!',
-      })
-      goNextStep(activeIndex)
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to submit',
-      })
+  try {
+    const formattedData = {
+      session: values.session,
+      firstTermStartDate: format(values.firstTermStartDate, 'yyyy-MM-dd'),
+      firstTermEndDate: format(values.firstTermEndDate, 'yyyy-MM-dd'),
+      secondTermStartDate: format(values.secondTermStartDate, 'yyyy-MM-dd'),
+      secondTermEndDate: format(values.secondTermEndDate, 'yyyy-MM-dd'),
+      thirdTermStartDate: format(values.thirdTermStartDate, 'yyyy-MM-dd'),
+      thirdTermEndDate: format(values.thirdTermEndDate, 'yyyy-MM-dd'),
     }
+
+    // Call API
+    const data = await createSessionAndTerms(formattedData)
+
+    // Show toast using API message
+    toast({
+      variant: 'default',
+      title: 'Success',
+      description: data?.message || 'Session and terms submitted successfully!',
+    })
+
+    // Clear the form
+    form.reset({
+      session: '',
+      firstTermStartDate: undefined,
+      firstTermEndDate: undefined,
+      secondTermStartDate: undefined,
+      secondTermEndDate: undefined,
+      thirdTermStartDate: undefined,
+      thirdTermEndDate: undefined,
+    })
+
+    // Proceed to next step
+    goNextStep(activeIndex)
+  } catch (error) {
+    toast({
+      variant: 'destructive',
+      title: 'Error',
+      description: error instanceof Error ? error.message : 'Failed to submit',
+    })
   }
+}
+
+
 
   return (
     <Form {...form}>

@@ -348,7 +348,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
+        <div className=" mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" onClick={() => router.push('/admin/parent')}>
@@ -363,7 +363,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className=" mx-auto px-4 py-8">
         {/* Alert for overdue fees */}
         {overdueCount > 0 && (
           <Alert variant="destructive" className="mb-6">
@@ -375,7 +375,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
         )}
 
         {/* Quick Actions */}
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <Card>
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
@@ -389,16 +389,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* {
-                "_id": "68cc5db9c031eb3ef15607de",
-                "paymentDate": "2022-01-01T00:00:00.000Z",
-                "paymentStatus": "paid",
-                "amount": 10000,
-                "userId": "683112addb58d74f5da05120",
-                "paymentMemo": "http://localhost:3000/public/files/1758223798053--Screenshot 2023-05-22 at 13.18.30.png"
-            }, */}
+        </div> */}
 
         <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6">
           {/* Parent Information Card */}

@@ -11,6 +11,7 @@ import { toast } from '@/components/ui/use-toast'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { addStudent, searchParents, getClasses, addParent } from '@/utils/api'
+import ParentSearch from './ParentSearch'
 
 // Define the payload type for addStudent based on your API
 interface AddStudentPayload {
@@ -174,109 +175,122 @@ export default function AddStudentForm() {
     router.push('/admin/student')
   }
 
-  const onSubmit = async (data: FormData) => {
-    console.log('Form submitted with data:', data)
-    console.log('Form validation state:', form.formState.isValid)
+const onSubmit = async (data: FormData) => {
+  console.log("Form submitted with data:", data);
+  console.log("Form validation state:", form.formState.isValid);
 
-    setIsSubmitting(true)
+  setIsSubmitting(true);
 
-    try {
-      let parentId = data.parentId
+  try {
+    let parentId: string | undefined = data.parentId;
 
-      // If parentId starts with "new_", it means we need to create a new parent
-      if (parentId.startsWith('new_')) {
-        console.log('Creating new parent...')
+    // If parentId starts with "new_", create a parent first
+    if (parentId && parentId.startsWith("new_")) {
+      console.log("Creating new parent...");
 
-        const parentPayload = {
-          firstName: data.newParentFirstName!,
-          lastName: data.newParentLastName!,
-          occupation: data.newParentOccupation!,
-          email: data.newParentEmail!,
-        }
+      const parentPayload = {
+        firstName: data.newParentFirstName!,
+        lastName: data.newParentLastName!,
+        occupation: data.newParentOccupation!,
+        email: data.newParentEmail!,
+      };
 
-        console.log('Parent payload:', parentPayload)
+      console.log("Parent payload:", parentPayload);
 
-        try {
-          const newParentResponse = await addParent(parentPayload)
-          console.log('Parent creation response:', newParentResponse)
-
-          const parentId = newParentResponse.data?.parentId
-
-          if (!parentId) {
-            throw new Error('Failed to get parent ID from response')
-          }
-
-          console.log('New parent created with ID:', parentId)
-
-          toast({
-            title: 'Parent Created',
-            description: 'New parent account created successfully',
-          })
-        } catch (parentError) {
-          console.error('Error creating parent:', parentError)
-          toast({
-            title: 'Parent Creation Failed',
-            description: 'Failed to create parent account',
-            variant: 'destructive',
-          })
-          return
-        }
-      } else {
-        console.log('Using existing parent ID:', parentId)
-      }
-
-      // Prepare student data
-      const studentData: AddStudentPayload = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        gender: data.gender,
-        class: data.class,
-        parent: parentId, // Use the parent ID (either existing or newly created)
-        language: data.language,
-        dateOfBirth: data.dateOfBirth,
-        address: data.address,
-        aboutMe: data.aboutMe,
-        hobbies: data.hobbies
-          .split(',')
-          .map(hobby => hobby.trim())
-          .filter(hobby => hobby.length > 0),
-        enrolmentDate: data.enrolmentDate,
-      }
-
-      console.log('Submitting student data:', JSON.stringify(studentData, null, 2))
-
-      // Add student
       try {
-        // const response = await addStudent(studentData);
-        const response = await addStudent(studentData as any)
-        console.log('Student creation response:', response)
+        const newParentResponse = await addParent(parentPayload);
+        console.log("Parent creation response:", newParentResponse);
+
+        // Update the same variable — NOT redeclare
+        parentId = newParentResponse.data?.parentId;
+
+        if (!parentId) {
+          throw new Error("Failed to get parent ID from response");
+        }
+
+        console.log("New parent created with ID:", parentId);
 
         toast({
-          title: 'Success!',
-          description: response?.message || 'Student added successfully',
-        })
-
-        handleReset()
-        router.push('/admin/student')
-      } catch (studentError) {
-        console.error('Error creating student:', studentError)
+          title: "Parent Created",
+          description: "New parent account created successfully",
+        });
+      } catch (parentError) {
+        console.error("Error creating parent:", parentError);
         toast({
-          title: 'Student Creation Failed',
-          description: studentError instanceof Error ? studentError?.message : 'Failed to create student',
-          variant: 'destructive',
-        })
+          title: "Parent Creation Failed",
+          description: "Failed to create parent account",
+          variant: "destructive",
+        });
+        return;
       }
-    } catch (error) {
-      console.error('Unexpected error in form submission:', error)
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred',
-        variant: 'destructive',
-      })
-    } finally {
-      setIsSubmitting(false)
+    } else {
+      console.log("Using existing parent ID:", parentId);
     }
+
+    // Validate parentId before using it
+    if (!parentId) {
+      throw new Error("Parent ID is missing");
+    }
+
+    // Prepare student data
+    const studentData: AddStudentPayload = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      gender: data.gender,
+      class: data.class,
+      parent: parentId, // always a valid string here
+      language: data.language,
+      dateOfBirth: data.dateOfBirth,
+      address: data.address,
+      aboutMe: data.aboutMe,
+      hobbies: data.hobbies
+        .split(",")
+        .map((hobby) => hobby.trim())
+        .filter((hobby) => hobby.length > 0),
+      enrolmentDate: data.enrolmentDate,
+    };
+
+    console.log(
+      "Submitting student data:",
+      JSON.stringify(studentData, null, 2)
+    );
+
+    // Add student
+    try {
+      const response = await addStudent(studentData as any);
+      console.log("Student creation response:", response);
+
+      toast({
+        title: "Success!",
+        description: response?.message || "Student added successfully",
+      });
+
+      handleReset();
+      router.push("/admin/student");
+    } catch (studentError) {
+      console.error("Error creating student:", studentError);
+      toast({
+        title: "Student Creation Failed",
+        description:
+          studentError instanceof Error
+            ? studentError?.message
+            : "Failed to create student",
+        variant: "destructive",
+      });
+    }
+  } catch (error) {
+    console.error("Unexpected error in form submission:", error);
+    toast({
+      title: "Error",
+      description: "An unexpected error occurred",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
   }
+};
+
+
 
   const handleParentSelect = (parentId: string) => {
     console.log('Parent selected:', parentId)
@@ -304,12 +318,12 @@ export default function AddStudentForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Debug info - remove in production */}
-        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+        {/* <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
           <p className="text-sm text-yellow-800">
             <strong>Debug Info:</strong> Form valid: {form.formState.isValid ? 'Yes' : 'No'}, Parent selected:{' '}
             {selectedParentId ? 'Yes' : 'No'}, Ready to submit: {isFormValid ? 'Yes' : 'No'}
           </p>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Student Information */}
@@ -529,24 +543,16 @@ export default function AddStudentForm() {
                           </Select>
                         )}
 
-                        {selectedParentId && selectedParentId !== 'new_parent' && (
-                          <div className="p-3 bg-green-50 border border-green-200 rounded-md">
-                            <p className="text-sm text-green-800">
-                              Parent selected: {parents.find(p => p.parentId === selectedParentId)?.name}
-                            </p>
-                            <Button
-                              type="button"
-                              variant="link"
-                              className="p-0 h-auto text-sm text-green-600"
-                              onClick={() => {
-                                form.setValue('parentId', '')
-                                setSearchQuery('')
-                              }}
-                            >
-                              Change parent
-                            </Button>
-                          </div>
-                        )}
+                      
+
+        <ParentSearch
+  parents={parents}
+  onSelect={(id) => form.setValue("parentId", id)}
+/>
+
+
+
+              
                       </div>
                     </FormControl>
                     <FormMessage />

@@ -206,33 +206,79 @@ export interface ClassPaginationResponse {
 
 // Staff-related types
 export interface UserId {
-  email: string;
   _id?: string;
   firstName: string;
   lastName: string;
+  email: string;
 }
 
 export interface Subject {
   _id: string;
   name: string;
+  code?: string;
+  category?: string;
+  description?: string;
+  isActive?: boolean;
+  prerequisites?: any[];
+  slug?: string;
 }
 
 export interface StaffResult {
-  result?: null;
   _id: string;
   level: string;
   userId: UserId;
+  qualification: string;
+  aboutMe: string;
   subjects: Subject[];
   role: string;
+  address: string;
+  experience: string;
   primarySubject: string;
   isActive: boolean;
-  qualification?: string;
-  aboutMe?: string;
-  address?: string;
 }
 
+export interface ScheduleSubject {
+  _id: string;
+  name: string;
+  code: string;
+  category: string;
+  description: string;
+  isActive: boolean;
+  prerequisites: any[];
+  slug: string;
+}
+
+export interface ScheduleTeacher {
+  _id: string;
+  userId: UserId;
+  subjects: Subject[];
+  isActive: boolean;
+}
+
+export interface ScheduleClass {
+  _id: string
+  className: string
+  shortName: string
+  levelType: string
+  classSection: string
+}
+
+export interface StaffSchedule {
+  _id: string
+  class: ScheduleClass  
+  day: string
+  subject: ScheduleSubject
+  teacher: ScheduleTeacher
+  startTime: string
+  endTime: string
+}
+
+
 export interface SingleStaffResponse {
-  data: StaffResult;
+  data: {
+    staff: StaffResult;
+    staffSchedules: StaffSchedule[];
+  };
   message: string;
 }
 
@@ -1165,3 +1211,123 @@ declare function debounce<T extends (...args: any[]) => any>(
   cancel(): void;
   flush(): ReturnType<T>;
 };
+
+
+
+export interface DisplayUser {
+  _id?: string
+  firstName?: string
+  lastName?: string
+  email?: string
+  phone?: string
+  phoneId?: {
+    phoneNumber: string
+  }
+  photo?: string
+  role?: string
+  school?: {
+    name: string
+  }
+}
+
+export interface ParentData {
+  _id: string
+  userId: string
+  children: string[]
+  occupation: string
+  schools: string[]
+  isActive: boolean
+  user: DisplayUser
+  childrenDetails: Child[]
+}
+
+// Add other types as needed
+export interface Child {
+  _id: string
+  firstName: string
+  lastName: string
+  gender?: string
+  photo?: string
+  createdAt?: string
+  class: {
+    _id: string
+    className: string
+    levelType: string
+  }
+}
+
+export interface Notice {
+  _id: string
+  title: string
+  content: string
+  isPinned: boolean
+  isActive: boolean
+  notificationType: string
+  expirationDate: string
+}
+
+export interface Expense {
+  _id: string
+  // Add expense properties as needed
+}
+
+export interface PaymentStatistics {
+  totalPaid: number
+  totalPending: number
+  totalOverdue: number
+}
+
+export interface PaymentStatisticsResponse {
+  data: PaymentStatistics
+  message: string
+}
+
+
+
+
+// types/payment.ts
+export interface PaymentRecord {
+  _id: string
+  paymentDate: string
+  paymentStatus: string
+  amountPaid: number
+  userId: string
+  paymentMethod: string
+  transactionId?: string
+  paymentMemo: string
+  paymentCategory: string
+  paymentType: string
+  student?: {
+    firstName: string
+    lastName: string
+    parentName?: string
+    className?: string
+  }
+}
+
+export interface PaymentStatistics {
+  totalPaid: number
+  totalPending: number
+  totalOverdue: number
+}
+
+export interface PaginationState {
+  total: number
+  currentPage: number
+  pageSize: number
+  totalPages: number
+  hasNextPage: boolean
+  hasPreviousPage: boolean
+}
+
+export interface PaymentFormData {
+  paymentDate: string
+  amountPaid: string
+  paymentMethod: string
+  paymentStatus: string
+  paymentType: string
+  paymentCategory: string
+  transactionId: string
+  paymentMemo: File | null
+  userId: string
+}

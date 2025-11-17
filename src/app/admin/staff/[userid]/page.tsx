@@ -3,16 +3,21 @@
 import LeftBar from '@/components/staff/LeftBar'
 import StaffSteps from '@/components/staff/StaffSteps'
 import StaffTopbar from '@/components/staff/StaffTopbar'
-import React, { useEffect, useState } from 'react' // Removed ReactNode import
+import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { getStaffById } from '@/utils/api'
-import { StaffResult, SingleStaffResponse } from '@/types'
+import { StaffResult, SingleStaffResponse, StaffSchedule } from '@/types'
 
 const Page = () => {
-  // Removed the children prop
   const pathname = usePathname()
   const [staffId, setStaffId] = useState('')
-  const [staff, setStaff] = useState<StaffResult | null>(null)
+  const [staffData, setStaffData] = useState<{
+    staff: StaffResult | null
+    staffSchedules: StaffSchedule[]
+  }>({
+    staff: null,
+    staffSchedules: []
+  })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -20,21 +25,30 @@ const Page = () => {
     // Extract the id from the pathname
     const pathSegments = pathname?.split('/') ?? []
     const extractedStaffId = pathSegments[pathSegments.length - 1]
-    setStaffId(extractedStaffId)
-    console.log('Staff ID:', extractedStaffId)
+    
+    if (extractedStaffId && extractedStaffId !== 'staff') {
+      setStaffId(extractedStaffId)
+      console.log('Staff ID:', extractedStaffId)
+    }
   }, [pathname])
 
   useEffect(() => {
     const fetchStaff = async () => {
-      if (!staffId) return // Skip if staffId is not set
+      if (!staffId) return
+      
       setLoading(true)
       setError(null)
+      
       try {
         const response: SingleStaffResponse = await getStaffById(staffId)
-        setStaff(response?.data ?? null)
+        setStaffData({
+          staff: response.data.staff,
+          staffSchedules: response.data.staffSchedules
+        })
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to fetch staff details'
         setError(errorMessage)
+        console.error('Error fetching staff:', err)
       } finally {
         setLoading(false)
       }
@@ -47,10 +61,18 @@ const Page = () => {
     <>
       <StaffTopbar staffId={staffId} />
       <section className="flex gap-8 flex-col lg:flex-row w-full">
-        <LeftBar staffId={staffId} staff={staff} loading={loading} error={error} />
+        <LeftBar 
+          staffId={staffId} 
+          staff={staffData.staff} 
+          loading={loading} 
+          error={error} 
+        />
         <div className="bg-white flex-1 rounded-md">
-          <StaffSteps staffId={staffId} staff={staff} />
-          {/* <Staff /> */}
+          <StaffSteps 
+            staffId={staffId} 
+            staff={staffData.staff}
+            staffSchedules={staffData.staffSchedules}
+          />
         </div>
       </section>
     </>

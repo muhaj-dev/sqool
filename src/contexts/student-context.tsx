@@ -37,8 +37,7 @@ const StudentContextProvider = ({ children, studentId }: { children: ReactNode; 
   const Elements: ComponentType<StepComponentProps>[] = [
     StudentProfile,
     StudyProgress,
-    AttendanceTable,
-    AttendanceTable,
+    AttendanceTable
   ]
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [studentData, setStudentData] = useState<ISingleStudent | null>(null)

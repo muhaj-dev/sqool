@@ -31,29 +31,29 @@ export const ClassOverview = ({ classData }: ClassOverviewProps) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="text-sm font-medium text-muted-foreground">Class Name</label>
-              <p className="text-lg font-semibold">{classData.className}</p>
+              <p className="text-lg font-semibold">{classData?.className}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Level/Stream</label>
-              <p className="text-lg font-semibold capitalize">{classData.levelType}</p>
+              <p className="text-lg font-semibold capitalize">{classData?.levelType}</p>
 
-              {/* <Badge variant="outline" className="mt-1">{classData.levelType}</Badge> */}
+              {/* <Badge variant="outline" className="mt-1">{classData?.levelType}</Badge> */}
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Class Section</label>
-              <p className="text-lg font-semibold">{classData.classSection || '-'}</p>
+              <p className="text-lg font-semibold">{classData?.classSection || '-'}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Class Teacher(s)</label>
               <p className="mt-1">
-                {classData.classTeacher && classData.classTeacher.length > 0
-                  ? `${classData.classTeacher[0].userId.firstName} ${classData.classTeacher[0].userId.lastName}`
+                {classData?.classTeacher && classData?.classTeacher.length > 0
+                  ? `${classData?.classTeacher[0].userId.firstName} ${classData?.classTeacher[0].userId.lastName}`
                   : 'No teacher assigned'}
               </p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Description</label>
-              <p className="mt-1">{classData.shortName || '-'}</p>
+              <p className="mt-1">{classData?.shortName || '-'}</p>
             </div>
           </div>
         </CardContent>
@@ -73,7 +73,7 @@ export const ClassOverview = ({ classData }: ClassOverviewProps) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="font-medium">Total Students: {classData.students ? classData.students.length : 0}</p>
+              <p className="font-medium">Total Students: {classData?.students ? classData?.students.length : 0}</p>
               {/* You can map students here if you fetch their details */}
             </div>
           </CardContent>
@@ -92,10 +92,10 @@ export const ClassOverview = ({ classData }: ClassOverviewProps) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="font-medium">Total Subjects: {classData.subjects ? classData.subjects.length : 0}</p>
+              <p className="font-medium">Total Subjects: {classData?.subjects ? classData?.subjects.length : 0}</p>
               <div className="flex flex-wrap gap-2 mt-2">
-                {classData.subjects && classData.subjects.length > 0 ? (
-                  classData.subjects.map(
+                {classData?.subjects && classData?.subjects.length > 0 ? (
+                  classData?.subjects.map(
                     (subject: {
                       _id: Key | null | undefined
                       name:

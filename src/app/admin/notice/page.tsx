@@ -30,6 +30,19 @@ interface PaginationInfo {
   previousPage: number | null;
 }
 
+
+const formatPagination = (apiPagination: any): PaginationInfo => ({
+  total: Number(apiPagination.total || 0),
+  currentPage: Number(apiPagination.currentPage || 1),
+  pageSize: Number(apiPagination.pageSize || 20),
+  totalPages: Number(apiPagination.totalPages || 0),
+  hasNextPage: Boolean(apiPagination.hasNextPage),
+  hasPreviousPage: Boolean(apiPagination.hasPreviousPage),
+  nextPage: apiPagination.nextPage !== null ? Number(apiPagination.nextPage) : null,
+  previousPage: apiPagination.previousPage !== null ? Number(apiPagination.previousPage) : null,
+});
+
+
 const Page = () => {
     const [notices, setNotices] = useState<Notice[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,34 +71,45 @@ const Page = () => {
 
   // Fetch notices from API
   useEffect(() => {
-    fetchNotices();
-  }, [currentPage, searchTerm]);
+  // Fetch the current page whenever it changes
+  fetchNotices(currentPage, searchTerm);
+}, [currentPage, searchTerm]);
 
-  const fetchNotices = async () => {
-    setLoading(true);
-    try {
-      const data = await getAllNotices(searchTerm, "", pagination.pageSize);
-      setNotices(data?.data?.result || []);
-      setPagination(data?.data?.pagination || {
-        total: 0,
-        currentPage: 1,
-        pageSize: 20,
-        totalPages: 0,
-        hasNextPage: false,
-        hasPreviousPage: false,
-        nextPage: null,
-        previousPage: null
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch notices",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+
+useEffect(() => {
+  const handler = setTimeout(() => {
+    setCurrentPage(1); // reset page
+  }, 500);
+
+  return () => clearTimeout(handler);
+}, [searchTerm]);
+
+
+  const fetchNotices = async (page: number = 1, search: string = '') => {
+  setLoading(true);
+  try {
+    const data = await getAllNotices(search, "", page, pagination.pageSize);
+    const formattedPagination = formatPagination(data?.data?.pagination);
+
+    setNotices(data?.data?.result || []);
+    setPagination(formattedPagination);
+
+    // Sync currentPage with API
+    if (currentPage !== formattedPagination.currentPage) {
+      setCurrentPage(formattedPagination.currentPage);
     }
-  };
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "Failed to fetch notices",
+      variant: "destructive",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   const handleCreate = () => {
     setEditingNotice(null);
@@ -253,12 +277,10 @@ const Page = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-64 pl-10"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setCurrentPage(1); // Reset to first page when searching
-                    fetchNotices();
-                  }
-                }}
+               onKeyDown={(e) => {
+  if (e.key === "Enter") setCurrentPage(1); // triggers useEffect
+}}
+
               />
             </div>
             <Button onClick={handleCreate}>
@@ -333,7 +355,7 @@ const Page = () => {
 
         {/* Notices List */}
         <div className="grid gap-4 mb-6">
-          {notices.length === 0 ? (
+          {notices?.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Bell className="h-12 w-12 text-muted-foreground mb-4" />
@@ -381,7 +403,7 @@ const Page = () => {
                           Expires: {safeFormat(notice.expirationDate)}
                         </span>
                       </div>
-                      {notice.resources.length > 0 && (
+                      {/* {notice.resources.length > 0 && (
                         <div className="mb-3">
                           <p className="text-sm font-medium mb-2">Resources:</p>
                           <div className="grid gap-2">
@@ -399,7 +421,7 @@ const Page = () => {
                             ))}
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <div className="flex items-center gap-2 ml-4">
                       <Button
