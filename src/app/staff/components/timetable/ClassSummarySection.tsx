@@ -1,9 +1,8 @@
-import React from "react";
-import { Card} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from "lucide-react";
-import { ClassSchedule, } from "@/types";
 
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { type ClassSchedule } from "@/types";
 
 export const ClassSummarySection = ({
   currentClass,
@@ -28,9 +27,7 @@ export const ClassSummarySection = ({
           </p>
           <p className="text-sm text-primary">
             {currentClass
-              ? `${formatTime(currentClass.startTime)} - ${formatTime(
-                  currentClass.endTime
-                )}`
+              ? `${formatTime(currentClass.startTime)} - ${formatTime(currentClass.endTime)}`
               : "Free period"}
           </p>
         </div>
@@ -46,9 +43,7 @@ export const ClassSummarySection = ({
             {nextClass ? nextClass.subject.name : "No more classes"}
           </p>
           <p className="text-sm text-orange-500">
-            {nextClass
-              ? `Starts at ${formatTime(nextClass.startTime)}`
-              : "Day ended"}
+            {nextClass ? `Starts at ${formatTime(nextClass.startTime)}` : "Day ended"}
           </p>
         </div>
         <Calendar className="h-8 w-8 text-orange-500" />

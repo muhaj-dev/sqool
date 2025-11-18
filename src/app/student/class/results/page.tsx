@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import Resultbar from '@/app/staff/components/class/result/Resultbar'
-import React, { useState } from 'react'
-import ResultExam from '../../components/ResultExam'
+import Resultbar from "@/app/staff/components/class/result/Resultbar";
+
+import ResultExam from "../../components/ResultExam";
 
 const Page = () => {
   return (
@@ -12,7 +12,7 @@ const Page = () => {
         <ResultExam />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

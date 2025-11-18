@@ -1,46 +1,51 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { useToast } from '@/components/ui/use-toast'
-import { Plus, FileEdit, Loader2 } from 'lucide-react'
-import { ExamBasicDetailsForm } from './ExamBasicDetailsForm'
-import { QuestionsFileUpload } from './QuestionsFileUpload'
-import { useExamData } from '@/hooks/useExamData'
+import { FileEdit, Loader2, Plus } from "lucide-react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+import { useExamData } from "@/hooks/useExamData";
+
+import { ExamBasicDetailsForm } from "./ExamBasicDetailsForm";
+import { QuestionsFileUpload } from "./QuestionsFileUpload";
 
 interface ExamFormData {
-  subject: string
-  class: string
-  examDate: string
-  startTime: string
-  endTime: string
-  venue: string
-  mode: string
-  sessionId: string
+  subject: string;
+  class: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  venue: string;
+  mode: string;
+  sessionId: string;
 }
 
 interface CreateExamFormProps {
-  onCreateExam: (examData: ExamFormData, questionsFile: File | null) => void
-  isLoading: boolean
+  onCreateExam: (examData: ExamFormData, questionsFile: File | null) => void;
+  isLoading: boolean;
 }
 
-export const CreateExamForm: React.FC<CreateExamFormProps> = ({ onCreateExam, isLoading: formLoading }) => {
+export const CreateExamForm: React.FC<CreateExamFormProps> = ({
+  onCreateExam,
+  isLoading: formLoading,
+}) => {
   const [examData, setExamData] = useState<ExamFormData>({
-    subject: '',
-    class: '',
-    examDate: '',
-    startTime: '',
-    endTime: '',
-    venue: '',
-    mode: 'online',
-    sessionId: '',
-  })
+    subject: "",
+    class: "",
+    examDate: "",
+    startTime: "",
+    endTime: "",
+    venue: "",
+    mode: "online",
+    sessionId: "",
+  });
 
-  const [questionsFile, setQuestionsFile] = useState<File | null>(null)
-  const { toast } = useToast()
+  const [questionsFile, setQuestionsFile] = useState<File | null>(null);
+  const { toast } = useToast();
 
   // Fetch classes, subjects, and sessions using the custom hook
-  const { classes, subjects, sessions, loading: dataLoading, error } = useExamData()
+  const { classes, subjects, sessions, loading: dataLoading, error } = useExamData();
 
   const isFormValid = () => {
     return (
@@ -51,20 +56,20 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({ onCreateExam, is
       examData.endTime &&
       examData.sessionId &&
       questionsFile
-    )
-  }
+    );
+  };
 
   const handleSubmit = () => {
     if (!isFormValid()) {
       toast({
-        title: 'Missing required fields',
-        description: 'Please fill all required fields and upload a questions file.',
-        variant: 'destructive',
-      })
-      return
+        title: "Missing required fields",
+        description: "Please fill all required fields and upload a questions file.",
+        variant: "destructive",
+      });
+      return;
     }
-    onCreateExam(examData, questionsFile)
-  }
+    onCreateExam(examData, questionsFile);
+  };
 
   if (error) {
     return (
@@ -78,7 +83,7 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({ onCreateExam, is
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -130,5 +135,5 @@ export const CreateExamForm: React.FC<CreateExamFormProps> = ({ onCreateExam, is
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};

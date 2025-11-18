@@ -1,10 +1,13 @@
 'use client'
 
-import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Instagram, Mail, Smartphone, Star, Twitter } from 'lucide-react'
-import { Separator } from '../ui/separator'
+import React from 'react'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { StaffResult } from '@/types'
+
+import { Separator } from '../ui/separator'
+
 
 interface LeftBarProps {
   staffId: string

@@ -1,23 +1,23 @@
-'use client'
-import React from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card'
-import Image, { StaticImageData } from 'next/image'
-import AttachmentUpload from '../AttachmentUpload'
-import { Button } from '../ui/button'
-import { Separator } from '../ui/separator'
+"use client";
+import Image, { type StaticImageData } from "next/image";
 
-type TProps = {
-  photo: StaticImageData
-  fullname: string
-  email: string
-  subject: string
-  total: number
-  approved: boolean
-  onApprove?: () => void
-  onReject?: () => void
-  onSchedule?: () => void
-  loading?: boolean
-  status?: string
+import { Card, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
+
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+
+interface TProps {
+  photo: StaticImageData;
+  fullname: string;
+  email: string;
+  subject: string;
+  total: number;
+  approved: boolean;
+  onApprove?: () => void;
+  onReject?: () => void;
+  onSchedule?: () => void;
+  loading?: boolean;
+  status?: string;
 }
 
 const ExamCard = ({
@@ -58,23 +58,27 @@ const ExamCard = ({
           {/* <AttachmentUpload /> */}
         </div>
       </CardContent>
-      {status === 'pending' && (
+      {status === "pending" && (
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
             <Button className="w-full text-white bg-primary" onClick={onApprove} disabled={loading}>
-              {loading ? 'Approving...' : 'Approve'}
+              {loading ? "Approving..." : "Approve"}
             </Button>
             <Button className="w-full text-white bg-red-600" onClick={onReject} disabled={loading}>
-              {loading ? 'Rejecting...' : 'Reject'}
+              {loading ? "Rejecting..." : "Reject"}
             </Button>
-            <Button className="w-full text-white bg-yellow-600" onClick={onSchedule} disabled={loading}>
-              {loading ? 'Scheduling...' : 'Schedule'}
+            <Button
+              className="w-full text-white bg-yellow-600"
+              onClick={onSchedule}
+              disabled={loading}
+            >
+              {loading ? "Scheduling..." : "Schedule"}
             </Button>
           </CardFooter>
         </>
       )}
-      {approved && (
+      {approved ? (
         <>
           <Separator className="my-2" />
           <CardFooter className="p-0 gap-3">
@@ -98,21 +102,25 @@ const ExamCard = ({
           </>
         )} */}
 
-            {status === 'reject' && (
+            {status === "reject" && (
               <Button className="w-full text-white bg-gray-600" disabled>
                 Rejected
               </Button>
             )}
-            {status === 'scheduled' && (
-              <Button className="w-full text-white bg-yellow-600" onClick={onSchedule} disabled={loading}>
-                {loading ? 'Scheduling...' : 'Schedule'}
+            {status === "scheduled" && (
+              <Button
+                className="w-full text-white bg-yellow-600"
+                onClick={onSchedule}
+                disabled={loading}
+              >
+                {loading ? "Scheduling..." : "Schedule"}
               </Button>
             )}
           </CardFooter>
         </>
-      )}
+      ) : null}
     </Card>
-  )
-}
+  );
+};
 
-export default ExamCard
+export default ExamCard;

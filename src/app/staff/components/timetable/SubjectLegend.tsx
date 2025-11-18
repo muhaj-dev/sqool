@@ -1,9 +1,8 @@
-import React from "react";
-import { Card } from "@/components/ui/card";
-import {Subject } from "@/types";
 import ErrorState from "@/components/ErrorState";
-import { SubjectSkeleton } from "./SkeletonsTimetable";
+import { Card } from "@/components/ui/card";
+import { type Subject } from "@/types";
 
+import { SubjectSkeleton } from "./SkeletonsTimetable";
 
 export const SubjectLegendSection = ({
   isPending,
@@ -40,7 +39,7 @@ export const SubjectLegendSection = ({
             <div
               key={subject._id}
               className={`px-2 py-1 rounded text-xs font-medium border text-center ${getSubjectColor(
-                subject.name
+                subject.name,
               )}`}
             >
               <div className="font-semibold capitalize">{subject.name}</div>

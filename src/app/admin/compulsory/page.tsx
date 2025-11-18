@@ -1,8 +1,7 @@
-import Compulsory from '@/components/admin/compulsory'
-import React from 'react'
+import Compulsory from "@/components/admin/compulsory";
 
 const page = () => {
-  return <Compulsory />
-}
+  return <Compulsory />;
+};
 
-export default page
+export default page;

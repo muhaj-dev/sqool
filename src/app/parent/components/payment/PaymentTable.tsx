@@ -1,8 +1,10 @@
-import { paymentData } from '@/components/student/student-data'
-import { PaymentCol } from './PaymentCol'
-import { PaymentTableRow } from './PaymentTableRow'
-import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
-import { AddPaymentCard } from './AddPaymentCard'
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+
+import { paymentData } from "@/components/student/student-data";
+
+import { AddPaymentCard } from "./AddPaymentCard";
+import { PaymentCol } from "./PaymentCol";
+import { PaymentTableRow } from "./PaymentTableRow";
 
 const PaymentTable = () => {
   return (
@@ -52,10 +54,10 @@ const PaymentTable = () => {
         <PaymentTableRow data={paymentData} columns={PaymentCol} />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default PaymentTable
+export default PaymentTable;
 
 const TPay = () => {
   return (
@@ -65,13 +67,13 @@ const TPay = () => {
         fill="#B700DD"
       />
     </svg>
-  )
-}
+  );
+};
 
 const OPay = () => {
   return (
     <svg width="36" height="24" viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_859_11792)">
+      <g clipPath="url(#clip0_859_11792)">
         <path
           d="M14.4 16.8H21.6V15H19.2V6.6H17.0625L14.2875 9.16875L15.7313 10.6688C16.2563 10.2063 16.6 9.85 16.7625 9.6H16.8V15H14.4V16.8ZM24 12C24 12.875 23.8688 13.7625 23.6063 14.6625C23.3438 15.5625 22.9719 16.4 22.4906 17.175C22.0094 17.95 21.375 18.5813 20.5875 19.0688C19.8 19.5563 18.9375 19.8 18 19.8C17.0625 19.8 16.2 19.5563 15.4125 19.0688C14.625 18.5813 13.9906 17.95 13.5094 17.175C13.0281 16.4 12.6562 15.5625 12.3938 14.6625C12.1313 13.7625 12 12.875 12 12C12 11.125 12.1313 10.2375 12.3938 9.3375C12.6562 8.4375 13.0281 7.6 13.5094 6.825C13.9906 6.05 14.625 5.41875 15.4125 4.93125C16.2 4.44375 17.0625 4.2 18 4.2C18.9375 4.2 19.8 4.44375 20.5875 4.93125C21.375 5.41875 22.0094 6.05 22.4906 6.825C22.9719 7.6 23.3438 8.4375 23.6063 9.3375C23.8688 10.2375 24 11.125 24 12ZM33.6 16.8V7.2C32.275 7.2 31.1438 6.73125 30.2063 5.79375C29.2688 4.85625 28.8 3.725 28.8 2.4H7.2C7.2 3.725 6.73125 4.85625 5.79375 5.79375C4.85625 6.73125 3.725 7.2 2.4 7.2V16.8C3.725 16.8 4.85625 17.2688 5.79375 18.2063C6.73125 19.1438 7.2 20.275 7.2 21.6H28.8C28.8 20.275 29.2688 19.1438 30.2063 18.2063C31.1438 17.2688 32.275 16.8 33.6 16.8ZM36 1.2V22.8C36 23.125 35.8813 23.4063 35.6438 23.6438C35.4063 23.8813 35.125 24 34.8 24H1.2C0.875 24 0.59375 23.8813 0.35625 23.6438C0.11875 23.4063 0 23.125 0 22.8V1.2C0 0.875 0.11875 0.59375 0.35625 0.35625C0.59375 0.11875 0.875 0 1.2 0H34.8C35.125 0 35.4063 0.11875 35.6438 0.35625C35.8813 0.59375 36 0.875 36 1.2Z"
           fill="#FF0000"
@@ -83,8 +85,8 @@ const OPay = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 const CFee = () => {
   return (
@@ -94,5 +96,5 @@ const CFee = () => {
         fill="#FFA206"
       />
     </svg>
-  )
-}
+  );
+};

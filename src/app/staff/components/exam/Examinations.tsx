@@ -1,94 +1,94 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useToast } from '@/components/ui/use-toast'
-import { Plus } from 'lucide-react'
-import { createExamination } from '@/utils/api'
-import { CreateExamForm } from './CreateExamForm'
-import { ExamList } from './ExamList'
-import { ExamResults } from './ExamResults'
-import { QuestionBuilder } from './QuestionBuilder'
+import { useState } from "react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
+import { createExamination } from "@/utils/api";
+
+import { CreateExamForm } from "./CreateExamForm";
+import { ExamList } from "./ExamList";
+import { ExamResults } from "./ExamResults";
+import { QuestionBuilder } from "./QuestionBuilder";
 
 // Types
 interface ExamFormData {
-  subject: string
-  class: string
-  examDate: string
-  startTime: string
-  endTime: string
-  venue: string
-  mode: string
-  sessionId: string
+  subject: string;
+  class: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  venue: string;
+  mode: string;
+  sessionId: string;
 }
 
 interface ExamItem {
-  id: number
-  title: string
-  subject: string
-  class: string
-  questions: number
-  duration: string
-  status: string
-  created: string
+  id: number;
+  title: string;
+  subject: string;
+  class: string;
+  questions: number;
+  duration: string;
+  status: string;
+  created: string;
 }
 
 // Main Examinations Component
 export const Examinations = () => {
-  const [activeTab, setActiveTab] = useState('create')
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const [activeTab, setActiveTab] = useState("create");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleCreateExam = async (examData: ExamFormData, questionsFile: File | null) => {
     if (!questionsFile) {
       toast({
-        title: 'No questions file',
-        description: 'Please upload a questions file.',
-        variant: 'destructive',
-      })
-      return
+        title: "No questions file",
+        description: "Please upload a questions file.",
+        variant: "destructive",
+      });
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const formData = new FormData()
+      const formData = new FormData();
 
       // Append all form data - now sending the actual IDs
-      formData.append('subject', examData.subject) // Subject ID
-      formData.append('class', examData.class) // Class ID
-      formData.append('examDate', examData.examDate)
-      formData.append('startTime', examData.startTime)
-      formData.append('endTime', examData.endTime)
-      formData.append('sessionId', examData.sessionId) // Session ID
+      formData.append("subject", examData.subject); // Subject ID
+      formData.append("class", examData.class); // Class ID
+      formData.append("examDate", examData.examDate);
+      formData.append("startTime", examData.startTime);
+      formData.append("endTime", examData.endTime);
+      formData.append("sessionId", examData.sessionId); // Session ID
 
       // Append optional fields only if they have values
-      if (examData.venue) formData.append('venue', examData.venue)
-      if (examData.mode) formData.append('mode', examData.mode)
+      if (examData.venue) formData.append("venue", examData.venue);
+      if (examData.mode) formData.append("mode", examData.mode);
 
       // Append the file
-      formData.append('questions', questionsFile)
+      formData.append("questions", questionsFile);
 
       // Call the API
-      const response = await createExamination(formData)
+      const response = await createExamination(formData);
 
       toast({
-        title: 'Exam created successfully!',
-        description: response?.message || 'The examination has been scheduled.',
-      })
+        title: "Exam created successfully!",
+        description: response?.message || "The examination has been scheduled.",
+      });
 
       // Reset form by switching tabs
-      setActiveTab('manage')
+      setActiveTab("manage");
     } catch (error) {
-      console.error('Error creating exam:', error)
+      console.error("Error creating exam:", error);
       toast({
-        title: 'Failed to create exam',
-        description: error instanceof Error ? error.message : 'Please try again later.',
-        variant: 'destructive',
-      })
+        title: "Failed to create exam",
+        description: error instanceof Error ? error.message : "Please try again later.",
+        variant: "destructive",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -121,7 +121,7 @@ export const Examinations = () => {
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};
 
-export default Examinations
+export default Examinations;

@@ -1,43 +1,44 @@
-import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { BookOpen, GraduationCap, School, Users } from 'lucide-react'
-import { getClassStats } from '@/utils/api'
+import { GraduationCap, School, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getClassStats } from "@/utils/api";
 
 interface ClassStatsData {
-  total: number
-  nursery: number
-  primary: number
-  secondary: number
-  tertiary: number
+  total: number;
+  nursery: number;
+  primary: number;
+  secondary: number;
+  tertiary: number;
 }
 
 interface ClassStatsProps {
-  onRefresh?: () => void
+  onRefresh?: () => void;
 }
 
 const ClassStats = ({ onRefresh }: ClassStatsProps) => {
-  const [stats, setStats] = useState<ClassStatsData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState<ClassStatsData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const response = await getClassStats()
+        const response = await getClassStats();
         // If response.data is an array, use [0]
-        setStats(Array.isArray(response.data) ? response.data[0] : response.data)
+        setStats(Array.isArray(response.data) ? response.data[0] : response.data);
       } catch (err) {
-        console.log(err)
-        setStats(null)
+        console.log(err);
+        setStats(null);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchStats()
-  }, [onRefresh])
+    };
+    void fetchStats();
+  }, [onRefresh]);
 
   if (loading) {
-    return <div>Loading class stats...</div>
+    return <div>Loading class stats...</div>;
   }
 
   return (
@@ -83,7 +84,7 @@ const ClassStats = ({ onRefresh }: ClassStatsProps) => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default ClassStats
+export default ClassStats;

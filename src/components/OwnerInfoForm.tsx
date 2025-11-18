@@ -1,61 +1,61 @@
-'use client'
-import { Button } from './ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import DatePicker from './DatePicker'
-import AttachmentUpload from './AttachmentUpload'
-import { useState } from 'react'
+} from "@/components/ui/select";
+
+import DatePicker from "./DatePicker";
+import { Button } from "./ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 
 const formSchema = z.object({
-  firstname: z.string({ required_error: 'first name is required' }).min(2).max(50),
-  lastname: z.string({ required_error: 'last name is required' }).min(2).max(50),
-  phone: z.string({ required_error: 'phone number is required' }).min(2).max(50),
-  gender: z.string({ required_error: 'gender is required' }),
-  dob: z.date({ required_error: 'Please select a date' }),
-  nationality: z.string({ required_error: 'nationality is required' }),
-  address: z.string({ required_error: 'residential address is required' }),
+  firstname: z.string({ required_error: "first name is required" }).min(2).max(50),
+  lastname: z.string({ required_error: "last name is required" }).min(2).max(50),
+  phone: z.string({ required_error: "phone number is required" }).min(2).max(50),
+  gender: z.string({ required_error: "gender is required" }),
+  dob: z.date({ required_error: "Please select a date" }),
+  nationality: z.string({ required_error: "nationality is required" }),
+  address: z.string({ required_error: "residential address is required" }),
   formofID: z.string(),
-  idNumber: z.string({ required_error: 'ID is required' }),
-})
+  idNumber: z.string({ required_error: "ID is required" }),
+});
 
 const OwnerInfoForm = () => {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
   function closeForm() {
-    setIsVisible(false)
+    setIsVisible(false);
   }
   function openForm() {
-    setIsVisible(true)
+    setIsVisible(true);
   }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstname: '',
-      lastname: '',
-      phone: '',
+      firstname: "",
+      lastname: "",
+      phone: "",
       dob: new Date(),
-      nationality: '',
-      address: '',
-      formofID: '',
-      idNumber: '',
-      gender: '',
+      nationality: "",
+      address: "",
+      formofID: "",
+      idNumber: "",
+      gender: "",
     },
-  })
+  });
   function onSubmit(data: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(data)
+    console.log(data);
   }
   return (
     <div className="bg-white rounded-md p-4 mt-8    ">
@@ -80,7 +80,11 @@ const OwnerInfoForm = () => {
           </div>
           <div className="w-[60%]">
             <Form {...form}>
-              <form action="" onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
+              <form
+                action=""
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full flex flex-col gap-4"
+              >
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <FormField
                     control={form.control}
@@ -127,7 +131,12 @@ const OwnerInfoForm = () => {
                               </SelectGroup>
                             </SelectContent>
                           </Select>
-                          <Input placeholder="Phone Number" {...field} className="rounded-l-none" type="text" />
+                          <Input
+                            placeholder="Phone Number"
+                            {...field}
+                            className="rounded-l-none"
+                            type="text"
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -259,7 +268,10 @@ const OwnerInfoForm = () => {
                 {/* <AttachmentUpload /> */}
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <Button className="flex-1 text-white">Save</Button>
-                  <Button className="flex-1 bg-white font-semibold hover:bg-gray-200" onClick={closeForm}>
+                  <Button
+                    className="flex-1 bg-white font-semibold hover:bg-gray-200"
+                    onClick={closeForm}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -268,10 +280,10 @@ const OwnerInfoForm = () => {
           </div>
         </div>
       ) : (
-        <div className="w-full h-[60vh]"></div>
+        <div className="w-full h-[60vh]" />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default OwnerInfoForm
+export default OwnerInfoForm;

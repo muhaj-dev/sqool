@@ -1,17 +1,17 @@
 "use client";
 
-import React from "react";
+import { AlertTriangle, Info, XCircle } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { AlertTriangle, Info, XCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 
 /**
  * Reusable Message Dialog
@@ -34,9 +34,9 @@ interface MessageDialogProps {
 }
 
 const iconMap = {
-  error: <XCircle className="w-6 h-6 text-red-600" />, 
-  warning: <AlertTriangle className="w-6 h-6 text-yellow-600" />, 
-  info: <Info className="w-6 h-6 text-blue-600" />, 
+  error: <XCircle className="w-6 h-6 text-red-600" />,
+  warning: <AlertTriangle className="w-6 h-6 text-yellow-600" />,
+  info: <Info className="w-6 h-6 text-blue-600" />,
 };
 
 export default function MessageDialog({
@@ -56,9 +56,7 @@ export default function MessageDialog({
           {iconMap[type]}
           <div>
             <DialogTitle>{title || type.toUpperCase()}</DialogTitle>
-            {description && (
-              <DialogDescription>{description}</DialogDescription>
-            )}
+            {description ? <DialogDescription>{description}</DialogDescription> : null}
           </div>
         </DialogHeader>
 
@@ -72,6 +70,7 @@ export default function MessageDialog({
           <Button
             variant={type === "error" ? "destructive" : "default"}
             onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               onAction && onAction();
               onOpenChange(false);
             }}

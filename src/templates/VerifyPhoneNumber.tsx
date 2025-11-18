@@ -1,8 +1,9 @@
-import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import OTPInput from '@/components/OTPInput'
-import Wrapper from '@/components/Wrapper'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import Link from "next/link";
+
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import OTPInput from "@/components/OTPInput";
+import { Button } from "@/components/ui/button";
+import Wrapper from "@/components/Wrapper";
 
 const VerifyPhoneNumber = () => {
   return (
@@ -22,21 +23,23 @@ const VerifyPhoneNumber = () => {
 
         <Button className="text-white font-semibold bg-primary  w-full mb-4">Verify</Button>
         <p className="text-left w-full">
-          Didn’t get the code?{' '}
-          <Link href={'#'} className="text-primary font-semibold">
+          Didn’t get the code?{" "}
+          <Link href={"#"} className="text-primary font-semibold">
             Click Resend
           </Link>
         </p>
         <div className="bg-[rgba(55,114,255,0.10)] text-primary p-3 my-6">
           Still not recevie your OTP kindly cross check you phone number by
-          <Link href={'/'} className="font-semibold px-1    ">
+          <Link href={"/"} className="font-semibold px-1    ">
             Click here
           </Link>
         </div>
       </Wrapper>
-      <p className="text-[#8C8C8C] text-sm text-center">Terms of service. Having problem with login?</p>
+      <p className="text-[#8C8C8C] text-sm text-center">
+        Terms of service. Having problem with login?
+      </p>
     </MaxWidthWrapper>
-  )
-}
+  );
+};
 
-export default VerifyPhoneNumber
+export default VerifyPhoneNumber;

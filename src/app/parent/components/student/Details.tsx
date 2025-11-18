@@ -1,7 +1,7 @@
-import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Instagram, Mail, Smartphone, Star, Twitter } from 'lucide-react'
-import { Separator } from '@/components/ui/separator'
+import { Instagram, Mail, Smartphone, Star, Twitter } from "lucide-react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 
 const Details = () => {
   return (
@@ -86,7 +86,7 @@ const Details = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Details
+export default Details;

@@ -1,8 +1,7 @@
-'use client'
+"use client";
 
-import React from 'react'
-import PaymentBar from '../components/payment/PaymentBar'
-import PaymentTable from '../components/payment/PaymentTable'
+import PaymentBar from "../components/payment/PaymentBar";
+import PaymentTable from "../components/payment/PaymentTable";
 
 const Page = () => {
   return (
@@ -12,7 +11,7 @@ const Page = () => {
         <PaymentTable />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

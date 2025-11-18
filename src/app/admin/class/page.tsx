@@ -1,6 +1,6 @@
 // app/classes/page.tsx
-import ClassList from './componenets/ClassList'
+import ClassList from "./componenets/ClassList";
 
 export default function Page() {
-  return <ClassList />
+  return <ClassList />;
 }

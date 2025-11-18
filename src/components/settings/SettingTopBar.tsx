@@ -1,7 +1,3 @@
-import React from 'react'
-import { Button } from '../ui/button'
-import { Plus } from 'lucide-react'
-
 const SettingTopBar = () => {
   return (
     <section className="my-4">
@@ -14,7 +10,7 @@ const SettingTopBar = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default SettingTopBar
+export default SettingTopBar;

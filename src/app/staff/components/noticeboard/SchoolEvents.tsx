@@ -1,22 +1,22 @@
-import React from 'react'
+import React from "react";
 
 interface Event {
-  text: string
-  date: string
-  color: string
+  text: string;
+  date: string;
+  color: string;
 }
 
 const events: Event[] = [
-  { text: 'Lorem ipsum dolor sit amet', date: '30.11.2024', color: '#5272E9' },
-  { text: 'Lorem ipsum dolor sit amet', date: '30.11.2024', color: '#24B0C9' },
-  { text: 'Lorem ipsum dolor sit amet', date: '30.11.2024', color: '#FD9E30' },
-  { text: 'Lorem ipsum dolor sit amet', date: '30.11.2024', color: '#FD3055' },
-  { text: 'Lorem ipsum dolor sit amet', date: '30.11.2024', color: '#5AEE72' },
-  { text: 'Lorem ipsum dolor sit amet', date: '30.11.2024', color: '#3EF1FD' },
-]
+  { text: "Lorem ipsum dolor sit amet", date: "30.11.2024", color: "#5272E9" },
+  { text: "Lorem ipsum dolor sit amet", date: "30.11.2024", color: "#24B0C9" },
+  { text: "Lorem ipsum dolor sit amet", date: "30.11.2024", color: "#FD9E30" },
+  { text: "Lorem ipsum dolor sit amet", date: "30.11.2024", color: "#FD3055" },
+  { text: "Lorem ipsum dolor sit amet", date: "30.11.2024", color: "#5AEE72" },
+  { text: "Lorem ipsum dolor sit amet", date: "30.11.2024", color: "#3EF1FD" },
+];
 
 interface CheckboxProps {
-  color: string
+  color: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ color }) => (
@@ -29,11 +29,11 @@ const Checkbox: React.FC<CheckboxProps> = ({ color }) => (
       style={{ accentColor: color }}
     />
   </div>
-)
+);
 
 interface EventListProps {
-  title: string
-  events: Event[]
+  title: string;
+  events: Event[];
 }
 
 const EventList: React.FC<EventListProps> = ({ title, events }) => (
@@ -49,7 +49,7 @@ const EventList: React.FC<EventListProps> = ({ title, events }) => (
       ))}
     </ul>
   </div>
-)
+);
 
 const SchoolEvents: React.FC = () => {
   return (
@@ -59,7 +59,7 @@ const SchoolEvents: React.FC = () => {
         <EventList title="Upcoming School Holidays" events={events} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SchoolEvents
+export default SchoolEvents;

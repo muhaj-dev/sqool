@@ -1,15 +1,17 @@
-'use client'
-import React, { useState } from 'react'
+"use client";
+import { useState } from "react";
+
 // import ImageUpload from "./ImageUpload"
-import { Separator } from '../ui/separator'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
-import { PinInput } from 'react-input-pin-code'
+import { PinInput } from "react-input-pin-code";
+
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
 
 const PasswordSetting = () => {
-  const [currentPin, setCurrentPin] = useState(['', '', '', ''])
-  const [newPin, setNewPin] = useState(['', '', '', ''])
+  const [currentPin, setCurrentPin] = useState(["", "", "", ""]);
+  const [newPin, setNewPin] = useState(["", "", "", ""]);
   return (
     <div className="bg-white rounded-md p-6 flex flex-col gap-4 ">
       <form className="grid grid-cols-1 lg:grid-cols-3 gap-10 py-4 w-full md:w-[90%]">
@@ -17,19 +19,19 @@ const PasswordSetting = () => {
           <p className="font-semibold">Change Password</p>
           <p className="text-muted-foreground ">Password must Consist the following</p>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>A minimum of 8 characters</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>At least one letter</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>At least one number</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>At least one special character</p>
           </div>
         </div>
@@ -55,16 +57,16 @@ const PasswordSetting = () => {
           <p className="font-semibold">Set Pin</p>
           <p className="text-muted-foreground ">Pin must Consist the following</p>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>A minimum of 4 characters</p>
           </div>
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>At least one letter</p>
           </div>
 
           <div className="flex items-center text-muted-foreground gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary"></div>
+            <p className="w-6 h-6 rounded-full bg-primary" />
             <p>At least one special character</p>
           </div>
         </div>
@@ -78,13 +80,13 @@ const PasswordSetting = () => {
               validBorderColor="#E5B80B"
               values={currentPin}
               onChange={(value, index, values) => setCurrentPin(values)}
-              onComplete={values => {
-                console.log(values)
+              onComplete={(values) => {
+                console.log(values);
               }}
               containerStyle={{
-                justifyContent: 'space-between',
-                width: '80%',
-                marginTop: '1rem',
+                justifyContent: "space-between",
+                width: "80%",
+                marginTop: "1rem",
               }}
             />
           </div>
@@ -97,13 +99,13 @@ const PasswordSetting = () => {
               validBorderColor="#E5B80B"
               values={currentPin}
               onChange={(value, index, values) => setCurrentPin(values)}
-              onComplete={values => {
-                console.log(values)
+              onComplete={(values) => {
+                console.log(values);
               }}
               containerStyle={{
-                justifyContent: 'space-between',
-                width: '80%',
-                marginTop: '1rem',
+                justifyContent: "space-between",
+                width: "80%",
+                marginTop: "1rem",
               }}
             />
           </div>
@@ -112,7 +114,7 @@ const PasswordSetting = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default PasswordSetting
+export default PasswordSetting;

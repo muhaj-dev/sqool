@@ -1,14 +1,16 @@
-'use client'
+"use client";
 
-import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
+import ErrorState from "@/components/ErrorState";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { EventModal } from "./EventModal";
+import { Skeleton } from "@/components/ui/skeleton";
+import { type Notice } from "@/types";
 import { getStaffNotices } from "@/utils/api";
 import { useAuthStore } from "@/zustand/authStore";
-import { Notice } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
-import ErrorState from "@/components/ErrorState";
+
+import { EventModal } from "./EventModal";
 
 // Reusable skeleton for event cards
 const EventCardSkeleton = () => (
@@ -37,7 +39,7 @@ const EventCardSkeleton = () => (
 );
 
 const EventCards = () => {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuthStore();
   const staffId = user?._id;
 
@@ -45,7 +47,7 @@ const EventCards = () => {
     queryKey: ["staff-more-notices", staffId],
     queryFn: async () => {
       const res = await getStaffNotices(searchTerm, 20);
-      return res.result as Notice[];
+      return res.result;
     },
     enabled: !!staffId && user?.role === "teacher",
     staleTime: 10 * 60 * 1000,
@@ -56,14 +58,14 @@ const EventCards = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {isError && (
+      {isError ? (
         <ErrorState
           title="Error Fetching notice"
           description="An error occured while fetching notices"
           onRetry={refetch}
           error={error}
         />
-      )}
+      ) : null}
       {isPending ? (
         // Render multiple skeletons
         Array.from({ length: 6 }).map((_, i) => <EventCardSkeleton key={i} />)
@@ -81,13 +83,10 @@ const EventCards = () => {
                     <div className="text-[#A7A9AD] text-sm flex justify-between items-center">
                       <span>
                         {event.expirationDate
-                          ? new Date(event.expirationDate).toLocaleTimeString(
-                              [],
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            )
+                          ? new Date(event.expirationDate).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
                           : ""}
                       </span>
                       <span>
@@ -98,11 +97,11 @@ const EventCards = () => {
                     </div>
                     <h2 className="font-bold mt-1">{event.title}</h2>
                   </div>
-                  {event.isPinned && (
+                  {event.isPinned ? (
                     <span className="h-fit text-[8px] bg-green-500 text-white px-1 py-[0.95px] rounded">
                       PINNED
                     </span>
-                  )}
+                  ) : null}
                 </div>
                 <p className="mt-5 text-sm">{event.content}</p>
                 <div className="mt-4 border-b-2 border-[#A7A9AD] pb-3">
@@ -112,7 +111,7 @@ const EventCards = () => {
                   </p>
                 </div>
                 <div className="mt-4 text-sm">
-                  {event.resources && event.resources.length > 0 && (
+                  {event.resources && event.resources.length > 0 ? (
                     <a
                       href={event.resources[0]}
                       className="text-blue-400 underline hover:text-blue-600"
@@ -121,7 +120,7 @@ const EventCards = () => {
                     >
                       Click here to view the resource
                     </a>
-                  )}
+                  ) : null}
                 </div>
                 <div className="mt-4 text-sm flex justify-between">
                   <span>
@@ -163,6 +162,6 @@ const EventCards = () => {
       )}
     </div>
   );
-}
+};
 
-export default EventCards
+export default EventCards;

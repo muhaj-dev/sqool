@@ -1,42 +1,46 @@
-'use client'
-import React from 'react'
-import ExamData from '../../data/exams.json'
-import ExamCard from './ExamCard'
-import avatar from '../../assets/avatar.png'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+"use client";
+import { ChevronDown } from "lucide-react";
+import React from "react";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronsUpDown, MoreHorizontal } from 'lucide-react'
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import avatar from "../../assets/avatar.png";
+import ExamData from "../../data/exams.json";
+import ExamCard from "./ExamCard";
 
 const SelectedExam = () => {
-  const examData = ExamData.slice(0, 3) // Assuming we're using the first 3 items for this class
+  const examData = ExamData.slice(0, 3); // Assuming we're using the first 3 items for this class
 
   return (
     <section className="">
       <Examination level="SSS3" data={examData} approved={false} />
     </section>
-  )
-}
+  );
+};
 
-export default SelectedExam
+export default SelectedExam;
 
 interface ExaminationProps {
-  level: string
-  approved: boolean
+  level: string;
+  approved: boolean;
   data: {
-    id: number
-    fullname: string
-    email: string
-    subject: string
-  }[]
+    id: number;
+    fullname: string;
+    email: string;
+    subject: string;
+  }[];
 }
 
 const Examination: React.FC<ExaminationProps> = ({ level, data, approved }) => {
@@ -67,7 +71,7 @@ const Examination: React.FC<ExaminationProps> = ({ level, data, approved }) => {
         </DropdownMenu>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 my-4">
-        {data.map(item => (
+        {data.map((item) => (
           <ExamCard
             key={item.id}
             fullname={item.fullname}
@@ -80,5 +84,5 @@ const Examination: React.FC<ExaminationProps> = ({ level, data, approved }) => {
         ))}
       </div>
     </>
-  )
-}
+  );
+};

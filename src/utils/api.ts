@@ -1,47 +1,46 @@
-import axios from 'axios'
-import { useAuthStore } from '@/zustand/authStore'
-import {
-  DashboardData,
-  DashboardResponse,
-  IBankAccount,
-  IClassConfiguration,
-  IClassConfigurationResponse,
-  ISessionAndTerm,
-  ClassPaginationResponse,
-  IStudent,
-  StudentPaginationResponse,
-  StudentResponse,
-  ISingleStudent,
-  ParentSearchResponse,
-  ClassSearchResponse,
-  StaffResponse,
-  AddStaffPayload,
-  SingleStaffResponse,
-  ParentPayload,
-  ParentResponse,
-  IParent,
-  ParentPaginationResponse,
-  ISubjectResponse,
-  ISubject,
-  StaffProfileResponse,
-  CreateExamResponse,
-  SessionsResponse,
-  Exam,
-  ExamsResponse,
-  TimetableResponse,
-  ParentDashboardResponse,
-  CreateFeeData,
-  UpdateFeeData,
-  GetFeesParams,
-  FeesResponse,
-  FeeStructure,
-  Session,
-  Class,
-  ClassesResponse,
-  PaymentResponse,
-  NoticesResponse,
-} from '@/types'
+import axios from "axios";
 import { format } from "date-fns";
+
+import {
+  type AddStaffPayload,
+  type Class,
+  type ClassesResponse,
+  type ClassPaginationResponse,
+  type CreateExamResponse,
+  type CreateFeeData,
+  type CreateSchoolResponse,
+  type DashboardData,
+  type DashboardResponse,
+  type Exam,
+  type ExamsResponse,
+  type FeesResponse,
+  type FeeStructure,
+  type GetFeesParams,
+  type IBankAccount,
+  type IClassConfiguration,
+  type IClassConfigurationResponse,
+  type ISessionAndTerm,
+  type ISingleStudent,
+  type ISubjectResponse,
+  type NoticesResponse,
+  type ParentDashboardResponse,
+  type ParentPaginationResponse,
+  type ParentPayload,
+  type ParentResponse,
+  type ParentSearchResponse,
+  type PaymentResponse,
+  type Session,
+  type SessionsResponse,
+  type SingleStaffResponse,
+  type StaffProfileResponse,
+  type StaffResponse,
+  type StudentPaginationResponse,
+  type StudentResponse,
+  type TimetableResponse,
+  type UpdateFeeData,
+} from "@/types";
+import { useAuthStore } from "@/zustand/authStore";
+import { handleApi } from "./api/apiHelpers";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -53,7 +52,8 @@ export const api = axios.create({
 
 // Add request interceptor to inject token
 api.interceptors.request.use(
-  (config) => {
+  // eslint-disable-next-line prettier/prettier
+  config => {
     const token = useAuthStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -61,17 +61,22 @@ api.interceptors.request.use(
     console.log(token);
     return config;
   },
-  (error) => {
+  // eslint-disable-next-line prettier/prettier
+  error => {
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
-  }
+  },
 );
 
 // Add response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  // eslint-disable-next-line prettier/prettier
+  response => response,
+  // eslint-disable-next-line prettier/prettier
+  error => {
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
-  }
+  },
 );
 
 // Define the response type for fetching banks
@@ -81,41 +86,46 @@ export interface BankResponse {
 }
 
 // School-related API calls
-export const createSchool = async (data: FormData) => {
-  try {
-    const response = await api.post("/v1/admin/schools", data, {
-      headers: {},
-    });
-    return response;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to create school";
-      console.error("API Error:", {
-        status: error.response?.status,
-        message: errorMessage,
-        url: error.config?.url,
-      });
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to create school");
-  }
-};
+// export const createSchool = async (data: FormData) => {
+//   try {
+//     const response = await api.post("/v1/admin/schools", data, {
+//       headers: {},
+//     });
+//     return response;
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       const errorMessage = error.response?.data?.message || "Failed to create school";
+//       console.error("API Error:", {
+//         status: error.response?.status,
+//         message: errorMessage,
+//         url: error.config?.url,
+//       });
+//       throw new Error(errorMessage);
+//     }
+//     throw new Error("Failed to create school");
+//   }
+// };
+
+// School-related API calls
+export const createSchool = (data: FormData) =>
+  handleApi<CreateSchoolResponse>(
+    () =>
+      api.post<CreateSchoolResponse>("/v1/admin/schools", data, {
+        headers: {},
+      }),
+    "Failed to create school",
+  );
 
 // Class-related API calls
 export const createClasses = async (
-  classData: IClassConfiguration
+  classData: IClassConfiguration,
 ): Promise<IClassConfigurationResponse> => {
   try {
-    const response = await api.post<IClassConfigurationResponse>(
-      "/v1/admin/classes",
-      classData
-    );
+    const response = await api.post<IClassConfigurationResponse>("/v1/admin/classes", classData);
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to create class";
+      const errorMessage = error?.response?.data?.message || "Failed to create class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -125,18 +135,17 @@ export const createClasses = async (
 
 export const editClasses = async (
   id: string,
-  classData: IClassConfiguration
+  classData: IClassConfiguration,
 ): Promise<IClassConfigurationResponse> => {
   try {
     const response = await api.patch<IClassConfigurationResponse>(
       `/v1/admin/classes/${id}`,
-      classData
+      classData,
     );
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to update class";
+      const errorMessage = error?.response?.data?.message || "Failed to update class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -144,15 +153,12 @@ export const editClasses = async (
   }
 };
 
-export const deleteClasses = async (
-  id: string
-): Promise<void> => {
+export const deleteClasses = async (id: string): Promise<void> => {
   try {
     await api.delete(`/v1/admin/classes/${id}`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to delete class";
+      const errorMessage = error?.response?.data?.message || "Failed to delete class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -160,22 +166,18 @@ export const deleteClasses = async (
   }
 };
 
-export const getClasses = async (page: string = "1", limit: string = "10") => {
+export const getClasses = async (page = "1", limit = "10") => {
   try {
-    const response = await api.get<ClassPaginationResponse>(
-      "/v1/admin/classes",
-      {
-        params: {
-          page,
-          limit,
-        },
-      }
-    );
+    const response = await api.get<ClassPaginationResponse>("/v1/admin/classes", {
+      params: {
+        page,
+        limit,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch classes";
+      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -189,8 +191,7 @@ export const getClassById = async (classId: string): Promise<any> => {
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch class";
+      const errorMessage = error.response?.data?.message || "Failed to fetch class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
       // return errorMessage
@@ -199,19 +200,13 @@ export const getClassById = async (classId: string): Promise<any> => {
   }
 };
 
-export const updateClass = async (
-  classId: string,
-  classData: IClassConfiguration
-): Promise<IClassConfigurationResponse> => {
+export const updateClass = async (classId: string): Promise<IClassConfigurationResponse> => {
   try {
-    const response = await api.patch<IClassConfigurationResponse>(
-      `/v1/admin/classes/${classId}`
-    );
+    const response = await api.patch<IClassConfigurationResponse>(`/v1/admin/classes/${classId}`);
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to update class";
+      const errorMessage = error.response?.data?.message || "Failed to update class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -219,19 +214,17 @@ export const updateClass = async (
   }
 };
 
-export const deleteClass = async (classId: string): Promise<void> => {
-  try {
-    const response = await api.delete(`/v1/admin/classes/${classId}`);
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete class";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to delete class");
-  }
-};
+// export const deleteClass = async (): Promise<void> => {
+//   try {
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       const errorMessage = error.response?.data?.message || "Failed to delete class";
+//       console.error("API Error:", errorMessage);
+//       throw new Error(errorMessage);
+//     }
+//     throw new Error("Failed to delete class");
+//   }
+// };
 
 // Session and Term-related API calls
 export const createSessionAndTerms = async (data: ISessionAndTerm) => {
@@ -240,8 +233,7 @@ export const createSessionAndTerms = async (data: ISessionAndTerm) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to create session and terms";
+      const errorMessage = error.response?.data?.message || "Failed to create session and terms";
       throw new Error(errorMessage);
     }
     throw new Error("Failed to create session and terms");
@@ -255,8 +247,7 @@ export const createBankAccount = async (data: IBankAccount) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to create bank account";
+      const errorMessage = error.response?.data?.message || "Failed to create bank account";
       throw new Error(errorMessage);
     }
     throw new Error("Failed to create bank account");
@@ -269,8 +260,7 @@ export const getBanks = async (): Promise<BankResponse> => {
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch banks";
+      const errorMessage = error.response?.data?.message || "Failed to fetch banks";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -285,8 +275,7 @@ export const getDashboardData = async (): Promise<DashboardData> => {
     return response.data.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch dashboard data";
+      const errorMessage = error.response?.data?.message || "Failed to fetch dashboard data";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -296,30 +285,24 @@ export const getDashboardData = async (): Promise<DashboardData> => {
 
 export const getAllStudents = async (
   page: number,
-  limit: number = 10,
+  limit = 10,
   search?: string,
-  filter?: string
+  filter?: string,
 ): Promise<StudentPaginationResponse> => {
   try {
-    const skip = (page - 1) * limit; // Calculate skip from page
-
-    const response = await api.get<StudentPaginationResponse>(
-      "/v1/admin/student/all",
-      {
-        params: {
-          page,
-          limit,
-          // skip, // Add skip parameter
-          search,
-          filter,
-        },
-      }
-    );
+    const response = await api.get<StudentPaginationResponse>("/v1/admin/student/all", {
+      params: {
+        page,
+        limit,
+        // skip, // Add skip parameter
+        search,
+        filter,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch students";
+      const errorMessage = error.response?.data?.message || "Failed to fetch students";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -328,19 +311,13 @@ export const getAllStudents = async (
 };
 
 // API to add a new student
-export const addStudent = async (
-  studentData: ISingleStudent
-): Promise<StudentResponse> => {
+export const addStudent = async (studentData: ISingleStudent): Promise<StudentResponse> => {
   try {
-    const response = await api.post<StudentResponse>(
-      "/v1/admin/student",
-      studentData
-    );
+    const response = await api.post<StudentResponse>("/v1/admin/student", studentData);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to add student";
+      const errorMessage = error.response?.data?.message || "Failed to add student";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -349,19 +326,15 @@ export const addStudent = async (
 };
 
 // API to search parents with pagination
-export const searchParents = async (
-  query: string,
-  page: number = 1
-): Promise<ParentSearchResponse> => {
+export const searchParents = async (query: string, page = 1): Promise<ParentSearchResponse> => {
   try {
     const response = await api.get<ParentSearchResponse>(
-      `/v1/admin/parents?search=${query}&page=${page}`
+      `/v1/admin/parents?search=${query}&page=${page}`,
     );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to search parents";
+      const errorMessage = error.response?.data?.message || "Failed to search parents";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -375,8 +348,7 @@ export const getStudentById = async (id: string): Promise<StudentResponse> => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch student";
+      const errorMessage = error.response?.data?.message || "Failed to fetch student";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -385,19 +357,13 @@ export const getStudentById = async (id: string): Promise<StudentResponse> => {
 };
 
 // API to add a new parent
-export const addParent = async (
-  parentData: ParentPayload
-): Promise<ParentResponse> => {
+export const addParent = async (parentData: ParentPayload): Promise<ParentResponse> => {
   try {
-    const response = await api.post<ParentResponse>(
-      "/v1/admin/parents",
-      parentData
-    );
+    const response = await api.post<ParentResponse>("/v1/admin/parents", parentData);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to add parent";
+      const errorMessage = error.response?.data?.message || "Failed to add parent";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -410,25 +376,21 @@ export const getAllParents = async (
   page: number,
   limit: number,
   search?: string,
-  filter?: string
+  filter?: string,
 ): Promise<ParentPaginationResponse> => {
   try {
-    const response = await api.get<ParentPaginationResponse>(
-      "/v1/admin/parents",
-      {
-        params: {
-          page,
-          limit,
-          search,
-          filter,
-        },
-      }
-    );
+    const response = await api.get<ParentPaginationResponse>("/v1/admin/parents", {
+      params: {
+        page,
+        limit,
+        search,
+        filter,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch parents";
+      const errorMessage = error.response?.data?.message || "Failed to fetch parents";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -442,8 +404,7 @@ export const getParentById = async (parentId: string) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch parent details";
+      const errorMessage = error.response?.data?.message || "Failed to fetch parent details";
       console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
@@ -456,11 +417,7 @@ export const getParentById = async (parentId: string) => {
 };
 
 // API to get staffs with pagination
-export const getStaffs = async (
-  limit: number = 10,
-  page: number = 1,
-  search: string = ""
-): Promise<StaffResponse> => {
+export const getStaffs = async (limit = 10, page = 1, search = ""): Promise<StaffResponse> => {
   try {
     const response = await api.get<StaffResponse>(`/v1/admin/staffs`, {
       params: {
@@ -472,8 +429,7 @@ export const getStaffs = async (
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch staffs";
+      const errorMessage = error?.response?.data?.message || "Failed to fetch staffs";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -484,15 +440,11 @@ export const getStaffs = async (
 // API to add a new staff
 export const addStaff = async (staffData: AddStaffPayload) => {
   try {
-    const response = await api.post<StaffResponse>(
-      "/v1/admin/staffs",
-      staffData
-    );
+    const response = await api.post<StaffResponse>("/v1/admin/staffs", staffData);
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to add staff";
+      const errorMessage = error?.response?.data?.message || "Failed to add staff";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -500,18 +452,13 @@ export const addStaff = async (staffData: AddStaffPayload) => {
   }
 };
 
-export const getStaffById = async (
-  staffId: string
-): Promise<SingleStaffResponse> => {
+export const getStaffById = async (staffId: string): Promise<SingleStaffResponse> => {
   try {
-    const response = await api.get<SingleStaffResponse>(
-      `/v1/admin/staffs/${staffId}`
-    );
+    const response = await api.get<SingleStaffResponse>(`/v1/admin/staffs/${staffId}`);
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch staff";
+      const errorMessage = error?.response?.data?.message || "Failed to fetch staff";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -519,16 +466,13 @@ export const getStaffById = async (
   }
 };
 
-export const updateStaffStatus = async (
-  staffId: string,
-  isActive: boolean
-): Promise<void> => {
+// eslint-disable-next-line @typescript-eslint/require-await
+export const updateStaffStatus = async (): Promise<void> => {
   try {
-    const response = await api.patch(`/v1/admin/staffs/${staffId}/${isActive}`);
+    /* empty */
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to update staff status";
+      const errorMessage = error.response?.data?.message || "Failed to update staff status";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -539,15 +483,11 @@ export const updateStaffStatus = async (
 // Subject-related API calls
 export const createSubject = async (subjectData: any): Promise<any> => {
   try {
-    const response = await api.post<ISubjectResponse>(
-      "/v1/admin/subject",
-      subjectData
-    );
+    const response = await api.post<ISubjectResponse>("/v1/admin/subject", subjectData);
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to create subject";
+      const errorMessage = error?.response?.data?.message || "Failed to create subject";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -570,15 +510,14 @@ export const getClassStats = async () => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch class stats";
+      const errorMessage = error.response?.data?.message || "Failed to fetch class stats";
       throw new Error(errorMessage);
     }
     throw new Error("Failed to fetch class stats");
   }
 };
 
-export const getSubjects = async (page: number = 1, search: string = "") => {
+export const getSubjects = async (page = 1, search = "") => {
   try {
     const response = await api.get(`/v1/admin/subject`, {
       params: { page, search, limit: 100 },
@@ -589,17 +528,16 @@ export const getSubjects = async (page: number = 1, search: string = "") => {
   }
 };
 
-export const assignSubjectToClass = async (payload: {
-  subjectIds: string[];
-  classId: string;
-}) => {
+export const assignSubjectToClass = async (payload: { subjectIds: string[]; classId: string }) => {
   try {
-    const response = await api.post(
-      "/v1/admin/classes/assign-subject",
-      payload
-    );
+    const response = await api.post("/v1/admin/classes/assign-subject", payload);
     return response;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to assign subject to class";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
     throw error;
   }
 };
@@ -609,30 +547,28 @@ export const deAssignSubjectToClass = async (payload: {
   subjectIds: string[];
 }) => {
   try {
-    const response = await api.post(
-      "/v1/admin/classes/de-assign-subject",
-      payload
-    );
+    const response = await api.post("/v1/admin/classes/de-assign-subject", payload);
     return response;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to unassign subject from class";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
     throw error;
   }
 };
 
 export const assignTutorToClass = async (
   classId: string,
-  payload: { tutor: string; subjects: string[] }
+  payload: { tutor: string; subjects: string[] },
 ) => {
   try {
-    const response = await api.post(
-      `/v1/admin/classes/${classId}/tutor`,
-      payload
-    );
+    const response = await api.post(`/v1/admin/classes/${classId}/tutor`, payload);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to assign tutor to class";
+      const errorMessage = error.response?.data?.message || "Failed to assign tutor to class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -642,19 +578,15 @@ export const assignTutorToClass = async (
 
 export const removeTutorOrSubjectFromClass = async (
   classId: string,
-  payload: { tutor: string; subjects: string[] }
+  payload: { tutor: string; subjects: string[] },
 ) => {
   try {
-    const response = await api.patch(
-      `/v1/admin/classes/${classId}/tutor`,
-      payload
-    );
+    const response = await api.patch(`/v1/admin/classes/${classId}/tutor`, payload);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const errorMessage =
-        error.response?.data?.message ||
-        "Failed to remove tutor or subject from class";
+        error.response?.data?.message || "Failed to remove tutor or subject from class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -662,21 +594,14 @@ export const removeTutorOrSubjectFromClass = async (
   }
 };
 
-export const deleteClassTeacher = async (
-  classId: string,
-  payload: { teacherId: string }
-) => {
+export const deleteClassTeacher = async (classId: string, payload: { teacherId: string }) => {
   console.log(classId, payload);
   try {
-    const response = await api.patch(
-      `/v1/admin/classes/${classId}/teacher/remove`,
-      payload
-    );
+    const response = await api.patch(`/v1/admin/classes/${classId}/teacher/remove`, payload);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to remove stafffrom class";
+      const errorMessage = error.response?.data?.message || "Failed to remove stafffrom class";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -697,8 +622,7 @@ export const createClassSchedule = async (payload: {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to create class schedule";
+      const errorMessage = error.response?.data?.message || "Failed to create class schedule";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -708,16 +632,18 @@ export const createClassSchedule = async (payload: {
 
 export const changeClassTeacher = async (
   classId: string,
-  payload: { oldTeacher: string; newTeacher: string }
+  payload: { oldTeacher: string; newTeacher: string },
 ) => {
   try {
-    const response = await api.patch(
-      `/v1/admin/classes/${classId}/teacher`,
-      payload
-    );
+    const response = await api.patch(`/v1/admin/classes/${classId}/teacher`, payload);
     return response.data;
   } catch (error) {
     // handle error as in your other API functions
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to patch class teacher";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
     throw error;
   }
 };
@@ -729,8 +655,7 @@ export const getClassSchedule = async (classId: string): Promise<any> => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch class schedule";
+      const errorMessage = error.response?.data?.message || "Failed to fetch class schedule";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -738,20 +663,13 @@ export const getClassSchedule = async (classId: string): Promise<any> => {
   }
 };
 
-export const updateClassSchedule = async (
-  scheduleId: string,
-  data: any
-): Promise<any> => {
+export const updateClassSchedule = async (scheduleId: string, data: any): Promise<any> => {
   try {
-    const response = await api.patch(
-      `/v1/admin/classes/schedule/${scheduleId}`,
-      data
-    );
+    const response = await api.patch(`/v1/admin/classes/schedule/${scheduleId}`, data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to update class schedule";
+      const errorMessage = error.response?.data?.message || "Failed to update class schedule";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -759,19 +677,13 @@ export const updateClassSchedule = async (
   }
 };
 
-export const deleteClassSchedule = async (
-  classId: string,
-  scheduleId: string
-): Promise<any> => {
+export const deleteClassSchedule = async (classId: string, scheduleId: string): Promise<any> => {
   try {
-    const response = await api.delete(
-      `/v1/admin/class/schedule/${classId}/${scheduleId}`
-    );
+    const response = await api.delete(`/v1/admin/class/schedule/${classId}/${scheduleId}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete class schedule";
+      const errorMessage = error.response?.data?.message || "Failed to delete class schedule";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -810,19 +722,14 @@ export const adminC = async (paymentData: {
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to create payment";
+      const errorMessage = error?.response?.data?.message || "Failed to create payment";
       throw new Error(errorMessage);
     }
     throw new Error("Failed to create payment");
   }
 };
 
-export const getPayments = async (
-  page: number = 1,
-  limit: number = 10,
-  paymentStatus?: string
-) => {
+export const getPayments = async (page = 1, limit = 10, paymentStatus?: string) => {
   try {
     const response = await api.get("/v1/admin/payment", {
       params: { page, limit, paymentStatus },
@@ -849,13 +756,10 @@ export const updatePayment = async (
     paymentStatus?: string;
     amount?: string;
     userId?: string;
-  }
+  },
 ) => {
   try {
-    const response = await api.patch(
-      `/v1/admin/payment/${paymentId}`,
-      paymentData
-    );
+    const response = await api.patch(`/v1/admin/payment/${paymentId}`, paymentData);
     return response.data;
   } catch (error) {
     throw new Error("Failed to update payment");
@@ -868,8 +772,7 @@ export const getStaffProfile = async (): Promise<StaffProfileResponse> => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch staff profile";
+      const errorMessage = error.response?.data?.message || "Failed to fetch staff profile";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -878,24 +781,17 @@ export const getStaffProfile = async (): Promise<StaffProfileResponse> => {
 };
 
 // Add this API function
-export const createExamination = async (
-  formData: FormData
-): Promise<CreateExamResponse> => {
+export const createExamination = async (formData: FormData): Promise<CreateExamResponse> => {
   try {
-    const response = await api.post<CreateExamResponse>(
-      "/v1/staff/examination",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await api.post<CreateExamResponse>("/v1/staff/examination", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response?.data ?? {};
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to create examination";
+      const errorMessage = error?.response?.data?.message || "Failed to create examination";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -903,22 +799,18 @@ export const createExamination = async (
   }
 };
 
-export const getSessions = async (page: string = "1", limit: string = "10") => {
+export const getSessions = async (page = "1", limit = "10") => {
   try {
-    const response = await api.get<SessionsResponse>(
-      "/v1/admin/session-and-terms",
-      {
-        params: {
-          page,
-          limit,
-        },
-      }
-    );
+    const response = await api.get<SessionsResponse>("/v1/admin/session-and-terms", {
+      params: {
+        page,
+        limit,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch classes";
+      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -926,25 +818,18 @@ export const getSessions = async (page: string = "1", limit: string = "10") => {
   }
 };
 
-export const getSessionsForStaff = async (
-  page: string = "1",
-  limit: string = "10"
-) => {
+export const getSessionsForStaff = async (page = "1", limit = "10") => {
   try {
-    const response = await api.get<SessionsResponse>(
-      "/v1/staff/session-and-terms",
-      {
-        params: {
-          page,
-          limit,
-        },
-      }
-    );
+    const response = await api.get<SessionsResponse>("/v1/staff/session-and-terms", {
+      params: {
+        page,
+        limit,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch classes";
+      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -952,25 +837,18 @@ export const getSessionsForStaff = async (
   }
 };
 
-export const getClassesForStaff = async (
-  page: string = "1",
-  limit: string = "10"
-) => {
+export const getClassesForStaff = async (page = "1", limit = "10") => {
   try {
-    const response = await api.get<ClassPaginationResponse>(
-      "/v1/staff/classes",
-      {
-        params: {
-          page,
-          limit,
-        },
-      }
-    );
+    const response = await api.get<ClassPaginationResponse>("/v1/staff/classes", {
+      params: {
+        page,
+        limit,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch classes";
+      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -978,10 +856,7 @@ export const getClassesForStaff = async (
   }
 };
 
-export const getSubjectsForStaff = async (
-  page: number = 1,
-  search: string = ""
-) => {
+export const getSubjectsForStaff = async (page = 1, search = "") => {
   try {
     const response = await api.get(`/v1/staff/subject`, {
       params: { page, search, limit: 100 },
@@ -993,10 +868,7 @@ export const getSubjectsForStaff = async (
 };
 
 // Update your getAllExams function to accept page and limit parameters
-export const getAllExams = async (
-  page: number = 1,
-  limit: number = 10
-): Promise<ExamsResponse> => {
+export const getAllExams = async (page = 1, limit = 10): Promise<ExamsResponse> => {
   try {
     const response = await api.get<ExamsResponse>("/v1/staff/examination", {
       params: {
@@ -1007,8 +879,7 @@ export const getAllExams = async (
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch exams";
+      const errorMessage = error.response?.data?.message || "Failed to fetch exams";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -1016,18 +887,15 @@ export const getAllExams = async (
   }
 };
 
-export const getExamById = async (
-  examId: string
-): Promise<{ data: Exam; message: string }> => {
+export const getExamById = async (examId: string): Promise<{ data: Exam; message: string }> => {
   try {
     const response = await api.get<{ data: Exam; message: string }>(
-      `/v1/staff/examination/${examId}`
+      `/v1/staff/examination/${examId}`,
     );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch exam";
+      const errorMessage = error.response?.data?.message || "Failed to fetch exam";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -1036,25 +904,17 @@ export const getExamById = async (
 };
 
 // utils/api.ts
-export const updateExamination = async (
-  examId: string,
-  formData: FormData
-): Promise<any> => {
+export const updateExamination = async (examId: string, formData: FormData): Promise<any> => {
   try {
-    const response = await api.patch(
-      `/v1/staff/examination/${examId}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await api.patch(`/v1/staff/examination/${examId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to update exam";
+      const errorMessage = error.response?.data?.message || "Failed to update exam";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -1067,8 +927,7 @@ export const deleteExam = async (examId: string): Promise<void> => {
     await api.delete(`/v1/staff/examination/${examId}`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete exam";
+      const errorMessage = error.response?.data?.message || "Failed to delete exam";
       console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
@@ -1077,28 +936,21 @@ export const deleteExam = async (examId: string): Promise<void> => {
 };
 
 // utils/api.ts
-export const getClassScheduleForStaff =
-  async (): Promise<TimetableResponse> => {
-    try {
-      const response = await api.get<TimetableResponse>(
-        "/v1/staff/class/schedule"
-      );
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message || "Failed to fetch timetable";
-        console.error("API Error:", errorMessage);
-        throw new Error(errorMessage);
-      }
-      throw new Error("Failed to fetch timetable");
+export const getClassScheduleForStaff = async (): Promise<TimetableResponse> => {
+  try {
+    const response = await api.get<TimetableResponse>("/v1/staff/class/schedule");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch timetable";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
     }
-  };
+    throw new Error("Failed to fetch timetable");
+  }
+};
 
-export const getAllExaminations = async (
-  page: number = 1,
-  limit: number = 50
-) => {
+export const getAllExaminations = async (page = 1, limit = 50) => {
   try {
     const response = await api.get("/v1/admin/examination", {
       params: { page, limit },
@@ -1111,15 +963,12 @@ export const getAllExaminations = async (
 
 export const updateExaminationStatus = async (
   examId: string,
-  status: "approve" | "reject" | "scheduled"
+  status: "approve" | "reject" | "scheduled",
 ) => {
   try {
-    const response = await api.patch(
-      `/v1/admin/examination/${examId}/approve`,
-      {
-        status,
-      }
-    );
+    const response = await api.patch(`/v1/admin/examination/${examId}/approve`, {
+      status,
+    });
     return response.data;
   } catch (error) {
     throw new Error("Failed to approve examination");
@@ -1145,22 +994,17 @@ export const createNotice = async (payload: {
 };
 
 // Get all notices with search, filter, and limit
-export const getAllNotices = async (
-  search: string = '', 
-  filter: string = '', 
-  page: number = 1, 
-  limit: number = 20
-) => {
+export const getAllNotices = async (search = "", filter = "", page = 1, limit = 20) => {
   try {
-    const response = await api.get('/v1/admin/notices', {
-      params: { 
-        search, 
-        filter, 
+    const response = await api.get("/v1/admin/notices", {
+      params: {
+        search,
+        filter,
         page,
-        limit 
+        limit,
       },
-    })
-    return response.data
+    });
+    return response.data;
   } catch (error) {
     throw new Error("Failed to fetch notices");
   }
@@ -1177,7 +1021,7 @@ export const updateNotice = async (
     resources: string[];
     expirationDate: string;
     notificationDate: string;
-  }
+  },
 ) => {
   try {
     const response = await api.patch(`/v1/admin/notices/${noticeId}`, payload);
@@ -1197,14 +1041,11 @@ export const deleteNotice = async (noticeId: string) => {
 };
 
 export const getStaffNotices = async (
-  search: string = "",
-  limit: number = 20,
-  startDate: string = format(
-    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    "yyyy-MM-dd"
-  ),
-  endDate: string = format(new Date(), "yyyy-MM-dd")
-):Promise<NoticesResponse> => {
+  search = "",
+  limit = 20,
+  startDate: string = format(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), "yyyy-MM-dd"),
+  endDate: string = format(new Date(), "yyyy-MM-dd"),
+): Promise<NoticesResponse> => {
   try {
     const response = await api.get("/v1/staff/notices", {
       params: { search, limit, startDate, endDate },
@@ -1215,25 +1056,25 @@ export const getStaffNotices = async (
   }
 };
 
-export const getParentNotices = async (search: string = '', limit: number = 20) => {
+export const getParentNotices = async (search = "", limit = 20) => {
   try {
-    const response = await api.get('/v1/parent/notices', {
+    const response = await api.get("/v1/parent/notices", {
       params: { search, limit },
-    })
-    return response.data
+    });
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch staff notices')
+    throw new Error("Failed to fetch staff notices");
   }
-}
+};
 
 export const getParentDashboard = async (): Promise<ParentDashboardResponse> => {
   try {
-    const response = await api.get('/v1/parent/dashboard')
-    return response.data
+    const response = await api.get("/v1/parent/dashboard");
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch parent dashboard data')
+    throw new Error("Failed to fetch parent dashboard data");
   }
-}
+};
 
 // export const getParentDashboard = async (): Promise<ParentDashboardResponse> => {
 //     const token = useAuthStore.getState().token;
@@ -1270,44 +1111,44 @@ export const getParentDashboard = async (): Promise<ParentDashboardResponse> => 
 
 export const getParentKidById = async (id: string) => {
   try {
-    const response = await api.get(`/v1/parent/${id}`)
-    return response.data
+    const response = await api.get(`/v1/parent/${id}`);
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch student data')
+    throw new Error("Failed to fetch student data");
   }
-}
+};
 
 export const getStudentSchedule = async (id: string) => {
   try {
-    const response = await api.get(`/v1/parent/${id}/schedule`)
-    return response.data
+    const response = await api.get(`/v1/parent/${id}/schedule`);
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch student schedule')
+    throw new Error("Failed to fetch student schedule");
   }
-}
+};
 
 // GET - Get all school fees with pagination and filters
 export const getSchoolFees = async (params: GetFeesParams = {}): Promise<FeesResponse> => {
   try {
-    const queryParams = new URLSearchParams()
+    const queryParams = new URLSearchParams();
 
     // Add optional parameters
-    if (params.search) queryParams.append('search', params.search)
-    if (params.filter) queryParams.append('filter', params.filter)
+    if (params.search) queryParams.append("search", params.search);
+    if (params.filter) queryParams.append("filter", params.filter);
     // if (params.skip !== undefined) queryParams.append('skip', params.skip.toString());
-    if (params.limit !== undefined) queryParams.append('limit', params.limit.toString())
-    if (params.class) queryParams.append('class', params.class)
-    if (params.session) queryParams.append('session', params.session)
+    if (params.limit !== undefined) queryParams.append("limit", params.limit.toString());
+    if (params.class) queryParams.append("class", params.class);
+    if (params.session) queryParams.append("session", params.session);
 
-    const queryString = queryParams.toString()
-    const url = `${'/v1/admin/schools/fee'}${queryString ? `?${queryString}` : ''}`
+    const queryString = queryParams.toString();
+    const url = `${"/v1/admin/schools/fee"}${queryString ? `?${queryString}` : ""}`;
 
-    const response = await api.get(url)
-    return response.data
+    const response = await api.get(url);
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch school fees')
+    throw new Error("Failed to fetch school fees");
   }
-}
+};
 
 // POST - Create a new fee structure
 export const createFeeStructure = async (feeData: CreateFeeData): Promise<any> => {
@@ -1318,26 +1159,26 @@ export const createFeeStructure = async (feeData: CreateFeeData): Promise<any> =
       totalAmount: feeData.totalAmount,
       terms: feeData.terms,
       // isActive: feeData.isActive,
-    }
+    };
 
-    const response = await api.post('/v1/admin/schools/fee', requestData)
-    return response.data
+    const response = await api.post("/v1/admin/schools/fee", requestData);
+    return response.data;
   } catch (error) {
     // If API responded with a body, return it so callers can show the server message/payload
     if (axios.isAxiosError(error)) {
-      const serverData = error.response?.data
-      console.error('createFeeStructure API error:', {
+      const serverData = error.response?.data;
+      console.error("createFeeStructure API error:", {
         status: error.response?.status,
         data: serverData,
-      })
-      return serverData ?? { message: error.message, error: true }
+      });
+      return serverData ?? { message: error.message, error: true };
     }
 
     // Non-Axios error fallback
-    console.error('createFeeStructure unexpected error:', error)
-    return { message: String(error), error: true }
+    console.error("createFeeStructure unexpected error:", error);
+    return { message: String(error), error: true };
   }
-}
+};
 
 // PATCH - Update an existing fee structure
 export const updateFeeStructure = async (
@@ -1346,205 +1187,210 @@ export const updateFeeStructure = async (
 ): Promise<{ data: FeeStructure; message: string }> => {
   try {
     // Transform the data to match API expectations
-    const requestData: any = {}
+    const requestData: any = {};
 
     if (updateData.totalAmount !== undefined) {
-      requestData.totalAmount = updateData.totalAmount
+      requestData.totalAmount = updateData.totalAmount;
     }
     if (updateData.terms !== undefined) {
-      requestData.terms = updateData.terms
+      requestData.terms = updateData.terms;
     }
     if (updateData.isActive !== undefined) {
-      requestData.isActive = updateData.isActive
+      requestData.isActive = updateData.isActive;
     }
 
-    const response = await api.patch(`${'/v1/admin/schools/fee'}/${feeId}`, requestData)
-    return response.data
+    const response = await api.patch(`${"/v1/admin/schools/fee"}/${feeId}`, requestData);
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to update fee structure')
+    throw new Error("Failed to update fee structure");
   }
-}
+};
 
 // DELETE - Delete a fee structure (if endpoint exists)
 export const deleteFeeStructure = async (feeId: string): Promise<{ message: string }> => {
   try {
-    const response = await api.delete(`${'/v1/admin/schools/fee'}/${feeId}`)
-    return response.data
+    const response = await api.delete(`${"/v1/admin/schools/fee"}/${feeId}`);
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to delete fee structure')
+    throw new Error("Failed to delete fee structure");
   }
-}
+};
 
 // GET - Get single fee structure by ID
-export const getFeeStructureById = async (feeId: string): Promise<{ data: FeeStructure; message: string }> => {
+export const getFeeStructureById = async (
+  feeId: string,
+): Promise<{ data: FeeStructure; message: string }> => {
   try {
-    const response = await api.get(`${'/v1/admin/schools/fee'}/${feeId}`)
-    return response.data
+    const response = await api.get(`${"/v1/admin/schools/fee"}/${feeId}`);
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch fee structure')
+    throw new Error("Failed to fetch fee structure");
   }
-}
+};
 
 // Add these to your existing API functions
 
 // Alternative approach with optional chaining
 export const getAllSessions = async (): Promise<Session[]> => {
   try {
-    const response = await api.get<SessionsResponse>('/v1/admin/session-and-terms', {
+    const response = await api.get<SessionsResponse>("/v1/admin/session-and-terms", {
       params: {
-        page: '1',
-        limit: '100',
+        page: "1",
+        limit: "100",
       },
-    })
+    });
 
     // Use optional chaining with fallback
-    const sessions = response.data?.data?.result || []
+    const sessions = response.data?.data?.result || [];
 
     if (sessions.length === 0) {
-      console.warn('No sessions found in response')
+      console.warn("No sessions found in response");
     }
 
-    return sessions
+    return sessions;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch sessions'
-      throw new Error(errorMessage)
+      const errorMessage = error.response?.data?.message || "Failed to fetch sessions";
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to fetch sessions')
+    throw new Error("Failed to fetch sessions");
   }
-}
+};
 
 export const getAllClasses = async (): Promise<Class[]> => {
   try {
-    const response = await api.get<ClassesResponse>('/v1/admin/classes', {
+    const response = await api.get<ClassesResponse>("/v1/admin/classes", {
       params: {
-        page: '1',
-        limit: '100',
+        page: "1",
+        limit: "100",
       },
-    })
+    });
 
     // Use optional chaining with fallback
-    const classes = response.data?.data?.result || []
+    const classes = response.data?.data?.result || [];
 
     if (classes.length === 0) {
-      console.warn('No classes found in response')
+      console.warn("No classes found in response");
     }
 
-    return classes
+    return classes;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch classes'
-      throw new Error(errorMessage)
+      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to fetch classes')
+    throw new Error("Failed to fetch classes");
   }
-}
+};
 
 // Publish a fee structure
 export const publishFeeStructure = async (feeId: string) => {
   try {
-    const response = await api.patch(`/v1/admin/schools/fee/publish/${feeId}`)
-    return response.data
+    const response = await api.patch(`/v1/admin/schools/fee/publish/${feeId}`);
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to publish fee structure'
-      console.error('API Error:', {
+      const errorMessage = error.response?.data?.message || "Failed to publish fee structure";
+      console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
         data: error.response?.data,
-      })
-      throw new Error(errorMessage)
+      });
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to publish fee structure')
+    throw new Error("Failed to publish fee structure");
   }
-}
+};
 
 export const getParentFees = async () => {
   try {
-    const response = await api.get(`/v1/parent/fees`)
-    return response.data
+    const response = await api.get(`/v1/parent/fees`);
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch parent details'
-      console.error('API Error:', {
+      const errorMessage = error.response?.data?.message || "Failed to fetch parent details";
+      console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
         data: error.response?.data,
-      })
-      throw new Error(errorMessage)
+      });
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to fetch parent details')
+    throw new Error("Failed to fetch parent details");
   }
-}
+};
 
 export const adminCreatePayment = async (data: FormData) => {
   try {
-    const response = await api.post('/v1/admin/payment', data, {
+    const response = await api.post("/v1/admin/payment", data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
-    })
-    return response
+    });
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to create payment'
-      console.error('API Error:', {
+      const errorMessage = error.response?.data?.message || "Failed to create payment";
+      console.error("API Error:", {
         status: error.response?.status,
         message: errorMessage,
         url: error.config?.url,
-      })
-      throw new Error(errorMessage)
+      });
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to create payment')
+    throw new Error("Failed to create payment");
   }
-}
+};
 
 // utils/api.ts - Add this function
-export const getAllPayments = async (page: number, limit: number = 10, paymentStatus?: string): Promise<any> => {
+
+export const getAllPayments = async (
+  page: number,
+  limit = 10,
+  paymentStatus?: string,
+): Promise<any> => {
   try {
-    const response = await api.get('/v1/admin/payment', {
+    const response = await api.get("/v1/admin/payment", {
       params: {
         page,
         limit,
         paymentStatus,
       },
-    })
-    return response.data
+    });
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch payments'
-      console.error('API Error:', errorMessage)
-      throw new Error(errorMessage)
+      const errorMessage = error.response?.data?.message || "Failed to fetch payments";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to fetch payments')
+    throw new Error("Failed to fetch payments");
   }
-}
+};
 
 export const getPaymentById = async (paymentId: string): Promise<PaymentResponse> => {
   try {
-    const response = await api.get(`/v1/admin/payment/${paymentId}`)
-    return response.data
+    const response = await api.get(`/v1/admin/payment/${paymentId}`);
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch payment details'
-      console.error('API Error:', {
+      const errorMessage = error.response?.data?.message || "Failed to fetch payment details";
+      console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
         data: error.response?.data,
-      })
-      throw new Error(errorMessage)
+      });
+      throw new Error(errorMessage);
     }
-    throw new Error('Failed to fetch payment details')
+    throw new Error("Failed to fetch payment details");
   }
-}
-
-
+};
 
 export const getPaymentStatistics = async () => {
   try {
-    const response = await api.get('/v1/admin/payment/stat')
-    return response.data
+    const response = await api.get("/v1/admin/payment/stat");
+    return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch payment statistics')
+    throw new Error("Failed to fetch payment statistics");
   }
-}
+};

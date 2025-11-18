@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
-
-
+import { useEffect, useState } from "react";
 
 interface ParentOption {
   parentId: string;
   name: string;
-  email?: string; 
+  email?: string;
   occupation: string;
 }
-
 
 interface Props {
   parents: ParentOption[];
@@ -17,19 +14,17 @@ interface Props {
 
 export default function ParentSearch({ parents, onSelect }: Props) {
   const [search, setSearch] = useState("");
-  const [selectedParent, setSelectedParent] = useState<ParentOption | null>(
-    null
-  );
+  const [selectedParent, setSelectedParent] = useState<ParentOption | null>(null);
 
   // Reset selectedParent if parents prop changes (e.g., new search)
   useEffect(() => {
-    if (selectedParent && !parents.find(p => p.parentId === selectedParent.parentId)) {
+    if (selectedParent && !parents.find((p) => p.parentId === selectedParent.parentId)) {
       setSelectedParent(null);
     }
   }, [parents]);
 
   const filteredParents = parents.filter((parent) =>
-    parent.name.toLowerCase().includes(search.toLowerCase())
+    parent.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleSelect = (parent: ParentOption) => {
@@ -55,7 +50,7 @@ export default function ParentSearch({ parents, onSelect }: Props) {
       /> */}
 
       {/* Selected parent */}
-      {selectedParent && (
+      {selectedParent ? (
         <div className="p-3 border rounded-md bg-blue-50 flex justify-between items-start">
           <div>
             <p className="font-medium">Selected: {selectedParent?.name}</p>
@@ -70,7 +65,7 @@ export default function ParentSearch({ parents, onSelect }: Props) {
             Change
           </button>
         </div>
-      )}
+      ) : null}
 
       {/* List of parents below */}
       <div className="space-y-2 max-h-64 overflow-y-auto">
@@ -86,9 +81,7 @@ export default function ParentSearch({ parents, onSelect }: Props) {
           </div>
         ))}
 
-        {filteredParents.length === 0 && (
-          <p className="text-gray-500 text-sm">No parent found.</p>
-        )}
+        {filteredParents.length === 0 && <p className="text-gray-500 text-sm">No parent found.</p>}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { FileEdit, FileText } from "lucide-react";
 
-import { FileEdit, FileText } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Individual Question Builder Component (Commented out with Coming Soon message)
 export const QuestionBuilder = () => {
@@ -61,7 +61,9 @@ export const QuestionBuilder = () => {
           <FileEdit className="h-5 w-5" />
           Individual Question Builder
         </CardTitle>
-        <CardDescription>Create questions one by one for practice or additional content</CardDescription>
+        <CardDescription>
+          Create questions one by one for practice or additional content
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {/* Coming Soon Message */}
@@ -234,5 +236,5 @@ export const QuestionBuilder = () => {
         */}
       </CardContent>
     </Card>
-  )
-}
+  );
+};

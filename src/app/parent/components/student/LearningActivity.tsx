@@ -1,26 +1,39 @@
-'use client'
-import React from 'react'
-import { Bar } from 'react-chartjs-2'
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+"use client";
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Tooltip,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const LearningActivity = () => {
   const data = {
-    labels: ['Math', 'English', 'Government', 'Biology', 'Chemistry'],
+    labels: ["Math", "English", "Government", "Biology", "Chemistry"],
     datasets: [
       {
-        label: 'Performance',
+        label: "Performance",
         data: [82, 72, 95, 78, 100],
-        backgroundColor: '#5542F6',
+        backgroundColor: "#5542F6",
       },
     ],
-  }
+  };
 
   // Correcting the indexAxis type to strictly use "y" as the value
   const options = {
-    indexAxis: 'y' as const, // Explicitly type as "y"
+    indexAxis: "y" as const, // Explicitly type as "y"
     scales: {
       x: {
         beginAtZero: true,
@@ -31,7 +44,7 @@ const LearningActivity = () => {
     layout: {
       padding: 16,
     },
-  }
+  };
 
   return (
     <div>
@@ -52,7 +65,7 @@ const LearningActivity = () => {
         <Bar data={data} options={options} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LearningActivity
+export default LearningActivity;

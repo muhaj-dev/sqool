@@ -1,18 +1,19 @@
 "use client";
 
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+
+import ErrorState from "@/components/ErrorState";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
+import { getStudentById } from "@/utils/api/index";
+import { useAuthStore } from "@/zustand/authStore";
+
 import Details, { DetailsSkeleton } from "../../components/student/Details";
 import LearningActivity, {
   LearningActivitySkeleton,
 } from "../../components/student/LearningActivity";
-import SResult from "../../components/student/SResult";
 import SCalender from "../../components/student/SCalender";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { getStudentById } from "@/utils/api/index";
-import { useAuthStore } from "@/zustand/authStore";
-import ErrorState from "@/components/ErrorState";
-import useAuthRedirect from "@/hooks/useAuthRedirect";
+import SResult from "../../components/student/SResult";
 
 const page = () => {
   const { id: studentId } = useParams();
@@ -22,7 +23,7 @@ const page = () => {
   const studentDetailsQuery = useQuery({
     queryKey: ["student-details", studentId],
     queryFn: async () => {
-      const res = await getStudentById(studentId! as string);
+      const res = await getStudentById(studentId as string);
       return res.data;
     },
     enabled: !!studentId,
@@ -48,20 +49,14 @@ const page = () => {
           {studentDetailsQuery.isPending ? (
             <DetailsSkeleton />
           ) : (
-            <Details
-              user={user!}
-              student={studentDetailsQuery.data?.student!}
-            />
+            //@ts-expect-error student not present in IStudent
+            <Details user={user!} student={studentDetailsQuery.data?.student} />
           )}
         </div>
 
         <div className="tablet:col-span-2 flex">
           <div className="w-full flex-1">
-            {studentDetailsQuery.isPending ? (
-              <LearningActivitySkeleton />
-            ) : (
-              <LearningActivity />
-            )}
+            {studentDetailsQuery.isPending ? <LearningActivitySkeleton /> : <LearningActivity />}
           </div>
         </div>
       </div>

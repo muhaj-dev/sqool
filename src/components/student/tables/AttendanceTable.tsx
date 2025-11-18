@@ -1,7 +1,3 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
-import React from 'react'
-
 const AttendanceTable = () => {
   return (
     // <section className="flex flex-col gap-4 overflow-auto">
@@ -84,7 +80,7 @@ const AttendanceTable = () => {
         </div>
       </div> */}
     </section>
-  )
-}
+  );
+};
 
-export default AttendanceTable
+export default AttendanceTable;

@@ -1,53 +1,53 @@
-import { ThreeDotsIcon } from '@/utils/icon'
-import React from 'react'
+import { ThreeDotsIcon } from "@/utils/icon";
+import Link from "next/link";
 
 const eventsData = [
   {
-    date: '13 July, 2021',
-    title: 'School Management Meeting',
-    author: 'Mildred Effiong',
-    timeAgo: '5 min ago',
-    viewText: 'View',
-    bgColor: 'bg-black',
-    textColor: 'text-white',
+    date: "13 July, 2021",
+    title: "School Management Meeting",
+    author: "Mildred Effiong",
+    timeAgo: "5 min ago",
+    viewText: "View",
+    bgColor: "bg-black",
+    textColor: "text-white",
   },
   {
-    date: '13 July, 2021',
-    title: 'School Management Meeting',
-    author: 'Mildred Effiong',
-    timeAgo: '5 min ago',
-    viewText: 'View',
-    bgColor: 'bg-primary',
-    textColor: 'text-white',
+    date: "13 July, 2021",
+    title: "School Management Meeting",
+    author: "Mildred Effiong",
+    timeAgo: "5 min ago",
+    viewText: "View",
+    bgColor: "bg-primary",
+    textColor: "text-white",
   },
   {
-    date: '13 July, 2021',
-    title: 'School Management Meeting',
-    author: 'Mildred Effiong',
-    timeAgo: '5 min ago',
-    viewText: 'View',
-    bgColor: 'bg-black',
-    textColor: 'text-white',
+    date: "13 July, 2021",
+    title: "School Management Meeting",
+    author: "Mildred Effiong",
+    timeAgo: "5 min ago",
+    viewText: "View",
+    bgColor: "bg-black",
+    textColor: "text-white",
   },
   {
-    date: '13 July, 2021',
-    title: 'School Management Meeting',
-    author: 'Mildred Effiong',
-    timeAgo: '5 min ago',
-    viewText: 'View',
-    bgColor: 'bg-primary',
-    textColor: 'text-white',
+    date: "13 July, 2021",
+    title: "School Management Meeting",
+    author: "Mildred Effiong",
+    timeAgo: "5 min ago",
+    viewText: "View",
+    bgColor: "bg-primary",
+    textColor: "text-white",
   },
   {
-    date: '13 July, 2021',
-    title: 'School Management Meeting',
-    author: 'Mildred Effiong',
-    timeAgo: '5 min ago',
-    viewText: 'View',
-    bgColor: 'bg-black',
-    textColor: 'text-white',
+    date: "13 July, 2021",
+    title: "School Management Meeting",
+    author: "Mildred Effiong",
+    timeAgo: "5 min ago",
+    viewText: "View",
+    bgColor: "bg-black",
+    textColor: "text-white",
   },
-]
+];
 
 const Noticeboard = () => {
   return (
@@ -59,9 +59,14 @@ const Noticeboard = () => {
 
       <div className="space-y-4">
         {eventsData.map((event, index) => (
-          <div key={index} className="py-4 flex border-b-[3px] border-gray justify-between gap-3 items-center">
+          <div
+            key={index}
+            className="py-4 flex border-b-[3px] border-gray justify-between gap-3 items-center"
+          >
             <div className="">
-              <div className={`inline-block px-3 py-1 ${event.bgColor} ${event.textColor} rounded-[20px]`}>
+              <div
+                className={`inline-block px-3 py-1 ${event.bgColor} ${event.textColor} rounded-[20px]`}
+              >
                 {event.date}
               </div>
               <h3 className="mt-2 text-lg font-semibold">{event.title}</h3>
@@ -71,14 +76,14 @@ const Noticeboard = () => {
                 </span>
               </div>
             </div>
-            <a href="#" className="text-primary text-sm font-semibold underline">
+            <Link href="#" className="text-primary text-sm font-semibold underline">
               {event.viewText}
-            </a>
+            </Link>
           </div>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Noticeboard
+export default Noticeboard;

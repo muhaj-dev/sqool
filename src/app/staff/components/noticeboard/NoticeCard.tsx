@@ -1,21 +1,22 @@
-import React, { ReactNode } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { type ReactNode } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
 interface EventCard {
-  id: number
-  time: string
-  date: string
-  title: string
-  description: string
+  id: number;
+  time: string;
+  date: string;
+  title: string;
+  description: string;
   participants: {
-    name: string
-    role: string
-  }[]
-  attachments: ReactNode
-  eventDate: string
-  eventTime: string
-  isNew: boolean
+    name: string;
+    role: string;
+  }[];
+  attachments: ReactNode;
+  eventDate: string;
+  eventTime: string;
+  isNew: boolean;
 }
 const NoticeCard = ({ event }: { event: EventCard }) => {
   return (
@@ -31,15 +32,13 @@ const NoticeCard = ({ event }: { event: EventCard }) => {
           </Avatar>
           <div>
             <p>{`${event?.time} ${event?.date}`} </p>
-            <p className="text-muted-foreground max-w-40 break-words ">
-              {event?.title}
-            </p>
+            <p className="text-muted-foreground max-w-40 break-words ">{event?.title}</p>
           </div>
         </div>
       </div>
       <Separator className="my-4" />
     </div>
   );
-}
+};
 
-export default NoticeCard
+export default NoticeCard;

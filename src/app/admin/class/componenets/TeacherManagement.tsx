@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RefreshCw, X } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -11,26 +16,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "@/components/ui/use-toast";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  getStaffs,
-  getSubjects,
   assignTutorToClass,
   changeClassTeacher,
-  removeTutorOrSubjectFromClass,
   deleteClassTeacher,
+  getStaffs,
+  getSubjects,
+  removeTutorOrSubjectFromClass,
 } from "@/utils/api";
-import { X, RefreshCw } from "lucide-react";
+
+import { Label } from "@/components/ui/label";
 import { RemoveStaffDialog } from "./RemoveStaffDialog";
-import { toast } from "@/components/ui/use-toast";
 
 interface User {
   _id: string;
@@ -63,7 +60,6 @@ interface Subject {
   name: string;
   code: string;
 }
-
 
 export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -102,8 +98,8 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
 
   const currentClassTeacherObj = classData?.classTeacher?.[0];
   // const [allTeachers, setAllTeachers] = useState<any>(classData?.classTeacher);
-    const [allTeachers, setAllTeachers] = useState<ClassTeacher[]>(classData?.classTeacher || []);
-  
+  const [allTeachers, setAllTeachers] = useState<ClassTeacher[]>(classData?.classTeacher || []);
+
   const currentClassTeacher = currentClassTeacherObj?.userId;
 
   // Tutors from classData
@@ -128,7 +124,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         setLoading(false);
       }
     };
-    fetchStaffs();
+    void fetchStaffs();
   }, [searchTerm, refresh]);
 
   // Fetch all subjects for assignment modal
@@ -141,7 +137,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         setAllSubjects([]);
       }
     };
-    fetchSubjects();
+    void fetchSubjects();
   }, [subjectSearch, refresh]);
 
   useEffect(() => {
@@ -153,9 +149,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
   }, [selectedStaff]);
 
   // Filter out teachers already assigned to this class
-  const availableTeachers = staffs.filter(
-    (teacher) => !currentTeacherIds.includes(teacher._id)
-  );
+  const availableTeachers = staffs.filter((teacher) => !currentTeacherIds.includes(teacher._id));
 
   // Get all subject IDs already assigned in classData
   const assignedSubjectIds = (classData?.subjects || []).map((s: any) => s._id);
@@ -288,17 +282,12 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
     }
   };
 
-  async function handleRemove(
-    classId: string | undefined,
-    teacherId: string | undefined
-  ) {
+  async function handleRemove(classId: string | undefined, teacherId: string | undefined) {
     if (!classId && !teacherId) return;
     try {
       setLoading(true);
       await deleteClassTeacher(classId!, { teacherId: teacherId! });
-      setAllTeachers((prev: any) =>
-        prev.filter((item: any) => item._id !== teacherId)
-      );
+      setAllTeachers((prev: any) => prev.filter((item: any) => item._id !== teacherId));
       toast({
         title: "Success",
         description: "Staff removed successfully",
@@ -343,58 +332,50 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-4">
-            <label className="text-sm font-medium">Current Class Teacher</label>
-             {allTeachers?.length > 0 &&
-    allTeachers?.map(({ userId, _id }: ClassTeacher) => {
-      return (
-        <div key={_id}>
-          <div className="p-2 border rounded bg-muted mt-1 flex items-center justify-between">
-            {`${userId?.firstName} ${userId?.lastName}`}
-            <Button
-              onClick={() => {
-                setSelectedStaff({
-                  teacherId: _id,
-                  classId,
-                  className: classData?.className,
-                  userId: {
-                    firstName: userId?.firstName,
-                    lastName: userId?.lastName,
-                  },
-                });
-                setRemoveOpen((prev) => !prev);
-              }}
-              className="bg-destructive text-white p-0.5 px-2 hover:bg-transparent hover:text-black hover:border"
-            >
-              <X className="h-3 w-3" /> Remove
-            </Button>
-          </div>
-        </div>
-      );
-    })}
+            <Label className="text-sm font-medium">Current Class Teacher</Label>
+            {allTeachers?.length > 0 &&
+              allTeachers?.map(({ userId, _id }: ClassTeacher) => {
+                return (
+                  <div key={_id}>
+                    <div className="p-2 border rounded bg-muted mt-1 flex items-center justify-between">
+                      {`${userId?.firstName} ${userId?.lastName}`}
+                      <Button
+                        onClick={() => {
+                          setSelectedStaff({
+                            teacherId: _id,
+                            classId,
+                            className: classData?.className,
+                            userId: {
+                              firstName: userId?.firstName,
+                              lastName: userId?.lastName,
+                            },
+                          });
+                          setRemoveOpen((prev) => !prev);
+                        }}
+                        className="bg-destructive text-white p-0.5 px-2 hover:bg-transparent hover:text-black hover:border"
+                      >
+                        <X className="h-3 w-3" /> Remove
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
             <div>
               <label className="text-sm font-medium">
-                {currentClassTeacher
-                  ? "Change Class Teacher"
-                  : "Add Class Teacher"}
+                {currentClassTeacher ? "Change Class Teacher" : "Add Class Teacher"}
               </label>
-              <Select
-                value={newClassTeacher}
-                onValueChange={setNewClassTeacher}
-              >
+              <Select value={newClassTeacher} onValueChange={setNewClassTeacher}>
                 <SelectTrigger>
                   <SelectValue
                     placeholder={
-                      currentClassTeacher
-                        ? "Select new class teacher"
-                        : "Select class teacher"
+                      currentClassTeacher ? "Select new class teacher" : "Select class teacher"
                     }
                   />
                 </SelectTrigger>
                 <SelectContent>
                   {availableTeachers.map((teacher) => (
                     <SelectItem key={teacher._id} value={teacher._id}>
-                      {teacher.userId.firstName} {teacher.userId.lastName} -{" "}
-                      {teacher.level}
+                      {teacher.userId.firstName} {teacher.userId.lastName} - {teacher.level}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -409,8 +390,8 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                     ? "Changing..."
                     : "Adding..."
                   : currentClassTeacher
-                  ? "Change Class Teacher"
-                  : "Add Class Teacher"}
+                    ? "Change Class Teacher"
+                    : "Add Class Teacher"}
               </Button>
             </div>
           </div>
@@ -418,17 +399,17 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
       </Card>
 
       {/* Delete staff from class dialog */}
+
       <RemoveStaffDialog
-        open={removeOpen && !!selectedStaff}
+        // @ts-expect-error boolean not null
+        open={removeOpen ? !!selectedStaff : null}
         setOpen={(v) => {
           setRemoveOpen(v);
           if (!v) setSelectedStaff(null);
         }}
         staff={selectedStaff}
         loading={loading}
-        onConfirm={() =>
-          handleRemove(selectedStaff?.classId, selectedStaff?.teacherId)
-        }
+        onConfirm={() => handleRemove(selectedStaff?.classId, selectedStaff?.teacherId)}
       />
 
       {/* Assign Subjects Modal */}
@@ -451,10 +432,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                 allSubjects.map((subject) => {
                   const isAssigned = assignedSubjectIds.includes(subject._id);
                   return (
-                    <div
-                      key={subject._id}
-                      className="flex items-center space-x-2 accent-primary"
-                    >
+                    <div key={subject._id} className="flex items-center space-x-2 accent-primary">
                       <input
                         type="checkbox"
                         id={subject._id}
@@ -463,15 +441,12 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                           setSelectedSubjects((prev) =>
                             prev.includes(subject._id)
                               ? prev.filter((id) => id !== subject._id)
-                              : [...prev, subject._id]
+                              : [...prev, subject._id],
                           );
                         }}
                         disabled={!isAssigned}
                       />
-                      <label
-                        htmlFor={subject._id}
-                        className={!isAssigned ? "text-[#adadad]" : ""}
-                      >
+                      <label htmlFor={subject._id} className={!isAssigned ? "text-[#adadad]" : ""}>
                         {subject.code} - {subject.name}
                         {!isAssigned && (
                           <span className="ml-2 text-xs text-gray-400">
@@ -484,9 +459,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                 })
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  {subjectSearch
-                    ? "No subjects found"
-                    : "No subjects available"}
+                  {subjectSearch ? "No subjects found" : "No subjects available"}
                 </p>
               )}
             </div>
@@ -506,18 +479,14 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                Subject Teachers
-              </CardTitle>
+              <CardTitle className="flex items-center gap-2">Subject Teachers</CardTitle>
               <Badge variant="outline">{classTutors.length} assigned</Badge>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4 h-[430px] overflow-y-auto">
               {classTutors.length === 0 ? (
-                <div className="text-muted-foreground">
-                  No teachers assigned.
-                </div>
+                <div className="text-muted-foreground">No teachers assigned.</div>
               ) : (
                 classTutors.map((tutor: any) => (
                   <div key={tutor._id} className="p-4 border rounded-lg">
@@ -531,12 +500,9 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                         </Avatar>
                         <div>
                           <h4 className="font-medium">
-                            {tutor.teacher?.userId?.firstName}{" "}
-                            {tutor.teacher?.userId?.lastName}
+                            {tutor.teacher?.userId?.firstName} {tutor.teacher?.userId?.lastName}
                           </h4>
-                          <p className="text-sm text-muted-foreground">
-                            {tutor.teacher?.level}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{tutor.teacher?.level}</p>
                         </div>
                       </div>
                     </div>
@@ -546,9 +512,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                         {Array.isArray(tutor.subject)
                           ? tutor.subject
                               .map((sub: any) =>
-                                typeof sub === "object" && sub !== null
-                                  ? sub.name
-                                  : sub
+                                typeof sub === "object" && sub !== null ? sub.name : sub,
                               )
                               .join(", ")
                           : ""}
@@ -617,17 +581,11 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                           <h4 className="font-medium">
                             {teacher.userId.firstName} {teacher.userId.lastName}
                           </h4>
-                          <p className="text-sm text-muted-foreground">
-                            {teacher.level}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {teacher.qualification}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{teacher.level}</p>
+                          <p className="text-sm text-muted-foreground">{teacher.qualification}</p>
                         </div>
                       </div>
-                      <Badge
-                        variant={teacher.isActive ? "default" : "secondary"}
-                      >
+                      <Badge variant={teacher.isActive ? "default" : "secondary"}>
                         {teacher.isActive ? "Available" : "Inactive"}
                       </Badge>
                     </div>
@@ -663,10 +621,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
             <div className="space-y-2 h-[180px] overflow-y-auto p-2 border border-[#c3c3c3] rounded">
               {removalTutor?.subject?.length > 0 ? (
                 removalTutor.subject.map((sub: any) => (
-                  <div
-                    key={sub._id}
-                    className="flex items-center space-x-2 accent-primary"
-                  >
+                  <div key={sub._id} className="flex items-center space-x-2 accent-primary">
                     <input
                       type="checkbox"
                       id={`remove-${sub._id}`}
@@ -675,7 +630,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                         setRemovalSubjects((prev) =>
                           prev.includes(sub._id)
                             ? prev.filter((id) => id !== sub._id)
-                            : [...prev, sub._id]
+                            : [...prev, sub._id],
                         );
                       }}
                     />
@@ -683,9 +638,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground">
-                  No subjects assigned to this tutor.
-                </p>
+                <p className="text-sm text-muted-foreground">No subjects assigned to this tutor.</p>
               )}
             </div>
             <div className="flex gap-2">
@@ -728,10 +681,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
               This action will remove all subjects assigned to this tutor.
             </p>
             <div className="flex gap-2 justify-end">
-              <Button
-                variant="outline"
-                onClick={() => setRemoveTutorModalOpen(false)}
-              >
+              <Button variant="outline" onClick={() => setRemoveTutorModalOpen(false)}>
                 Cancel
               </Button>
               <Button
@@ -739,7 +689,7 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
                 onClick={() =>
                   handleRemoveTutor(
                     tutorToRemove?.teacher?._id,
-                    tutorToRemove?.subject?.map((s: any) => s._id) || []
+                    tutorToRemove?.subject?.map((s: any) => s._id) || [],
                   )
                 }
                 disabled={loading}

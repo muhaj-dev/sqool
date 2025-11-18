@@ -1,5 +1,5 @@
-import { ListFilter } from 'lucide-react'
-import React from 'react'
+import { ListFilter } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 
 const Filter = () => {
   return (
@@ -25,7 +25,7 @@ const Filter = () => {
         <DropdownMenuItem>Subscription</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;

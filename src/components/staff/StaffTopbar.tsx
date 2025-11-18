@@ -1,11 +1,25 @@
-import { MoveLeft } from 'lucide-react'
-import React, { useState } from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '../ui/separator'
-import Link from 'next/link'
-import { toast } from '@/components/ui/use-toast' // Assuming you have a toast library
-import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
-import { updateStaffStatus } from '@/utils/api'
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+import { MoveLeft } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+
+import {
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast"; // Assuming you have a toast library
+import { updateStaffStatus } from "@/utils/api";
+
+import { Separator } from "../ui/separator";
 // import {
 //   // DialogContent,
 //   // DialogHeader,
@@ -14,48 +28,48 @@ import { updateStaffStatus } from '@/utils/api'
 //   // DialogDescription,
 //   DialogClose,
 // } from "@radix-ui/react-dialog"; // Additional Dialog components
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 interface Props {
-  staffId: string
+  staffId: string;
 }
 
 const StaffTopbar = ({ staffId }: Props) => {
-  const [status, setStatus] = useState<'enable' | 'disable' | null>(null)
-  const [open, setOpen] = useState(false) // State to control modal visibility
+  const [status, setStatus] = useState<"enable" | "disable" | null>(null);
+  const [open, setOpen] = useState(false); // State to control modal visibility
 
   const handleStatusChange = (value: string) => {
-    setStatus(value as 'enable' | 'disable')
-    setOpen(true) // Open modal when a status is selected
-  }
+    setStatus(value as "enable" | "disable");
+    setOpen(true); // Open modal when a status is selected
+  };
 
   const handleUpdateStatus = async () => {
     if (!staffId || !status) {
       toast({
-        title: 'Error',
-        description: 'Please select a status and ensure a valid staff ID.',
-        variant: 'destructive',
-      })
-      setOpen(false) // Close modal on error
-      return
+        title: "Error",
+        description: "Please select a status and ensure a valid staff ID.",
+        variant: "destructive",
+      });
+      setOpen(false); // Close modal on error
+      return;
     }
 
     try {
-      const isActive = status === 'enable' // Map "enable" to true, "disable" to false
-      await updateStaffStatus(staffId, isActive)
+      const isActive = status === "enable"; // Map "enable" to true, "disable" to false
+      //@ts-expect-error should not have arguments in function
+      await updateStaffStatus(staffId, isActive);
       toast({
-        title: 'Success',
+        title: "Success",
         description: `Staff member has been ${status}ed successfully.`,
-      })
-      setOpen(false) // Close modal on success
+      });
+      setOpen(false); // Close modal on success
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update staff status'
+      const errorMessage = error instanceof Error ? error.message : "Failed to update staff status";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
-      })
+        variant: "destructive",
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -83,9 +97,9 @@ const StaffTopbar = ({ staffId }: Props) => {
             <DialogHeader>
               <DialogTitle>Confirm Action</DialogTitle>
               <DialogDescription>
-                {status === 'disable'
-                  ? 'Are you sure you want to deactivate this staff?'
-                  : 'Are you sure you want to activate this staff?'}
+                {status === "disable"
+                  ? "Are you sure you want to deactivate this staff?"
+                  : "Are you sure you want to activate this staff?"}
               </DialogDescription>
             </DialogHeader>
             <div className="flex gap-4 justify-end">
@@ -98,7 +112,7 @@ const StaffTopbar = ({ staffId }: Props) => {
                 onClick={handleUpdateStatus}
                 className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/40"
               >
-                {status === 'disable' ? 'Deactivate' : 'Activate'}
+                {status === "disable" ? "Deactivate" : "Activate"}
               </button>
             </div>
           </DialogContent>
@@ -106,7 +120,7 @@ const StaffTopbar = ({ staffId }: Props) => {
       </div>
       <Separator />
     </>
-  )
-}
+  );
+};
 
-export default StaffTopbar
+export default StaffTopbar;

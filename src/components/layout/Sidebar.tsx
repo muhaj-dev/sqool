@@ -1,19 +1,19 @@
 "use client";
-import React from "react";
-import { Separator } from "../ui/separator";
+import { GraduationCap, Landmark, Settings } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Landmark, Settings, GraduationCap } from "lucide-react";
-import Link from "next/link";
 import { DashboardIcon, ExamIcon, PersonIcon, StudentIcon } from "@/utils/icon";
-import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/zustand/authStore";
-import { useRouter } from "next/navigation";
+
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Separator } from "../ui/separator";
 
 const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const pathname = usePathname();
@@ -113,11 +113,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
       <div className="flex flex-col gap-10 w-[90%] mx-auto">
         {/* Student */}
         <Link href="/admin/student" className={`flex items-center gap-4 pl-4`}>
-          <StudentIcon
-            color={`${
-              pathname.startsWith("/admin/student") ? "#E5B80B" : "#515B6F"
-            }`}
-          />
+          <StudentIcon color={`${pathname.startsWith("/admin/student") ? "#E5B80B" : "#515B6F"}`} />
           <p
             onClick={toggleSidebar}
             className={`text-[#515B6F] cursor-pointer ${
@@ -128,11 +124,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
           </p>
         </Link>
         <Link href="/admin/parent" className={`flex items-center gap-4 pl-4`}>
-          <StudentIcon
-            color={`${
-              pathname.startsWith("/admin/parent") ? "#E5B80B" : "#515B6F"
-            }`}
-          />
+          <StudentIcon color={`${pathname.startsWith("/admin/parent") ? "#E5B80B" : "#515B6F"}`} />
           <p
             onClick={toggleSidebar}
             className={`text-[#515B6F] cursor-pointer ${
@@ -143,11 +135,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
           </p>
         </Link>
         <Link href="/admin/staff" className={`flex items-center gap-4 pl-4`}>
-          <PersonIcon
-            color={`${
-              pathname.startsWith("/admin/staff") ? "#E5B80B" : "#515B6F"
-            }`}
-          />
+          <PersonIcon color={`${pathname.startsWith("/admin/staff") ? "#E5B80B" : "#515B6F"}`} />
           <p
             onClick={toggleSidebar}
             className={`text-[#515B6F] ${
@@ -159,11 +147,7 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         </Link>
 
         <Link href="/admin/class" className={`flex items-center gap-4 pl-4`}>
-          <PersonIcon
-            color={`${
-              pathname.startsWith("/admin/class") ? "#E5B80B" : "#515B6F"
-            }`}
-          />
+          <PersonIcon color={`${pathname.startsWith("/admin/class") ? "#E5B80B" : "#515B6F"}`} />
           <p
             onClick={toggleSidebar}
             className={`text-[#515B6F] ${
@@ -192,15 +176,11 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
 
         <Link href="/admin/fees" className={`flex items-center gap-4 pl-4 `}>
           <GraduationCap
-            className={`text-[#515B6F] ${
-              pathname.startsWith("/admin/fees") ? "text-primary" : ""
-            }`}
+            className={`text-[#515B6F] ${pathname.startsWith("/admin/fees") ? "text-primary" : ""}`}
           />
           <p
             onClick={toggleSidebar}
-            className={`text-[#515B6F] ${
-              pathname.startsWith("/admin/fees") ? "text-primary" : ""
-            }`}
+            className={`text-[#515B6F] ${pathname.startsWith("/admin/fees") ? "text-primary" : ""}`}
           >
             Fees
           </p>
@@ -223,30 +203,22 @@ const Sidebar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         </Link>
         <Link
           href="/admin/exam"
-          className={`flex items-center gap-4 pl-4 ${pathname.startsWith(
-            "/admin/exam"
-          )}`}
+          className={`flex items-center gap-4 pl-4 ${pathname.startsWith("/admin/exam")}`}
         >
           <ExamIcon
             size={24}
-            color={`${
-              pathname.startsWith("/admin/exam") ? "#E5B80B" : "#515B6F"
-            }`}
+            color={`${pathname.startsWith("/admin/exam") ? "#E5B80B" : "#515B6F"}`}
           />
           <p
             onClick={toggleSidebar}
-            className={`text-[#515B6F] ${
-              pathname.startsWith("/admin/exam") ? "text-primary" : ""
-            }`}
+            className={`text-[#515B6F] ${pathname.startsWith("/admin/exam") ? "text-primary" : ""}`}
           >
             Examinations
           </p>
         </Link>
         <Link
           href="/admin/settings"
-          className={`flex items-center gap-4 pl-4 ${pathname.startsWith(
-            "/admin/settings"
-          )}`}
+          className={`flex items-center gap-4 pl-4 ${pathname.startsWith("/admin/settings")}`}
         >
           <Settings
             className={`text-[#515B6F] ${

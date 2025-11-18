@@ -1,7 +1,8 @@
 import { create } from "zustand";
+
 import type { IClassConfigurationResponse } from "@/types";
 
-interface StaffClassesStore {
+export interface StaffClassesStore {
   classes: IClassConfigurationResponse[];
   selectedClassId: string | null;
 

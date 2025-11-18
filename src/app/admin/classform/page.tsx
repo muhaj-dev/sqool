@@ -1,14 +1,14 @@
-import ConfigurationForm from '@/components/admin/compulsory/ConfigurationForm'
-import Link from 'next/link'
-import React from 'react'
+import Link from "next/link";
+
+import ConfigurationForm from "@/components/admin/compulsory/ConfigurationForm";
 
 interface PageProps {
-  searchParams?: Promise<{ type?: string }>
+  searchParams?: Promise<{ type?: string }>;
 }
 
 const Page = async ({ searchParams }: PageProps) => {
-  const params = await searchParams
-  const type = params?.type || ''
+  const params = await searchParams;
+  const type = params?.type || "";
 
   return (
     <div>
@@ -17,7 +17,7 @@ const Page = async ({ searchParams }: PageProps) => {
       </Link>
       <ConfigurationForm classType={type} />
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

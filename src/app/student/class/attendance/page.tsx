@@ -1,11 +1,12 @@
-'use client'
-import React, { useState } from 'react'
-import StudentAttendance from '../../components/StudentAttendance'
+"use client";
+import { useState } from "react";
+
 import ADetails from "@/app/parent/components/Attendance/ADetails";
 import Attendancebar from "@/app/parent/components/Attendance/Attendancebar";
+import StudentAttendance from "../../components/StudentAttendance";
 
 const Page = () => {
-  const [activeComponent, setActiveComponent] = useState<'attendance' | 'library'>('attendance')
+  const [activeComponent, setActiveComponent] = useState<"attendance" | "library">("attendance");
 
   return (
     <div>
@@ -22,11 +23,11 @@ const Page = () => {
             <div className="flex flex-col justify-end mb-4 gap-4">
               <div className="flex  px-4 gap-4  border-[1px] border-[#D6DDEB] rounded-lg w-full items-center justify-start">
                 <button
-                  onClick={() => setActiveComponent('attendance')}
+                  onClick={() => setActiveComponent("attendance")}
                   className={` py-2 text-sm ${
-                    activeComponent === 'attendance'
-                      ? 'border-primary border-b-[4px]'
-                      : 'text-[#a4a4a5] border-b-[4px] border-transparent'
+                    activeComponent === "attendance"
+                      ? "border-primary border-b-[4px]"
+                      : "text-[#a4a4a5] border-b-[4px] border-transparent"
                   }`}
                 >
                   <div className="text-left">
@@ -39,11 +40,11 @@ const Page = () => {
                   </div>
                 </button>
                 <button
-                  onClick={() => setActiveComponent('library')}
+                  onClick={() => setActiveComponent("library")}
                   className={` py-2   text-sm ${
-                    activeComponent === 'library'
-                      ? 'border-primary  border-b-[4px]'
-                      : 'text-[#a4a4a5] border-b-[4px] border-transparent '
+                    activeComponent === "library"
+                      ? "border-primary  border-b-[4px]"
+                      : "text-[#a4a4a5] border-b-[4px] border-transparent "
                   }`}
                 >
                   <div className=" text-left">
@@ -58,7 +59,7 @@ const Page = () => {
               </div>
             </div>
             <div className="w-full min-w-full  max-w-[900px] mt-8 bg-red py-5 px-0 ">
-              {activeComponent === 'attendance' ? (
+              {activeComponent === "attendance" ? (
                 <div>
                   <StudentAttendance />
                 </div>
@@ -72,7 +73,7 @@ const Page = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

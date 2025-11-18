@@ -1,6 +1,7 @@
-'use client'
-import NavItem from './NavItem'
-import { sections } from '@/lib/sections'
+"use client";
+import { sections } from "@/lib/sections";
+
+import NavItem from "./NavItem";
 
 const NavItems = () => {
   return (
@@ -11,7 +12,7 @@ const NavItems = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NavItems
+export default NavItems;

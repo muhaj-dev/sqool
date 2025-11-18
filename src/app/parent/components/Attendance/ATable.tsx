@@ -1,114 +1,120 @@
-'use client'
+"use client";
 
-import * as React from 'react'
 import {
-  ColumnDef,
-  SortingState,
+  type ColumnDef,
+  type SortingState,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import { Input } from '@/components/ui/input'
+} from "@tanstack/react-table";
+import Image from "next/image";
+import * as React from "react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 const data: Period[] = [
   {
     id: 1,
-    time: '9:40 am - 10: 20 am',
-    img: '/assests/avatar.png',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    status: 'Absent',
+    time: "9:40 am - 10: 20 am",
+    img: "/assests/avatar.png",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    status: "Absent",
   },
   {
     id: 2,
-    time: '9:40 am - 10: 20 am',
-    img: '/assests/avatar.png',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    status: 'Absent',
+    time: "9:40 am - 10: 20 am",
+    img: "/assests/avatar.png",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    status: "Absent",
   },
   {
     id: 3,
-    time: '9:40 am - 10: 20 am',
-    img: '/assests/avatar.png',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    status: 'Present',
+    time: "9:40 am - 10: 20 am",
+    img: "/assests/avatar.png",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    status: "Present",
   },
   {
     id: 4,
-    time: '9:40 am - 10: 20 am',
-    img: '/assests/avatar.png',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    status: 'Present',
+    time: "9:40 am - 10: 20 am",
+    img: "/assests/avatar.png",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    status: "Present",
   },
   {
     id: 5,
-    time: '9:40 am - 10: 20 am',
-    img: '/assests/avatar.png',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    status: 'Absent',
+    time: "9:40 am - 10: 20 am",
+    img: "/assests/avatar.png",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    status: "Absent",
   },
-]
+];
 
-export type Period = {
-  id: number
-  time: string
-  img: string
-  subject: string
-  topic: string
-  status: 'Absent' | 'Present'
+export interface Period {
+  id: number;
+  time: string;
+  img: string;
+  subject: string;
+  topic: string;
+  status: "Absent" | "Present";
 }
 
 export const columns: ColumnDef<Period>[] = [
   {
-    accessorKey: 'img',
-    header: 'Image',
+    accessorKey: "img",
+    header: "Image",
     cell: ({ row }) => (
       <div>
-        <Image src={row.getValue('img')} alt="Avatar" width={40} height={40} className="rounded-full" />
+        <Image
+          src={row.getValue("img")}
+          alt="Avatar"
+          width={40}
+          height={40}
+          className="rounded-full"
+        />
       </div>
     ),
   },
   {
-    accessorKey: 'subject',
-    header: 'Subject',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('subject')}</div>,
+    accessorKey: "subject",
+    header: "Subject",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("subject")}</div>,
   },
   {
-    accessorKey: 'time',
-    header: 'Time',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('time')}</div>,
+    accessorKey: "time",
+    header: "Time",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("time")}</div>,
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue('status')
+      const status = row.getValue("status");
       return (
         <div className="flex gap-4">
           <div className="capitalize w-[110px] bg-[#20C9AC1A] text-[#20C9AC] py-2 px-5 rounded-md flex justify-center items-center">
-            {status === 'Absent' ? <Attended /> : 'Absent'}
+            {status === "Absent" ? <Attended /> : "Absent"}
           </div>
           <div className="capitalize w-[110px] bg-[#FC34001A] text-[#FC3400] py-2 px-5 rounded-md flex justify-center items-center">
-            {status === 'Present' ? <Cancel /> : 'Present'}
+            {status === "Present" ? <Cancel /> : "Present"}
           </div>
         </div>
-      )
+      );
     },
   },
-]
+];
 
 export function ATable() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
     data,
@@ -120,7 +126,7 @@ export function ATable() {
     state: {
       sorting,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -160,10 +166,12 @@ export function ATable() {
           </TableHeader> */}
           <TableBody className="">
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow key={row.id} data-state={row.getIsSelected() ? 'selected' : undefined}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -178,7 +186,7 @@ export function ATable() {
         </Table>
       </div>
     </div>
-  )
+  );
 }
 
 const Export = () => (
@@ -192,29 +200,29 @@ const Export = () => (
       fill="white"
     />
   </svg>
-)
+);
 
 const Attended = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="7.5" cy="10.5" r="5.25" fill="#7E869E" fill-opacity="0.25" />
-    <path d="M4.5 9.75L7.5 12L12.75 5.25" stroke="#20C9AC" stroke-width="1.2" />
+    <circle cx="7.5" cy="10.5" r="5.25" fill="#7E869E" fillOpacity="0.25" />
+    <path d="M4.5 9.75L7.5 12L12.75 5.25" stroke="#20C9AC" strokeWidth="1.2" />
   </svg>
-)
+);
 
 const Cancel = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="9" cy="10" r="6.75" fill="#7E869E" fill-opacity="0.25" />
-    <path d="M6.75 12.2498L11.25 7.74976" stroke="#FD4B1C" stroke-width="1.2" />
-    <path d="M11.25 12.25L6.75 7.75" stroke="#FD4B1C" stroke-width="1.2" />
+    <circle cx="9" cy="10" r="6.75" fill="#7E869E" fillOpacity="0.25" />
+    <path d="M6.75 12.2498L11.25 7.74976" stroke="#FD4B1C" strokeWidth="1.2" />
+    <path d="M11.25 12.25L6.75 7.75" stroke="#FD4B1C" strokeWidth="1.2" />
   </svg>
-)
+);
 
 export const Search = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="11" cy="11" r="6" stroke="#222222" />
     <path d="M20 20L17 17" stroke="#222222" strokeLinecap="round" />
   </svg>
-)
+);
 
 const Upload = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -227,4 +235,4 @@ const Upload = () => (
       fill="white"
     />
   </svg>
-)
+);

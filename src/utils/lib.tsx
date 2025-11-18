@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import {
   formatISO,
   isWeekend,
@@ -8,6 +7,8 @@ import {
   differenceInYears,
   parse,
 } from "date-fns";
+
+import { Badge } from "@/components/ui/badge";
 import { FeeItem, Session, SessionsResponse, StudentAttendance } from "@/types";
 
 // utils/dateUtils.ts

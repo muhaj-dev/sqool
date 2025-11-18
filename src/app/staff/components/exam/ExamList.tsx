@@ -1,125 +1,124 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { useToast } from '@/components/ui/use-toast'
 import {
   BookOpen,
-  Clock,
   Calendar,
-  Users,
+  Clock,
+  Edit,
+  FileText,
   MapPin,
   Monitor,
-  FileText,
-  Eye,
-  Edit,
   Trash2,
-  Download,
-  MoreVertical,
-} from 'lucide-react'
-import { Exam } from '@/types'
-import { updateExamination, deleteExam } from '@/utils/api'
-import { useExams } from '@/hooks/useExams'
-import { EditExamModal } from './EditExamModal'
+  Users,
+} from "lucide-react";
+import { useState } from "react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { useExams } from "@/hooks/useExams";
+import { type Exam } from "@/types";
+import { deleteExam } from "@/utils/api";
+
+import { EditExamModal } from "./EditExamModal";
 
 // Add Dialog import
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 interface ExamListProps {
-  onEditExam?: (exam: Exam) => void
-  onViewExam?: (exam: Exam) => void
+  onEditExam?: (exam: Exam) => void;
+  onViewExam?: (exam: Exam) => void;
 }
 
 export const ExamList: React.FC<ExamListProps> = () => {
-  const { exams, loading, error, refetch } = useExams()
-  const { toast } = useToast()
-  const [deletingId, setDeletingId] = useState<string | null>(null)
-  const [editingExam, setEditingExam] = useState<Exam | null>(null)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const { exams, loading, error, refetch } = useExams();
+  const { toast } = useToast();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingExam, setEditingExam] = useState<Exam | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Add state for delete confirmation modal
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
-  const [examToDelete, setExamToDelete] = useState<Exam | null>(null)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [examToDelete, setExamToDelete] = useState<Exam | null>(null);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-  }
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   const formatTime = (timeString: string) => {
-    return new Date(timeString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(timeString).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
       hour12: true,
-    })
-  }
+    });
+  };
 
   const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'default'
-      case 'pending':
-        return 'secondary'
-      case 'completed':
-        return 'outline'
-      case 'cancelled':
-        return 'destructive'
+      case "active":
+        return "default";
+      case "pending":
+        return "secondary";
+      case "completed":
+        return "outline";
+      case "cancelled":
+        return "destructive";
       default:
-        return 'secondary'
+        return "secondary";
     }
-  }
+  };
 
   const handleEditExam = (exam: Exam) => {
-    setEditingExam(exam)
-    setIsEditModalOpen(true)
-  }
+    setEditingExam(exam);
+    setIsEditModalOpen(true);
+  };
 
   const handleExamUpdated = () => {
-    refetch()
-    setEditingExam(null)
-    setIsEditModalOpen(false)
-  }
+    void refetch();
+    setEditingExam(null);
+    setIsEditModalOpen(false);
+  };
 
   // Open delete confirmation modal
   const handleDeleteExam = (exam: Exam) => {
-    setExamToDelete(exam)
-    setDeleteConfirmOpen(true)
-  }
+    setExamToDelete(exam);
+    setDeleteConfirmOpen(true);
+  };
 
   // Confirm delete
   const confirmDeleteExam = async () => {
-    if (!examToDelete) return
+    if (!examToDelete) return;
     try {
-      setDeletingId(examToDelete._id)
-      await deleteExam(examToDelete._id)
+      setDeletingId(examToDelete._id);
+      await deleteExam(examToDelete._id);
       toast({
-        title: 'Exam deleted',
-        description: 'The exam has been successfully deleted.',
-      })
-      refetch()
+        title: "Exam deleted",
+        description: "The exam has been successfully deleted.",
+      });
+      void refetch();
     } catch (error) {
       toast({
-        title: 'Error deleting exam',
-        description: error instanceof Error ? error.message : 'Please try again',
-        variant: 'destructive',
-      })
+        title: "Error deleting exam",
+        description: error instanceof Error ? error.message : "Please try again",
+        variant: "destructive",
+      });
     } finally {
-      setDeletingId(null)
-      setDeleteConfirmOpen(false)
-      setExamToDelete(null)
+      setDeletingId(null);
+      setDeleteConfirmOpen(false);
+      setExamToDelete(null);
     }
-  }
+  };
 
   const handleDownloadQuestions = (exam: Exam) => {
     // Implement download logic here
     toast({
-      title: 'Download started',
-      description: 'Downloading exam questions...',
-    })
-  }
+      title: "Download started",
+      description: "Downloading exam questions...",
+    });
+  };
 
   if (loading) {
     return (
@@ -137,14 +136,14 @@ export const ExamList: React.FC<ExamListProps> = () => {
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="border rounded-lg p-4 animate-pulse">
                   <div className="flex justify-between items-start mb-3">
-                    <div className="h-6 bg-muted rounded w-1/3"></div>
-                    <div className="h-6 bg-muted rounded w-20"></div>
+                    <div className="h-6 bg-muted rounded w-1/3" />
+                    <div className="h-6 bg-muted rounded w-20" />
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[...Array(4)].map((_, j) => (
                       <div key={j} className="space-y-2">
-                        <div className="h-4 bg-muted rounded w-16"></div>
-                        <div className="h-4 bg-muted rounded w-24"></div>
+                        <div className="h-4 bg-muted rounded w-16" />
+                        <div className="h-4 bg-muted rounded w-24" />
                       </div>
                     ))}
                   </div>
@@ -160,7 +159,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
           onExamUpdated={handleExamUpdated}
         />
       </>
-    )
+    );
   }
 
   if (error) {
@@ -175,7 +174,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -199,16 +198,20 @@ export const ExamList: React.FC<ExamListProps> = () => {
                 </p>
               </div>
             ) : (
-              exams.map(exam => (
-                <div key={exam._id} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+              exams.map((exam) => (
+                <div
+                  key={exam._id}
+                  className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                >
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-3">
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg flex items-center gap-2">
                         <FileText className="h-4 w-4" />
-                        {exam.subject?.name || 'Unknown Subject'} Examination
+                        {exam.subject?.name || "Unknown Subject"} Examination
                       </h3>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Created by {exam.creator?.details?.firstName} {exam.creator?.details?.lastName}
+                        Created by {exam.creator?.details?.firstName}{" "}
+                        {exam.creator?.details?.lastName}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -222,7 +225,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">Session:</span>
-                      <span>{exam.session?.session || 'Not specified'}</span>
+                      <span>{exam.session?.session || "Not specified"}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -239,7 +242,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                     <div className="flex items-center gap-2 text-sm">
                       <MapPin className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">Venue:</span>
-                      <span>{exam.venue || 'Not specified'}</span>
+                      <span>{exam.venue || "Not specified"}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Monitor className="h-4 w-4 text-muted-foreground" />
@@ -248,13 +251,13 @@ export const ExamList: React.FC<ExamListProps> = () => {
                     </div>
                   </div>
 
-                  {exam?.class && (
+                  {exam?.class ? (
                     <div className="flex items-center gap-2 text-sm mb-3">
                       <Users className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">Class:</span>
                       <span>{exam?.class?.className}</span>
                     </div>
-                  )}
+                  ) : null}
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -263,7 +266,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                         <span>{exam.students} students</span>
                       </div>
                     </div>
-                    {exam?.status !== 'approve' && (
+                    {exam?.status !== "approve" && (
                       <div className="flex items-center gap-2">
                         <Button variant="outline" size="sm" onClick={() => handleEditExam(exam)}>
                           <Edit className="h-4 w-4 mr-1" />
@@ -276,7 +279,7 @@ export const ExamList: React.FC<ExamListProps> = () => {
                           disabled={deletingId === exam._id}
                         >
                           <Trash2 className="text-white bg-primary h-4 w-4 mr-1" />
-                          {deletingId === exam._id ? 'Deleting...' : 'Delete'}
+                          {deletingId === exam._id ? "Deleting..." : "Delete"}
                         </Button>
                       </div>
                     )}
@@ -303,7 +306,11 @@ export const ExamList: React.FC<ExamListProps> = () => {
           <div className="py-4">
             <p className="mb-6 text-center text-lg">Are you sure you want to delete this exam?</p>
             <div className="flex justify-center gap-4">
-              <Button variant="destructive" onClick={confirmDeleteExam} disabled={deletingId === examToDelete?._id}>
+              <Button
+                variant="destructive"
+                onClick={confirmDeleteExam}
+                disabled={deletingId === examToDelete?._id}
+              >
                 Yes
               </Button>
               <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
@@ -314,5 +321,5 @@ export const ExamList: React.FC<ExamListProps> = () => {
         </DialogContent>
       </Dialog>
     </>
-  )
-}
+  );
+};

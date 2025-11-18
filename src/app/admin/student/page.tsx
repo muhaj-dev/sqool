@@ -1,13 +1,11 @@
-import StudentList from '@/components/student/StudentList'
-
-import React from 'react'
+import StudentList from "@/components/student/StudentList";
 
 const page = () => {
   return (
     <div>
       <StudentList />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

@@ -1,20 +1,27 @@
-'use client'
-import React from 'react'
-import { Input } from '@/components/ui/input'
-import { HelpCircle, Search } from 'lucide-react'
-import { Tooltip, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
-import { TooltipTrigger } from '@radix-ui/react-tooltip'
-import { HiMenu, HiX } from 'react-icons/hi'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import Link from 'next/link'
-import { GreaterThan } from '@/utils/icon'
+"use client";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { HelpCircle, Search } from "lucide-react";
+import { HiMenu, HiX } from "react-icons/hi";
+
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 const Navbar = ({ toggleSidebar, isOpen }: { toggleSidebar: () => void; isOpen: boolean }) => {
   return (
     <div className="bg-primary md:bg-[#fafafa] w-full flex flex-wrap justify-between mb-4 px-5 py-4">
       <div className="">
         {/* Hamburger button - toggles sidebar */}
-        <button className="max-[700px]:block hidden text-3xl focus:outline-none" onClick={toggleSidebar}>
+        <button
+          className="max-[700px]:block hidden text-3xl focus:outline-none"
+          onClick={toggleSidebar}
+        >
           {isOpen ? <HiX className="text-white" /> : <HiMenu className="text-white" />}
         </button>
       </div>
@@ -28,7 +35,7 @@ const Navbar = ({ toggleSidebar, isOpen }: { toggleSidebar: () => void; isOpen: 
       </div>
       <div className="hidden md:flex items-center gap-8 ">
         <div className="flex items-center gap-4 border rounded-full  px-4 py-2 w-fit shadow-sm cursor-pointer">
-          <span className="bg-[#19B257] w-2 h-2 rounded-full"></span> <span>New update</span>
+          <span className="bg-[#19B257] w-2 h-2 rounded-full" /> <span>New update</span>
         </div>
         <TooltipProvider>
           <Tooltip>
@@ -53,7 +60,7 @@ const Navbar = ({ toggleSidebar, isOpen }: { toggleSidebar: () => void; isOpen: 
         </SelectContent>
       </Select>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

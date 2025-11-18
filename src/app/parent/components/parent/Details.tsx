@@ -1,10 +1,9 @@
-import React from 'react'
-import LearningActivity from '../../components/student/LearningActivity'
-import SResult from '../../components/student/SResult'
-import SCalender from '../../components/student/SCalender'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Instagram, Mail, Smartphone, Star, Twitter } from 'lucide-react'
-import { Separator } from '@/components/ui/separator'
+import { Instagram, Mail, Smartphone, Star, Twitter } from "lucide-react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+
+import LearningActivity from "../../components/student/LearningActivity";
 
 const Details = () => {
   return (
@@ -34,7 +33,9 @@ const Details = () => {
               <Separator />
               <div className="flex items-center justify-between">
                 <p className="text-xl font-semibold">Gender</p>
-                <span className="bg-[#5542F61A] text-sm px-2 py-1 rounded-sm text-[#5542F6]">Female</span>
+                <span className="bg-[#5542F61A] text-sm px-2 py-1 rounded-sm text-[#5542F6]">
+                  Female
+                </span>
               </div>
             </div>
             <div className="bg-[#F8F8FD] rounded-md px-2 py-3 flex flex-col gap-2">
@@ -101,7 +102,7 @@ const Details = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Details
+export default Details;

@@ -1,19 +1,22 @@
-import React from 'react'
-import { Separator } from '@/components/ui/separator'
-import { StaffResult } from '@/types'
+import { Separator } from "@/components/ui/separator";
+import { type StaffResult } from "@/types";
 
 const TeacherProfile = ({ staffId, staff }: { staffId: string; staff: StaffResult | null }) => {
-  const fullName = staff?.userId ? `${staff.userId?.firstName} ${staff.userId?.lastName}` : 'Unknown Staff'
-  const email = 'No email provided' // Email not available in StaffResult
-  const phone = staff?.address ? `+${staff.address?.split(',')?.[0]?.trim()}` : '+44 1245 572 135'
-  const address = staff?.address ? `${staff.address}` : '43 awayewaserere street ejigun ayetoro itele ogun state'
+  const fullName = staff?.userId
+    ? `${staff.userId?.firstName} ${staff.userId?.lastName}`
+    : "Unknown Staff";
+  const email = "No email provided"; // Email not available in StaffResult
+  const phone = staff?.address ? `+${staff.address?.split(",")?.[0]?.trim()}` : "+44 1245 572 135";
+  const address = staff?.address
+    ? `${staff.address}`
+    : "43 awayewaserere street ejigun ayetoro itele ogun state";
   const instagram = staff?.aboutMe
-    ? `instagram.com/${staff.aboutMe?.split(' ')?.[0]?.toLowerCase()}`
-    : 'instagram.com/jeromebell'
+    ? `instagram.com/${staff.aboutMe?.split(" ")?.[0]?.toLowerCase()}`
+    : "instagram.com/jeromebell";
   const twitter = staff?.aboutMe
-    ? `twitter.com/${staff.aboutMe?.split(' ')?.[0]?.toLowerCase()}`
-    : 'twitter.com/jeromebell'
-  const aboutMe = staff?.aboutMe ? staff?.aboutMe : 'Not available'
+    ? `twitter.com/${staff.aboutMe?.split(" ")?.[0]?.toLowerCase()}`
+    : "twitter.com/jeromebell";
+  const aboutMe = staff?.aboutMe ? staff?.aboutMe : "Not available";
 
   return (
     <div className="px-4 py-6 flex h-fit border-2 min-[850px]:border-none border-[#F8F8FD] flex-col gap-4">
@@ -30,7 +33,7 @@ const TeacherProfile = ({ staffId, staff }: { staffId: string; staff: StaffResul
         <div className="flex flex-col max-w-[300px]">
           <p className="text-muted-foreground">Date of Birth</p>
           <p>
-            March 23, 1995 <span className="text-muted-foreground">(26 y.o)</span>{' '}
+            March 23, 1995 <span className="text-muted-foreground">(26 y.o)</span>{" "}
           </p>
         </div>
         <div className="flex flex-col max-w-[300px]">
@@ -59,7 +62,7 @@ const TeacherProfile = ({ staffId, staff }: { staffId: string; staff: StaffResul
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default TeacherProfile
+export default TeacherProfile;

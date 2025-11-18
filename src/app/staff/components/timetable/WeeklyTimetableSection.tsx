@@ -1,8 +1,9 @@
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock } from "lucide-react";
-import { ClassSchedule } from "@/types";
+
 import ErrorState from "@/components/ErrorState";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { type ClassSchedule } from "@/types";
+
 import { TimetableSkeleton } from "./SkeletonsTimetable";
 
 export const WeeklyTimetableSection = ({
@@ -52,12 +53,9 @@ export const WeeklyTimetableSection = ({
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h4 className="font-medium capitalize">
-                            {p.subject.name}
-                          </h4>
+                          <h4 className="font-medium capitalize">{p.subject.name}</h4>
                           <p className="text-sm text-muted-foreground capitalize">
-                            {p.teacher?.userId?.firstName}{" "}
-                            {p.teacher?.userId?.lastName}
+                            {p.teacher?.userId?.firstName} {p.teacher?.userId?.lastName}
                           </p>
                         </div>
                       </div>

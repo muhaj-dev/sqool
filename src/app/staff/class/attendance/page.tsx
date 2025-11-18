@@ -1,26 +1,33 @@
-'use client'
-export const dynamic = 'force-dynamic'
+"use client";
+export const dynamic = "force-dynamic";
 
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
-import { Switch } from '@/components/ui/switch'
-import { Calendar, Save, Users, UserCheck, UserX } from 'lucide-react'
+import { Save, UserCheck, Users, UserX } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 const Attendance = () => {
   const students = [
-    { id: 'ADM221-10', name: 'Tyrus McVity', present: true },
-    { id: 'ADM221-11', name: 'Sarah Johnson', present: true },
-    { id: 'ADM221-12', name: 'Michael Brown', present: false },
-    { id: 'ADM221-13', name: 'Emily Davis', present: true },
-    { id: 'ADM221-14', name: 'James Wilson', present: true },
-  ]
+    { id: "ADM221-10", name: "Tyrus McVity", present: true },
+    { id: "ADM221-11", name: "Sarah Johnson", present: true },
+    { id: "ADM221-12", name: "Michael Brown", present: false },
+    { id: "ADM221-13", name: "Emily Davis", present: true },
+    { id: "ADM221-14", name: "James Wilson", present: true },
+  ];
 
-  const presentCount = students.filter(s => s.present).length
-  const absentCount = students.length - presentCount
+  const presentCount = students.filter((s) => s.present).length;
+  const absentCount = students.length - presentCount;
 
   return (
     <div className="space-y-6">
@@ -45,7 +52,7 @@ const Attendance = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="date">Date</Label>
-                  <Input type="date" defaultValue={new Date().toISOString().split('T')[0]} />
+                  <Input type="date" defaultValue={new Date().toISOString().split("T")[0]} />
                 </div>
 
                 <div className="space-y-2">
@@ -103,7 +110,7 @@ const Attendance = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {students.map(student => (
+                      {students.map((student) => (
                         <tr key={student.id}>
                           <td>{student.id}</td>
                           <td className="font-medium">{student.name}</td>
@@ -186,7 +193,7 @@ const Attendance = () => {
                   <span className="font-medium">92%</span>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">
-                  <div className="bg-success h-2 rounded-full" style={{ width: '92%' }}></div>
+                  <div className="bg-success h-2 rounded-full" style={{ width: "92%" }} />
                 </div>
               </div>
               <div className="space-y-2">
@@ -195,7 +202,7 @@ const Attendance = () => {
                   <span className="font-medium">89%</span>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">
-                  <div className="bg-success h-2 rounded-full" style={{ width: '89%' }}></div>
+                  <div className="bg-success h-2 rounded-full" style={{ width: "89%" }} />
                 </div>
               </div>
             </div>
@@ -203,7 +210,7 @@ const Attendance = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Attendance
+export default Attendance;

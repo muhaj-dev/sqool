@@ -1,22 +1,23 @@
-import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-// import { Separator } from "../ui/separator"
-import { Phone } from 'lucide-react'
-import Link from 'next/link'
-import { Separator } from '@/components/ui/separator'
+import { Phone } from "lucide-react";
+import Link from "next/link";
 
-type TStudent = {
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Separator } from "../ui/separator"
+
+import { Separator } from "@/components/ui/separator";
+
+interface TStudent {
   item: {
-    _id: number
-    first_name: string
-    last_name: string
-    email: string
-    ID: string
-    class: string
-    phone: string
-    addmissin_date: string
-    contact: string
-  }
+    _id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    ID: string;
+    class: string;
+    phone: string;
+    addmissin_date: string;
+    contact: string;
+  };
 }
 const StudentsCard = ({ item }: TStudent) => {
   return (
@@ -35,7 +36,9 @@ const StudentsCard = ({ item }: TStudent) => {
             <p className="text-muted-foreground max-w-40 break-words ">{item.email}</p>
           </div>
         </div>
-        <span className=" text-[#5542F6] text-sm rounded-sm px-4 py-2 bg-[#5542F61A]">View More</span>
+        <span className=" text-[#5542F6] text-sm rounded-sm px-4 py-2 bg-[#5542F61A]">
+          View More
+        </span>
       </div>
       <Separator className="my-4" />
       <div className="flex flex-col gap-4 ">
@@ -50,7 +53,7 @@ const StudentsCard = ({ item }: TStudent) => {
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">ADDMISSION DATE</p>
           <p className="flex items-center gap-1">
-            <span className="w-2 h-2 bg-green-600 rounded-sm"></span> <span>{item.addmissin_date}</span>
+            <span className="w-2 h-2 bg-green-600 rounded-sm" /> <span>{item.addmissin_date}</span>
           </p>
         </div>
         <div className="flex items-center justify-between">
@@ -62,7 +65,7 @@ const StudentsCard = ({ item }: TStudent) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export default StudentsCard
+export default StudentsCard;

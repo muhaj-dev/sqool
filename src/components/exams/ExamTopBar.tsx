@@ -1,8 +1,10 @@
-import React from 'react'
-import { Button } from '../ui/button'
-import { Plus } from 'lucide-react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const ExamTopBar = () => {
   return (
     <section className="my-4">
@@ -29,7 +31,7 @@ const ExamTopBar = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ExamTopBar
+export default ExamTopBar;

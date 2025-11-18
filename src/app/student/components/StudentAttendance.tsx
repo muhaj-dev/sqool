@@ -1,12 +1,14 @@
-'use client'
-import React from 'react'
-import { Button } from '@/components/ui/button'
+"use client";
+
+import { Button } from "@/components/ui/button";
 
 const StudentAttendance = () => {
   return (
     <div className=" w-[90%] mx-auto max-w-[370px] flex flex-col justify-center px-5 py-2">
       <p className="text-primary text-center text-{28px} font-bold">Mark Attendance</p>
-      <p className="text-[#515B6F] text-center">Click the button below to mark your attendance for this class.</p>
+      <p className="text-[#515B6F] text-center">
+        Click the button below to mark your attendance for this class.
+      </p>
       <div className=" w-fit my-6 mx-auto">
         <Attend />
       </div>
@@ -15,14 +17,20 @@ const StudentAttendance = () => {
         Click me
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default StudentAttendance
+export default StudentAttendance;
 
 const Attend = () => (
-  <svg width="266" height="249" viewBox="0 0 266 249" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_879_14573)">
+  <svg
+    width="266"
+    height="249"
+    viewBox="0 0 266 249"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_879_14573)">
       <path
         d="M245.891 190.492L257.824 192.359C261.864 187.464 264.648 181.656 265.936 175.44C257.21 182.589 243.941 178.79 233.361 182.693C230.07 183.935 227.101 185.903 224.673 188.45C222.246 190.997 220.422 194.058 219.338 197.407L213.506 203.686C218.785 205.778 224.454 206.699 230.123 206.387C235.792 206.075 241.326 204.536 246.344 201.877C249.144 200.357 251.741 198.491 254.075 196.321C249.9 193.69 245.891 190.492 245.891 190.492Z"
         fill="#F2F2F2"
@@ -148,7 +156,10 @@ const Attend = () => (
         d="M157.906 142.703L162.021 137.018L181.847 146.398L206.518 141.765C207.738 141.536 208.993 141.579 210.194 141.89C211.395 142.201 212.513 142.773 213.469 143.565C214.424 144.357 215.194 145.35 215.723 146.473C216.252 147.596 216.527 148.822 216.53 150.064C216.531 152.307 215.644 154.459 214.062 156.048C212.48 157.637 210.334 158.533 208.093 158.54L179.82 158.592L157.906 142.703Z"
         fill="#3F3D56"
       />
-      <path d="M151.568 240.904L147.404 238.911L153.124 221.492L159.269 224.434L151.568 240.904Z" fill="#FFB7B7" />
+      <path
+        d="M151.568 240.904L147.404 238.911L153.124 221.492L159.269 224.434L151.568 240.904Z"
+        fill="#FFB7B7"
+      />
       <path
         d="M179.482 238.096C179.179 238.285 178.877 238.472 178.571 238.659C177.962 239.032 177.347 239.4 176.733 239.761C176.424 239.941 176.112 240.122 175.803 240.3V240.309L175.785 240.312L175.778 240.315L175.307 240.431L174.632 238.644L174.32 237.82L173.879 236.654L173.072 234.52L168.821 223.286L175.43 221.655L175.678 222.668H175.681L175.803 223.17L178.112 232.543L178.583 234.459L178.598 234.517L178.883 235.662L179.127 236.654L179.4 237.762L179.482 238.096Z"
         fill="#FFB7B7"
@@ -201,4 +212,4 @@ const Attend = () => (
       </clipPath>
     </defs>
   </svg>
-)
+);

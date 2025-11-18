@@ -1,13 +1,13 @@
-import AdminParentDetail from './AdminParentDetail'
+import AdminParentDetail from "./AdminParentDetail";
 
 interface PageParams {
-  parentId: string
+  parentId: string;
 }
 
 const Page = async ({ params }: { params: Promise<PageParams> }) => {
-  const { parentId } = await params
+  const { parentId } = await params;
 
-  return <AdminParentDetail parentId={parentId} />
-}
+  return <AdminParentDetail parentId={parentId} />;
+};
 
-export default Page
+export default Page;

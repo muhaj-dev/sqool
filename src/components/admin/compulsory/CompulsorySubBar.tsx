@@ -1,15 +1,16 @@
-'use client'
-import React from 'react'
-import { Select, SelectContent, SelectItem } from '../../ui/select'
-import { SelectTrigger, SelectValue } from '@radix-ui/react-select'
-import { ChevronDown } from 'lucide-react'
+"use client";
+import { SelectTrigger, SelectValue } from "@radix-ui/react-select";
+import { ChevronDown } from "lucide-react";
+
+import { Select, SelectContent, SelectItem } from "../../ui/select";
 
 const CompulsorySubBar = () => {
   return (
     <div className=" w-full flex justify-between flex-col lg:flex-row my-4">
       <div className="w-full md:w-[50%]">
         <h3 className="text-xl font-bold">
-          Dashboard - <span className="text-muted-foreground text-[16px] font-normal ml-1">Compulsory</span>
+          Dashboard -{" "}
+          <span className="text-muted-foreground text-[16px] font-normal ml-1">Compulsory</span>
         </h3>
         <p className="text-muted-foreground w-full  max-w-[490px] text-sm">
           Showing your Account metrics for July 19, 2021 - July 25, 2021
@@ -31,7 +32,7 @@ const CompulsorySubBar = () => {
         </Select>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CompulsorySubBar
+export default CompulsorySubBar;

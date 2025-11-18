@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react'
+import { type ReactNode } from "react";
 
 const layout = ({ children }: { children: ReactNode }) => {
-  return <section className="w-full">{children}</section>
-}
+  return <section className="w-full">{children}</section>;
+};
 
-export default layout
+export default layout;

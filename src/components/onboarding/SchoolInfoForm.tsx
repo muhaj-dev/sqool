@@ -1,149 +1,152 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import { Button } from '../ui/button'
-import { cn } from '@/lib/utils'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
-import { Textarea } from '../ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { FormControl, FormField, FormItem, FormLabel, Form, FormMessage } from '../ui/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Dialog } from '../ui/dialog'
-import { DialogTrigger } from '@radix-ui/react-dialog'
-import Requirement from '../Requirement'
-import { useOnboarding } from '@/contexts/onboarding-context'
-import { SchoolInformation } from '@/types/onboarding'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-type MouseEvent = React.MouseEvent<HTMLButtonElement>
-type StateProp = {
-  label: string
-  value: string
+import Requirement from "../Requirement";
+
+import { useOnboarding } from "@/contexts/onboarding-context";
+import { cn } from "@/lib/utils";
+import { type SchoolInformation } from "@/types/onboarding";
+
+import { Button } from "../ui/button";
+import { Dialog } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Textarea } from "../ui/textarea";
+
+type MouseEvent = React.MouseEvent<HTMLButtonElement>;
+interface StateProp {
+  label: string;
+  value: string;
 }
 
 interface SchoolInfoFormProps {
-  initialData: SchoolInformation
-  onPrev: () => void
+  initialData: SchoolInformation;
+  onPrev: () => void;
 }
 
 const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
-  const { formData, updateFormData, goNextPage, goPrevPage, updateCompletionState } = useOnboarding()
+  const { formData, updateFormData, goNextPage, goPrevPage, updateCompletionState } =
+    useOnboarding();
 
-  const [charCount, setCharCount] = useState(0)
-  const [activeIndex, setActiveIndex] = useState<number>(0)
-  const [localGovernment, setLocalGovernment] = useState<StateProp[]>()
-  const [states, setStates] = useState<StateProp[]>([])
-  const [isLoadingStates, setIsLoadingStates] = useState(true)
-  const [isLoadingLgas, setIsLoadingLgas] = useState(false)
+  const [charCount, setCharCount] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [localGovernment, setLocalGovernment] = useState<StateProp[]>();
+  const [states, setStates] = useState<StateProp[]>([]);
+  const [isLoadingStates, setIsLoadingStates] = useState(true);
+  const [isLoadingLgas, setIsLoadingLgas] = useState(false);
 
   // Fetch all states on component mount
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const response = await fetch('https://nga-states-lga.onrender.com/fetch')
-        const stateNames = await response.json()
+        const response = await fetch("https://nga-states-lga.onrender.com/fetch");
+        const stateNames = await response.json();
 
         const formattedStates = stateNames.map((state: string) => ({
           label: state,
-          value: state.toLowerCase().replace(/\s+/g, '-'),
-        }))
+          value: state.toLowerCase().replace(/\s+/g, "-"),
+        }));
 
-        setStates(formattedStates)
-        setIsLoadingStates(false)
+        setStates(formattedStates);
+        setIsLoadingStates(false);
       } catch (error) {
-        console.error('Error fetching states:', error)
-        setIsLoadingStates(false)
+        console.error("Error fetching states:", error);
+        setIsLoadingStates(false);
       }
-    }
+    };
 
-    fetchStates()
-  }, [])
+    void fetchStates();
+  }, []);
 
   // Fetch LGAs when state changes
   const fetchLgas = async (state: string) => {
-    if (!state) return
+    if (!state) return;
 
-    setIsLoadingLgas(true)
+    setIsLoadingLgas(true);
     try {
-      const response = await fetch(`https://nga-states-lga.onrender.com/?state=${state}`)
-      const lgaNames = await response.json()
+      const response = await fetch(`https://nga-states-lga.onrender.com/?state=${state}`);
+      const lgaNames = await response.json();
 
       const formattedLgas = lgaNames.map((lga: string) => ({
         label: lga,
-        value: lga.toLowerCase().replace(/\s+/g, '-'),
-      }))
+        value: lga.toLowerCase().replace(/\s+/g, "-"),
+      }));
 
-      setLocalGovernment(formattedLgas)
+      setLocalGovernment(formattedLgas);
     } catch (error) {
-      console.error('Error fetching LGAs:', error)
+      console.error("Error fetching LGAs:", error);
     } finally {
-      setIsLoadingLgas(false)
+      setIsLoadingLgas(false);
     }
-  }
+  };
 
   const schoolType = [
-    { label: 'Primary', value: 'Primary School' },
-    { label: 'Secondary', value: 'Secondary School' },
-    { label: 'Both', value: 'Combined School' },
-    { label: 'Sixth Form', value: 'Sixth Form' },
-  ]
+    { label: "Primary", value: "Primary School" },
+    { label: "Secondary", value: "Secondary School" },
+    { label: "Both", value: "Combined School" },
+    { label: "Sixth Form", value: "Sixth Form" },
+  ];
 
   const statesData = [
     {
-      label: 'Oyo',
-      value: 'oyo',
+      label: "Oyo",
+      value: "oyo",
       localGovernments: [
-        { label: 'Ido', value: 'ido' },
-        { label: 'Egbeda', value: 'egbeda' },
-        { label: 'Ibadan-North', value: 'ibadan-north' },
-        { label: 'Akinyele', value: 'akinyele' },
+        { label: "Ido", value: "ido" },
+        { label: "Egbeda", value: "egbeda" },
+        { label: "Ibadan-North", value: "ibadan-north" },
+        { label: "Akinyele", value: "akinyele" },
       ],
     },
     {
-      label: 'Lagos',
-      value: 'lagos',
+      label: "Lagos",
+      value: "lagos",
       localGovernments: [
-        { label: 'Ido', value: 'ido' },
-        { label: 'Egbeda', value: 'egbeda' },
-        { label: 'Ibadan-North', value: 'ibadan-north' },
-        { label: 'Akinyele', value: 'akinyele' },
+        { label: "Ido", value: "ido" },
+        { label: "Egbeda", value: "egbeda" },
+        { label: "Ibadan-North", value: "ibadan-north" },
+        { label: "Akinyele", value: "akinyele" },
       ],
     },
     {
-      label: 'Osun',
-      value: 'osun',
+      label: "Osun",
+      value: "osun",
       localGovernments: [
-        { label: 'Ido', value: 'ido' },
-        { label: 'Egbeda', value: 'egbeda' },
-        { label: 'Ibadan-North', value: 'ibadan-north' },
-        { label: 'Akinyele', value: 'akinyele' },
+        { label: "Ido", value: "ido" },
+        { label: "Egbeda", value: "egbeda" },
+        { label: "Ibadan-North", value: "ibadan-north" },
+        { label: "Akinyele", value: "akinyele" },
       ],
     },
     {
-      label: 'Ogun',
-      value: 'ogun',
+      label: "Ogun",
+      value: "ogun",
       localGovernments: [
-        { label: 'Ido', value: 'ido' },
-        { label: 'Egbeda', value: 'egbeda' },
-        { label: 'Ibadan-North', value: 'ibadan-north' },
-        { label: 'Akinyele', value: 'akinyele' },
+        { label: "Ido", value: "ido" },
+        { label: "Egbeda", value: "egbeda" },
+        { label: "Ibadan-North", value: "ibadan-north" },
+        { label: "Akinyele", value: "akinyele" },
       ],
     },
-  ]
+  ];
 
   const FormSchema = z.object({
-    name: z.string().min(2, { message: 'School name must be at least 2 characters' }),
+    name: z.string().min(2, { message: "School name must be at least 2 characters" }),
     description: z
       .string()
-      .min(2, { message: 'About school must be at least 2 characters' })
-      .max(500, { message: 'About school cannot be more than 500 characters' }),
+      .min(2, { message: "About school must be at least 2 characters" })
+      .max(500, { message: "About school cannot be more than 500 characters" }),
     address: z.object({
-      schoolAddress: z.string().min(2, { message: 'School address must be at least 2 characters' }),
-      localGovernment: z.string().min(2, { message: 'Please select a local government' }),
-      state: z.string().min(2, { message: 'Please select a state' }),
+      schoolAddress: z.string().min(2, { message: "School address must be at least 2 characters" }),
+      localGovernment: z.string().min(2, { message: "Please select a local government" }),
+      state: z.string().min(2, { message: "Please select a state" }),
     }),
-  })
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -156,22 +159,25 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
         state: formData.SchoolInformation.address.state,
       },
     },
-  })
+  });
 
   const handleSubmit = (data: z.infer<typeof FormSchema>) => {
-    updateFormData('SchoolInformation', {
+    updateFormData("SchoolInformation", {
       ...data,
       schoolType: schoolType[activeIndex].value,
-    })
-    console.log(data, schoolType[activeIndex].value)
-    console.log(formData)
-    updateCompletionState('School Information')
-    goNextPage()
-  }
+    });
+    console.log(data, schoolType[activeIndex].value);
+    console.log(formData);
+    updateCompletionState("School Information");
+    goNextPage();
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="bg-white rounded-md py-4 sm:p-4 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="bg-white rounded-md py-4 sm:p-4 space-y-6"
+      >
         {/* School Type Selection */}
         <div className="border-b-2 grid grid-cols-1 lg:grid-cols-2">
           <span>Type of school</span>
@@ -180,24 +186,24 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             <div className="grid grid-cols-2 gap-4">
               {schoolType.map((item, i) => {
                 const handleOpen = (e: MouseEvent) => {
-                  e.preventDefault()
-                  setActiveIndex(i)
-                }
+                  e.preventDefault();
+                  setActiveIndex(i);
+                };
 
-                const isOpen = i === activeIndex
+                const isOpen = i === activeIndex;
                 return (
                   <div key={item.label}>
                     <Button
                       onClick={handleOpen}
-                      className={cn('shadow-sm border w-full text-muted-foreground', {
-                        'bg-[rgba(0,0,0,0.05)] text-primary': isOpen,
+                      className={cn("shadow-sm border w-full text-muted-foreground", {
+                        "bg-[rgba(0,0,0,0.05)] text-primary": isOpen,
                       })}
-                      variant={isOpen ? 'secondary' : 'ghost'}
+                      variant={isOpen ? "secondary" : "ghost"}
                     >
                       {item.label}
                     </Button>
                   </div>
-                )
+                );
               })}
             </div>
             <Dialog>
@@ -210,7 +216,6 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             </Dialog>
           </div>
         </div>
-
         {/* School Name */}
         <div className="border-b-2 grid grid-col-1 md:grid-cols-2 gap-2 py-4">
           <div className="w-full max-w-[24.5rem]">
@@ -236,8 +241,7 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             />
           </div>
         </div>
-
-        {/* School Description */}
+        ;{/* School Description */}
         <div className="border-b-2 grid md:grid-cols-2 gap-2 py-4">
           <div className="w-full max-w-[24.5rem]">
             <h3>Tell us about your School</h3>
@@ -259,9 +263,9 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
                       rows={8}
                       maxLength={500}
                       {...field}
-                      onChange={e => {
-                        setCharCount(e.target.value.length)
-                        field.onChange(e)
+                      onChange={(e) => {
+                        setCharCount(e.target.value.length);
+                        field.onChange(e);
                       }}
                     />
                   </FormControl>
@@ -279,14 +283,13 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             </div>
           </div>
         </div>
-
-        {/* School Location */}
+        ;{/* School Location */}
         <div className="border-b-2 grid md:grid-cols-2 gap-2 py-4">
           <div className="w-full max-w-[24.5rem]">
             <h3>Verify your School Location</h3>
             <p className="text-sm text-muted-foreground">
-              We will require you to submit a copy of your utility bill associated with this address in the
-              documentation section
+              We will require you to submit a copy of your utility bill associated with this address
+              in the documentation section
             </p>
           </div>
           <div className="flex flex-col gap-4 mt-4 sm:mt-0 w-full max-w-[25rem]">
@@ -312,12 +315,12 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
                 <FormItem>
                   <FormLabel>State</FormLabel>
                   <Select
-                    onValueChange={stateValue => {
-                      field.onChange(stateValue)
+                    onValueChange={(stateValue) => {
+                      field.onChange(stateValue);
                       // Find the state name by value
-                      const selectedState = states.find(s => s.value === stateValue)
+                      const selectedState = states.find((s) => s.value === stateValue);
                       if (selectedState) {
-                        fetchLgas(selectedState.label)
+                        void fetchLgas(selectedState.label);
                       }
                     }}
                     defaultValue={field.value}
@@ -325,11 +328,13 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={isLoadingStates ? 'Loading states...' : 'Select a state'} />
+                        <SelectValue
+                          placeholder={isLoadingStates ? "Loading states..." : "Select a state"}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {states.map(state => (
+                      {states.map((state) => (
                         <SelectItem key={state.value} value={state.value}>
                           {state.label}
                         </SelectItem>
@@ -358,16 +363,16 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
                         <SelectValue
                           placeholder={
                             isLoadingLgas
-                              ? 'Loading LGAs...'
+                              ? "Loading LGAs..."
                               : localGovernment
-                                ? 'Select a Local Government'
-                                : 'Please select a state first'
+                                ? "Select a Local Government"
+                                : "Please select a state first"
                           }
                         />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {localGovernment?.map(item => (
+                      {localGovernment?.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
                           {item.label}
                         </SelectItem>
@@ -380,8 +385,7 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
             />
           </div>
         </div>
-
-        {/* Navigation Buttons */}
+        ;{/* Navigation Buttons */}
         <div className="flex justify-between pt-4">
           <Button type="button" variant="outline" onClick={goPrevPage}>
             Back
@@ -392,7 +396,7 @@ const SchoolInfoForm = ({ initialData, onPrev }: SchoolInfoFormProps) => {
         </div>
       </form>
     </Form>
-  )
-}
+  );
+};
 
-export default SchoolInfoForm
+export default SchoolInfoForm;

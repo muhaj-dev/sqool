@@ -1,6 +1,5 @@
-import StaffList from '@/components/staff/StaffList'
-import StaffContextProvider from '@/contexts/staff-context'
-import React from 'react'
+import StaffList from "@/components/staff/StaffList";
+import StaffContextProvider from "@/contexts/staff-context";
 
 const page = () => {
   return (
@@ -9,7 +8,7 @@ const page = () => {
         <StaffList />
       </StaffContextProvider>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

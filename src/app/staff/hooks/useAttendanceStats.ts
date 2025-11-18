@@ -1,12 +1,13 @@
-import { useMemo } from 'react'
-import { useAttendanceStore } from '@/zustand/staff/useAttendanceStore'
-import { Student } from '@/types/attendance'
+import { useMemo } from "react";
+
+import { type Student } from "@/types/attendance";
+import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
 
 export function useAttendanceStats(students: Student[]) {
-  const { attendance } = useAttendanceStore()
+  const { attendance } = useAttendanceStore();
 
   return useMemo(() => {
-    const total = students.length
+    const total = students.length;
     if (total === 0) {
       return {
         total: 0,
@@ -16,16 +17,16 @@ export function useAttendanceStats(students: Student[]) {
         excused: 0,
         presentRate: 0,
         absentRate: 0,
-      }
+      };
     }
 
-    const present = students.filter(s => attendance[s.id]?.status === 'present').length
-    const absent = students.filter(s => attendance[s.id]?.status === 'absent').length
-    const late = students.filter(s => attendance[s.id]?.status === 'late').length
-    const excused = students.filter(s => attendance[s.id]?.status === 'excused').length
+    const present = students.filter((s) => attendance[s.id]?.status === "present").length;
+    const absent = students.filter((s) => attendance[s.id]?.status === "absent").length;
+    const late = students.filter((s) => attendance[s.id]?.status === "late").length;
+    const excused = students.filter((s) => attendance[s.id]?.status === "excused").length;
 
-    const presentRate = Math.round((present / total) * 100)
-    const absentRate = Math.round((absent / total) * 100)
+    const presentRate = Math.round((present / total) * 100);
+    const absentRate = Math.round((absent / total) * 100);
 
     return {
       total,
@@ -35,6 +36,6 @@ export function useAttendanceStats(students: Student[]) {
       excused,
       presentRate,
       absentRate,
-    }
-  }, [students, attendance])
+    };
+  }, [students, attendance]);
 }

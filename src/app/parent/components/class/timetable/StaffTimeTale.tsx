@@ -1,120 +1,134 @@
-'use client'
+"use client";
 
-import * as React from 'react'
 import {
-  ColumnDef,
-  SortingState,
+  type ColumnDef,
+  type SortingState,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
+} from "@tanstack/react-table";
+import * as React from "react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const data: Period[] = [
   {
     id: 1,
-    time: '9:40 am - 10: 20 am',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    class: 'SS1',
-    status: 'Attend',
+    time: "9:40 am - 10: 20 am",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    class: "SS1",
+    status: "Attend",
   },
   {
     id: 2,
-    time: '9:40 am - 10: 20 am',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    class: 'SS1',
-    status: 'Attend',
+    time: "9:40 am - 10: 20 am",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    class: "SS1",
+    status: "Attend",
   },
   {
     id: 3,
-    time: '9:40 am - 10: 20 am',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    class: 'SS1',
-    status: 'Cancel',
+    time: "9:40 am - 10: 20 am",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    class: "SS1",
+    status: "Cancel",
   },
   {
     id: 4,
-    time: '9:40 am - 10: 20 am',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    class: 'SS1',
-    status: 'Cancel',
+    time: "9:40 am - 10: 20 am",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    class: "SS1",
+    status: "Cancel",
   },
   {
     id: 5,
-    time: '9:40 am - 10: 20 am',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    class: 'SS1',
-    status: 'Up coming',
+    time: "9:40 am - 10: 20 am",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    class: "SS1",
+    status: "Up coming",
   },
-]
+];
 
-export type Period = {
-  id: number
-  time: string
-  subject: string
-  topic: string
-  class: string
-  status: 'Attend' | 'Cancel' | 'Up coming'
+export interface Period {
+  id: number;
+  time: string;
+  subject: string;
+  topic: string;
+  class: string;
+  status: "Attend" | "Cancel" | "Up coming";
 }
 
 export const columns: ColumnDef<Period>[] = [
   {
-    accessorKey: 'time',
-    header: 'Time',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('time')}</div>,
+    accessorKey: "time",
+    header: "Time",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("time")}</div>,
   },
   {
-    accessorKey: 'subject',
-    header: 'Subject',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('subject')}</div>,
+    accessorKey: "subject",
+    header: "Subject",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("subject")}</div>,
   },
   {
-    accessorKey: 'topic',
-    header: 'Topic',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('topic')}</div>,
+    accessorKey: "topic",
+    header: "Topic",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("topic")}</div>,
   },
   {
-    accessorKey: 'class',
-    header: 'Class',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('class')}</div>,
+    accessorKey: "class",
+    header: "Class",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("class")}</div>,
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue('status')
+      const status = row.getValue("status");
       return (
         <div className="flex gap-4   items-center justify-between w-full">
           <div className="capitalize w-[110px] bg-[#20C9AC1A] text-[#20C9AC] py-2 px-5 rounded-md flex justify-center items-center">
-            {status === 'Attend' ? <Attended /> : 'Attend'}
+            {status === "Attend" ? <Attended /> : "Attend"}
           </div>
           <div className="capitalize w-[110px] bg-[#FC34001A] text-[#FC3400] py-2 px-5 rounded-md flex justify-center items-center">
-            {status === 'Cancel' ? <Cancel /> : 'Cancel'}
+            {status === "Cancel" ? <Cancel /> : "Cancel"}
           </div>
           <div className="capitalize w-[110px] bg-[#00A5FF1A] text-[#00A5FF] py-2 px-5 rounded-md flex justify-center items-center">
-            {status === 'Edit' ? 'marked' : 'Edit'}
+            {status === "Edit" ? "marked" : "Edit"}
           </div>
         </div>
-      )
+      );
     },
   },
-]
+];
 
 interface StaffTimeTableProps {
-  toggleTexam: () => void
+  toggleTexam: () => void;
 }
 
 export function StaffTimeTable({ toggleTexam }: StaffTimeTableProps) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
     data,
@@ -126,7 +140,7 @@ export function StaffTimeTable({ toggleTexam }: StaffTimeTableProps) {
     state: {
       sorting,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -153,24 +167,28 @@ export function StaffTimeTable({ toggleTexam }: StaffTimeTableProps) {
       <div className="rounded-md">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <TableRow className="bg-[#F2F2F2] hover:bg-[#F2F2F2]" key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
+                {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow key={row.id} data-state={row.getIsSelected() ? 'selected' : undefined}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -185,7 +203,7 @@ export function StaffTimeTable({ toggleTexam }: StaffTimeTableProps) {
         </Table>
       </div>
     </div>
-  )
+  );
 }
 
 const Export = () => (
@@ -199,19 +217,19 @@ const Export = () => (
       fill="white"
     />
   </svg>
-)
+);
 
 const Attended = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="7.5" cy="10.5" r="5.25" fill="#7E869E" fill-opacity="0.25" />
-    <path d="M4.5 9.75L7.5 12L12.75 5.25" stroke="#20C9AC" stroke-width="1.2" />
+    <circle cx="7.5" cy="10.5" r="5.25" fill="#7E869E" fillOpacity="0.25" />
+    <path d="M4.5 9.75L7.5 12L12.75 5.25" stroke="#20C9AC" strokeWidth="1.2" />
   </svg>
-)
+);
 
 const Cancel = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="9" cy="10" r="6.75" fill="#7E869E" fill-opacity="0.25" />
-    <path d="M6.75 12.2498L11.25 7.74976" stroke="#FD4B1C" stroke-width="1.2" />
-    <path d="M11.25 12.25L6.75 7.75" stroke="#FD4B1C" stroke-width="1.2" />
+    <circle cx="9" cy="10" r="6.75" fill="#7E869E" fillOpacity="0.25" />
+    <path d="M6.75 12.2498L11.25 7.74976" stroke="#FD4B1C" strokeWidth="1.2" />
+    <path d="M11.25 12.25L6.75 7.75" stroke="#FD4B1C" strokeWidth="1.2" />
   </svg>
-)
+);

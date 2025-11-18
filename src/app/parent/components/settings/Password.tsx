@@ -1,14 +1,13 @@
-'use client'
-import React, { useState } from 'react'
+"use client";
+import { useState } from "react";
 
-import { Separator } from '@/components/ui/separator'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Password = () => {
-  const [currentPin, setCurrentPin] = useState(['', '', '', ''])
-  const [newPin, setNewPin] = useState(['', '', '', ''])
+  const [currentPin, setCurrentPin] = useState(["", "", "", ""]);
+  const [newPin, setNewPin] = useState(["", "", "", ""]);
   return (
     <div className="bg-white rounded-md p-6 flex flex-col gap-4 ">
       <form className="mx-auto py-4 w-[95%] max-w-[500px]">
@@ -29,7 +28,7 @@ const Password = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Password
+export default Password;

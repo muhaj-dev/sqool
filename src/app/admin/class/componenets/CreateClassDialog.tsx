@@ -1,82 +1,97 @@
 // components/class-management/CreateClassDialog.tsx
-'use client'
-import { useState } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { createClasses } from '@/utils/api'
-import { IClassConfiguration } from '@/types'
-import { toast } from '@/components/ui/use-toast'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast";
+import { type IClassConfiguration } from "@/types";
+import { createClasses } from "@/utils/api";
 
 // Form schema for class creation
 const formSchema = z.object({
-  classname: z.string().min(3, 'Class name must be at least 3 characters').max(50),
-  shortname: z.string().min(1, 'Short name is required').max(25),
-  leveltype: z.string().min(1, 'Level type is required'),
-  classSection: z.string().max(2, 'Section must be at most 2 characters'),
-})
+  classname: z.string().min(3, "Class name must be at least 3 characters").max(50),
+  shortname: z.string().min(1, "Short name is required").max(25),
+  leveltype: z.string().min(1, "Level type is required"),
+  classSection: z.string().max(2, "Section must be at most 2 characters"),
+});
 
 interface CreateClassDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onClassCreated: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onClassCreated: () => void;
 }
 
-const CreateClassDialog = ({
-  open,
-  onOpenChange,
-  onClassCreated
-}: CreateClassDialogProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+const CreateClassDialog = ({ open, onOpenChange, onClassCreated }: CreateClassDialogProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      classname: '',
-      shortname: '',
-      leveltype: 'primary',
-      classSection: '',
+      classname: "",
+      shortname: "",
+      leveltype: "primary",
+      classSection: "",
     },
-  })
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
 
       const classData: IClassConfiguration = {
         className: values.classname,
         shortName: values.shortname,
-        levelType: values.leveltype.toLowerCase() as 'nursery' | 'primary' | 'secondary',
+        levelType: values.leveltype.toLowerCase() as "nursery" | "primary" | "secondary",
         classSection: values.classSection,
-      }
+      };
 
-      await createClasses(classData)
-      toast({ title: "Class created successfully" })
-      
-      form.reset()
-      onClassCreated()
-      
+      await createClasses(classData);
+      toast({ title: "Class created successfully" });
+
+      form.reset();
+      onClassCreated();
     } catch (error) {
-      console.error('Error creating class:', error)
-      const errorMessage = error instanceof Error ? error.message : "Failed to create class"
-      toast({ title: errorMessage, variant: "destructive" })
+      console.error("Error creating class:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to create class";
+      toast({ title: errorMessage, variant: "destructive" });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      form.reset()
+      form.reset();
     }
-    onOpenChange(open)
-  }
+    onOpenChange(open);
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -87,7 +102,7 @@ const CreateClassDialog = ({
             Add a new class to your school. Fill in the details below.
           </DialogDescription>
         </DialogHeader>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <div className="space-y-4">
@@ -98,16 +113,13 @@ const CreateClassDialog = ({
                   <FormItem>
                     <FormLabel>Class Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter class name (e.g., Primary 1)"
-                        {...field}
-                      />
+                      <Input placeholder="Enter class name (e.g., Primary 1)" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="shortname"
@@ -115,16 +127,13 @@ const CreateClassDialog = ({
                   <FormItem>
                     <FormLabel>Short Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter short name (e.g., P1)"
-                        {...field}
-                      />
+                      <Input placeholder="Enter short name (e.g., P1)" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -132,10 +141,7 @@ const CreateClassDialog = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Level Type</FormLabel>
-                      <Select 
-                        value={field.value} 
-                        onValueChange={field.onChange}
-                      >
+                      <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select level" />
@@ -151,7 +157,7 @@ const CreateClassDialog = ({
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="classSection"
@@ -159,11 +165,7 @@ const CreateClassDialog = ({
                     <FormItem>
                       <FormLabel>Section</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="A, B, etc."
-                          maxLength={2}
-                          {...field}
-                        />
+                        <Input placeholder="A, B, etc." maxLength={2} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -171,28 +173,25 @@ const CreateClassDialog = ({
                 />
               </div>
             </div>
-            
+
             <DialogFooter>
-              <Button 
+              <Button
                 type="button"
-                variant="outline" 
+                variant="outline"
                 onClick={() => handleOpenChange(false)}
                 disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button 
-                type="submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Creating...' : 'Create Class'}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Creating..." : "Create Class"}
               </Button>
             </DialogFooter>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default CreateClassDialog
+export default CreateClassDialog;

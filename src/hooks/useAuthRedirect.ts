@@ -1,9 +1,10 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import { useAuthStore } from '@/zustand/authStore'
-import { LAST_PAGE_VISITED_BEFORE_AUTH } from '@/constants'
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+import { LAST_PAGE_VISITED_BEFORE_AUTH } from "@/constants";
+import { useAuthStore } from "@/zustand/authStore";
 
 export default function useAuthRedirect() {
   const router = useRouter();

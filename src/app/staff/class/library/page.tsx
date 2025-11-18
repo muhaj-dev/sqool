@@ -1,6 +1,5 @@
-import React from 'react'
-import LibraryList from '../../components/class/library/LibraryList'
-import Librarybar from '../../components/class/library/Librarybar'
+import Librarybar from "../../components/class/library/Librarybar";
+import LibraryList from "../../components/class/library/LibraryList";
 
 const page = () => {
   return (
@@ -10,7 +9,7 @@ const page = () => {
         <LibraryList />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

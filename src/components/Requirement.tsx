@@ -1,7 +1,8 @@
 'use client'
+import { CheckCircle2 } from 'lucide-react'
+
 import { Button } from './ui/button'
 import { DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
-import { CheckCircle2 } from 'lucide-react'
 
 const Requirement = () => {
   return (

@@ -1,6 +1,12 @@
-'use client'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,99 +14,108 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 // import { Input } from '@/components/ui/input';
 // import { Label } from '@/components/ui/label';
 // import { createPayment } from '@/utils/api';
-import { IStudent } from '@/types'
-import { Plus } from 'lucide-react'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
+import { type IStudent } from "@/types";
 // import { TermAndSessionForm } from '../admin/compulsory/TermAndSessionForm';
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '../ui/separator'
-import { DatePickerAdmin } from '../admin/compulsory/DatePickerAdmin'
-import { useToast } from '@/components/ui/use-toast'
-import { useCompulsory } from '@/contexts/compulsory-context'
-import { createSessionAndTerms } from '@/utils/api'
-import { format } from 'date-fns'
+
+import { createSessionAndTerms } from "@/utils/api";
+
+import { DatePickerAdmin } from "../admin/compulsory/DatePickerAdmin";
+import { Separator } from "../ui/separator";
 
 const formSchema = z.object({
-  session: z.string().min(1, 'Session is required'),
-  firstTermStartDate: z.date({ required_error: 'First term start date is required' }),
-  firstTermEndDate: z.date({ required_error: 'First term end date is required' }),
-  secondTermStartDate: z.date({ required_error: 'Second term start date is required' }),
-  secondTermEndDate: z.date({ required_error: 'Second term end date is required' }),
-  thirdTermStartDate: z.date({ required_error: 'Third term start date is required' }),
-  thirdTermEndDate: z.date({ required_error: 'Third term end date is required' }),
-})
+  session: z.string().min(1, "Session is required"),
+  firstTermStartDate: z.date({ required_error: "First term start date is required" }),
+  firstTermEndDate: z.date({ required_error: "First term end date is required" }),
+  secondTermStartDate: z.date({ required_error: "Second term start date is required" }),
+  secondTermEndDate: z.date({ required_error: "Second term end date is required" }),
+  thirdTermStartDate: z.date({ required_error: "Third term start date is required" }),
+  thirdTermEndDate: z.date({ required_error: "Third term end date is required" }),
+});
 
 // Generate session options from 10 years back to current year
 const generateSessionOptions = () => {
-  const currentYear = new Date().getFullYear()
-  const options: string[] = []
+  const currentYear = new Date().getFullYear();
+  const options: string[] = [];
   for (let i = currentYear - 10; i <= currentYear; i++) {
-    options.push(`${i}/${i + 1}`)
+    options.push(`${i}/${i + 1}`);
   }
-  return options
-}
+  return options;
+};
 
 interface SchoolSessionProps {
-  students: IStudent[]
-  refresh: boolean
-  setRefresh: React.Dispatch<React.SetStateAction<boolean>>
+  students: IStudent[];
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function SchoolSession() {
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [paymentForm, setPaymentForm] = useState({
-    userId: '',
-    paymentDate: new Date().toISOString().split('T')[0],
-    paymentStatus: 'paid',
-    amount: '',
-  })
+    userId: "",
+    paymentDate: new Date().toISOString().split("T")[0],
+    paymentStatus: "paid",
+    amount: "",
+  });
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      session: '',
+      session: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const formattedData = {
         session: values.session,
-        firstTermStartDate: format(values.firstTermStartDate, 'yyyy-MM-dd'),
-        firstTermEndDate: format(values.firstTermEndDate, 'yyyy-MM-dd'),
-        secondTermStartDate: format(values.secondTermStartDate, 'yyyy-MM-dd'),
-        secondTermEndDate: format(values.secondTermEndDate, 'yyyy-MM-dd'),
-        thirdTermStartDate: format(values.thirdTermStartDate, 'yyyy-MM-dd'),
-        thirdTermEndDate: format(values.thirdTermEndDate, 'yyyy-MM-dd'),
-      }
+        firstTermStartDate: format(values.firstTermStartDate, "yyyy-MM-dd"),
+        firstTermEndDate: format(values.firstTermEndDate, "yyyy-MM-dd"),
+        secondTermStartDate: format(values.secondTermStartDate, "yyyy-MM-dd"),
+        secondTermEndDate: format(values.secondTermEndDate, "yyyy-MM-dd"),
+        thirdTermStartDate: format(values.thirdTermStartDate, "yyyy-MM-dd"),
+        thirdTermEndDate: format(values.thirdTermEndDate, "yyyy-MM-dd"),
+      };
 
-      await createSessionAndTerms(formattedData)
+      await createSessionAndTerms(formattedData);
 
       toast({
-        variant: 'default',
-        title: 'Success',
-        description: 'Session and terms submitted successfully!',
-      })
-      setOpen(false)
+        variant: "default",
+        title: "Success",
+        description: "Session and terms submitted successfully!",
+      });
+      setOpen(false);
 
       // goNextStep(activeIndex)
     } catch (error) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to submit',
-      })
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to submit",
+      });
     }
   }
 
@@ -159,7 +174,10 @@ export function SchoolSession() {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white p-8 flex flex-col gap-4 mb-8 rounded-md">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="bg-white p-8 flex flex-col gap-4 mb-8 rounded-md"
+          >
             <div className="flex justify-between flex-col md:flex-row">
               <div>
                 <h3 className="font-semibold">School Session</h3>
@@ -178,7 +196,7 @@ export function SchoolSession() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {generateSessionOptions().map(session => (
+                        {generateSessionOptions().map((session) => (
                           <SelectItem key={session} value={session}>
                             {session}
                           </SelectItem>
@@ -207,7 +225,11 @@ export function SchoolSession() {
                     <FormItem>
                       <FormLabel>Start Date</FormLabel>
                       <FormControl>
-                        <DatePickerAdmin title="Start Date" date={field.value} onSelect={field.onChange} />
+                        <DatePickerAdmin
+                          title="Start Date"
+                          date={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -220,7 +242,11 @@ export function SchoolSession() {
                     <FormItem>
                       <FormLabel>End Date</FormLabel>
                       <FormControl>
-                        <DatePickerAdmin title="End Date" date={field.value} onSelect={field.onChange} />
+                        <DatePickerAdmin
+                          title="End Date"
+                          date={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -243,7 +269,11 @@ export function SchoolSession() {
                     <FormItem>
                       <FormLabel>Start Date</FormLabel>
                       <FormControl>
-                        <DatePickerAdmin title="Start Date" date={field.value} onSelect={field.onChange} />
+                        <DatePickerAdmin
+                          title="Start Date"
+                          date={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -256,7 +286,11 @@ export function SchoolSession() {
                     <FormItem>
                       <FormLabel>End Date</FormLabel>
                       <FormControl>
-                        <DatePickerAdmin title="End Date" date={field.value} onSelect={field.onChange} />
+                        <DatePickerAdmin
+                          title="End Date"
+                          date={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -279,7 +313,11 @@ export function SchoolSession() {
                     <FormItem>
                       <FormLabel>Start Date</FormLabel>
                       <FormControl>
-                        <DatePickerAdmin title="Start Date" date={field.value} onSelect={field.onChange} />
+                        <DatePickerAdmin
+                          title="Start Date"
+                          date={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -292,7 +330,11 @@ export function SchoolSession() {
                     <FormItem>
                       <FormLabel>End Date</FormLabel>
                       <FormControl>
-                        <DatePickerAdmin title="End Date" date={field.value} onSelect={field.onChange} />
+                        <DatePickerAdmin
+                          title="End Date"
+                          date={field.value}
+                          onSelect={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -308,5 +350,5 @@ export function SchoolSession() {
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

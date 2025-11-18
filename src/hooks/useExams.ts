@@ -1,29 +1,30 @@
-import { useState, useEffect } from 'react'
-import { getAllExams } from '@/utils/api'
-import { Exam, PaginationInfo, ExamsResponse } from '@/types'
+import { useEffect, useState } from "react";
+
+import { type Exam, type PaginationInfo } from "@/types";
+import { getAllExams } from "@/utils/api";
 
 interface UseExamsOptions {
-  page?: number
-  limit?: number
+  page?: number;
+  limit?: number;
 }
 
 export const useExams = (options: UseExamsOptions = {}) => {
-  const { page = 1, limit = 10 } = options
-  const [exams, setExams] = useState<Exam[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { page = 1, limit = 10 } = options;
+  const [exams, setExams] = useState<Exam[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationInfo>({
     currentPage: page,
     totalPages: 1,
     totalItems: 0,
     itemsPerPage: limit,
-  })
+  });
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        setLoading(true)
-        const response = await getAllExams(pagination.currentPage, limit)
+        setLoading(true);
+        const response = await getAllExams(pagination.currentPage, limit);
 
         setExams(response.result || []);
 
@@ -39,23 +40,23 @@ export const useExams = (options: UseExamsOptions = {}) => {
           totalItems: response.result?.length || 0,
         }));
 
-        setError(null)
+        setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch exams')
-        console.error('Error fetching exams:', err)
+        setError(err instanceof Error ? err.message : "Failed to fetch exams");
+        console.error("Error fetching exams:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchExams()
-  }, [pagination.currentPage, limit])
+    void fetchExams();
+  }, [pagination.currentPage, limit]);
 
   const refetch = async (newPage?: number) => {
     try {
-      setLoading(true)
-      const pageToFetch = newPage !== undefined ? newPage : pagination.currentPage
-      const response = await getAllExams(pageToFetch, limit)
+      setLoading(true);
+      const pageToFetch = newPage !== undefined ? newPage : pagination.currentPage;
+      const response = await getAllExams(pageToFetch, limit);
 
       setExams(response.result || []);
 
@@ -65,31 +66,31 @@ export const useExams = (options: UseExamsOptions = {}) => {
         totalItems: response.result?.length || 0,
       }));
 
-      setError(null)
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch exams')
+      setError(err instanceof Error ? err.message : "Failed to fetch exams");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const goToPage = (page: number) => {
     if (page >= 1 && page <= pagination.totalPages) {
-      setPagination(prev => ({ ...prev, currentPage: page }))
+      setPagination((prev) => ({ ...prev, currentPage: page }));
     }
-  }
+  };
 
   const nextPage = () => {
     if (pagination.currentPage < pagination.totalPages) {
-      setPagination(prev => ({ ...prev, currentPage: prev.currentPage + 1 }))
+      setPagination((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
     }
-  }
+  };
 
   const prevPage = () => {
     if (pagination.currentPage > 1) {
-      setPagination(prev => ({ ...prev, currentPage: prev.currentPage - 1 }))
+      setPagination((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
     }
-  }
+  };
 
   return {
     exams,
@@ -100,5 +101,5 @@ export const useExams = (options: UseExamsOptions = {}) => {
     goToPage,
     nextPage,
     prevPage,
-  }
-}
+  };
+};

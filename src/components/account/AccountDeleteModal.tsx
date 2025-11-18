@@ -1,25 +1,24 @@
-'use client'
-import { Button } from '@/components/ui/button'
+"use client";
+import { type DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
-} from '@/components/ui/dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu'
-import { useState } from 'react'
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-type TProps = {
-  account_name: string
-  account_no: string
-  bank_name: string
+interface TProps {
+  account_name: string;
+  account_no: string;
+  bank_name: string;
 }
-type Checked = DropdownMenuCheckboxItemProps['checked']
+type Checked = DropdownMenuCheckboxItemProps["checked"];
 export function AccountDeleteModal({ account_name, account_no, bank_name }: TProps) {
   return (
     <div className=" w-full ">
@@ -29,8 +28,12 @@ export function AccountDeleteModal({ account_name, account_no, bank_name }: TPro
             X
           </DialogClose>
           <DialogHeader className="flex flex-col items-center w-[60%] mx-auto my-4">
-            <DialogTitle className="text-primary font-semibold text-xl mb-2">Delete My Account</DialogTitle>
-            <DialogDescription className="text-center">This will delete the account</DialogDescription>
+            <DialogTitle className="text-primary font-semibold text-xl mb-2">
+              Delete My Account
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              This will delete the account
+            </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
@@ -53,13 +56,25 @@ export function AccountDeleteModal({ account_name, account_no, bank_name }: TPro
               <Label htmlFor="name" className="">
                 Account Nunber
               </Label>
-              <Input id="account_no" value={account_no} placeholder="Bank name" className="bg-[#E9EBEB]" disabled />
+              <Input
+                id="account_no"
+                value={account_no}
+                placeholder="Bank name"
+                className="bg-[#E9EBEB]"
+                disabled
+              />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="name" className="">
                 Account Name
               </Label>
-              <Input id="account_no" value={account_name} placeholder="Bank name" className="bg-[#E9EBEB]" disabled />
+              <Input
+                id="account_no"
+                value={account_name}
+                placeholder="Bank name"
+                className="bg-[#E9EBEB]"
+                disabled
+              />
             </div>
           </div>
           <DialogFooter>
@@ -73,5 +88,5 @@ export function AccountDeleteModal({ account_name, account_no, bank_name }: TPro
         </DialogContent>
       </div>
     </div>
-  )
+  );
 }

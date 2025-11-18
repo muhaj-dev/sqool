@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Select,
   SelectContent,
@@ -49,4 +48,3 @@ export function ReusableSelect({
     </div>
   );
 }
-

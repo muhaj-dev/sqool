@@ -1,23 +1,22 @@
-import React, { ReactNode } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
-import { Phone } from 'lucide-react'
-import Link from 'next/link'
+import { type ReactNode } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 
 interface EventCard {
-  id: number
-  time: string
-  date: string
-  title: string
-  description: string
+  id: number;
+  time: string;
+  date: string;
+  title: string;
+  description: string;
   participants: {
-    name: string
-    role: string
-  }[]
-  attachments: ReactNode
-  eventDate: string
-  eventTime: string
-  isNew: boolean
+    name: string;
+    role: string;
+  }[];
+  attachments: ReactNode;
+  eventDate: string;
+  eventTime: string;
+  isNew: boolean;
 }
 const NoticeCard = ({ event }: { event: EventCard }) => {
   return (
@@ -66,7 +65,7 @@ const NoticeCard = ({ event }: { event: EventCard }) => {
         </div>
       </div> */}
     </div>
-  )
-}
+  );
+};
 
-export default NoticeCard
+export default NoticeCard;

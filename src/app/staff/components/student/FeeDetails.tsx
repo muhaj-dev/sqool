@@ -1,36 +1,31 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import {
-  TableHeader,
-  TableRow,
-  TableHead,
+  Table,
   TableBody,
   TableCell,
-  Table,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
-import React from "react";
-import { formatDate,getStatusBadge,formatCurrency,transformFeeDataToItems } from "@/utils/lib";
-import { useQuery } from "@tanstack/react-query";
 import { getStudentById } from "@/utils/api/index";
+import { formatCurrency, formatDate, getStatusBadge, transformFeeDataToItems } from "@/utils/lib";
 
-interface FeeDetailsProp{
-    studentId:string;
+interface FeeDetailsProp {
+  studentId: string;
 }
-const FeeDetails:React.FC<FeeDetailsProp> = ({studentId}) => {
-const {
+const FeeDetails: React.FC<FeeDetailsProp> = ({ studentId }) => {
+  const {
     data: studentData,
     isPending,
     error,
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["students-info-data",studentId],
+    queryKey: ["students-info-data", studentId],
     queryFn: async () => {
       const res = await getStudentById(studentId);
       return res.data;
@@ -40,30 +35,25 @@ const {
     gcTime: 60 * 60 * 1000, // still cached for 60 min ~~ 1hr
   });
 
-    const feeItems = studentData ? transformFeeDataToItems(studentData.studentFee) : []
+  //@ts-expect-error studentFee type issue
+  const feeItems = studentData ? transformFeeDataToItems(studentData.studentFee) : [];
 
   // Filter for display
-  const pendingFees = feeItems.filter(fee => fee.status === 'pending')
-  const overdueFees = feeItems.filter(fee => fee.status === 'overdue')
-  const paidFees = feeItems.filter(fee => fee.status === 'paid')
+  const pendingFees = feeItems.filter((fee) => fee.status === "pending");
+  const overdueFees = feeItems.filter((fee) => fee.status === "overdue");
+  const paidFees = feeItems.filter((fee) => fee.status === "paid");
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Fee Details</CardTitle>
-        <CardDescription>
-          Complete breakdown of all fees and payments
-        </CardDescription>
+        <CardDescription>Complete breakdown of all fees and payments</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="pending" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="pending">
-              Pending ({pendingFees.length})
-            </TabsTrigger>
-            <TabsTrigger value="overdue">
-              Overdue ({overdueFees.length})
-            </TabsTrigger>
+            <TabsTrigger value="pending">Pending ({pendingFees.length})</TabsTrigger>
+            <TabsTrigger value="overdue">Overdue ({overdueFees.length})</TabsTrigger>
             <TabsTrigger value="paid">Paid ({paidFees.length})</TabsTrigger>
           </TabsList>
 
@@ -86,9 +76,7 @@ const {
                         <TableCell>
                           <div>
                             <p className="font-medium">{fee.childName}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {fee.childClass}
-                            </p>
+                            <p className="text-sm text-muted-foreground">{fee.childClass}</p>
                           </div>
                         </TableCell>
                         <TableCell>{fee.feeName}</TableCell>
@@ -101,10 +89,7 @@ const {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell
-                        colSpan={5}
-                        className="text-center text-muted-foreground"
-                      >
+                      <TableCell colSpan={5} className="text-center text-muted-foreground">
                         No pending fees
                       </TableCell>
                     </TableRow>
@@ -133,9 +118,7 @@ const {
                         <TableCell>
                           <div>
                             <p className="font-medium">{fee.childName}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {fee.childClass}
-                            </p>
+                            <p className="text-sm text-muted-foreground">{fee.childClass}</p>
                           </div>
                         </TableCell>
                         <TableCell>{fee.feeName}</TableCell>
@@ -150,10 +133,7 @@ const {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell
-                        colSpan={5}
-                        className="text-center text-muted-foreground"
-                      >
+                      <TableCell colSpan={5} className="text-center text-muted-foreground">
                         No overdue fees
                       </TableCell>
                     </TableRow>
@@ -183,28 +163,21 @@ const {
                         <TableCell>
                           <div>
                             <p className="font-medium">{fee.childName}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {fee.childClass}
-                            </p>
+                            <p className="text-sm text-muted-foreground">{fee.childClass}</p>
                           </div>
                         </TableCell>
                         <TableCell>{fee.feeName}</TableCell>
                         <TableCell className="font-semibold text-green-600">
                           {formatCurrency(fee.amount)}
                         </TableCell>
-                        <TableCell>
-                          {fee.paidDate ? formatDate(fee.paidDate) : "-"}
-                        </TableCell>
+                        <TableCell>{fee.paidDate ? formatDate(fee.paidDate) : "-"}</TableCell>
                         <TableCell>{fee.paymentMethod || "-"}</TableCell>
                         <TableCell>{getStatusBadge(fee.status)}</TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        className="text-center text-muted-foreground"
-                      >
+                      <TableCell colSpan={6} className="text-center text-muted-foreground">
                         No payment history
                       </TableCell>
                     </TableRow>
