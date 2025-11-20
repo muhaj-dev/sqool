@@ -22,7 +22,7 @@ const Page = () => {
     queryKey: ["staff-dashboard-stats", staffId],
     queryFn: async () => {
       const res = await getStaffDashboardStats();
-      return res;
+      return res.data;
     },
     enabled: !!staffId && user?.role === "teacher",
     staleTime: 2 * 60 * 60 * 1000, // 2 hours

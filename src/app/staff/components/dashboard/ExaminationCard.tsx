@@ -20,14 +20,12 @@ export function ExaminationCard({ staffId, user }: ExaminationCardProps) {
     queryKey: ["staff-dashboard-exams", staffId],
     queryFn: async () => {
       const res = await getStaffUpcomingExam(1, 4); // latest 4 exams
-      return res.result;
+      return res.data.result;
     },
     staleTime: 10 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: !!staffId && user?.role === "teacher",
   });
-
-  console.log("ExaminationCard Data:", data);
 
   const exams = data || [];
 

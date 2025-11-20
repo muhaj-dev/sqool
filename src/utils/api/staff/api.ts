@@ -7,11 +7,12 @@ import {
   type ClassPaginationResponse,
   type CreateExamResponse,
   type Exam,
+  type ExamsApiResponse,
   type ExamsResponse,
   type NoticesResponse,
   type SessionsResponse,
   type StaffProfileResponse,
-  type StaffStatResponse,
+  type StaffStatApiResponse,
   type StudentPaginationResponse,
   type SubjectPaginationResponse,
   type TimetableResponse,
@@ -92,7 +93,7 @@ export const getStudentByIdStaff = (id: string): Promise<StaffStudentResponse> =
 //********************* DASHBOARD **********************************/
 
 // Staff: Get upcoming exams
-export const getStaffUpcomingExam = (page = 1, limit = 4): Promise<ExamsResponse> =>
+export const getStaffUpcomingExam = (page = 1, limit = 4): Promise<ExamsApiResponse> =>
   handleApi(
     () =>
       api.get("/v1/staff/examination", {
@@ -106,7 +107,7 @@ export const getStaffUpcomingExam = (page = 1, limit = 4): Promise<ExamsResponse
     "Failed to fetch upcoming exams",
   );
 // Staff: Get dashboard stats
-export const getStaffDashboardStats = (): Promise<StaffStatResponse> =>
+export const getStaffDashboardStats = (): Promise<StaffStatApiResponse> =>
   handleApi(() => api.get(`/v1/staff/stat`), "Failed to fetch dashboard stats");
 
 // Staff profile API

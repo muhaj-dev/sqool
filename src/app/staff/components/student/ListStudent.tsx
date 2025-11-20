@@ -6,7 +6,7 @@ import React, { useMemo, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { PAGE_SIZE } from "@/constants";
 import { type IStudent } from "@/types";
-import { getAllStudents } from "@/utils/api/index";
+import { getAllStudentsStaff } from "@/utils/api/index";
 
 import StudentsCard, { StudentsCardSkeleton } from "./StudentsCard";
 
@@ -18,7 +18,7 @@ const ListStudent: React.FC<ListStudentProps> = ({ staffId }) => {
   const query = useInfiniteQuery({
     queryKey: ["staffs-students", staffId],
     queryFn: async ({ pageParam = 1 }) => {
-      const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery);
+      const res = await getAllStudentsStaff(pageParam, PAGE_SIZE, searchQuery);
       return res.data;
     },
     getNextPageParam: (lastPage) => {

@@ -762,12 +762,22 @@ export interface ExamsResponse {
   pagination: Pagination;
 }
 
+export interface ExamsApiResponse {
+  data: Omit<ExamsResponse, "message">;
+  message: string;
+}
+
 export interface StaffStatResponse {
   activeClasss: number;
   totalStudent: number;
   totalSubject: number;
   lessonScheduledToday: number;
   attendanceStats: ClassAttendanceStat[];
+}
+
+export interface StaffStatApiResponse {
+  data: StaffStatResponse;
+  message: string;
 }
 
 export interface ClassAttendanceStat {
