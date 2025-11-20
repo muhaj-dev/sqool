@@ -1,8 +1,9 @@
-import axios from "axios";
 import { format } from "date-fns";
 import qs from "qs";
 
 import {
+  type AttendanceResponse,
+  type AttendanceStatus,
   type ClassPaginationResponse,
   type CreateExamResponse,
   type Exam,
@@ -43,7 +44,9 @@ const buildStaffQueryUrl = (
   return queryString ? `${fullPath}?${queryString}` : fullPath;
 };
 
-export const getAllStudentsStaff = async (
+//********************* STAFF STUDENTS **********************************/
+//Staff: Get all students
+export const getAllStudentsStaff = (
   page = 1,
   limit = 10,
   search?: string,
@@ -53,8 +56,8 @@ export const getAllStudentsStaff = async (
     startDate?: string;
     endDate?: string;
   },
-): Promise<StudentPaginationResponse> => {
-  try {
+): Promise<StudentPaginationResponse> =>
+  handleApi(async () => {
     const filters: StudentFilters = {
       ...filter,
       page,
@@ -64,92 +67,47 @@ export const getAllStudentsStaff = async (
       ...(options?.endDate && { endDate: options.endDate }),
       ...(options?.hasAttendance && { include: "Attendance" }),
     };
+
     const url = buildStaffQueryUrl("/student", filters);
 
-    const response = await api.get<StudentPaginationResponse>(url);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || "Failed to fetch students";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to fetch students");
-  }
-};
+    return api.get<StudentPaginationResponse>(url);
+  }, "Failed to fetch students");
 
-// eslint-disable-next-line prettier/prettier
-export const getStaffClasses = async (
-  page: number,
-  limit = 10,
-): Promise<ClassPaginationResponse> => {
-  try {
-    const response = await api.get<ClassPaginationResponse>("/v1/staff/classes/own", {
-      params: {
-        page,
-        limit,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || "Failed to fetch classes";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to fetch classes");
-  }
-};
-
-export const getStudentByIdStaff = async (id: string): Promise<StaffStudentResponse> => {
-  try {
-    const response = await api.get<StaffStudentResponse>(`/v1/staff/student/${id}`);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || "Failed to fetch student";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to fetch student");
-  }
-};
+//get staff classes
+export const getStaffClasses = (page: number, limit = 10): Promise<ClassPaginationResponse> =>
+  handleApi(
+    () =>
+      api.get<ClassPaginationResponse>("/v1/staff/classes/own", {
+        params: { page, limit },
+      }),
+    "Failed to fetch classes",
+  );
+//get student by id
+export const getStudentByIdStaff = (id: string): Promise<StaffStudentResponse> =>
+  handleApi(
+    () => api.get<StaffStudentResponse>(`/v1/staff/student/${id}`),
+    "Failed to fetch student",
+  );
 
 //********************* DASHBOARD **********************************/
 
-export const getStaffUpcomingExam = async (page = 1, limit = 4): Promise<ExamsResponse> => {
-  try {
-    const response = await api.get(`/v1/staff/examination`, {
-      params: {
-        limit,
-        page,
-        startDate: format(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), "yyyy-MM-dd"),
-        endDate: format(new Date(), "yyyy-MM-dd"),
-      },
-    });
-    return response.data.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || "Failed to fetch upcoming exams";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to fetch upcoming exams");
-  }
-};
-export const getStaffDashboardStats = async (): Promise<StaffStatResponse> => {
-  try {
-    const response = await api.get(`/v1/staff/stat`);
-    return response.data.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || "Failed to dashboard stats";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
-    }
-    throw new Error("Failed to dashboard stats");
-  }
-};
+// Staff: Get upcoming exams
+export const getStaffUpcomingExam = (page = 1, limit = 4): Promise<ExamsResponse> =>
+  handleApi(
+    () =>
+      api.get("/v1/staff/examination", {
+        params: {
+          limit,
+          page,
+          startDate: format(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), "yyyy-MM-dd"),
+          endDate: format(new Date(), "yyyy-MM-dd"),
+        },
+      }),
+    "Failed to fetch upcoming exams",
+  );
+// Staff: Get dashboard stats
+export const getStaffDashboardStats = (): Promise<StaffStatResponse> =>
+  handleApi(() => api.get(`/v1/staff/stat`), "Failed to fetch dashboard stats");
 
 // Staff profile API
 export const getStaffProfile = async (): Promise<StaffProfileResponse> => {
@@ -252,6 +210,36 @@ export const getClassScheduleForStaff = async (): Promise<TimetableResponse> => 
   return handleApi(
     () => api.get<TimetableResponse>("/v1/staff/class/schedule"),
     "Failed to fetch timetable",
+  );
+};
+
+//Staff: Attendance create
+export const createStudentAttendanceStaff = async (
+  classId: string,
+  attendanceData: { studentId: string; status: AttendanceStatus; remarks: string }[],
+): Promise<void> => {
+  return handleApi(
+    () => api.post(`/v1/staff/attendance/${classId}`, { attendance: attendanceData }),
+    "Failed to save attendance",
+  );
+};
+
+//Staff: Attendance save
+export const saveStaffAttendance = async (
+  classId: string,
+  attendanceData: { studentId: string; status: AttendanceStatus; remarks: string }[],
+): Promise<void> => {
+  console.log({ attendanceData }, "from attendance data api");
+  return handleApi(
+    () => api.post(`/v1/staff/attendance/${classId}`, { attendance: attendanceData }),
+    "Failed to save attendance",
+  );
+};
+//Staff: Get student attendance records
+export const getStudentAttendance = async (classId: string): Promise<AttendanceResponse> => {
+  return handleApi(
+    () => api.get<AttendanceResponse>(`/v1/staff/attendance/${classId}`),
+    "Failed to save attendance",
   );
 };
 

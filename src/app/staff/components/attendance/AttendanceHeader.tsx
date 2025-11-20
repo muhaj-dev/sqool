@@ -19,14 +19,14 @@ import useAuthRedirect from "@/hooks/useAuthRedirect";
 import { type AcademicSessionTerms } from "@/types";
 import { getSessionsForStaff } from "@/utils/api";
 import { getStaffClasses } from "@/utils/api/index";
-import { normalizeSessionTermsData } from "@/utils/lib";
+import { formatDate, normalizeSessionTermsData } from "@/utils/lib";
 import { useAuthStore } from "@/zustand/authStore";
 import { useStaffClassesStore } from "@/zustand/staff/staffStore";
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
 
+import MessageDialog from "@/components/message-dialog";
 import { useAttendanceCreate } from "../../hooks/useAttendanceCreate";
 import { AttendanceDatePicker } from "./AttendanceDatePicker";
-import { CreateAttendanceButton } from "./CreateAttendanceButton";
 import CreateAttendanceDialog from "./CreateAttendanceDialog";
 
 export function AttendanceHeader() {
@@ -70,6 +70,7 @@ export function AttendanceHeader() {
     markAllPresent,
     attendance,
     students,
+    resetAttendance,
   } = useAttendanceStore();
   const attendanceCreate = useAttendanceCreate();
   const controller = {
@@ -81,8 +82,6 @@ export function AttendanceHeader() {
     selectedTerm,
     setSelectedTerm: setTerm,
   };
-
-  console.log({ selectedTerm }, "selected term in header");
 
   useEffect(() => {
     if (classQuery.data) {
@@ -112,27 +111,36 @@ export function AttendanceHeader() {
     });
   };
 
-  const mockApi = async (): Promise<void> => {
-    async function attendanceCreate() {
-      return new Promise<void>((resolve) => {
-        setTimeout(() => {
-          console.log("Mock saveAttendance called");
-        }, 2000);
-        resolve();
-      });
-    }
-
-    await attendanceCreate();
-    console.log({ attendance });
-    toast({
-      title: "Attendance Saved",
-      description: "Attendance records have been updated successfully",
-    });
+  const saveAttendance = () => {
+    const mappedAttendance = Object.entries(attendance).map(([studentId, record]) => ({
+      studentId,
+      status: record.status,
+      remarks: record.remarks,
+    }));
+    attendanceCreate.setLoading(true);
+    // Call the saveAttendance mutation from useAttendanceCreate
+    attendanceCreate.saveAttendance({ classId: selectedClass, attendance: mappedAttendance });
   };
 
   const handleSaveAttendance = () => {
-    void mockApi();
+    void saveAttendance();
   };
+
+  if (attendanceCreate.loading) {
+    return (
+      <MessageDialog
+        title="Saving Attendance"
+        type="info"
+        description={`Attendance for ${students.length} on ${formatDate(new Date())} is being saved.`}
+        open={attendanceCreate.loading}
+        onOpenChange={() => {
+          return;
+        }}
+        showSpinner={attendanceCreate.loading}
+        message="Please wait while the attendance is being saved."
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -144,10 +152,10 @@ export function AttendanceHeader() {
           </p>
         </div>
         <div className="flex justify-end">
-          <CreateAttendanceButton
+          {/* <CreateAttendanceButton
             disabled={classQuery.isPending}
             onClick={() => controller.setOpen(true)}
-          />
+          /> */}
         </div>
       </div>
 

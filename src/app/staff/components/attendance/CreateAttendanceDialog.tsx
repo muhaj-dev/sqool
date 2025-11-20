@@ -309,9 +309,9 @@ export default function CreateAttendanceDialog({
                 <AttendancePreviewTable students={students} />
 
                 {}
-                <Button onClick={() => submit()} className="w-full">
+                {/* <Button onClick={() => submit()} className="w-full">
                   Create Attendance
-                </Button>
+                </Button> */}
               </div>
             </ScrollArea>
           </TabsContent>

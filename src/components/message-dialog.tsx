@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Spinner } from "./ui/spinner";
 
 /**
  * Reusable Message Dialog
@@ -31,6 +32,7 @@ interface MessageDialogProps {
   description?: string;
   actionLabel?: string;
   onAction?: () => void;
+  showSpinner?: boolean;
 }
 
 const iconMap = {
@@ -48,6 +50,7 @@ export default function MessageDialog({
   description,
   actionLabel = "Okay",
   onAction,
+  showSpinner = false,
 }: MessageDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -66,9 +69,11 @@ export default function MessageDialog({
           </p>
         </ScrollArea>
 
+        {showSpinner ? <Spinner className="flex self-center mx-auto" /> : null}
         <DialogFooter className="mt-4">
           <Button
             variant={type === "error" ? "destructive" : "default"}
+            disabled={showSpinner}
             onClick={() => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               onAction && onAction();

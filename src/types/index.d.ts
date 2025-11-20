@@ -23,8 +23,15 @@ export interface IStudent {
   };
   gender: string;
   hobbies: string[];
+  dateOfBirth: string;
+  rollNumber?: string;
+  attendanceRate?: number;
+  school: string | School;
+  language?: string;
+  aboutMe?: string;
+  enrolmentDate?: string;
+  address: string;
 }
-
 export interface ISingleStudent {
   message: string;
   _id?: string;

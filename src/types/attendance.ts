@@ -1,3 +1,5 @@
+import { type IStudent } from ".";
+
 export type AttendanceStatus = "present" | "absent" | "late" | "excused";
 
 export interface Student {
@@ -29,6 +31,7 @@ export interface CreateAttendancePayload {
   startDate: string;
   endDate: string;
   frequency: Frequency;
+  // attendance: { studentId: string; status: AttendanceStatus; remarks: string }[];
 }
 export type Frequency = "week" | "month" | "term" | "custom";
 export type Term = "first" | "second" | "third";
@@ -44,3 +47,13 @@ export type AcademicSessionTerms = Record<
     termDates: Partial<Record<Term, { start: string; end: string }>>;
   }
 >;
+
+export interface AttendanceResponse {
+  _id: string;
+  records: {
+    student: IStudent;
+    status: AttendanceStatus;
+    remarks?: string;
+    _id: string;
+  }[];
+}

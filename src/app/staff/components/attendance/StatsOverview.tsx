@@ -1,14 +1,13 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { CheckCircle, TrendingUp, Users, XCircle } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useAttendanceStats } from "@/app/staff/hooks/useAttendanceStats";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PAGE_SIZE } from "@/constants";
-import { getAllStudents } from "@/utils/api/index";
+import { getStudentAttendance } from "@/utils/api/index";
 import { mapStudentToAttendance } from "@/utils/lib";
 import { useAuthStore } from "@/zustand/authStore";
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
@@ -22,53 +21,71 @@ export default function StatsOverview() {
   const { selectedClass, startDate, endDate } = useAttendanceStore();
 
   const staffId = user?._id;
+  console.log({ selectedClass, startDate, endDate }, "selected class and dates in stats overview");
 
-  const query = useInfiniteQuery({
-    queryKey: ["staffs-attendance-students", staffId, selectedClass, startDate, endDate],
-    queryFn: async ({ pageParam = 1 }) => {
-      //@ts-expect-error date params string
-      const res = await getAllStudents(pageParam, PAGE_SIZE, searchQuery, {
-        include: "Attendance",
-        startDate,
-        endDate,
-      });
-      return res.data;
+  // const query = useInfiniteQuery({
+  //   queryKey: ["staffs-attendance-students", staffId, selectedClass, startDate, endDate],
+  //   queryFn: async ({ pageParam = 1 }) => {
+  //     const res = await getAllStudentsStaff(pageParam, PAGE_SIZE, searchQuery, {
+  //       include: "Attendance",
+  //       startDate,
+  //       endDate,
+  //       classId: selectedClass,
+  //     });
+  //     return res.data;
+  //   },
+  //   getNextPageParam: (lastPage) => {
+  //     if (lastPage.pagination?.hasNextPage) {
+  //       return lastPage.pagination.nextPage;
+  //     }
+  //     return undefined;
+  //   },
+  //   initialPageParam: 1,
+  //   staleTime: 2 * 60 * 1000,
+  //   gcTime: 10 * 60 * 1000,
+  //   enabled: !!startDate && !!staffId && !!selectedClass && user?.role === "teacher",
+  // });
+
+  const studentAttendanceQuery = useQuery({
+    queryKey: ["staff-student-attendance", staffId],
+    queryFn: async () => {
+      const res = await getStudentAttendance(selectedClass);
+      return res;
     },
-    getNextPageParam: (lastPage) => {
-      if (lastPage.pagination?.hasNextPage) {
-        return lastPage.pagination.nextPage;
-      }
-      return undefined;
-    },
-    initialPageParam: 1,
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    enabled: !!startDate && !!staffId && !!selectedClass && user?.role === "teacher",
+    enabled: !!staffId && user?.role === "teacher",
+    staleTime: 2 * 60 * 60 * 1000, // 2 hours
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Flatten pages
-  const studentData = useMemo(
+  // const studentData = useMemo(
+  //   () =>
+  //     query.data?.pages
+  //       .flatMap((page) => page.result)
+  //       .filter((item, index, self) => index === self.findIndex((t) => t._id === item._id)) ?? [],
+  //   [query.data],
+  // );
+
+  const studentsAttendance = useMemo(
     () =>
-      query.data?.pages
-        .flatMap((page) => page.result)
-        .filter((item, index, self) => index === self.findIndex((t) => t._id === item._id)) ?? [],
-    [query.data],
+      studentAttendanceQuery.data?.records?.map((item, index) =>
+        mapStudentToAttendance(item.student, index),
+      ),
+    [studentAttendanceQuery.data],
   );
 
-  const studentsAttendance = studentData.map((student, index) =>
-    mapStudentToAttendance(student, index),
-  );
+  console.log(studentsAttendance, "students attendance in stats overview");
 
   const { initializeAttendance, setStudent, students } = useAttendanceStore();
   const stats = useAttendanceStats(studentsAttendance || []);
 
   // Initialize attendance records when students load
   useEffect(() => {
-    if (studentData) {
+    if (studentAttendanceQuery.data && studentsAttendance) {
       setStudent(studentsAttendance);
       initializeAttendance(studentsAttendance.map((s) => s.id));
     }
-  }, [studentData, initializeAttendance, setStudent]);
+  }, [studentsAttendance, initializeAttendance, setStudent]);
 
   const debouncedSearch = React.useMemo(
     () =>
@@ -87,7 +104,7 @@ export default function StatsOverview() {
   return (
     <div className="space-y-10">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {query.isPending ? (
+        {studentAttendanceQuery.isPending ? (
           <>
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-32 rounded-lg" />
@@ -127,7 +144,7 @@ export default function StatsOverview() {
       </div>
       <AttendanceTable
         students={students ?? []}
-        isLoading={query.isPending}
+        isLoading={studentAttendanceQuery.isPending}
         performDeepSearch={(query, shouldSearch) => {
           if (shouldSearch) {
             debouncedSearch(query);

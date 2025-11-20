@@ -15,7 +15,7 @@ export interface AttendanceStore {
   selectedClass: string;
   selectedSession: string;
   selectedTerm: TermDateRange;
-  attendance: Record<string, AttendanceRecord>;
+  attendance: Record<string, AttendanceRecord>; // key: studentId
   students: StudentAttendance[];
 
   // setters
