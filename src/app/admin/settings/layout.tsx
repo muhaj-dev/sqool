@@ -1,7 +1,8 @@
-import SettingSteps from '@/components/settings/SettingSteps'
-import SettingTopBar from '@/components/settings/SettingTopBar'
-import SettingContextProvider from '@/contexts/setting-context'
-import React from 'react'
+import React from "react";
+
+import SettingSteps from "@/components/settings/SettingSteps";
+import SettingTopBar from "@/components/settings/SettingTopBar";
+import SettingContextProvider from "@/contexts/setting-context";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,7 +11,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <SettingSteps />
       <div>{children}</div>
     </SettingContextProvider>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;

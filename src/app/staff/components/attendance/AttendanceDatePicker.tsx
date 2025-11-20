@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
-import { Calendar,ArrowRight } from "lucide-react";
 import { format } from "date-fns";
+import { ArrowRight, Calendar } from "lucide-react";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
 
 export function AttendanceDatePicker() {
@@ -19,9 +20,8 @@ export function AttendanceDatePicker() {
   const from = startDate ? new Date(startDate) : undefined;
   const to = endDate ? new Date(endDate) : undefined;
   const hasValidRange =
-    from instanceof Date && !isNaN(from.getTime()) &&
-    to instanceof Date && !isNaN(to.getTime());
-    
+    from instanceof Date && !isNaN(from.getTime()) && to instanceof Date && !isNaN(to.getTime());
+
   if (!hydrated) {
     return (
       <Button
@@ -42,13 +42,13 @@ export function AttendanceDatePicker() {
           variant="outline"
           className={cn(
             "w-[240px] justify-start text-left font-normal",
-            !hasValidRange && "text-muted-foreground"
+            !hasValidRange && "text-muted-foreground",
           )}
         >
           <Calendar className="mr-2 h-4 w-4" />
           {hasValidRange ? (
             <span className="break-words flex items-center gap-1">
-              {format(from!, "yyyy-MM-dd")} <ArrowRight size={2}/> {format(to!, "yyyy-MM-dd")}
+              {format(from, "yyyy-MM-dd")} <ArrowRight size={2} /> {format(to, "yyyy-MM-dd")}
             </span>
           ) : (
             <span>Pick a date</span>

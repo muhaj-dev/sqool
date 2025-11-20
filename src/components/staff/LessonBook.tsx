@@ -1,167 +1,174 @@
-'use client'
+"use client";
 
-import * as React from 'react'
 import {
-  ColumnDef,
-  SortingState,
+  type ColumnDef,
+  type SortingState,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { TimetableView } from '@/types'
+} from "@tanstack/react-table";
+import * as React from "react";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const data: Period[] = [
   {
     id: 1,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 2,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 3,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 4,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 5,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 6,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 7,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 8,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 9,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 10,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
   {
     id: 11,
-    date: '5/01/2024',
-    class: 'SS1',
-    subject: 'Physics',
-    topic: 'Nuclear Boom',
-    approveBy: 'Tunde lawal',
-    attachment: 'View Files',
+    date: "5/01/2024",
+    class: "SS1",
+    subject: "Physics",
+    topic: "Nuclear Boom",
+    approveBy: "Tunde lawal",
+    attachment: "View Files",
   },
-]
+];
 
-export type Period = {
-  id: number
-  date: string
-  class: string
-  subject: string
-  topic: string
-  approveBy: string
-  attachment: string
+export interface Period {
+  id: number;
+  date: string;
+  class: string;
+  subject: string;
+  topic: string;
+  approveBy: string;
+  attachment: string;
 }
 
 export const columns: ColumnDef<Period>[] = [
   {
-    accessorKey: 'date',
-    header: 'Date',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('date')}</div>,
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("date")}</div>,
   },
   {
-    accessorKey: 'class',
-    header: 'Class',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('class')}</div>,
+    accessorKey: "class",
+    header: "Class",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("class")}</div>,
   },
   {
-    accessorKey: 'subject',
-    header: 'Subject',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('subject')}</div>,
+    accessorKey: "subject",
+    header: "Subject",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("subject")}</div>,
   },
   {
-    accessorKey: 'topic',
-    header: 'Topic',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('topic')}</div>,
+    accessorKey: "topic",
+    header: "Topic",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("topic")}</div>,
   },
   {
-    accessorKey: 'approveBy',
-    header: 'Approved By',
-    cell: ({ row }) => <div className="capitalize">{row.getValue('approveBy')}</div>,
+    accessorKey: "approveBy",
+    header: "Approved By",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("approveBy")}</div>,
   },
   {
-    accessorKey: 'attachment',
-    header: 'Attachment',
-    cell: ({ row }) => <div className="capitalize text-primary underline">{row.getValue('attachment')}</div>,
+    accessorKey: "attachment",
+    header: "Attachment",
+    cell: ({ row }) => (
+      <div className="capitalize text-primary underline">{row.getValue("attachment")}</div>
+    ),
   },
-]
+];
 
 export const LessonBook = ({ staffId }: { staffId: string }) => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
     data,
@@ -173,31 +180,35 @@ export const LessonBook = ({ staffId }: { staffId: string }) => {
     state: {
       sorting,
     },
-  })
+  });
 
   return (
     <div className="w-full">
       <div className="rounded-md">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <TableRow className="bg-[#F2F2F2] hover:bg-[#F2F2F2]" key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
+                {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow key={row.id} data-state={row.getIsSelected() ? 'selected' : undefined}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -212,8 +223,8 @@ export const LessonBook = ({ staffId }: { staffId: string }) => {
         </Table>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Export = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -226,19 +237,19 @@ const Export = () => (
       fill="white"
     />
   </svg>
-)
+);
 
 const Attended = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="7.5" cy="10.5" r="5.25" fill="#7E869E" fill-opacity="0.25" />
-    <path d="M4.5 9.75L7.5 12L12.75 5.25" stroke="#20C9AC" stroke-width="1.2" />
+    <circle cx="7.5" cy="10.5" r="5.25" fill="#7E869E" fillOpacity="0.25" />
+    <path d="M4.5 9.75L7.5 12L12.75 5.25" stroke="#20C9AC" strokeWidth="1.2" />
   </svg>
-)
+);
 
 const Cancel = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="9" cy="10" r="6.75" fill="#7E869E" fill-opacity="0.25" />
-    <path d="M6.75 12.2498L11.25 7.74976" stroke="#FD4B1C" stroke-width="1.2" />
-    <path d="M11.25 12.25L6.75 7.75" stroke="#FD4B1C" stroke-width="1.2" />
+    <circle cx="9" cy="10" r="6.75" fill="#7E869E" fillOpacity="0.25" />
+    <path d="M6.75 12.2498L11.25 7.74976" stroke="#FD4B1C" strokeWidth="1.2" />
+    <path d="M11.25 12.25L6.75 7.75" stroke="#FD4B1C" strokeWidth="1.2" />
   </svg>
-)
+);

@@ -1,11 +1,11 @@
-import React from 'react'
-import * as z from 'zod'
-import { Trash2 } from 'lucide-react'
+import { Trash2 } from "lucide-react";
+import React from "react";
+import type * as z from "zod";
 
-import { formSchema } from './ConfigurationForm'
+import { type formSchema } from "./ConfigurationForm";
 interface SchoolItemProps extends z.infer<typeof formSchema> {
-  onDelete: () => void
-  onEdit: () => void
+  onDelete: () => void;
+  onEdit: () => void;
 }
 const SchoolItem: React.FC<SchoolItemProps> = ({ classname, shortname, onDelete, onEdit }) => {
   return (
@@ -23,7 +23,7 @@ const SchoolItem: React.FC<SchoolItemProps> = ({ classname, shortname, onDelete,
         </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SchoolItem
+export default SchoolItem;

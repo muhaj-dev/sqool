@@ -1,23 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import { Bell, Edit, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Search, Bell } from "lucide-react";
-import { Notice } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { type Notice } from "@/types";
+import { createNotice, deleteNotice, getAllNotices, updateNotice } from "@/utils/api";
+
+import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
 import { NoticeDialog } from "./components/NoticeDialog";
 import { NoticeViewModal } from "./components/NoticeViewModal";
-import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
-import { useToast } from "@/components/ui/use-toast";
-import { format } from "date-fns";
-import {
-  getAllNotices,
-  createNotice,
-  updateNotice,
-  deleteNotice,
-} from "@/utils/api";
 
 interface PaginationInfo {
   total: number;
@@ -30,7 +27,6 @@ interface PaginationInfo {
   previousPage: number | null;
 }
 
-
 const formatPagination = (apiPagination: any): PaginationInfo => ({
   total: Number(apiPagination.total || 0),
   currentPage: Number(apiPagination.currentPage || 1),
@@ -42,9 +38,8 @@ const formatPagination = (apiPagination: any): PaginationInfo => ({
   previousPage: apiPagination.previousPage !== null ? Number(apiPagination.previousPage) : null,
 });
 
-
 const Page = () => {
-    const [notices, setNotices] = useState<Notice[]>([]);
+  const [notices, setNotices] = useState<Notice[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingNotice, setEditingNotice] = useState<Notice | null>(null);
@@ -55,7 +50,7 @@ const Page = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  
+
   // Pagination states
   const [pagination, setPagination] = useState<PaginationInfo>({
     total: 0,
@@ -65,51 +60,47 @@ const Page = () => {
     hasNextPage: false,
     hasPreviousPage: false,
     nextPage: null,
-    previousPage: null
+    previousPage: null,
   });
   const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch notices from API
   useEffect(() => {
-  // Fetch the current page whenever it changes
-  fetchNotices(currentPage, searchTerm);
-}, [currentPage, searchTerm]);
+    // Fetch the current page whenever it changes
+    void fetchNotices(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setCurrentPage(1); // reset page
+    }, 500);
 
-useEffect(() => {
-  const handler = setTimeout(() => {
-    setCurrentPage(1); // reset page
-  }, 500);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
-  return () => clearTimeout(handler);
-}, [searchTerm]);
+  const fetchNotices = async (page = 1, search = "") => {
+    setLoading(true);
+    try {
+      const data = await getAllNotices(search, "", page, pagination.pageSize);
+      const formattedPagination = formatPagination(data?.data?.pagination);
 
+      setNotices(data?.data?.result || []);
+      setPagination(formattedPagination);
 
-  const fetchNotices = async (page: number = 1, search: string = '') => {
-  setLoading(true);
-  try {
-    const data = await getAllNotices(search, "", page, pagination.pageSize);
-    const formattedPagination = formatPagination(data?.data?.pagination);
-
-    setNotices(data?.data?.result || []);
-    setPagination(formattedPagination);
-
-    // Sync currentPage with API
-    if (currentPage !== formattedPagination.currentPage) {
-      setCurrentPage(formattedPagination.currentPage);
+      // Sync currentPage with API
+      if (currentPage !== formattedPagination.currentPage) {
+        setCurrentPage(formattedPagination.currentPage);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch notices",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    toast({
-      title: "Error",
-      description: "Failed to fetch notices",
-      variant: "destructive",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
-
-
+  };
 
   const handleCreate = () => {
     setEditingNotice(null);
@@ -133,7 +124,7 @@ useEffect(() => {
 
   const handleDeleteConfirm = async () => {
     if (!deleteNoticeData) return;
-    
+
     setDeleteLoading(true);
     try {
       await deleteNotice(deleteNoticeData._id);
@@ -143,7 +134,7 @@ useEffect(() => {
       });
       setIsDeleteModalOpen(false);
       setDeleteNoticeData(null);
-      fetchNotices(); // Refresh the list
+      void fetchNotices(); // Refresh the list
     } catch (error) {
       toast({
         title: "Error",
@@ -172,7 +163,7 @@ useEffect(() => {
         });
       }
       setIsDialogOpen(false);
-      fetchNotices(); // Refresh the list
+      void fetchNotices(); // Refresh the list
     } catch (error) {
       toast({
         title: "Error",
@@ -209,7 +200,7 @@ useEffect(() => {
     const maxVisiblePages = 5;
 
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(pagination.totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(pagination.totalPages, startPage + maxVisiblePages - 1);
 
     // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
@@ -239,8 +230,8 @@ useEffect(() => {
   const safeFormat = (dateInput: string | Date | undefined | null) => {
     if (!dateInput) return "N/A";
     const d = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-    if (isNaN((d as Date).getTime())) return "N/A";
-    return format(d as Date, "MMM dd, yyyy");
+    if (isNaN(d.getTime())) return "N/A";
+    return format(d, "MMM dd, yyyy");
   };
 
   return (
@@ -265,9 +256,7 @@ useEffect(() => {
               <Bell className="h-6 w-6" />
               Notice Management
             </h2>
-            <p className="text-muted-foreground">
-              Create and manage notices for staff and parents
-            </p>
+            <p className="text-muted-foreground">Create and manage notices for staff and parents</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -277,10 +266,9 @@ useEffect(() => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-64 pl-10"
-               onKeyDown={(e) => {
-  if (e.key === "Enter") setCurrentPage(1); // triggers useEffect
-}}
-
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setCurrentPage(1); // triggers useEffect
+                }}
               />
             </div>
             <Button onClick={handleCreate}>
@@ -311,27 +299,21 @@ useEffect(() => {
             <CardContent>
               <div className="text-2xl font-bold">
                 {
-                  notices.filter(
-                    (n) =>
-                      n.visibility === "parent" || n.visibility === "everyone"
-                  ).length
+                  notices.filter((n) => n.visibility === "parent" || n.visibility === "everyone")
+                    .length
                 }
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                For Staff
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">For Staff</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {
-                  notices.filter(
-                    (n) =>
-                      n.visibility === "staff" || n.visibility === "everyone"
-                  ).length
+                  notices.filter((n) => n.visibility === "staff" || n.visibility === "everyone")
+                    .length
                 }
               </div>
             </CardContent>
@@ -344,10 +326,7 @@ useEffect(() => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {
-                  notices.filter((n) => new Date(n.expirationDate) > new Date())
-                    .length
-                }
+                {notices.filter((n) => new Date(n.expirationDate) > new Date()).length}
               </div>
             </CardContent>
           </Card>
@@ -360,11 +339,7 @@ useEffect(() => {
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Bell className="h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No notices found</p>
-                <Button
-                  onClick={handleCreate}
-                  variant="outline"
-                  className="mt-4"
-                >
+                <Button onClick={handleCreate} variant="outline" className="mt-4">
                   Create your first notice
                 </Button>
               </CardContent>
@@ -380,28 +355,18 @@ useEffect(() => {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold">
-                          {notice.title}
-                        </h3>
-                        <Badge
-                          className={getVisibilityColor(notice.visibility)}
-                        >
+                        <h3 className="text-lg font-semibold">{notice.title}</h3>
+                        <Badge className={getVisibilityColor(notice.visibility)}>
                           {notice.visibility}
                         </Badge>
                         {new Date(notice.expirationDate) < new Date() && (
                           <Badge variant="destructive">Expired</Badge>
                         )}
                       </div>
-                      <p className="text-muted-foreground mb-3">
-                        {notice.content}
-                      </p>
+                      <p className="text-muted-foreground mb-3">{notice.content}</p>
                       <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-3">
-                        <span>
-                          Notification: {safeFormat(notice.notificationDate)}
-                        </span>
-                        <span>
-                          Expires: {safeFormat(notice.expirationDate)}
-                        </span>
+                        <span>Notification: {safeFormat(notice.notificationDate)}</span>
+                        <span>Expires: {safeFormat(notice.expirationDate)}</span>
                       </div>
                       {/* {notice.resources.length > 0 && (
                         <div className="mb-3">
@@ -458,7 +423,8 @@ useEffect(() => {
           <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
             <div>
               <span className="text-sm text-muted-foreground">
-                Showing {notices.length} of {pagination.total} items (Page {currentPage} of {pagination.totalPages})
+                Showing {notices.length} of {pagination.total} items (Page {currentPage} of{" "}
+                {pagination.totalPages})
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -471,11 +437,13 @@ useEffect(() => {
               </button>
 
               {/* Page numbers */}
-              {generatePageNumbers().map(page => (
+              {generatePageNumbers().map((page) => (
                 <button
                   key={page}
                   className={`px-3 py-2 text-sm rounded-md border transition-colors ${
-                    page === currentPage ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-50'
+                    page === currentPage
+                      ? "bg-primary text-white border-primary"
+                      : "border-gray-300 hover:bg-gray-50"
                   }`}
                   onClick={() => handlePageChange(page)}
                 >

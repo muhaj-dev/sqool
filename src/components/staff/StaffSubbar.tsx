@@ -1,14 +1,13 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 
-import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
-import { Plus } from 'lucide-react'
-import React from 'react'
-import AddNewStaff from './AddNewStaff'
+import AddNewStaff from "./AddNewStaff";
 
 const StaffSubbar = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="my-6">
@@ -30,14 +29,14 @@ const StaffSubbar = () => {
       </div>
       <div className="flex items-center  gap-8 my-6">
         <div className="flex items-center gap-4 bg-white p-4 rounded-md w-[48%] md:w-[200px]">
-          <div className="h-[3.5rem] w-[3.5rem] rounded-full bg-gray-50"></div>
+          <div className="h-[3.5rem] w-[3.5rem] rounded-full bg-gray-50" />
           <div>
             <p>Teacher</p>
             <p className="text-3xl">12</p>
           </div>
         </div>
         <div className="flex items-center gap-4 bg-white p-4 rounded-md w-[48%] md:w-[200px]">
-          <div className="h-[3.5rem] w-[3.5rem] rounded-full bg-gray-50"></div>
+          <div className="h-[3.5rem] w-[3.5rem] rounded-full bg-gray-50" />
           <div>
             <p>Non Teacher</p>
             <p className="text-3xl">40</p>
@@ -45,7 +44,7 @@ const StaffSubbar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StaffSubbar
+export default StaffSubbar;

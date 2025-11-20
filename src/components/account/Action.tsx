@@ -1,5 +1,8 @@
-'use client'
-import React from 'react'
+"use client";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,10 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
-import { MoreHorizontal } from 'lucide-react'
-import { Button } from '../ui/button'
-import Link from 'next/link'
+} from "../ui/dropdown-menu";
 
 const Action = () => {
   return (
@@ -31,7 +31,7 @@ const Action = () => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};
 
-export default Action
+export default Action;

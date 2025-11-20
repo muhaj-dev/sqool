@@ -1,29 +1,28 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useRouter, usePathname } from 'next/navigation'
-import Schoolfees from './Schoolfees' // Assuming this component handles all the tabs
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import Schoolfees from "./Schoolfees"; // Assuming this component handles all the tabs
 
 const PaymentFee = () => {
-  const [activeTab, setActiveTab] = useState<'school' | 'transport' | 'addition'>('school') // Active tab state
-  const [showUploadButton, setShowUploadButton] = useState(false) // State to track button display
-  const pathname = usePathname()
+  const [activeTab, setActiveTab] = useState<"school" | "transport" | "addition">("school"); // Active tab state
+  const [showUploadButton, setShowUploadButton] = useState(false); // State to track button display
+  const pathname = usePathname();
 
   // Check the current path and update the button display state
   useEffect(() => {
-    if (pathname.startsWith('/student')) {
-      setShowUploadButton(true) // Show upload button if pathname starts with /student
-    } else if (pathname.startsWith('/staff')) {
-      setShowUploadButton(false) // Otherwise, hide it
+    if (pathname.startsWith("/student")) {
+      setShowUploadButton(true); // Show upload button if pathname starts with /student
+    } else if (pathname.startsWith("/staff")) {
+      setShowUploadButton(false); // Otherwise, hide it
     }
-  }, [pathname]) // Re-run this effect when the pathname changes
+  }, [pathname]); // Re-run this effect when the pathname changes
 
   // Function to switch between tabs
-  const handleTabSwitch = (tab: 'school' | 'transport' | 'addition') => {
-    setActiveTab(tab)
-  }
+  const handleTabSwitch = (tab: "school" | "transport" | "addition") => {
+    setActiveTab(tab);
+  };
 
   return (
     <div className="">
@@ -32,25 +31,31 @@ const PaymentFee = () => {
         <div className="space-x-3">
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
-              activeTab === 'school' ? 'border-b-primary border-b-2 text-[#2E2C34]' : 'text-[#84818A]'
+              activeTab === "school"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
+                : "text-[#84818A]"
             }`}
-            onClick={() => handleTabSwitch('school')}
+            onClick={() => handleTabSwitch("school")}
           >
             School Fee Details
           </button>
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
-              activeTab === 'transport' ? 'border-b-primary border-b-2 text-[#2E2C34]' : 'text-[#84818A]'
+              activeTab === "transport"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
+                : "text-[#84818A]"
             }`}
-            onClick={() => handleTabSwitch('transport')}
+            onClick={() => handleTabSwitch("transport")}
           >
             Transport Fee
           </button>
           <button
             className={`px-1 py-2 text-[1.125rem] font-semibold ${
-              activeTab === 'addition' ? 'border-b-primary border-b-2 text-[#2E2C34]' : 'text-[#84818A]'
+              activeTab === "addition"
+                ? "border-b-primary border-b-2 text-[#2E2C34]"
+                : "text-[#84818A]"
             }`}
-            onClick={() => handleTabSwitch('addition')}
+            onClick={() => handleTabSwitch("addition")}
           >
             Additional Fee
           </button>
@@ -59,15 +64,15 @@ const PaymentFee = () => {
 
       {/* Tab Content Rendering */}
       <div className="py-4 px-3">
-        {activeTab === 'school' && <Schoolfees />}
-        {activeTab === 'transport' && <Schoolfees />}
-        {activeTab === 'addition' && <Schoolfees />}
+        {activeTab === "school" && <Schoolfees />}
+        {activeTab === "transport" && <Schoolfees />}
+        {activeTab === "addition" && <Schoolfees />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PaymentFee
+export default PaymentFee;
 
 // Assuming the SVG for Search icon is used somewhere in the app
 export const Search = () => (
@@ -75,4 +80,4 @@ export const Search = () => (
     <circle cx="11" cy="11" r="6" stroke="#222222" />
     <path d="M20 20L17 17" stroke="#222222" strokeLinecap="round" />
   </svg>
-)
+);

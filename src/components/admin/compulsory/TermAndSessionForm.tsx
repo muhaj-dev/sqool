@@ -1,97 +1,113 @@
-'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '../../ui/separator'
-import { DatePickerAdmin } from './DatePickerAdmin'
-import { useToast } from '@/components/ui/use-toast'
-import { useCompulsory } from '@/contexts/compulsory-context'
-import { createSessionAndTerms } from '@/utils/api'
-import { format } from 'date-fns'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
+import { useCompulsory } from "@/contexts/compulsory-context";
+import { createSessionAndTerms } from "@/utils/api";
+
+import { Separator } from "../../ui/separator";
+import { DatePickerAdmin } from "./DatePickerAdmin";
 
 const formSchema = z.object({
-  session: z.string().min(1, 'Session is required'),
-  firstTermStartDate: z.date({ required_error: 'First term start date is required' }),
-  firstTermEndDate: z.date({ required_error: 'First term end date is required' }),
-  secondTermStartDate: z.date({ required_error: 'Second term start date is required' }),
-  secondTermEndDate: z.date({ required_error: 'Second term end date is required' }),
-  thirdTermStartDate: z.date({ required_error: 'Third term start date is required' }),
-  thirdTermEndDate: z.date({ required_error: 'Third term end date is required' }),
-})
+  session: z.string().min(1, "Session is required"),
+  firstTermStartDate: z.date({ required_error: "First term start date is required" }),
+  firstTermEndDate: z.date({ required_error: "First term end date is required" }),
+  secondTermStartDate: z.date({ required_error: "Second term start date is required" }),
+  secondTermEndDate: z.date({ required_error: "Second term end date is required" }),
+  thirdTermStartDate: z.date({ required_error: "Third term start date is required" }),
+  thirdTermEndDate: z.date({ required_error: "Third term end date is required" }),
+});
 
 // Generate session options from 10 years back to current year
 const generateSessionOptions = () => {
-  const currentYear = new Date().getFullYear()
-  const options: string[] = []
+  const currentYear = new Date().getFullYear();
+  const options: string[] = [];
   for (let i = currentYear - 10; i <= currentYear; i++) {
-    options.push(`${i}/${i + 1}`)
+    options.push(`${i}/${i + 1}`);
   }
-  return options
-}
+  return options;
+};
 
 export function TermAndSessionForm() {
-  const { goNextStep, activeIndex } = useCompulsory()
-  const { toast } = useToast()
+  const { goNextStep, activeIndex } = useCompulsory();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      session: '',
+      session: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-  try {
-    const formattedData = {
-      session: values.session,
-      firstTermStartDate: format(values.firstTermStartDate, 'yyyy-MM-dd'),
-      firstTermEndDate: format(values.firstTermEndDate, 'yyyy-MM-dd'),
-      secondTermStartDate: format(values.secondTermStartDate, 'yyyy-MM-dd'),
-      secondTermEndDate: format(values.secondTermEndDate, 'yyyy-MM-dd'),
-      thirdTermStartDate: format(values.thirdTermStartDate, 'yyyy-MM-dd'),
-      thirdTermEndDate: format(values.thirdTermEndDate, 'yyyy-MM-dd'),
+    try {
+      const formattedData = {
+        session: values.session,
+        firstTermStartDate: format(values.firstTermStartDate, "yyyy-MM-dd"),
+        firstTermEndDate: format(values.firstTermEndDate, "yyyy-MM-dd"),
+        secondTermStartDate: format(values.secondTermStartDate, "yyyy-MM-dd"),
+        secondTermEndDate: format(values.secondTermEndDate, "yyyy-MM-dd"),
+        thirdTermStartDate: format(values.thirdTermStartDate, "yyyy-MM-dd"),
+        thirdTermEndDate: format(values.thirdTermEndDate, "yyyy-MM-dd"),
+      };
+
+      // Call API
+      const data = await createSessionAndTerms(formattedData);
+
+      // Show toast using API message
+      toast({
+        variant: "default",
+        title: "Success",
+        description: data?.message || "Session and terms submitted successfully!",
+      });
+
+      // Clear the form
+      form.reset({
+        session: "",
+        firstTermStartDate: undefined,
+        firstTermEndDate: undefined,
+        secondTermStartDate: undefined,
+        secondTermEndDate: undefined,
+        thirdTermStartDate: undefined,
+        thirdTermEndDate: undefined,
+      });
+
+      // Proceed to next step
+      goNextStep(activeIndex);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to submit",
+      });
     }
-
-    // Call API
-    const data = await createSessionAndTerms(formattedData)
-
-    // Show toast using API message
-    toast({
-      variant: 'default',
-      title: 'Success',
-      description: data?.message || 'Session and terms submitted successfully!',
-    })
-
-    // Clear the form
-    form.reset({
-      session: '',
-      firstTermStartDate: undefined,
-      firstTermEndDate: undefined,
-      secondTermStartDate: undefined,
-      secondTermEndDate: undefined,
-      thirdTermStartDate: undefined,
-      thirdTermEndDate: undefined,
-    })
-
-    // Proceed to next step
-    goNextStep(activeIndex)
-  } catch (error) {
-    toast({
-      variant: 'destructive',
-      title: 'Error',
-      description: error instanceof Error ? error.message : 'Failed to submit',
-    })
   }
-}
-
-
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white p-8 flex flex-col gap-4 mb-8 rounded-md">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="bg-white p-8 flex flex-col gap-4 mb-8 rounded-md"
+      >
         <div className="flex justify-between flex-col md:flex-row">
           <div>
             <h3 className="font-semibold">School Session</h3>
@@ -110,7 +126,7 @@ export function TermAndSessionForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {generateSessionOptions().map(session => (
+                    {generateSessionOptions().map((session) => (
                       <SelectItem key={session} value={session}>
                         {session}
                       </SelectItem>
@@ -139,7 +155,11 @@ export function TermAndSessionForm() {
                 <FormItem>
                   <FormLabel>Start Date</FormLabel>
                   <FormControl>
-                    <DatePickerAdmin title="Start Date" date={field.value} onSelect={field.onChange} />
+                    <DatePickerAdmin
+                      title="Start Date"
+                      date={field.value}
+                      onSelect={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -152,7 +172,11 @@ export function TermAndSessionForm() {
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
                   <FormControl>
-                    <DatePickerAdmin title="End Date" date={field.value} onSelect={field.onChange} />
+                    <DatePickerAdmin
+                      title="End Date"
+                      date={field.value}
+                      onSelect={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -175,7 +199,11 @@ export function TermAndSessionForm() {
                 <FormItem>
                   <FormLabel>Start Date</FormLabel>
                   <FormControl>
-                    <DatePickerAdmin title="Start Date" date={field.value} onSelect={field.onChange} />
+                    <DatePickerAdmin
+                      title="Start Date"
+                      date={field.value}
+                      onSelect={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,7 +216,11 @@ export function TermAndSessionForm() {
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
                   <FormControl>
-                    <DatePickerAdmin title="End Date" date={field.value} onSelect={field.onChange} />
+                    <DatePickerAdmin
+                      title="End Date"
+                      date={field.value}
+                      onSelect={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -211,7 +243,11 @@ export function TermAndSessionForm() {
                 <FormItem>
                   <FormLabel>Start Date</FormLabel>
                   <FormControl>
-                    <DatePickerAdmin title="Start Date" date={field.value} onSelect={field.onChange} />
+                    <DatePickerAdmin
+                      title="Start Date"
+                      date={field.value}
+                      onSelect={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -224,7 +260,11 @@ export function TermAndSessionForm() {
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
                   <FormControl>
-                    <DatePickerAdmin title="End Date" date={field.value} onSelect={field.onChange} />
+                    <DatePickerAdmin
+                      title="End Date"
+                      date={field.value}
+                      onSelect={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -238,5 +278,5 @@ export function TermAndSessionForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

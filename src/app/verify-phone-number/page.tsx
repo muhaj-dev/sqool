@@ -1,51 +1,54 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import OtpInput from 'react-otp-input'
-import { useAuthStore } from '@/zustand/authStore'
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import OtpInput from "react-otp-input";
+
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuthStore } from "@/zustand/authStore";
 
 export default function VerifyPhoneNumber() {
-  const router = useRouter()
-  const { toast } = useToast()
-  const { verifyOtpAndRegister, tempPhone, isLoading, error } = useAuthStore()
-  const [otp, setOtp] = useState('')
+  const router = useRouter();
+  const { toast } = useToast();
+  const { verifyOtpAndRegister, tempPhone, isLoading, error } = useAuthStore();
+  const [otp, setOtp] = useState("");
 
   const handleVerify = async () => {
     try {
-      const success = await verifyOtpAndRegister(otp)
+      const success = await verifyOtpAndRegister(otp);
       if (success) {
         toast({
-          variant: 'default',
-          title: 'Success',
-          description: 'Registration successful!',
+          variant: "default",
+          title: "Success",
+          description: "Registration successful!",
           duration: 3000,
-        })
-        router.push('/onboarding')
+        });
+        router.push("/onboarding");
       }
     } catch (error) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Registration failed. Please try again.',
+        variant: "destructive",
+        title: "Error",
+        description:
+          error instanceof Error ? error.message : "Registration failed. Please try again.",
         duration: 3000,
-      })
+      });
     }
-  }
+  };
 
   const maskPhoneNumber = (phone: string | null) => {
-    if (!phone || phone.length < 7) return phone
-    return phone.slice(0, 4) + '****' + phone.slice(-3)
-  }
+    if (!phone || phone.length < 7) return phone;
+    return phone.slice(0, 4) + "****" + phone.slice(-3);
+  };
 
   return (
     <div style={styles.container}>
       <div className="flex flex-col items-center">
         <h2 className="text-primary font-bold text-[28px]">Verify your Phone number</h2>
         <p className="text-[#515B6F] font-normal text-[18px]">
-          We sent an OTP to {tempPhone ? maskPhoneNumber(tempPhone) : 'your number'} via SMS and WhatsApp.
+          We sent an OTP to {tempPhone ? maskPhoneNumber(tempPhone) : "your number"} via SMS and
+          WhatsApp.
         </p>
       </div>
 
@@ -57,8 +60,8 @@ export default function VerifyPhoneNumber() {
           onChange={setOtp}
           inputType="text"
           numInputs={4}
-          renderSeparator={<span></span>}
-          renderInput={props => (
+          renderSeparator={<span />}
+          renderInput={(props) => (
             <input
               {...props}
               style={styles.input}
@@ -66,17 +69,17 @@ export default function VerifyPhoneNumber() {
             />
           )}
           placeholder="0000"
-          onPaste={e => e.preventDefault()}
+          onPaste={(e) => e.preventDefault()}
         />
         <div>
-          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+          {error ? <div className="text-red-500 text-sm text-center">{error}</div> : null}
 
           <Button
             onClick={handleVerify}
             className="bg-primary mt-4 font-semibold text-white w-full py-4 shadow-lg"
             disabled={isLoading || otp.length !== 4}
           >
-            {isLoading ? 'Verifying...' : 'Verify'}
+            {isLoading ? "Verifying..." : "Verify"}
           </Button>
           <small>
             Didn’t get the code? <span>Click Resend</span>
@@ -87,27 +90,27 @@ export default function VerifyPhoneNumber() {
         <p>Still not received your OTP? Kindly cross-check your phone number by clicking here.</p>
       </div>
     </div>
-  )
+  );
 }
 
 const styles = {
   container: {
-    display: 'flex',
-    gap: '2rem',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column' as 'column',
-    height: '100vh',
+    display: "flex",
+    gap: "2rem",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column" as const,
+    height: "100vh",
   },
   input: {
-    width: '58px',
-    height: '58px',
-    fontSize: '1.5rem',
-    textAlign: 'center' as 'center',
-    border: '2px solid #ccc',
-    borderRadius: '5px',
-    margin: '0 5px',
+    width: "58px",
+    height: "58px",
+    fontSize: "1.5rem",
+    textAlign: "center" as const,
+    border: "2px solid #ccc",
+    borderRadius: "5px",
+    margin: "0 5px",
   },
-}
+};
 
 // console.error("Error sending OTP:", error);

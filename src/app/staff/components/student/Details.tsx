@@ -1,11 +1,12 @@
-import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Mail, Smartphone, Star, LocateIcon } from "lucide-react";
+import { LocateIcon, Mail, Smartphone, Star } from "lucide-react";
+import React from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ISingleStudent } from "@/types";
+import { type ISingleStudent } from "@/types";
 import { formatDate, getInitials } from "@/utils/lib";
-import { AuthUser } from "@/zustand/authStore";
+import { type AuthUser } from "@/zustand/authStore";
 
 interface DetailsProps {
   student: ISingleStudent;
@@ -52,18 +53,18 @@ const Details: React.FC<DetailsProps> = ({ student, user }) => {
       <div className="bg-[#F8F8FD] rounded-md px-2 py-3 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">Class</p>
-          {/* @ts-ignore */}
+          {/* @ts-expect-error classname not string */}
           <p className="">{student.class.className ?? "N/A"}</p>
         </div>
         <Separator />
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">Section</p>
-          {/* @ts-ignore */}
+          {/* @ts-expect-error classSection not string */}
           <p className="">{student.class.classSection}</p>
         </div>
       </div>
-      {/* @ts-ignore */}
-      {user.role && user.role !== "teacher" && (
+
+      {user.role && user.role !== "teacher" ? (
         <div className="bg-[#F8F8FD] rounded-md px-2 py-3 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <p className="text-muted-foreground">Class Teacher</p>
@@ -71,13 +72,13 @@ const Details: React.FC<DetailsProps> = ({ student, user }) => {
           <Separator />
           <div className="flex items-center justify-between">
             <p className="text-muted-foreground capitalize">
-              {/* @ts-ignore */}
-              {user.gender && user.gender == "male" ? "Mr." : "Mrs."}{" "}
-              {user.lastName} {user.lastName}
+              {/* @ts-expect-error gender not string */}
+              {user.gender && user.gender == "male" ? "Mr." : "Mrs."} {user.lastName}{" "}
+              {user.lastName}
             </p>
           </div>
         </div>
-      )}
+      ) : null}
 
       <Separator />
 
@@ -88,7 +89,7 @@ const Details: React.FC<DetailsProps> = ({ student, user }) => {
           <div>
             <p className="text-muted-foreground">Email</p>
             <p className="text-[14px]">
-              {/* @ts-ignore */}
+              {/* @ts-expect-error parent not string */}
               {student.parent?.userId?.email ?? "N/A"}
             </p>
           </div>
@@ -98,7 +99,7 @@ const Details: React.FC<DetailsProps> = ({ student, user }) => {
           <div>
             <p className="text-muted-foreground">Phone</p>
             <p className="text-[14px]">
-              {/* @ts-ignore */}
+              {/* @ts-expect-error phone not string */}
               {student.parent?.userId?.phone ?? "N/A"}
             </p>
           </div>
@@ -226,4 +227,3 @@ const DetailsSkeleton = () => {
 };
 
 export { DetailsSkeleton };
-

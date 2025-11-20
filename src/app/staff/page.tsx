@@ -1,16 +1,16 @@
 "use client";
 
-import React from "react";
-import { StatsCard, StatsCardSkeleton } from "./components/dashboard/StatsCard";
-import { UpcomingLessons } from "./components/dashboard/UpcomingLessons";
-import { RecentNotices } from "./components/dashboard/RecentNotice";
-import { AttendanceOverview } from "./components/dashboard/AttendanceOverview";
-import { ExaminationCard } from "./components/dashboard/ExaminationCard";
-import { Users, GraduationCap, BookOpen, Calendar } from "lucide-react";
-import { useAuthStore } from "@/zustand/authStore";
+import { useQuery } from "@tanstack/react-query";
+import { BookOpen, Calendar, GraduationCap, Users } from "lucide-react";
 
 import { getStaffDashboardStats } from "@/utils/api/index";
-import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/zustand/authStore";
+
+import { AttendanceOverview } from "./components/dashboard/AttendanceOverview";
+import { ExaminationCard } from "./components/dashboard/ExaminationCard";
+import { RecentNotices } from "./components/dashboard/RecentNotice";
+import { StatsCard, StatsCardSkeleton } from "./components/dashboard/StatsCard";
+import { UpcomingLessons } from "./components/dashboard/UpcomingLessons";
 import Staffbar from "./components/staff/Staffbar";
 
 const Page = () => {
@@ -22,7 +22,7 @@ const Page = () => {
     queryKey: ["staff-dashboard-stats", staffId],
     queryFn: async () => {
       const res = await getStaffDashboardStats();
-      return res;
+      return res.data;
     },
     enabled: !!staffId && user?.role === "teacher",
     staleTime: 2 * 60 * 60 * 1000, // 2 hours

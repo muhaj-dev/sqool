@@ -1,13 +1,11 @@
-import ParentList from '@/components/student/ParentList'
-
-import React from 'react'
+import ParentList from "@/components/student/ParentList";
 
 const page = () => {
   return (
     <div>
       <ParentList />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

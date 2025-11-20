@@ -1,37 +1,37 @@
-import React, { useState } from 'react'
-import ExamData from '../../data/exams.json'
-import { MySelect } from './MySelect'
-import { ListFilter } from 'lucide-react'
-import Filter from '../Filter'
+import React, { useState } from "react";
 
-type TProps = {
-  department: string[]
-  level: string[]
+import ExamData from "../../data/exams.json";
+import Filter from "../Filter";
+import { MySelect } from "./MySelect";
+
+interface TProps {
+  department: string[];
+  level: string[];
 
   setData: React.Dispatch<
     React.SetStateAction<
       {
-        id: number
-        fullname: string
-        subject: string
-        email: string
+        id: number;
+        fullname: string;
+        subject: string;
+        email: string;
       }[]
     >
-  >
+  >;
 }
 const FilterBar = ({ department, level, setData }: TProps) => {
   //   const [departmentFiltered, setDepartmentFilter] = useState([...department])
   //   const [classFilter, setClassFilter] = useState([...level])
-  const [selectedDepartment, setSelectedDepartment] = useState('')
-  const [selectedClass, setSelectedClass] = useState('')
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
   const filterData = () => {
-    if (selectedDepartment === 'all') {
-      setData(ExamData)
-      return
+    if (selectedDepartment === "all") {
+      setData(ExamData);
+      return;
     }
-    setData(previousData => previousData.filter(item => item.subject === selectedDepartment))
-    level.filter(item => item === selectedClass)
-  }
+    setData((previousData) => previousData.filter((item) => item.subject === selectedDepartment));
+    level.filter((item) => item === selectedClass);
+  };
   return (
     <div className="my-8 flex gap-3  flex-wrap items-center justify-between">
       <div className="flex items-center flex-wrap gap-3">
@@ -47,7 +47,7 @@ const FilterBar = ({ department, level, setData }: TProps) => {
       </div> */}
       <Filter />
     </div>
-  )
-}
+  );
+};
 
-export default FilterBar
+export default FilterBar;

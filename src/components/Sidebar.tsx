@@ -1,6 +1,6 @@
-import React from 'react'
-import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar'
-import { CheckCircle2, Video } from 'lucide-react'
+import { CheckCircle2, Video } from "lucide-react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Sidebar = () => {
   return (
@@ -42,7 +42,7 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

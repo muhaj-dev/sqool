@@ -1,9 +1,7 @@
-import Account from '@/components/account'
-import React from 'react'
-import AdminPaymentHistory from './components/AdminPaymentHistory'
+import AdminPaymentHistory from "./components/AdminPaymentHistory";
 
 const page = () => {
-  return <AdminPaymentHistory />
-}
+  return <AdminPaymentHistory />;
+};
 
-export default page
+export default page;

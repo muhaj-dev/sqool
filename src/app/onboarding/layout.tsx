@@ -1,12 +1,13 @@
-import OnboardingContextProvider from '@/contexts/onboarding-context'
-import React, { ReactNode } from 'react'
+import { type ReactNode } from "react";
+
+import OnboardingContextProvider from "@/contexts/onboarding-context";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
     <section>
       <OnboardingContextProvider>{children}</OnboardingContextProvider>
     </section>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;

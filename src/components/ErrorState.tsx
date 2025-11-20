@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Button } from "@/components/ui/button"
-import { AlertTriangle } from "lucide-react"
+import { AlertTriangle } from "lucide-react";
+import React from "react";
+
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface ErrorStateProps {
@@ -33,32 +34,27 @@ const ErrorState: React.FC<ErrorStateProps> = ({
         isCompact
           ? "p-3 space-y-2 rounded-lg border border-border bg-muted/20"
           : "h-[50vh] min-h-[300px] px-6 py-10 space-y-3",
-        className
+        className,
       )}
     >
       <AlertTriangle
-        className={cn(
-          "text-red-500",
-          isCompact ? "h-6 w-6 mb-1" : "h-14 w-14 mb-4"
-        )}
+        className={cn("text-red-500", isCompact ? "h-6 w-6 mb-1" : "h-14 w-14 mb-4")}
       />
 
       {!isCompact && <h2 className="text-2xl font-semibold mb-1">{title}</h2>}
 
-      {!isCompact && (
-        <p className="text-muted-foreground text-sm max-w-md">{description}</p>
-      )}
+      {!isCompact && <p className="text-muted-foreground text-sm max-w-md">{description}</p>}
 
-      {message && (
+      {message ? (
         <p
           className={cn(
             "text-sm text-red-600 bg-red-100 border border-red-200 rounded-md",
-            isCompact ? "px-2 py-1" : "px-3 py-2 max-w-md mb-2"
+            isCompact ? "px-2 py-1" : "px-3 py-2 max-w-md mb-2",
           )}
         >
           {message}
         </p>
-      )}
+      ) : null}
 
       <Button
         variant={isCompact ? "outline" : "default"}
@@ -71,4 +67,4 @@ const ErrorState: React.FC<ErrorStateProps> = ({
   );
 };
 
-export default ErrorState
+export default ErrorState;

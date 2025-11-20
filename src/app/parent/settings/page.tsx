@@ -1,8 +1,7 @@
-'use client'
+"use client";
 
-import Settingsbar from '@/app/staff/components/settings/settingsbar'
-import SettingsDetails from '@/app/staff/components/settings/SettingsDetails'
-import React, { useState } from 'react'
+import Settingsbar from "@/app/staff/components/settings/settingsbar";
+import SettingsDetails from "@/app/staff/components/settings/SettingsDetails";
 
 const Page = () => {
   return (
@@ -12,7 +11,7 @@ const Page = () => {
         <SettingsDetails />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

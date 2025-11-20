@@ -1,55 +1,62 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { PaginationControls } from '@/components/PaginationControl'
-import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import React, { useState } from "react";
+
+import { PaginationControls } from "@/components/PaginationControl";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const resultsData = [
   {
-    session: '1st Session 2024',
-    class: 'Class 5A',
-    description: 'Lorem ipsum dolor sit amet consectetur.',
-    result: 'Download Result',
+    session: "1st Session 2024",
+    class: "Class 5A",
+    description: "Lorem ipsum dolor sit amet consectetur.",
+    result: "Download Result",
   },
   {
-    session: '2nd Session 2034',
-    class: 'Class 5A',
-    description: 'Lorem ipsum dolor sit amet consectetur.',
-    result: 'Download Result',
+    session: "2nd Session 2034",
+    class: "Class 5A",
+    description: "Lorem ipsum dolor sit amet consectetur.",
+    result: "Download Result",
   },
   {
-    session: '3rd Session 2024',
-    class: 'Class 5A',
-    description: 'Lorem ipsum dolor sit amet consectetur.',
-    result: 'Download Result',
+    session: "3rd Session 2024",
+    class: "Class 5A",
+    description: "Lorem ipsum dolor sit amet consectetur.",
+    result: "Download Result",
   },
 
   // Add more items if needed
-]
+];
 
 const SCalender: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [activeDropdown, setActiveDropdown] = useState<number | null>(null) // State to manage the active dropdown
-  const itemsPerPage = 6
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeDropdown, setActiveDropdown] = useState<number | null>(null); // State to manage the active dropdown
+  const itemsPerPage = 6;
 
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = resultsData.slice(indexOfFirstItem, indexOfLastItem)
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = resultsData.slice(indexOfFirstItem, indexOfLastItem);
 
   // Handle page change
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   // Toggle dropdown visibility for specific row
   const toggleDropdown = (index: number) => {
     if (activeDropdown === index) {
-      setActiveDropdown(null) // Close the dropdown if it's already open
+      setActiveDropdown(null); // Close the dropdown if it's already open
     } else {
-      setActiveDropdown(index) // Open the clicked dropdown
+      setActiveDropdown(index); // Open the clicked dropdown
     }
-  }
+  };
 
   return (
     <div className="w-full mx-auto my-20">
@@ -86,15 +93,21 @@ const SCalender: React.FC = () => {
               </div>
               <div className="ml-4 w-fit px-6 ">{result.class}</div>
               <div className="ml-4">{result.description}</div>
-              <button className="bg-primary text-white px-4 py-2 ml-4 rounded-[80px]">Download Result</button>
+              <button className="bg-primary text-white px-4 py-2 ml-4 rounded-[80px]">
+                Download Result
+              </button>
               <div className="relative ml-6">
                 <button onClick={() => toggleDropdown(index)}>
                   <span className="text-gray-500">•••</span>
                 </button>
                 {activeDropdown === index && (
                   <div className="absolute right-0 mt-2 bg-white border rounded shadow-lg">
-                    <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Replace</button>
-                    <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Delete</button>
+                    <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Replace
+                    </button>
+                    <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Delete
+                    </button>
                   </div>
                 )}
               </div>
@@ -104,12 +117,16 @@ const SCalender: React.FC = () => {
       </div>
 
       {/* Pagination component */}
-      <PaginationControls totalPages={resultsData.length} currentPage={currentPage} onPageChange={handlePageChange} />
+      <PaginationControls
+        totalPages={resultsData.length}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default SCalender
+export default SCalender;
 
 const Upload = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,4 +139,4 @@ const Upload = () => (
       fill="white"
     />
   </svg>
-)
+);

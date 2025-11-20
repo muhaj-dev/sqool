@@ -1,18 +1,19 @@
-'use client'
+"use client";
 
-import { Button } from '@/components/ui/button'
-import { useAuthStore } from '@/zustand/authStore'
-import { LogOut } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/zustand/authStore";
 
 export function LogoutButton() {
-  const { logout } = useAuthStore()
-  const router = useRouter()
+  const { logout } = useAuthStore();
+  const router = useRouter();
 
   const handleLogout = () => {
-    logout()
-    router.push('/signin')
-  }
+    logout();
+    router.push("/signin");
+  };
 
   return (
     <Button
@@ -23,5 +24,5 @@ export function LogoutButton() {
       <LogOut className="h-4 w-4" />
       Logout
     </Button>
-  )
+  );
 }

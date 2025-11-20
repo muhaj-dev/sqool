@@ -1,39 +1,39 @@
-import React from 'react'
-import OwnerInfoForm from './OwnerInfoForm'
-import { Check, Trash2 } from 'lucide-react'
-import { Checkbox } from './ui/checkbox'
-import { Button } from './ui/button'
+import { Trash2 } from "lucide-react";
+
+import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
 
 const Ownerinfo = () => {
   const requirments = [
     {
-      label: 'Company Information',
-      text: 'Personal information of the business Owner(s)',
+      label: "Company Information",
+      text: "Personal information of the business Owner(s)",
     },
     {
-      label: 'Owner Information',
-      text: 'Personal information of the business Owner(s)',
+      label: "Owner Information",
+      text: "Personal information of the business Owner(s)",
     },
     {
-      label: 'Business Documentation',
-      text: 'Personal information of the business Owner(s)',
+      label: "Business Documentation",
+      text: "Personal information of the business Owner(s)",
     },
     {
-      label: 'Setup School',
-      text: 'Personal information of the business Owner(s)',
+      label: "Setup School",
+      text: "Personal information of the business Owner(s)",
     },
-  ]
+  ];
   return (
     <div className="py-4 ">
       <div>
         <h3>Review your Application</h3>
         <p className="text-muted-foreground">
-          This is the final look at your application. Make sure you met all the registration requirement.
+          This is the final look at your application. Make sure you met all the registration
+          requirement.
         </p>
       </div>
       <div className="bg-white rounded-md p-4 mt-8    ">
         <div className="flex flex-col gap-4">
-          {requirments.map(item => (
+          {requirments.map((item) => (
             <div key={item.label} className="flex gap-8 items-center w-full p-4 rounded-sm border">
               <div className=" rounded-full p-4 bg-[#f6513b48]">
                 <Trash2 className="text-red-600" />
@@ -55,7 +55,9 @@ const Ownerinfo = () => {
             "
             />
             <div className="grid gap-1.5 leading-none">
-              <p className="text-sm text-muted-foreground">I Confirm tis information provide Are Accurate and legit.</p>
+              <p className="text-sm text-muted-foreground">
+                I Confirm tis information provide Are Accurate and legit.
+              </p>
             </div>
           </div>
           <div className="w-full">
@@ -66,7 +68,7 @@ const Ownerinfo = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Ownerinfo
+export default Ownerinfo;

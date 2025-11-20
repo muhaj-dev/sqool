@@ -1,19 +1,26 @@
-'use client'
+"use client";
 
-import { Globe } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { FeeStructure } from '@/types'
+import { Globe } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { type FeeStructure } from "@/types";
 
 interface PublishDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  feeToPublish: FeeStructure | null
-  publishing: boolean
-  getClassName: (fee: FeeStructure) => string
-  getSessionName: (fee: FeeStructure) => string
-  onConfirm: () => void
-  onCancel: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  feeToPublish: FeeStructure | null;
+  publishing: boolean;
+  getClassName: (fee: FeeStructure) => string;
+  getSessionName: (fee: FeeStructure) => string;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 export function PublishDialog({
@@ -34,10 +41,12 @@ export function PublishDialog({
             <Globe className="w-5 h-5" />
             Publish Fee Structure
           </DialogTitle>
-          <DialogDescription>Are you sure you want to publish this fee structure?</DialogDescription>
+          <DialogDescription>
+            Are you sure you want to publish this fee structure?
+          </DialogDescription>
         </DialogHeader>
 
-        {feeToPublish && (
+        {feeToPublish ? (
           <div className="space-y-4">
             <div className="bg-muted/50 rounded-lg p-4 space-y-2">
               <div className="flex justify-between">
@@ -50,7 +59,9 @@ export function PublishDialog({
               </div>
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Total Amount:</span>
-                <span className="text-sm font-semibold">₦{feeToPublish.totalAmount.toLocaleString()}</span>
+                <span className="text-sm font-semibold">
+                  ₦{feeToPublish.totalAmount.toLocaleString()}
+                </span>
               </div>
             </div>
 
@@ -66,20 +77,26 @@ export function PublishDialog({
                   </svg>
                 </div>
                 <p className="text-sm">
-                  Once published, this fee structure will be visible to parents and students and cannot be
-                  unpublished.
+                  Once published, this fee structure will be visible to parents and students and
+                  cannot be unpublished.
                 </p>
               </div>
             </div>
           </div>
-        )}
+        ) : null}
 
         <div className="flex justify-end gap-3 mt-4">
           <Button type="button" variant="outline" onClick={onCancel} disabled={publishing}>
             Cancel
           </Button>
 
-          <Button type="button" variant="default" onClick={onConfirm} disabled={publishing} className="">
+          <Button
+            type="button"
+            variant="default"
+            onClick={onConfirm}
+            disabled={publishing}
+            className=""
+          >
             {publishing ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
@@ -95,5 +112,5 @@ export function PublishDialog({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

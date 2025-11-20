@@ -1,44 +1,51 @@
-'use client'
+"use client";
 
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import TopBar from '@/components/TopBar'
-import Wrapper from '@/components/Wrapper'
-import React from 'react'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import TopBar from "@/components/TopBar";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import Wrapper from "@/components/Wrapper";
 
 const FormSchema = z
   .object({
-    password: z.string().min(5, 'provide a valid password'),
+    password: z.string().min(5, "provide a valid password"),
     confirmPassword: z.string(),
   })
-  .refine(data => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-  })
+  });
 
 const ResetPassword = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      password: '',
-      confirmPassword: '',
+      password: "",
+      confirmPassword: "",
     },
-  })
+  });
 
-  const { toast } = useToast()
+  const { toast } = useToast();
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log('Hello')
-    console.log(data)
+    console.log("Hello");
+    console.log(data);
     toast({
-      variant: 'destructive',
-      title: 'Uh oh! Something went wrong.',
-      description: 'Invalid email or password!.',
-    })
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: "Invalid email or password!.",
+    });
   }
   return (
     <MaxWidthWrapper className="flex flex-col ">
@@ -88,7 +95,7 @@ const ResetPassword = () => {
         </Form>
       </Wrapper>
     </MaxWidthWrapper>
-  )
-}
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;

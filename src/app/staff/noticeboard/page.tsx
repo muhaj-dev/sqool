@@ -1,24 +1,22 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Noticebar from '../components/noticeboard/Noticbar'
-import EventCards from '../components/noticeboard/EventCards'
-import SchoolEvents from '../components/noticeboard/SchoolEvents'
+import EventCards from "../components/noticeboard/EventCards";
+import Noticebar from "../components/noticeboard/Noticbar";
 
 interface EventCard {
-  id: number
-  time: string
-  date: string
-  title: string
-  description: string
+  id: number;
+  time: string;
+  date: string;
+  title: string;
+  description: string;
   participants: {
-    name: string
-    role: string
-  }[]
-  attachments: string[]
-  eventDate: string
-  eventTime: string
-  isNew: boolean
+    name: string;
+    role: string;
+  }[];
+  attachments: string[];
+  eventDate: string;
+  eventTime: string;
+  isNew: boolean;
 }
 
 const Page = () => {
@@ -30,7 +28,7 @@ const Page = () => {
         {/* <SchoolEvents /> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

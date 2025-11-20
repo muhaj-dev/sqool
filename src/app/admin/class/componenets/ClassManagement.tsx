@@ -1,63 +1,61 @@
-'use client'
+"use client";
 
-import { useEffect, useState, useCallback } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import ClassHeader from './ClassHeader'
-import SubjectAssignment from './SubjectAssignment'
-import { ScheduleManagement } from './ScheduleManagement'
-import ResourceManagement from './ResourceManagement'
-import { Teacher, Subject, ClassPaginationResponse } from './types'
-import { getClassById } from '@/utils/api'
-import { useToast } from '@/components/ui/use-toast' // <-- Import useToast
-import { ClassOverview } from './ClassOverview'
-import { TeacherManagement } from './TeacherManagement'
-import { ArrowLeft, Search, Plus, Users, BookOpen, Calendar, FileText } from 'lucide-react'
+import { BookOpen, Calendar, FileText, Users } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast"; // <-- Import useToast
+import { getClassById } from "@/utils/api";
+
+import ClassHeader from "./ClassHeader";
+import { ClassOverview } from "./ClassOverview";
+import ResourceManagement from "./ResourceManagement";
+import { ScheduleManagement } from "./ScheduleManagement";
+import SubjectAssignment from "./SubjectAssignment";
+import { TeacherManagement } from "./TeacherManagement";
+import { type Subject, type Teacher } from "./types";
 
 interface ClassManagementProps {
-  initialTeachers: Teacher[]
-  initialSubjects: Subject[]
-  classId: string
+  initialTeachers: Teacher[];
+  initialSubjects: Subject[];
+  classId: string;
   // initialClasses: Class[];
 }
 
 const ClassManagement = ({
-  initialTeachers,
-  initialSubjects,
   classId,
   // initialClasses,
 }: ClassManagementProps) => {
-  const [teachers] = useState<Teacher[]>(initialTeachers)
-  const [classes, setClasses] = useState<ClassPaginationResponse[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [activeTab, setActiveTab] = useState('overview')
-  const { toast } = useToast()
+  const [activeTab, setActiveTab] = useState("overview");
+  const { toast } = useToast();
 
-  const [classData, setClassData] = useState<any | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [classData, setClassData] = useState<any>(null);
+  const [, setLoading] = useState(true);
 
-  const [refresh, setRefresh] = useState(false)
-  const handleRefresh = useCallback(() => setRefresh(r => !r), [])
+  const [refresh, setRefresh] = useState(false);
+  // eslint-disable-next-line prettier/prettier
+  const handleRefresh = useCallback(() => setRefresh(r => !r), []);
 
   useEffect(() => {
-    if (!classId) return
+    if (!classId) return;
     const fetchClass = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const res = await getClassById(classId)
-        setClassData(res.data)
+        const res = await getClassById(classId);
+        setClassData(res.data);
       } catch {
-        setClassData(null)
+        setClassData(null);
         toast({
-          variant: 'destructive',
-          title: 'Unable to fetch data',
-          description: 'There was an error fetching class data.',
-        })
+          variant: "destructive",
+          title: "Unable to fetch data",
+          description: "There was an error fetching class data.",
+        });
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchClass()
-  }, [classId, refresh]) // <-- add refresh here
+    };
+    void fetchClass();
+  }, [classId, refresh]); // <-- add refresh here
 
   // if (loading) return <div>Loading...</div>
   // if (!classData) return <div>Class not found</div>
@@ -137,7 +135,7 @@ const ClassManagement = ({
         </Tabs>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ClassManagement
+export default ClassManagement;

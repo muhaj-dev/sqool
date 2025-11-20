@@ -1,9 +1,9 @@
-'use client'
-import Settings from '@/components/settings'
-import React from 'react'
+"use client";
+
+import Settings from "@/components/settings";
 
 const page = () => {
-  return <Settings />
-}
+  return <Settings />;
+};
 
-export default page
+export default page;

@@ -1,23 +1,24 @@
-'use client'
+"use client";
 
+import { AlertTriangle } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { AlertTriangle } from 'lucide-react'
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface DeleteConfirmationModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onConfirm: () => void
-  title: string
-  description?: string
-  loading?: boolean
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+  title: string;
+  description?: string;
+  loading?: boolean;
 }
 
 export function DeleteConfirmationModal({
@@ -26,7 +27,7 @@ export function DeleteConfirmationModal({
   onConfirm,
   title,
   description = "This action cannot be undone. This will permanently delete the item and remove it from our servers.",
-  loading = false
+  loading = false,
 }: DeleteConfirmationModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -38,13 +39,11 @@ export function DeleteConfirmationModal({
             </div>
             <div>
               <DialogTitle className="text-left">{title}</DialogTitle>
-              <DialogDescription className="text-left mt-2">
-                {description}
-              </DialogDescription>
+              <DialogDescription className="text-left mt-2">{description}</DialogDescription>
             </div>
           </div>
         </DialogHeader>
-        
+
         <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 mt-4">
           <Button
             type="button"
@@ -67,5 +66,5 @@ export function DeleteConfirmationModal({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

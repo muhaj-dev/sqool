@@ -1,8 +1,7 @@
-import VerifiedEmail from '@/components/VerifiedEmail'
-import React from 'react'
+import VerifiedEmail from "@/components/VerifiedEmail";
 
 const page = () => {
-  return <VerifiedEmail />
-}
+  return <VerifiedEmail />;
+};
 
-export default page
+export default page;

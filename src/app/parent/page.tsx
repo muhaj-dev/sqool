@@ -1,5 +1,4 @@
-import ParentDashboard from './components/ParentDashboard'
-import ParentDetail from './components/ParentDetail'
+import ParentDetail from "./components/ParentDetail";
 
 const Page = () => {
   return (
@@ -10,7 +9,7 @@ const Page = () => {
         <ParentDetail />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

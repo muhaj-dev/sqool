@@ -1,20 +1,21 @@
 import { create } from "zustand";
-import { AttendanceStatus, StudentAttendance, TermDateRange } from "@/types";
-import { generateBusinessDayDates, getDefaultSchoolSession } from "@/utils/lib";
+
 import { ATTENDANCE_STORAGE_KEY } from "@/constants";
+import { type AttendanceStatus, type StudentAttendance, type TermDateRange } from "@/types";
+import { generateBusinessDayDates, getDefaultSchoolSession } from "@/utils/lib";
 
 interface AttendanceRecord {
   status: AttendanceStatus;
   remarks: string;
 }
 
-interface AttendanceStore {
+export interface AttendanceStore {
   startDate: Date;
   endDate: Date;
   selectedClass: string;
   selectedSession: string;
   selectedTerm: TermDateRange;
-  attendance: Record<string, AttendanceRecord>;
+  attendance: Record<string, AttendanceRecord>; // key: studentId
   students: StudentAttendance[];
 
   // setters
@@ -26,10 +27,7 @@ interface AttendanceStore {
 
   // attendance
   initializeAttendance: (studentIds: string[]) => void;
-  updateAttendance: (
-    studentId: string,
-    record: Partial<AttendanceRecord>
-  ) => void;
+  updateAttendance: (studentId: string, record: Partial<AttendanceRecord>) => void;
   markAllPresent: () => void;
   resetAttendance: () => void;
 
@@ -45,7 +43,7 @@ const loadInitialState = (): Partial<AttendanceStore> => {
     const stored = localStorage.getItem(ATTENDANCE_STORAGE_KEY);
     if (!stored) return {};
 
-    const parsed = JSON.parse(stored);
+    const parsed = JSON.parse(stored) as AttendanceStore;
 
     // revive date objects if they exist
     if (parsed.startDate) parsed.startDate = new Date(parsed.startDate);
@@ -89,10 +87,7 @@ export const useAttendanceStore = create<AttendanceStore>((set, get) => {
   };
 
   const initialState =
-    typeof window !== "undefined"
-      ? { ...defaultState, ...loadInitialState() }
-      : defaultState;
-
+    typeof window !== "undefined" ? { ...defaultState, ...loadInitialState() } : defaultState;
 
   return {
     ...initialState,

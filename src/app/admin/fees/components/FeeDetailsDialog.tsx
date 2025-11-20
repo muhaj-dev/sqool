@@ -1,15 +1,21 @@
-'use client'
+"use client";
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { FeeStructure } from '@/types'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { type FeeStructure } from "@/types";
 
 interface FeeDetailsDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  selectedFee: FeeStructure | null
-  getClassName: (fee: FeeStructure) => string
-  getSessionName: (fee: FeeStructure) => string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  selectedFee: FeeStructure | null;
+  getClassName: (fee: FeeStructure) => string;
+  getSessionName: (fee: FeeStructure) => string;
 }
 
 export function FeeDetailsDialog({
@@ -25,12 +31,12 @@ export function FeeDetailsDialog({
         <DialogHeader>
           <DialogTitle>Fee Structure Details</DialogTitle>
           <DialogDescription>
-            Complete breakdown of fees for {selectedFee && getClassName(selectedFee)} -{' '}
-            {selectedFee && getSessionName(selectedFee)}
+            Complete breakdown of fees for {selectedFee ? getClassName(selectedFee) : null} -{" "}
+            {selectedFee ? getSessionName(selectedFee) : null}
           </DialogDescription>
         </DialogHeader>
 
-        {selectedFee && (
+        {selectedFee ? (
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -60,8 +66,13 @@ export function FeeDetailsDialog({
                   <CardContent>
                     <div className="space-y-2">
                       {Object?.entries(term?.breakdown || []).map(([key, value]) => (
-                        <div key={key} className="flex justify-between items-center border-b pb-2 last:border-0">
-                          <span className="text-sm capitalize text-muted-foreground">{key.replace(/_/g, ' ')}</span>
+                        <div
+                          key={key}
+                          className="flex justify-between items-center border-b pb-2 last:border-0"
+                        >
+                          <span className="text-sm capitalize text-muted-foreground">
+                            {key.replace(/_/g, " ")}
+                          </span>
                           <span className="font-medium">₦{(value as number).toLocaleString()}</span>
                         </div>
                       ))}
@@ -71,8 +82,8 @@ export function FeeDetailsDialog({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
       </DialogContent>
     </Dialog>
-  )
+  );
 }

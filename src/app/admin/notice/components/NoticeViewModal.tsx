@@ -1,44 +1,41 @@
-'use client'
+"use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogClose,
-} from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
-import { Notice } from '@/types'
-import { format } from 'date-fns'
-import { X } from 'lucide-react'
-import Link from 'next/link'
+import { format } from "date-fns";
+import { X } from "lucide-react";
+import Link from "next/link";
+
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
+import { type Notice } from "@/types";
 
 interface NoticeViewModalProps {
-  notice: Notice | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  notice: Notice | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalProps) {
-  if (!notice) return null
+  if (!notice) return null;
 
   const safeFormat = (dateInput: string | Date | undefined | null) => {
-    if (!dateInput) return "N/A"
-    const d = typeof dateInput === "string" ? new Date(dateInput) : dateInput
-    if (isNaN((d as Date).getTime())) return "N/A"
-    return format(d as Date, "MMM dd, yyyy 'at' hh:mm a")
-  }
+    if (!dateInput) return "N/A";
+    const d = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+    if (isNaN(d.getTime())) return "N/A";
+    return format(d, "MMM dd, yyyy 'at' hh:mm a");
+  };
 
   const getVisibilityColor = (visibility: string) => {
     switch (visibility) {
       case "parent":
-        return "bg-blue-500/10 text-blue-700 dark:text-blue-400"
+        return "bg-blue-500/10 text-blue-700 dark:text-blue-400";
       case "staff":
-        return "bg-purple-500/10 text-purple-700 dark:text-purple-400"
+        return "bg-purple-500/10 text-purple-700 dark:text-purple-400";
       case "everyone":
-        return "bg-green-500/10 text-green-700 dark:text-green-400"
+        return "bg-green-500/10 text-green-700 dark:text-green-400";
       default:
-        return ""
+        return "";
     }
-  }
+  };
 
   const FileIcon = () => (
     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +48,7 @@ export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalP
         stroke="#9530AE"
       />
     </svg>
-  )
+  );
 
   const DotsIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +81,7 @@ export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalP
         </clipPath>
       </defs>
     </svg>
-  )
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -101,9 +98,7 @@ export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalP
             <div className="basis-full">
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="font-bold text-lg">{notice.title}</h2>
-                <Badge className={getVisibilityColor(notice.visibility)}>
-                  {notice.visibility}
-                </Badge>
+                <Badge className={getVisibilityColor(notice.visibility)}>{notice.visibility}</Badge>
                 {new Date(notice.expirationDate) < new Date() && (
                   <Badge variant="destructive">Expired</Badge>
                 )}
@@ -120,13 +115,15 @@ export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalP
               </div>
             </div>
           </div>
-          
+
           <div className="flex-1 mt-4 text-sm">
             <div className="mb-4">
               <h3 className="font-semibold mb-2">Full Details:</h3>
-              <p className="text-muted-foreground whitespace-pre-wrap">{notice.body || notice.content}</p>
+              <p className="text-muted-foreground whitespace-pre-wrap">
+                {notice.body || notice.content}
+              </p>
             </div>
-            
+
             <div className="border-b-[1px] border-[#A7A9AD] pb-4 mb-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -139,7 +136,7 @@ export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalP
                 </div>
               </div>
             </div>
-            
+
             <div className="flex justify-between items-center">
               <div className="flex-1">
                 {notice.resources.length > 0 && (
@@ -169,5 +166,5 @@ export function NoticeViewModal({ notice, open, onOpenChange }: NoticeViewModalP
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

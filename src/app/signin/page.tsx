@@ -1,24 +1,32 @@
-'use client'
+"use client";
 
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { useToast } from '@/components/ui/use-toast'
-import { zodResolver } from '@hookform/resolvers/zod'
-import TopBar from '@/components/TopBar'
-import Wrapper from '@/components/Wrapper'
-import Link from 'next/link'
-import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { useAuthStore } from '@/zustand/authStore'
-import { Eye, EyeOff } from 'lucide-react'
-import { LogoutButton } from '@/components/Logout'
-import { SchoolSelectionModal, RoleSelectionModal } from '@/components/SchoolSelectionModal'
-import { School, Role } from '@/types'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { LogoutButton } from "@/components/Logout";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { RoleSelectionModal, SchoolSelectionModal } from "@/components/SchoolSelectionModal";
+import TopBar from "@/components/TopBar";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import Wrapper from "@/components/Wrapper";
 import { LAST_PAGE_VISITED_BEFORE_AUTH } from "@/constants";
+import { type Role, type School } from "@/types";
+import { useAuthStore } from "@/zustand/authStore";
 
 const FormSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -55,7 +63,7 @@ export default function SignIn() {
       values.email,
       values.password,
       selectedSchool!.schoolId._id,
-      role
+      role,
     );
 
     if (result.success) {
@@ -132,9 +140,7 @@ export default function SignIn() {
         error: null,
       });
       const lastPage =
-        typeof window !== "undefined"
-          ? localStorage.getItem(LAST_PAGE_VISITED_BEFORE_AUTH)
-          : null;
+        typeof window !== "undefined" ? localStorage.getItem(LAST_PAGE_VISITED_BEFORE_AUTH) : null;
 
       if (lastPage) {
         localStorage.removeItem(LAST_PAGE_VISITED_BEFORE_AUTH);
@@ -203,16 +209,11 @@ export default function SignIn() {
       <LogoutButton />
       <Wrapper className="h-full max-w-[450px] w-full mx-auto gap-4 mt-[4rem] sm:mt-[4rem]">
         <div className="text-center mb-8">
-          <h3 className="text-primary text-2xl sm:text-3xl mb-4">
-            Welcome Back!
-          </h3>
+          <h3 className="text-primary text-2xl sm:text-3xl mb-4">Welcome Back!</h3>
           <p className="text-[#434547]">Login to visit your dashboard</p>
         </div>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
             <FormField
               control={form.control}
               name="email"
@@ -220,11 +221,7 @@ export default function SignIn() {
                 <FormItem>
                   <FormLabel>Email address</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="email@example.com"
-                      {...field}
-                      type="email"
-                    />
+                    <Input placeholder="email@example.com" {...field} type="email" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -249,9 +246,7 @@ export default function SignIn() {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowPassword(!showPassword)}
-                        aria-label={
-                          showPassword ? "Hide password" : "Show password"
-                        }
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 text-gray-500" />
@@ -265,11 +260,7 @@ export default function SignIn() {
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              className="w-full bg-primary text-white"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full bg-primary text-white" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Login"}
             </Button>
             <div className="text-center">

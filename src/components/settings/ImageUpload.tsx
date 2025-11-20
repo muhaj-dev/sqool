@@ -1,35 +1,36 @@
-'use client'
-import React, { useRef, useState, ChangeEvent } from 'react'
-import { Input } from '../ui/input'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+"use client";
+import { useRef, useState, type ChangeEvent } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Input } from "../ui/input";
 
 const ImageUpload = () => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [url, setUrl] = useState<string | null>('')
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [url, setUrl] = useState<string | null>("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
+    const files = e.target.files;
     if (files && files.length > 0) {
-      const url = URL.createObjectURL(files[0])
-      setSelectedImage(files[0])
-      setUrl(url)
+      const url = URL.createObjectURL(files[0]);
+      setSelectedImage(files[0]);
+      setUrl(url);
     }
-  }
+  };
   const clickHandler = () => {
-    inputRef.current?.focus()
-  }
+    inputRef.current?.focus();
+  };
   const handleFileRemove = () => {
-    setSelectedImage(null)
-    URL.revokeObjectURL(url!)
-    setUrl(null)
-    inputRef.current?.focus()
-  }
+    setSelectedImage(null);
+    URL.revokeObjectURL(url!);
+    setUrl(null);
+    inputRef.current?.focus();
+  };
   return (
     <div className="flex item-center gap-4 w-full">
       <div className="flex flex-col items-center ">
         <Avatar className="">
-          <AvatarImage src={selectedImage ? url! : ''} alt="@shadcn" />
+          <AvatarImage src={selectedImage ? url! : ""} alt="@shadcn" />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <Input
@@ -53,7 +54,7 @@ const ImageUpload = () => {
         we only accept this type of format (PNG, JPG). kindly upload photo not more that 5mb
       </span>
     </div>
-  )
-}
+  );
+};
 
-export default ImageUpload
+export default ImageUpload;

@@ -1,84 +1,92 @@
-import React from 'react'
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { toast } from '@/components/ui/use-toast'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Button } from '../ui/button'
-import { DialogClose } from '@radix-ui/react-dialog'
-import { X } from 'lucide-react'
-import { AddStaffPayload } from '@/types'
-import { useStaff } from '@/contexts/staff-context'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
+import { useStaff } from "@/contexts/staff-context";
+import { type AddStaffPayload } from "@/types";
+
+import { Button } from "../ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const FormSchema = z.object({
   firstName: z.string().min(2, {
-    message: 'First name must be at least 2 characters.',
+    message: "First name must be at least 2 characters.",
   }),
   lastName: z.string().min(2, {
-    message: 'Last name must be at least 2 characters.',
+    message: "Last name must be at least 2 characters.",
   }),
   level: z.string().min(1, {
-    message: 'Level is required.',
+    message: "Level is required.",
   }),
   email: z.string().email({
-    message: 'Invalid email address.',
+    message: "Invalid email address.",
   }),
   role: z.string().min(1, {
-    message: 'Role is required.',
+    message: "Role is required.",
   }),
   primarySubject: z.string().min(2, {
-    message: 'Primary subject must be at least 2 characters.',
+    message: "Primary subject must be at least 2 characters.",
   }),
   language: z.string().min(1, {
-    message: 'Language is required.',
+    message: "Language is required.",
   }),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'Date of birth must be in YYYY-MM-DD format.',
+    message: "Date of birth must be in YYYY-MM-DD format.",
   }),
   address: z.string().min(1, {
-    message: 'Address is required.',
+    message: "Address is required.",
   }),
   aboutMe: z.string().min(1, {
-    message: 'About me is required.',
+    message: "About me is required.",
   }),
   hobbies: z.array(z.string()).min(1, {
-    message: 'At least one hobby is required.',
+    message: "At least one hobby is required.",
   }),
   employmentDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'Employment date must be in YYYY-MM-DD format.',
+    message: "Employment date must be in YYYY-MM-DD format.",
   }),
   qualification: z.string().min(1, {
-    message: 'Qualification is required.',
+    message: "Qualification is required.",
   }),
   experience: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'Experience must be a date in YYYY-MM-DD format.',
+    message: "Experience must be a date in YYYY-MM-DD format.",
   }),
-})
+});
 
 const AddNewStaff = ({ setOpen }: any) => {
-  const { mutate, loading } = useStaff()
+  const { mutate, loading } = useStaff();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      level: '',
-      email: '',
-      role: '',
-      primarySubject: '',
-      language: '',
-      dateOfBirth: '',
-      address: '',
-      aboutMe: '',
+      firstName: "",
+      lastName: "",
+      level: "",
+      email: "",
+      role: "",
+      primarySubject: "",
+      language: "",
+      dateOfBirth: "",
+      address: "",
+      aboutMe: "",
       hobbies: [],
-      employmentDate: '',
-      qualification: '',
-      experience: '',
+      employmentDate: "",
+      qualification: "",
+      experience: "",
     },
-  })
+  });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     // console.log("Form data:", data)
@@ -98,25 +106,25 @@ const AddNewStaff = ({ setOpen }: any) => {
         employmentDate: data.employmentDate,
         qualification: data.qualification,
         experience: data.experience,
-      }
-      const response = await mutate(staffData)
+      };
+      const response = await mutate(staffData);
       toast({
-        title: 'Staff added successfully',
+        title: "Staff added successfully",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <p className="text-white">{response?.message || 'Staff created successfully'}</p>
+            <p className="text-white">{response?.message || "Staff created successfully"}</p>
           </pre>
         ),
-      })
-      setOpen(false)
+      });
+      setOpen(false);
 
-      form.reset()
+      form.reset();
     } catch (err) {
       toast({
-        title: 'Error adding staff',
-        description: err instanceof Error ? err.message : 'An error occurred',
-        variant: 'destructive',
-      })
+        title: "Error adding staff",
+        description: err instanceof Error ? err.message : "An error occurred",
+        variant: "destructive",
+      });
     }
   }
 
@@ -289,8 +297,10 @@ const AddNewStaff = ({ setOpen }: any) => {
                   <FormControl>
                     <Input
                       placeholder="Hobbies (e.g., reading, swimming)"
-                      onChange={e => field.onChange(e.target.value.split(',').map(hobby => hobby.trim()))}
-                      value={field.value.join(', ')}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.split(",").map((hobby) => hobby.trim()))
+                      }
+                      value={field.value.join(", ")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -344,7 +354,7 @@ const AddNewStaff = ({ setOpen }: any) => {
         </form>
       </Form>
     </DialogContent>
-  )
-}
+  );
+};
 
-export default AddNewStaff
+export default AddNewStaff;

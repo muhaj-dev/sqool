@@ -1,14 +1,15 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getClassScheduleForStaff } from "@/utils/api";
-import ErrorState from "@/components/ErrorState";
 import { format } from "date-fns";
-import { ClassInfo, ClassSchedule } from "@/types";
+import { Clock } from "lucide-react";
 import Link from "next/link";
-import { AuthUser } from "@/zustand/authStore";
+
+import ErrorState from "@/components/ErrorState";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { type ClassInfo, type ClassSchedule } from "@/types";
+import { getClassScheduleForStaff } from "@/utils/api";
+import { type AuthUser } from "@/zustand/authStore";
 
 interface UpcomingLessonsProps {
   staffId: string | undefined;
@@ -30,10 +31,7 @@ export function UpcomingLessons({ staffId, user }: UpcomingLessonsProps) {
 
   const formatTimeRange = (start: string, end: string) => {
     try {
-      return `${format(new Date(start), "hh:mm a")} - ${format(
-        new Date(end),
-        "hh:mm a"
-      )}`;
+      return `${format(new Date(start), "hh:mm a")} - ${format(new Date(end), "hh:mm a")}`;
     } catch {
       return "Invalid time";
     }
@@ -54,22 +52,23 @@ export function UpcomingLessons({ staffId, user }: UpcomingLessonsProps) {
       <CardContent>
         <div className="space-y-4">
           {/* Skeleton Loader */}
-          {isPending &&
-            Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0 animate-pulse"
-              >
-                <div className="p-2 bg-primary/10 rounded-lg h-6 w-6" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-3 bg-muted rounded w-1/2" />
-                  <div className="h-2 bg-muted rounded w-3/4" />
-                  <div className="h-2 bg-muted rounded w-1/3" />
+          {isPending
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0 animate-pulse"
+                >
+                  <div className="p-2 bg-primary/10 rounded-lg h-6 w-6" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 bg-muted rounded w-1/2" />
+                    <div className="h-2 bg-muted rounded w-3/4" />
+                    <div className="h-2 bg-muted rounded w-1/3" />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            : null}
           {/*Error State */}
-          {isError && (
+          {isError ? (
             <ErrorState
               variant="compact"
               onRetry={refetch}
@@ -77,7 +76,7 @@ export function UpcomingLessons({ staffId, user }: UpcomingLessonsProps) {
               title="Failed to load lessons"
               description="Please try again later."
             />
-          )}
+          ) : null}
           {/* Lesson Items */}
           {!isPending &&
             !isError &&
@@ -98,9 +97,7 @@ export function UpcomingLessons({ staffId, user }: UpcomingLessonsProps) {
                       {(lesson.class as ClassInfo).className || "—"}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-1">
-                    {lesson.day || "—"}
-                  </p>
+                  <p className="text-xs text-muted-foreground mb-1">{lesson.day || "—"}</p>
                   <p className="text-xs text-primary font-medium">
                     {formatTimeRange(lesson.startTime, lesson.endTime)}
                   </p>

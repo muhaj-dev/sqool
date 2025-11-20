@@ -1,15 +1,15 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bell, AlertCircle, CalendarCheck, Info, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { getStaffNotices } from "@/utils/api";
-import { AuthUser } from "@/zustand/authStore";
-import ErrorState from "@/components/ErrorState";
-import { cn } from "@/lib/utils";
-import { Notice } from "@/types";
+import { AlertCircle, Bell, CalendarCheck, Info, Star } from "lucide-react";
 import Link from "next/link";
+
+import ErrorState from "@/components/ErrorState";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { type Notice } from "@/types";
+import { getStaffNotices } from "@/utils/api";
+import { type AuthUser } from "@/zustand/authStore";
 
 interface RecentNoticesProps {
   staffId: string | undefined;
@@ -33,7 +33,7 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
     queryKey: ["staff-dashboard-notices", staffId],
     queryFn: async () => {
       const res = await getStaffNotices("", 3); // recent 3 notices
-      return res.result as Notice[];
+      return res.result;
     },
     enabled: !!staffId && user?.role === "teacher",
     staleTime: 10 * 60 * 1000,
@@ -57,23 +57,24 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
       <CardContent>
         <div className="space-y-4">
           {/* Skeleton Loading */}
-          {isPending &&
-            Array.from({ length: 3 }).map((_, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0 animate-pulse"
-              >
-                <div className="p-2 rounded-lg h-6 w-6 bg-muted/20" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-3 bg-muted rounded w-1/2" />
-                  <div className="h-2 bg-muted rounded w-3/4" />
-                  <div className="h-2 bg-muted rounded w-1/4" />
+          {isPending
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-4 pb-4 last:pb-0 border-b last:border-0 animate-pulse"
+                >
+                  <div className="p-2 rounded-lg h-6 w-6 bg-muted/20" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 bg-muted rounded w-1/2" />
+                    <div className="h-2 bg-muted rounded w-3/4" />
+                    <div className="h-2 bg-muted rounded w-1/4" />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            : null}
 
           {/* Error State */}
-          {isError && (
+          {isError ? (
             <ErrorState
               variant="compact"
               onRetry={refetch}
@@ -81,14 +82,13 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
               title="Error Fetching Notices"
               description="Failed to load notices. Please try again later."
             />
-          )}
+          ) : null}
 
           {/* Notices */}
           {!isPending &&
             !isError &&
             notices.map((notice: Notice) => {
-              const config =
-                TYPE_CONFIG[notice.notificationType] || TYPE_CONFIG.general;
+              const config = TYPE_CONFIG[notice.notificationType] || TYPE_CONFIG.general;
               const Icon = config.icon;
 
               return (
@@ -96,15 +96,15 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
                   key={notice._id}
                   className={cn(
                     "flex items-start gap-4 pb-4 last:pb-0 border-b border-b-black/15 last:border-0",
-                    !notice.isActive && "opacity-50"
+                    !notice.isActive && "opacity-50",
                   )}
                 >
                   {/* Icon with badge color */}
                   <div className={cn("p-2 rounded-lg relative", config.bg)}>
                     <Icon className={cn("h-4 w-4", config.text)} />
-                    {notice.isPinned && (
+                    {notice.isPinned ? (
                       <Star className="h-3 w-3 text-yellow-500 absolute -top-1 -right-1" />
-                    )}
+                    ) : null}
                   </div>
 
                   <div className="flex-1 space-y-1">
@@ -115,7 +115,7 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
                           className={cn(
                             "text-xs font-medium px-2 py-0.5 rounded-full",
                             config.bg,
-                            config.text
+                            config.text,
                           )}
                         >
                           {notice.notificationType.toUpperCase()}
@@ -128,8 +128,8 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
                               notice.visibility === "everyone"
                                 ? "bg-green-100 border-green-300 text-green-800"
                                 : notice.visibility === "staff"
-                                ? "bg-blue-100 border-blue-300 text-blue-800"
-                                : "bg-purple-100 border-purple-300 text-purple-800"
+                                  ? "bg-blue-100 border-blue-300 text-blue-800"
+                                  : "bg-purple-100 border-purple-300 text-purple-800",
                             )}
                           >
                             {notice.visibility.toUpperCase()}
@@ -138,9 +138,7 @@ export function RecentNotices({ staffId, user }: RecentNoticesProps) {
                       </div>
                     </div>
 
-                    <p className="text-xs text-muted-foreground">
-                      {notice.content}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{notice.content}</p>
                   </div>
                 </div>
               );

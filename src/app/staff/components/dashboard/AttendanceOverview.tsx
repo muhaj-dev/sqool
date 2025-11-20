@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -13,10 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ClassAttendanceStat } from "@/types";
+import { cn } from "@/lib/utils";
+import { type ClassAttendanceStat } from "@/types";
 
 interface AttendanceOverviewProps {
-  data: Array<ClassAttendanceStat>;
+  data: ClassAttendanceStat[];
 }
 
 export function AttendanceOverview({ data }: AttendanceOverviewProps) {
@@ -45,8 +46,8 @@ export function AttendanceOverview({ data }: AttendanceOverviewProps) {
     attendanceRate >= 90
       ? "bg-gradient-to-b from-green-50 to-transparent"
       : attendanceRate >= 50
-      ? "bg-gradient-to-b from-yellow-50 to-transparent"
-      : "bg-gradient-to-b from-red-50 to-transparent"
+        ? "bg-gradient-to-b from-yellow-50 to-transparent"
+        : "bg-gradient-to-b from-red-50 to-transparent",
   );
 
   return (
@@ -92,30 +93,21 @@ export function AttendanceOverview({ data }: AttendanceOverviewProps) {
                 strokeWidth="8"
                 fill="none"
                 strokeDasharray={`${2 * Math.PI * 56}`}
-                strokeDashoffset={`${
-                  2 * Math.PI * 56 * (1 - attendanceRate / 100)
-                }`}
+                strokeDashoffset={`${2 * Math.PI * 56 * (1 - attendanceRate / 100)}`}
                 className={cn(colorClass, "transition-all duration-700")}
                 strokeLinecap="round"
               />
             </svg>
 
             <div className="absolute inset-0 flex items-center justify-center">
-              <span
-                className={cn(
-                  "text-3xl font-bold transition-colors duration-500",
-                  colorClass
-                )}
-              >
+              <span className={cn("text-3xl font-bold transition-colors duration-500", colorClass)}>
                 {attendanceRate}%
               </span>
             </div>
           </div>
 
           {/* Subtitle */}
-          <p className="text-sm text-muted-foreground mb-4">
-            {selectedClass?.className}, Today.
-          </p>
+          <p className="text-sm text-muted-foreground mb-4">{selectedClass?.className}, Today.</p>
 
           {/* Button */}
           <Button className="w-full">

@@ -1,43 +1,41 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { FaAngleDown } from 'react-icons/fa'
-import { Menu, Transition } from '@headlessui/react'
-import { RiArrowDownSFill } from 'react-icons/ri'
-import { IParent, IStudent } from '@/types'
+import { Menu, Transition } from "@headlessui/react";
+import React, { Fragment, useEffect, useState } from "react";
+import { RiArrowDownSFill } from "react-icons/ri";
 
 interface AdminTableProps {
-  title?: string
-  columns: ColumnDef[]
-  data: any[]
-  currentPage: number
-  totalPages: number
-  totalItems: number
+  title?: string;
+  columns: ColumnDef[];
+  data: any[];
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
   pagination: {
-    hasPreviousPage: boolean
-    hasNextPage: boolean
-    currentPage: number
-    totalPages: number
-  }
-  showFilter?: boolean
-  showSorting?: boolean
-  showPagination?: boolean
-  showItemCheck?: boolean
-  onPageChange?: (page: number) => void
-  onRecordClicked?: (student: any) => void
-  sortOptions?: { label: string; value: string }[]
-  statusOptions?: { label: string; value: string }[]
-  onSort?: (sortValue: string) => void
-  onStatusFilterChange?: (status: string) => void
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    currentPage: number;
+    totalPages: number;
+  };
+  showFilter?: boolean;
+  showSorting?: boolean;
+  showPagination?: boolean;
+  showItemCheck?: boolean;
+  onPageChange?: (page: number) => void;
+  onRecordClicked?: (student: any) => void;
+  sortOptions?: { label: string; value: string }[];
+  statusOptions?: { label: string; value: string }[];
+  onSort?: (sortValue: string) => void;
+  onStatusFilterChange?: (status: string) => void;
 }
 
 interface ColumnDef {
-  key: string
-  label: string
-  renderCell?: (item: any) => React.ReactNode
-  width?: string
+  key: string;
+  label: string;
+  renderCell?: (item: any) => React.ReactNode;
+  width?: string;
 }
 
 const AdminTable = ({
-  title = 'Students',
+  title = "Students",
   columns = [],
   data = [],
   currentPage = 1,
@@ -60,83 +58,83 @@ const AdminTable = ({
   onSort = () => {},
   onStatusFilterChange = () => {},
 }: AdminTableProps) => {
-  const [selectedLabel, setSelectedLabel] = useState('All')
-  const [selectedLabelDate, setSelectedLabelDate] = useState('Date')
-  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({})
+  const [selectedLabel, setSelectedLabel] = useState("All");
+  const [selectedLabelDate, setSelectedLabelDate] = useState("Date");
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const initialCheckedState = data.reduce(
       (acc, item) => {
-        acc[item._id || ''] = false
-        return acc
+        acc[item._id || ""] = false;
+        return acc;
       },
       {} as Record<string, boolean>,
-    )
-    setCheckedItems(initialCheckedState)
-  }, [data])
+    );
+    setCheckedItems(initialCheckedState);
+  }, [data]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, itemId: string) => {
-    e.stopPropagation()
-    setCheckedItems(prev => ({ ...prev, [itemId]: !prev[itemId] }))
-  }
+    e.stopPropagation();
+    setCheckedItems((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  };
 
   const handleToggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation()
-    const allChecked = Object.values(checkedItems).every(Boolean)
+    e.stopPropagation();
+    const allChecked = Object.values(checkedItems).every(Boolean);
     const newCheckedItems = data.reduce(
       (acc, item) => {
-        acc[item._id || ''] = !allChecked
-        return acc
+        acc[item._id || ""] = !allChecked;
+        return acc;
       },
       {} as Record<string, boolean>,
-    )
-    setCheckedItems(newCheckedItems)
-  }
+    );
+    setCheckedItems(newCheckedItems);
+  };
 
   const handleNextPage = () => {
     if (currentPage < totalPages && pagination.hasNextPage) {
-      onPageChange(currentPage + 1)
+      onPageChange(currentPage + 1);
     }
-  }
+  };
 
   const handlePrevPage = () => {
     if (currentPage > 1 && pagination.hasPreviousPage) {
-      onPageChange(currentPage - 1)
+      onPageChange(currentPage - 1);
     }
-  }
+  };
 
   // Generate page numbers for pagination
   const generatePageNumbers = () => {
-    const pages = []
-    const maxVisiblePages = 5
+    const pages = [];
+    const maxVisiblePages = 5;
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      pages.push(i)
+      pages.push(i);
     }
 
-    return pages
-  }
+    return pages;
+  };
 
   const defaultRenderCell = (item: any, key: string): React.ReactNode => {
-    const value = item[key as keyof any]
-    if (typeof value === 'object' && value !== null) {
-      if (key === 'parent') {
-        return `${item.parent.userId.firstName} ${item.parent.userId.lastName} (Active: ${item.parent.isActive})`
-      } else if (key === 'class') {
-        return item.class.className || 'N/A'
+    const value = item[key as keyof any];
+    if (typeof value === "object" && value !== null) {
+      if (key === "parent") {
+        return `${item.parent.userId.firstName} ${item.parent.userId.lastName} (Active: ${item.parent.isActive})`;
+      } else if (key === "class") {
+        return item.class.className || "N/A";
       }
-      return JSON.stringify(value)
+      return JSON.stringify(value);
     }
-    return value ?? 'N/A'
-  }
+    return value ?? "N/A";
+  };
 
   return (
     <div className="bg-white relative w-full font-inter px-6 py-4">
@@ -145,7 +143,7 @@ const AdminTable = ({
       <div className="flex flex-wrap justify-between ml-auto w-fit gap-4 mt-0 md:mt-4 mb-8">
         <div className="flex flex-wrap gap-5 items-center">
           <div className="flex gap-2 flex-wrap items-center">
-            {showFilter && statusOptions.length > 0 && (
+            {showFilter && statusOptions.length > 0 ? (
               <div className="flex gap-3">
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
@@ -170,11 +168,11 @@ const AdminTable = ({
                             {({ active }) => (
                               <button
                                 onClick={() => {
-                                  onStatusFilterChange(option.value)
-                                  setSelectedLabel(option.label)
+                                  onStatusFilterChange(option.value);
+                                  setSelectedLabel(option.label);
                                 }}
                                 className={`${
-                                  active ? 'bg-gray-100' : ''
+                                  active ? "bg-gray-100" : ""
                                 } block w-full text-left px-4 py-2 text-sm text-gray-700`}
                               >
                                 {option.label}
@@ -187,9 +185,9 @@ const AdminTable = ({
                   </Transition>
                 </Menu>
               </div>
-            )}
+            ) : null}
 
-            {showSorting && sortOptions.length > 0 && (
+            {showSorting && sortOptions.length > 0 ? (
               <div className="flex gap-3">
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
@@ -214,11 +212,11 @@ const AdminTable = ({
                             {({ active }) => (
                               <button
                                 onClick={() => {
-                                  onSort(option.value)
-                                  setSelectedLabelDate(option.label)
+                                  onSort(option.value);
+                                  setSelectedLabelDate(option.label);
                                 }}
                                 className={`${
-                                  active ? 'bg-gray-100' : ''
+                                  active ? "bg-gray-100" : ""
                                 } block w-full text-left px-4 py-2 text-sm text-gray-700`}
                               >
                                 {option.label}
@@ -231,7 +229,7 @@ const AdminTable = ({
                   </Transition>
                 </Menu>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -240,8 +238,12 @@ const AdminTable = ({
         <table className="w-full max-w-[1000px] text-sm text-left text-gray-500">
           <thead className="text-xs h-[70px] capitalize bg-[#F8F8FD] text-[#171D1B]">
             <tr>
-              {showItemCheck && (
-                <th scope="col" className="px-3 py-3 text-[14px] font-medium" style={{ width: '5%' }}>
+              {showItemCheck ? (
+                <th
+                  scope="col"
+                  className="px-3 py-3 text-[14px] font-medium"
+                  style={{ width: "5%" }}
+                >
                   <input
                     checked={Object.values(checkedItems).every(Boolean)}
                     onChange={handleToggleAll}
@@ -249,12 +251,12 @@ const AdminTable = ({
                     className="w-[18px] h-[18px] accent-[#006b5e]"
                   />
                 </th>
-              )}
-              {columns?.map(col => (
+              ) : null}
+              {columns?.map((col) => (
                 <th
                   key={col.key}
                   scope="col"
-                  className={`py-3 text-[14px] font-medium ${col.width ? `w-[${col.width}]` : ''}`}
+                  className={`py-3 text-[14px] font-medium ${col.width ? `w-[${col.width}]` : ""}`}
                 >
                   {col.label}
                 </th>
@@ -262,24 +264,24 @@ const AdminTable = ({
             </tr>
           </thead>
           <tbody>
-            {data?.map(student => (
+            {data?.map((student) => (
               <tr
                 key={student._id}
                 className="hover:bg-[#F8F8FD] cursor-pointer border-b border-gray-200"
                 onClick={() => onRecordClicked(student)}
               >
-                {showItemCheck && (
+                {showItemCheck ? (
                   <td className="px-3 py-4">
                     <input
                       type="checkbox"
                       className="w-[18px] h-[18px] accent-[#006b5e]"
                       checked={checkedItems[student._id] || false}
-                      onChange={e => handleCheckboxChange(e, student._id)}
-                      onClick={e => e.stopPropagation()}
+                      onChange={(e) => handleCheckboxChange(e, student._id)}
+                      onClick={(e) => e.stopPropagation()}
                     />
                   </td>
-                )}
-                {columns.map(col => (
+                ) : null}
+                {columns.map((col) => (
                   <td key={col.key} className="py-5">
                     {col.renderCell ? col.renderCell(student) : defaultRenderCell(student, col.key)}
                   </td>
@@ -290,7 +292,7 @@ const AdminTable = ({
         </table>
       </div>
 
-      {showPagination && totalPages > 1 && (
+      {showPagination && totalPages > 1 ? (
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
           <div>
             <span className="text-sm text-muted-foreground">
@@ -307,11 +309,13 @@ const AdminTable = ({
             </button>
 
             {/* Page numbers */}
-            {generatePageNumbers().map(page => (
+            {generatePageNumbers().map((page) => (
               <button
                 key={page}
                 className={`px-3 py-2 text-sm rounded-md border transition-colors ${
-                  page === currentPage ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-50'
+                  page === currentPage
+                    ? "bg-primary text-white border-primary"
+                    : "border-gray-300 hover:bg-gray-50"
                 }`}
                 onClick={() => onPageChange(page)}
               >
@@ -328,9 +332,9 @@ const AdminTable = ({
             </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default AdminTable
+export default AdminTable;

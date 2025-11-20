@@ -1,45 +1,48 @@
-'use client'
-import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import DatePicker from '../DatePicker'
-import AttachmentUpload from '../AttachmentUpload'
-import { Plus } from 'lucide-react'
-import { Separator } from '../ui/separator'
-import { useOnboarding } from '@/contexts/onboarding-context'
-import { useSchoolStore } from '@/zustand/useSetupSchool'
-import React from 'react'
+} from "@/components/ui/select";
+
+import { useOnboarding } from "@/contexts/onboarding-context";
+import AttachmentUpload from "../AttachmentUpload";
+import DatePicker from "../DatePicker";
+import { Button } from "../ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+
+import { Separator } from "../ui/separator";
+
+import { useSchoolStore } from "@/zustand/useSetupSchool";
 
 const formSchema = z.object({
   schoolLogoId: z.instanceof(File).optional(),
-  schoolShortName: z.string({ required_error: 'School short name is required' }).min(2).max(50),
-  schoolMotto: z.string({ required_error: 'School motto is required' }).min(2).max(50),
-  schoolPhoneNumber: z.string({ required_error: 'Phone number is required' }).min(2).max(50),
-  lga: z.string({ required_error: 'Local government is required' }).min(2),
-  foundingDate: z.string().min(2, { message: 'Date is required' }),
-  schoolWebsite: z.string({ required_error: 'Website is required' }).min(2),
-  country: z.string({ required_error: 'Country is required' }).min(2),
-  state: z.string({ required_error: 'State is required' }).min(2),
-  schoolAddress: z.string({ required_error: 'School address is required' }).min(2),
-  schoolEmailAddress: z.string().email({ message: 'Please provide a valid email address' }),
-})
+  schoolShortName: z.string({ required_error: "School short name is required" }).min(2).max(50),
+  schoolMotto: z.string({ required_error: "School motto is required" }).min(2).max(50),
+  schoolPhoneNumber: z.string({ required_error: "Phone number is required" }).min(2).max(50),
+  lga: z.string({ required_error: "Local government is required" }).min(2),
+  foundingDate: z.string().min(2, { message: "Date is required" }),
+  schoolWebsite: z.string({ required_error: "Website is required" }).min(2),
+  country: z.string({ required_error: "Country is required" }).min(2),
+  state: z.string({ required_error: "State is required" }).min(2),
+  schoolAddress: z.string({ required_error: "School address is required" }).min(2),
+  schoolEmailAddress: z.string().email({ message: "Please provide a valid email address" }),
+});
 
 const SetupSchoolForm = () => {
-  const { setSchoolData, schoolData } = useSchoolStore()
-  const { updateCompletionState, goNextPage, updateFormData } = useOnboarding()
-  const [date, setDate] = React.useState<Date | undefined>(undefined)
+  const { setSchoolData, schoolData } = useSchoolStore();
+  const { updateCompletionState, goNextPage, updateFormData } = useOnboarding();
+  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,7 +51,7 @@ const SetupSchoolForm = () => {
       foundingDate: schoolData.foundingDate || undefined,
       schoolLogoId: undefined,
     },
-  })
+  });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     // Prepare the school setup data
@@ -63,40 +66,42 @@ const SetupSchoolForm = () => {
       state: data.state,
       schoolAddress: data.schoolAddress,
       schoolEmailAddress: data.schoolEmailAddress,
-    }
+    };
 
     // Prepare the files data
-    const uploadedFiles: File[] = []
+    const uploadedFiles: File[] = [];
     if (data.schoolLogoId) {
-      uploadedFiles.push(data.schoolLogoId)
+      uploadedFiles.push(data.schoolLogoId);
     }
 
     // Update the form data in context (this will append files)
-    updateFormData('SchoolSetup', schoolSetupData)
-    updateFormData('UploadedFiles', uploadedFiles)
+    updateFormData("SchoolSetup", schoolSetupData);
+    updateFormData("UploadedFiles", uploadedFiles);
 
     // Update the school store
-    setSchoolData(schoolSetupData)
+    setSchoolData(schoolSetupData);
 
-    console.log('Submitted data:', { schoolSetupData, uploadedFiles })
-    goNextPage()
-    updateCompletionState('Setup School')
+    console.log("Submitted data:", { schoolSetupData, uploadedFiles });
+    goNextPage();
+    updateCompletionState("Setup School");
   }
 
   const handleSelect = (selectedDate: Date | string | undefined) => {
-    if (typeof selectedDate === 'string') {
-      selectedDate = new Date(selectedDate)
+    if (typeof selectedDate === "string") {
+      selectedDate = new Date(selectedDate);
     }
-    setDate(selectedDate)
-    form.setValue('foundingDate', (selectedDate as Date).toLocaleString())
-  }
+    setDate(selectedDate);
+    form.setValue("foundingDate", (selectedDate as Date).toLocaleString());
+  };
 
   return (
     <div className="bg-white rounded-md px-0 md:p-4 mt-8">
       <div className="flex items-center justify-between border-b-2 pb-4 mb-4">
         <div>
           <h3 className="text-xl font-semibold">Setup your school system</h3>
-          <p className="text-sm text-muted-foreground">This information that you can update anytime.</p>
+          <p className="text-sm text-muted-foreground">
+            This information that you can update anytime.
+          </p>
         </div>
       </div>
 
@@ -119,13 +124,13 @@ const SetupSchoolForm = () => {
                     <FormControl>
                       <AttachmentUpload
                         {...field}
-                        onChange={file => {
-                          if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
-                            form.setValue('schoolLogoId', file)
+                        onChange={(file) => {
+                          if (file && ["image/jpeg", "image/png"].includes(file.type)) {
+                            form.setValue("schoolLogoId", file);
                           } else {
-                            form.setError('schoolLogoId', {
-                              message: 'Only JPG/PNG files are allowed',
-                            })
+                            form.setError("schoolLogoId", {
+                              message: "Only JPG/PNG files are allowed",
+                            });
                           }
                         }}
                         accept=".jpg,.jpeg,.png"
@@ -147,7 +152,7 @@ const SetupSchoolForm = () => {
                       <FormControl>
                         <DatePicker
                           selected={field.value ? new Date(field.value) : undefined}
-                          onSelect={date => field.onChange(date?.toISOString())}
+                          onSelect={(date) => field.onChange(date?.toISOString())}
                         />
                       </FormControl>
                       <FormMessage />
@@ -201,7 +206,12 @@ const SetupSchoolForm = () => {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                        <Input placeholder="Phone Number" {...field} className="rounded-l-none" type="text" />
+                        <Input
+                          placeholder="Phone Number"
+                          {...field}
+                          className="rounded-l-none"
+                          type="text"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -324,14 +334,16 @@ const SetupSchoolForm = () => {
       <div className="flex sm:w-[95%] justify-between mt-4">
         <div>
           <h3 className="text-xl font-semibold">School Brands</h3>
-          <p className="text-sm text-muted-foreground  w-[16rem]">if your school don&apos;t have a brands ignore.</p>
+          <p className="text-sm text-muted-foreground  w-[16rem]">
+            if your school don&apos;t have a brands ignore.
+          </p>
         </div>
         <Button className="text-primary bg-white hover:bg-gray-200">
           <Plus /> Add Brands
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SetupSchoolForm
+export default SetupSchoolForm;

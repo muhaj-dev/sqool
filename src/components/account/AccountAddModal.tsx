@@ -1,29 +1,42 @@
-'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { createBankAccount } from '@/utils/api'
-import { useToast } from '@/components/ui/use-toast'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
+import { createBankAccount } from "@/utils/api";
 
 const formSchema = z.object({
   account_name: z.string().min(5, {
-    message: 'Account name must be at least 5 characters',
+    message: "Account name must be at least 5 characters",
   }),
   account_no: z
     .string()
-    .min(10, { message: 'Account number must be at least 10 digits' })
-    .max(20, { message: 'Account number cannot exceed 20 digits' })
-    .regex(/^\d+$/, { message: 'Account number must contain only numbers' }),
+    .min(10, { message: "Account number must be at least 10 digits" })
+    .max(20, { message: "Account number cannot exceed 20 digits" })
+    .regex(/^\d+$/, { message: "Account number must contain only numbers" }),
   bank_name: z.string().min(2, {
-    message: 'Please select a bank',
+    message: "Please select a bank",
   }),
-})
+});
 
 export function AccountAddModal({
   refresh,
@@ -31,20 +44,20 @@ export function AccountAddModal({
   showAccountModal,
   setShowAccountModal,
 }: {
-  refresh: boolean
-  setRefresh: React.Dispatch<React.SetStateAction<boolean>>
-  showAccountModal: boolean
-  setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  showAccountModal: boolean;
+  setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { toast } = useToast()
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      account_name: '',
-      account_no: '',
-      bank_name: '',
+      account_name: "",
+      account_no: "",
+      bank_name: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -52,29 +65,29 @@ export function AccountAddModal({
         accountName: values.account_name,
         bankName: values.bank_name,
         accountNumber: values.account_no,
-      }
+      };
 
-      await createBankAccount(bankAccountData)
+      await createBankAccount(bankAccountData);
 
       toast({
-        variant: 'default',
-        title: 'Success',
-        description: 'Bank account added successfully!',
-      })
-      setRefresh(!refresh)
-      setShowAccountModal(false)
+        variant: "default",
+        title: "Success",
+        description: "Bank account added successfully!",
+      });
+      setRefresh(!refresh);
+      setShowAccountModal(false);
       // Reset form after successful submission
-      form.reset()
+      form.reset();
     } catch (error) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to add bank account',
-      })
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to add bank account",
+      });
     }
   }
 
-  if (!showAccountModal) return null
+  if (!showAccountModal) return null;
 
   return (
     <div className="w-full">
@@ -84,10 +97,12 @@ export function AccountAddModal({
             X
           </DialogClose>
           <DialogHeader className="flex flex-col items-center w-[100%] mx-auto my-4">
-            <DialogTitle className="text-primary font-semibold text-xl mb-2">Add Bank Account</DialogTitle>
+            <DialogTitle className="text-primary font-semibold text-xl mb-2">
+              Add Bank Account
+            </DialogTitle>
             <DialogDescription className="text-center">
-              Provide your bank account details to receive payments. Ensure the account name matches the name on your
-              official documentation.
+              Provide your bank account details to receive payments. Ensure the account name matches
+              the name on your official documentation.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -147,7 +162,12 @@ export function AccountAddModal({
                       Account Name
                     </Label>
                     <FormControl>
-                      <Input id="account_name" placeholder="Account name" className="bg-[#E9EBEB]" {...field} />
+                      <Input
+                        id="account_name"
+                        placeholder="Account name"
+                        className="bg-[#E9EBEB]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -164,5 +184,5 @@ export function AccountAddModal({
         </DialogContent>
       </div>
     </div>
-  )
+  );
 }

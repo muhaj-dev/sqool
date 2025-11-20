@@ -1,9 +1,10 @@
-'use client'
-import React from 'react'
+"use client";
+
 // import { Ellipsis } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { CircularProgressbar } from 'react-circular-progressbar'
-import { Separator } from '@/components/ui/separator'
+import { CircularProgressbar } from "react-circular-progressbar";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 
 const TopTeachers = () => {
   return (
@@ -29,7 +30,7 @@ const TopTeachers = () => {
         </div>
         <div className="flex gap-1 w-[64px] h-[54px] items-center ">
           <CircularProgressbar strokeWidth={15} value={85} />
-          <span>{'85%'}</span>
+          <span>{"85%"}</span>
         </div>
       </div>
       <Separator />
@@ -49,7 +50,7 @@ const TopTeachers = () => {
         </div>
         <div className="flex gap-1 w-[64px] h-[54px] items-center ">
           <CircularProgressbar strokeWidth={15} value={85} />
-          <span>{'85%'}</span>
+          <span>{"85%"}</span>
         </div>
       </div>
       <Separator />
@@ -69,7 +70,7 @@ const TopTeachers = () => {
         </div>
         <div className="flex gap-1 w-[64px] h-[54px] items-center ">
           <CircularProgressbar strokeWidth={15} value={85} />
-          <span>{'85%'}</span>
+          <span>{"85%"}</span>
         </div>
       </div>
       <Separator />
@@ -89,7 +90,7 @@ const TopTeachers = () => {
         </div>
         <div className="flex gap-1 w-[64px] h-[54px] items-center ">
           <CircularProgressbar strokeWidth={15} value={85} />
-          <span>{'85%'}</span>
+          <span>{"85%"}</span>
         </div>
       </div>
       <Separator />
@@ -109,7 +110,7 @@ const TopTeachers = () => {
         </div>
         <div className="flex gap-1 w-[64px] h-[54px] items-center ">
           <CircularProgressbar strokeWidth={15} value={85} />
-          <span>{'85%'}</span>
+          <span>{"85%"}</span>
         </div>
       </div>
       <Separator />
@@ -129,12 +130,12 @@ const TopTeachers = () => {
         </div>
         <div className="flex gap-1 w-[64px] h-[54px] items-center ">
           <CircularProgressbar strokeWidth={15} value={85} />
-          <span>{'85%'}</span>
+          <span>{"85%"}</span>
         </div>
       </div>
       {/* <Separator /> */}
     </section>
-  )
-}
+  );
+};
 
-export default TopTeachers
+export default TopTeachers;

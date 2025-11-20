@@ -1,18 +1,18 @@
 "use client";
 
-import React from "react";
+import { Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogContent,
-  DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Item, ItemMedia, ItemContent, ItemTitle } from "@/components/ui/item";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
-import { Trash2 } from "lucide-react";
 
 interface RemoveStaffDialogProps {
   open: boolean;
@@ -42,7 +42,7 @@ export function RemoveStaffDialog({
     <Dialog open={open} onOpenChange={!loading ? setOpen : () => {}}>
       <DialogContent className="overflow-hidden">
         {/* LOADING OVERLAY */}
-        {loading && (
+        {loading ? (
           <div
             className="absolute inset-0 z-20 flex items-center justify-center 
             bg-black/40 backdrop-blur-sm"
@@ -52,13 +52,11 @@ export function RemoveStaffDialog({
                 <Spinner />
               </ItemMedia>
               <ItemContent>
-                <ItemTitle className="line-clamp-1">
-                  Removing staff...
-                </ItemTitle>
+                <ItemTitle className="line-clamp-1">Removing staff...</ItemTitle>
               </ItemContent>
             </Item>
           </div>
-        )}
+        ) : null}
 
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -66,9 +64,8 @@ export function RemoveStaffDialog({
             Remove Staff from {staff.className} Class
           </DialogTitle>
           <DialogDescription>
-            This action will remove the staff from this class. They will no
-            longer appear as a class tutor or have subject access for this
-            class.
+            This action will remove the staff from this class. They will no longer appear as a class
+            tutor or have subject access for this class.
           </DialogDescription>
         </DialogHeader>
 
@@ -88,8 +85,7 @@ export function RemoveStaffDialog({
             rounded-md p-3 text-sm"
           >
             <p className="leading-relaxed">
-              Are you sure you want to remove this staff? This action cannot be
-              undone.
+              Are you sure you want to remove this staff? This action cannot be undone.
             </p>
           </div>
         </div>
@@ -104,12 +100,7 @@ export function RemoveStaffDialog({
             Cancel
           </Button>
 
-          <Button
-            variant="destructive"
-            onClick={onConfirm}
-            disabled={loading}
-            className="w-full"
-          >
+          <Button variant="destructive" onClick={onConfirm} disabled={loading} className="w-full">
             Confirm Removal
           </Button>
         </DialogFooter>

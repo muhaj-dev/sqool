@@ -1,22 +1,24 @@
-'use client'
-import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import AttachmentUpload from '../AttachmentUpload'
-import { Separator } from '../ui/separator'
-import { useOnboarding } from '@/contexts/onboarding-context'
-import { zodResolver } from '@hookform/resolvers/zod'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { useOnboarding } from "@/contexts/onboarding-context";
+
+import AttachmentUpload from "../AttachmentUpload";
+import { Button } from "../ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Separator } from "../ui/separator";
 
 const formSchema = z.object({
   files: z.object({
     cacId: z.instanceof(File).optional(),
     utility: z.instanceof(File).optional(),
   }),
-})
+});
 
 const BusinessDocForm = () => {
-  const { updateCompletionState, goNextPage, updateFormData } = useOnboarding()
+  const { updateCompletionState, goNextPage, updateFormData } = useOnboarding();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -26,25 +28,25 @@ const BusinessDocForm = () => {
         utility: undefined,
       },
     },
-  })
+  });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     // Prepare the files data
-    const uploadedFiles: File[] = []
+    const uploadedFiles: File[] = [];
 
     if (data.files.cacId) {
-      uploadedFiles.push(data.files.cacId)
+      uploadedFiles.push(data.files.cacId);
     }
     if (data.files.utility) {
-      uploadedFiles.push(data.files.utility)
+      uploadedFiles.push(data.files.utility);
     }
 
     // Update the form data in context (this will append files)
-    updateFormData('UploadedFiles', uploadedFiles)
+    updateFormData("UploadedFiles", uploadedFiles);
 
-    console.log('Submitted files:', uploadedFiles)
-    goNextPage()
-    updateCompletionState('Business Documentation')
+    console.log("Submitted files:", uploadedFiles);
+    goNextPage();
+    updateCompletionState("Business Documentation");
   }
 
   return (
@@ -52,7 +54,9 @@ const BusinessDocForm = () => {
       <div className="flex items-center justify-between border-b-2 pb-4 mb-4">
         <div>
           <h3 className="text-xl font-semibold">Please submit your business documentation</h3>
-          <p className="text-sm text-muted-foreground">Ensure the business documentation you are submitting is valid</p>
+          <p className="text-sm text-muted-foreground">
+            Ensure the business documentation you are submitting is valid
+          </p>
         </div>
       </div>
 
@@ -64,8 +68,8 @@ const BusinessDocForm = () => {
                 <div>
                   <h3 className="text-xl font-semibold">Form CAC7</h3>
                   <p className="text-sm text-muted-foreground w-full md:w-[16rem]">
-                    The Corporate Affairs Commission (CAC) is the statutory body charged with the administration of the
-                    Companies and Allied Matters Act.
+                    The Corporate Affairs Commission (CAC) is the statutory body charged with the
+                    administration of the Companies and Allied Matters Act.
                   </p>
                 </div>
                 <FormField
@@ -77,7 +81,7 @@ const BusinessDocForm = () => {
                       <FormControl>
                         <AttachmentUpload
                           {...field}
-                          onChange={file => form.setValue('files.cacId', file)}
+                          onChange={(file) => form.setValue("files.cacId", file)}
                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         />
                       </FormControl>
@@ -91,8 +95,8 @@ const BusinessDocForm = () => {
                 <div>
                   <h3 className="text-xl font-semibold">Utility Bills</h3>
                   <p className="text-sm text-muted-foreground w-full md:w-[16rem]">
-                    A utility bill is a monthly statement of the amount a household or School owes for essential
-                    services.
+                    A utility bill is a monthly statement of the amount a household or School owes
+                    for essential services.
                   </p>
                 </div>
                 <FormField
@@ -104,7 +108,7 @@ const BusinessDocForm = () => {
                       <FormControl>
                         <AttachmentUpload
                           {...field}
-                          onChange={file => form.setValue('files.utility', file)}
+                          onChange={(file) => form.setValue("files.utility", file)}
                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         />
                       </FormControl>
@@ -115,7 +119,7 @@ const BusinessDocForm = () => {
               </div>
               <Separator className="my-6 h-[2px]" />
               <div className="grid grid-cols-1 md:grid-cols-5 w-full">
-                <div className="col-span-2"></div>
+                <div className="col-span-2" />
                 <div className="col-span-3">
                   <Button type="submit" className="w-full text-white text-lg">
                     Save and Continue
@@ -127,7 +131,7 @@ const BusinessDocForm = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BusinessDocForm
+export default BusinessDocForm;

@@ -1,11 +1,11 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import React, { useState } from 'react'
+"use client";
+import { useState } from "react";
 
-type EditField = 'name' | 'email' | 'phone' | 'emergency' | 'address'
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+
+type EditField = "name" | "email" | "phone" | "emergency" | "address";
 
 const PersonalDetails = () => {
   const [isEdit, setIsEdit] = useState({
@@ -14,14 +14,14 @@ const PersonalDetails = () => {
     phone: true,
     emergency: true,
     address: true,
-  })
+  });
 
   const handleEditToggle = (field: EditField) => {
-    setIsEdit(prevState => ({
+    setIsEdit((prevState) => ({
       ...prevState,
       [field]: !prevState[field],
-    }))
-  }
+    }));
+  };
 
   return (
     <div className="bg-white rounded-md p-6 flex flex-col gap-4 ">
@@ -40,10 +40,10 @@ const PersonalDetails = () => {
               />
             </div>
             <p
-              className={`underline font-medium w-fit ${isEdit.name ? 'text-black' : 'text-yellow-500'} cursor-pointer`}
-              onClick={() => handleEditToggle('name')}
+              className={`underline font-medium w-fit ${isEdit.name ? "text-black" : "text-yellow-500"} cursor-pointer`}
+              onClick={() => handleEditToggle("name")}
             >
-              {isEdit.name ? 'Edit' : 'Save'}
+              {isEdit.name ? "Edit" : "Save"}
             </p>
           </div>
           <Separator />
@@ -62,11 +62,11 @@ const PersonalDetails = () => {
             </div>
             <p
               className={`underline font-medium w-fit ${
-                isEdit.email ? 'text-black' : 'text-yellow-500'
+                isEdit.email ? "text-black" : "text-yellow-500"
               } cursor-pointer`}
-              onClick={() => handleEditToggle('email')}
+              onClick={() => handleEditToggle("email")}
             >
-              {isEdit.email ? 'Edit' : 'Save'}
+              {isEdit.email ? "Edit" : "Save"}
             </p>
           </div>
           <Separator />
@@ -85,11 +85,11 @@ const PersonalDetails = () => {
             </div>
             <p
               className={`underline font-medium w-fit ${
-                isEdit.phone ? 'text-black' : 'text-yellow-500'
+                isEdit.phone ? "text-black" : "text-yellow-500"
               } cursor-pointer`}
-              onClick={() => handleEditToggle('phone')}
+              onClick={() => handleEditToggle("phone")}
             >
-              {isEdit.phone ? 'Edit' : 'Save'}
+              {isEdit.phone ? "Edit" : "Save"}
             </p>
           </div>
           <Separator />
@@ -108,11 +108,11 @@ const PersonalDetails = () => {
             </div>
             <p
               className={`underline font-medium w-fit ${
-                isEdit.emergency ? 'text-black' : 'text-yellow-500'
+                isEdit.emergency ? "text-black" : "text-yellow-500"
               } cursor-pointer`}
-              onClick={() => handleEditToggle('emergency')}
+              onClick={() => handleEditToggle("emergency")}
             >
-              {isEdit.emergency ? 'Edit' : 'Save'}
+              {isEdit.emergency ? "Edit" : "Save"}
             </p>
           </div>
           <Separator />
@@ -131,11 +131,11 @@ const PersonalDetails = () => {
             </div>
             <p
               className={`underline font-medium w-fit ${
-                isEdit.address ? 'text-black' : 'text-yellow-500'
+                isEdit.address ? "text-black" : "text-yellow-500"
               } cursor-pointer`}
-              onClick={() => handleEditToggle('address')}
+              onClick={() => handleEditToggle("address")}
             >
-              {isEdit.address ? 'Edit' : 'Save'}
+              {isEdit.address ? "Edit" : "Save"}
             </p>
           </div>
           <Separator />
@@ -144,7 +144,7 @@ const PersonalDetails = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default PersonalDetails
+export default PersonalDetails;

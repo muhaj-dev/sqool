@@ -1,27 +1,25 @@
 // components/class-management/ClassHeader.tsx
-'use client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { GraduationCap, Plus, Search } from 'lucide-react'
-import CreateClassDialog from './CreateClassDialog'
-import { Class, Teacher } from './types'
-import { useState } from 'react'
+"use client";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+
+import CreateClassDialog from "./CreateClassDialog";
 
 interface ClassHeaderProps {
   onRefresh?: () => void;
 }
 
-const ClassHeader = ({
-  onRefresh,
-}: ClassHeaderProps) => {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+const ClassHeader = ({ onRefresh }: ClassHeaderProps) => {
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const handleClassCreated = () => {
-    setIsCreateDialogOpen(false)
+    setIsCreateDialogOpen(false);
     if (onRefresh) {
-      onRefresh()
+      onRefresh();
     }
-  }
+  };
 
   return (
     <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -33,12 +31,9 @@ const ClassHeader = ({
             <p className="text-gray-600 mt-1">Manage classes, subjects, teachers, and schedules</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
-          <Button 
-            onClick={() => setIsCreateDialogOpen(true)}
-            className=" "
-          >
+          <Button onClick={() => setIsCreateDialogOpen(true)} className=" ">
             <Plus className="h-4 w-4 mr-2" />
             Add Class
           </Button>
@@ -52,7 +47,7 @@ const ClassHeader = ({
         onClassCreated={handleClassCreated}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ClassHeader
+export default ClassHeader;

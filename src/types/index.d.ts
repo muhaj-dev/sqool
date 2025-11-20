@@ -1,6 +1,7 @@
 // src/types.ts
 // Student-related types
 export * from "./attendance";
+export * from "./errors";
 export * from "./payment";
 export interface IStudent {
   photo: string;
@@ -22,8 +23,15 @@ export interface IStudent {
   };
   gender: string;
   hobbies: string[];
+  dateOfBirth: string;
+  rollNumber?: string;
+  attendanceRate?: number;
+  school: string | School;
+  language?: string;
+  aboutMe?: string;
+  enrolmentDate?: string;
+  address: string;
 }
-
 export interface ISingleStudent {
   message: string;
   _id?: string;
@@ -187,6 +195,19 @@ export interface IClassConfigurationResponse extends IClassConfiguration {
   message?: string;
 }
 
+export interface ISubjectPayload {
+  name: string;
+  code: string;
+  category: string;
+  description: string;
+  classes: string[];
+}
+
+export interface CreateSchoolResponse {
+  data: string;
+  message: string;
+}
+
 export interface ClassPaginationResponse {
   data: {
     result: IClassConfigurationResponse[];
@@ -223,6 +244,11 @@ export interface Subject {
   slug?: string;
 }
 
+export interface SubjectPaginationResponse {
+  pagination: Pagination;
+  data: Subject[];
+}
+
 export interface StaffResult {
   _id: string;
   level: string;
@@ -256,23 +282,22 @@ export interface ScheduleTeacher {
 }
 
 export interface ScheduleClass {
-  _id: string
-  className: string
-  shortName: string
-  levelType: string
-  classSection: string
+  _id: string;
+  className: string;
+  shortName: string;
+  levelType: string;
+  classSection: string;
 }
 
 export interface StaffSchedule {
-  _id: string
-  class: ScheduleClass  
-  day: string
-  subject: ScheduleSubject
-  teacher: ScheduleTeacher
-  startTime: string
-  endTime: string
+  _id: string;
+  class: ScheduleClass;
+  day: string;
+  subject: ScheduleSubject;
+  teacher: ScheduleTeacher;
+  startTime: string;
+  endTime: string;
 }
-
 
 export interface SingleStaffResponse {
   data: {
@@ -372,13 +397,7 @@ export interface ISessionAndTerm {
   thirdTermEndDate: string;
 }
 
-export const ROLES = [
-  "superAdmin",
-  "admin",
-  "teacher",
-  "parent",
-  "student",
-] as const;
+export const ROLES = ["superAdmin", "admin", "teacher", "parent", "student"] as const;
 export type Role = (typeof ROLES)[number];
 
 export function isRole(role: string): role is Role {
@@ -462,6 +481,7 @@ export interface ISubject {
 
 export interface ISubjectResponse extends ISubject {
   // _id: string;
+  message: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -473,7 +493,7 @@ export interface ISubject {
   category: string;
   description: string;
   isActive?: boolean;
-  prerequisites?: any[];
+  prerequisites?: string[];
   slug?: string;
 }
 
@@ -623,7 +643,7 @@ export interface Class {
   shortName: string;
   levelType: string;
   classSection?: string; // Make this optional to match IClassConfigurationResponse
-  classTeacher?: Array<{
+  classTeacher?: {
     _id: string;
     userId: {
       _id: string;
@@ -633,7 +653,7 @@ export interface Class {
     };
     subjects: string[];
     isActive: boolean;
-  }>;
+  }[];
   classSchedule?: any[];
   resources?: any[];
   tutors?: any[];
@@ -693,6 +713,10 @@ export interface ExamCreator {
   };
 }
 
+export interface UpdateExamResponse {
+  data: Exam;
+}
+
 export interface SessionTerm {
   startDate: string;
   endDate: string;
@@ -719,13 +743,7 @@ export interface Exam {
     className: string;
   };
   creator: ExamCreator;
-  status:
-    | "pending"
-    | "approve"
-    | "completed"
-    | "cancelled"
-    | "reject"
-    | "scheduled";
+  status: "pending" | "approve" | "completed" | "cancelled" | "reject" | "scheduled";
   examDate: string;
   startTime: string;
   endTime: string;
@@ -744,12 +762,22 @@ export interface ExamsResponse {
   pagination: Pagination;
 }
 
+export interface ExamsApiResponse {
+  data: Omit<ExamsResponse, "message">;
+  message: string;
+}
+
 export interface StaffStatResponse {
   activeClasss: number;
   totalStudent: number;
   totalSubject: number;
   lessonScheduledToday: number;
-  attendanceStats: Array<ClassAttendanceStat>;
+  attendanceStats: ClassAttendanceStat[];
+}
+
+export interface StaffStatApiResponse {
+  data: StaffStatResponse;
+  message: string;
 }
 
 export interface ClassAttendanceStat {
@@ -820,12 +848,7 @@ export interface Notice {
   visibility: string;
   body: string;
   notificationDate: string;
-  notificationType:
-    | "general"
-    | "urgent"
-    | "reminder"
-    | "event"
-    | "announcement";
+  notificationType: "general" | "urgent" | "reminder" | "event" | "announcement";
   isActive: boolean;
   isPinned: boolean;
   resources: string[];
@@ -1172,7 +1195,15 @@ export interface Student {
 export interface Payment {
   _id: string;
   paymentDate: string;
-  paymentStatus: "paid" | "pending" | "overdue" | string;
+  paymentStatus:
+    | "paid"
+    | "pending"
+    | "overdue"
+    | "OVERDUE"
+    | "Success"
+    | "Processing"
+    | "Failed"
+    | "not paid";
   amountPaid: number;
   userId: string | null;
   paymentMethod: string;
@@ -1184,6 +1215,11 @@ export interface Payment {
   student?: Student;
 }
 
+export interface PaymentPaginationResponse {
+  result: Payment[];
+  pagination: Pagination;
+}
+
 export interface PaymentResponse {
   data: Payment;
   message: string;
@@ -1193,141 +1229,127 @@ export interface StudentAttendance extends Partial<ISingleStudent> {
   id: string;
   status: StatusFilter;
   name: string;
-  rollNumber;
+  rollNumber: string;
   age: number;
   guardianName: string;
   attendanceRate: number;
 }
 
-declare function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait?: number,
-  options?: {
-    leading?: boolean;
-    trailing?: boolean;
-    maxWait?: number;
-  }
-): T & {
-  cancel(): void;
-  flush(): ReturnType<T>;
-};
-
-
-
 export interface DisplayUser {
-  _id?: string
-  firstName?: string
-  lastName?: string
-  email?: string
-  phone?: string
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
   phoneId?: {
-    phoneNumber: string
-  }
-  photo?: string
-  role?: string
+    phoneNumber: string;
+  };
+  photo?: string;
+  role?: string;
   school?: {
-    name: string
-  }
+    name: string;
+  };
+}
+
+export interface StaffProfileResponse {
+  data: DisplayUser;
 }
 
 export interface ParentData {
-  _id: string
-  userId: string
-  children: string[]
-  occupation: string
-  schools: string[]
-  isActive: boolean
-  user: DisplayUser
-  childrenDetails: Child[]
+  _id: string;
+  userId: string;
+  children: string[];
+  occupation: string;
+  schools: string[];
+  isActive: boolean;
+  user: DisplayUser;
+  childrenDetails: Child[];
 }
 
 // Add other types as needed
 export interface Child {
-  _id: string
-  firstName: string
-  lastName: string
-  gender?: string
-  photo?: string
-  createdAt?: string
+  _id: string;
+  firstName: string;
+  lastName: string;
+  gender?: string;
+  photo?: string;
+  createdAt?: string;
   class: {
-    _id: string
-    className: string
-    levelType: string
-  }
+    _id: string;
+    className: string;
+    levelType: string;
+  };
 }
 
 export interface Notice {
-  _id: string
-  title: string
-  content: string
-  isPinned: boolean
-  isActive: boolean
-  notificationType: string
-  expirationDate: string
+  _id: string;
+  title: string;
+  content: string;
+  isPinned: boolean;
+  isActive: boolean;
+  notificationType: string;
+  expirationDate: string;
 }
 
 export interface Expense {
-  _id: string
+  _id: string;
   // Add expense properties as needed
 }
 
 export interface PaymentStatistics {
-  totalPaid: number
-  totalPending: number
-  totalOverdue: number
+  totalPaid: number;
+  totalPending: number;
+  totalOverdue: number;
 }
 
 export interface PaymentStatisticsResponse {
-  data: PaymentStatistics
-  message: string
+  data: PaymentStatistics;
+  message: string;
 }
-
-
-
 
 // types/payment.ts
 export interface PaymentRecord {
-  _id: string
-  paymentDate: string
-  paymentStatus: string
-  amountPaid: number
-  userId: string
-  paymentMethod: string
-  transactionId?: string
-  paymentMemo: string
-  paymentCategory: string
-  paymentType: string
+  _id: string;
+  paymentDate: string;
+  paymentStatus: string;
+  amountPaid: number;
+  userId: string;
+  paymentMethod: string;
+  transactionId?: string;
+  paymentMemo: string;
+  paymentCategory: string;
+  paymentType: string;
   student?: {
-    firstName: string
-    lastName: string
-    parentName?: string
-    className?: string
-  }
+    firstName: string;
+    lastName: string;
+    parentName?: string;
+    className?: string;
+  };
 }
 
 export interface PaymentStatistics {
-  totalPaid: number
-  totalPending: number
-  totalOverdue: number
+  totalPaid: number;
+  totalPending: number;
+  totalOverdue: number;
 }
 
 export interface PaginationState {
-  total: number
-  currentPage: number
-  pageSize: number
-  totalPages: number
-  hasNextPage: boolean
-  hasPreviousPage: boolean
+  total: number;
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface PaymentFormData {
-  paymentDate: string
-  amountPaid: string
-  paymentMethod: string
-  paymentStatus: string
-  paymentType: string
-  paymentCategory: string
-  transactionId: string
-  paymentMemo: File | null
-  userId: string
+  paymentDate: string;
+  amountPaid: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  paymentType: string;
+  paymentCategory: string;
+  transactionId: string;
+  paymentMemo: File | null;
+  userId: string;
 }

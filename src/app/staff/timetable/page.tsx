@@ -1,22 +1,23 @@
 "use client";
 
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getSubjectsForStaff, getClassScheduleForStaff } from "@/utils/api";
-import { useAuthStore } from "@/zustand/authStore";
-import { ClassSchedule, Subject } from "@/types";
+
 import ErrorState from "@/components/ErrorState";
-import { TimetableSkeleton } from "../components/timetable/SkeletonsTimetable";
+import { type Subject } from "@/types";
+import { getClassScheduleForStaff, getSubjectsForStaff } from "@/utils/api";
+import { formatTime } from "@/utils/lib";
+import { useAuthStore } from "@/zustand/authStore";
+
 import { ClassSummarySection } from "../components/timetable/ClassSummarySection";
 import { HeaderSection } from "../components/timetable/Header";
-import { WeeklyTimetableSection } from "../components/timetable/WeeklyTimetableSection";
+import { TimetableSkeleton } from "../components/timetable/SkeletonsTimetable";
 import { SubjectLegendSection } from "../components/timetable/SubjectLegend";
 import {
+  getCurrentClassesInfo,
   getSubjectColor,
   groupSchedulesByDay,
-  getCurrentClassesInfo,
 } from "../components/timetable/utils";
-import { formatTime } from "@/utils/lib";
+import { WeeklyTimetableSection } from "../components/timetable/WeeklyTimetableSection";
 
 const Timetable = () => {
   const { user } = useAuthStore();
@@ -31,8 +32,7 @@ const Timetable = () => {
     refetch: refetchSchedule,
   } = useQuery({
     queryKey: ["staff-all-schedules", staffId],
-    queryFn: async () =>
-      (await getClassScheduleForStaff()).data as ClassSchedule[],
+    queryFn: async () => (await getClassScheduleForStaff()).data,
     enabled: !!staffId && user?.role === "teacher",
     staleTime: 10 * 60 * 1000,
   });
@@ -67,7 +67,7 @@ const Timetable = () => {
         <TimetableSkeleton skipHeader />
       ) : isErrorSchedule ? (
         <ErrorState
-          error={errorSchedule as Error}
+          error={errorSchedule}
           onRetry={refetchSchedule}
           title="Failed to load schedule"
           description="We couldn’t fetch your class schedules. Please retry."

@@ -1,4 +1,4 @@
-import ParentFees from './ParentFees'
+import ParentFees from "./ParentFees";
 
 const Page = () => {
   return (
@@ -8,7 +8,7 @@ const Page = () => {
         <ParentFees />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

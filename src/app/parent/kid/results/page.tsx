@@ -1,10 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Resultbar from '../../components/class/result/Resultbar'
-import { Upload } from '../../components/class/result/Upload'
-import Texam from '../../components/class/result/Texam'
-import KidsResult from '../../components/parent/results/KidsResults'
+import Resultbar from "../../components/class/result/Resultbar";
+import KidsResult from "../../components/parent/results/KidsResults";
 
 const Page = () => {
   return (
@@ -14,7 +11,7 @@ const Page = () => {
         <KidsResult />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

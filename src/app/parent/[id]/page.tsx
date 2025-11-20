@@ -1,8 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import KidsBar from '../components/parent/KidBar'
-import KidsDetails from '../components/parent/KidDetails'
+import KidsBar from "../components/parent/KidBar";
+import KidsDetails from "../components/parent/KidDetails";
 
 const Page = () => {
   return (
@@ -12,7 +11,7 @@ const Page = () => {
         <KidsDetails />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

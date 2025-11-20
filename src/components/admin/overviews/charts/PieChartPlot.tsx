@@ -1,20 +1,20 @@
-'use client'
-import React from 'react'
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+"use client";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-const COLORS = ['#5542F6', '#FFA043']
+const COLORS = ["#5542F6", "#FFA043"];
 
 interface CustomPieChartProps {
-  maleCount: number
-  femaleCount: number
-  totalStudents: number
+  maleCount: number;
+  femaleCount: number;
+  totalStudents: number;
 }
 
 const CustomPieChart = ({ maleCount, femaleCount, totalStudents }: CustomPieChartProps) => {
   const data = [
-    { name: 'Female', value: femaleCount },
-    { name: 'Male', value: maleCount },
-  ]
+    { name: "Female", value: femaleCount },
+    { name: "Male", value: maleCount },
+  ];
 
   const renderCenterText = () => {
     return (
@@ -23,14 +23,14 @@ const CustomPieChart = ({ maleCount, femaleCount, totalStudents }: CustomPieChar
           {totalStudents}
         </text>
         <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle">
-          {'Total Students'}
+          {"Total Students"}
         </text>
       </>
-    )
-  }
+    );
+  };
 
   return (
-    <ResponsiveContainer width={'100%'} height={'100%'}>
+    <ResponsiveContainer width={"100%"} height={"100%"}>
       <PieChart>
         <Pie
           data={data}
@@ -39,8 +39,8 @@ const CustomPieChart = ({ maleCount, femaleCount, totalStudents }: CustomPieChar
           label={() => renderCenterText()}
           dataKey="value"
           nameKey="name"
-          cx={'50%'}
-          cy={'50%'}
+          cx={"50%"}
+          cy={"50%"}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -49,7 +49,7 @@ const CustomPieChart = ({ maleCount, femaleCount, totalStudents }: CustomPieChar
         <Tooltip formatter={(value, name) => [`${value} students`, name]} />
       </PieChart>
     </ResponsiveContainer>
-  )
-}
+  );
+};
 
-export default CustomPieChart
+export default CustomPieChart;

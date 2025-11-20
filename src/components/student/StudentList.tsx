@@ -1,25 +1,27 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { Separator } from '../ui/separator'
-import AdminTable from '../Constant/Table/AdminTable'
-import { Dialog } from '@radix-ui/react-dialog'
-import { IStudent, StudentPaginationResponse } from '@/types'
-import { getAllStudents } from '@/utils/api'
-import { useRouter } from 'next/navigation'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
-import Link from 'next/link'
+"use client";
+import { Dialog } from "@radix-ui/react-dialog";
+import { Search } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const tabs = ['Student', 'Male Student', 'Female Student']
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { type IStudent, type StudentPaginationResponse } from "@/types";
+import { getAllStudents } from "@/utils/api";
+
+import AdminTable from "../Constant/Table/AdminTable";
+import { Separator } from "../ui/separator";
+
+const tabs = ["Student", "Male Student", "Female Student"];
 
 const Steps = ({
   activeIndex,
   setActiveIndex,
 }: {
-  activeIndex: number
-  setActiveIndex: React.Dispatch<React.SetStateAction<number>>
+  activeIndex: number;
+  setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   return (
     <section className="overflow-auto">
@@ -29,7 +31,9 @@ const Steps = ({
             onClick={() => setActiveIndex(ind)}
             key={ind}
             className={`cursor-pointer transition pb-3 w-fit ${
-              activeIndex === ind ? 'border-b-[2px] border-primary text-black' : 'text-muted-foreground'
+              activeIndex === ind
+                ? "border-b-[2px] border-primary text-black"
+                : "text-muted-foreground"
             }`}
           >
             {item}
@@ -38,8 +42,8 @@ const Steps = ({
       </section>
       <Separator />
     </section>
-  )
-}
+  );
+};
 
 // Skeleton component for student rows
 const StudentSkeleton = () => {
@@ -71,16 +75,16 @@ const StudentSkeleton = () => {
         </tr>
       ))}
     </>
-  )
-}
+  );
+};
 
 const StudentList = () => {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [students, setStudents] = useState<IStudent[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [search, setSearch] = useState<string>('')
-  const [searchInput, setSearchInput] = useState<string>('') // Local search input state
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [students, setStudents] = useState<IStudent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>(""); // Local search input state
   const [pagination, setPagination] = useState({
     total: 0,
     currentPage: 1,
@@ -88,103 +92,119 @@ const StudentList = () => {
     totalPages: 1,
     hasNextPage: false,
     hasPreviousPage: false,
-  })
+  });
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const fetchStudents = async (page: number = 1, limit: number = 10, searchQuery?: string, filter?: string) => {
+  const fetchStudents = async (page = 1, limit = 10, searchQuery?: string, filter?: string) => {
     try {
-      setLoading(true)
-      console.log('Fetching students - Page:', page, 'Limit:', limit, 'Search:', searchQuery, 'Filter:', filter)
+      setLoading(true);
+      console.log(
+        "Fetching students - Page:",
+        page,
+        "Limit:",
+        limit,
+        "Search:",
+        searchQuery,
+        "Filter:",
+        filter,
+      );
 
-      const response: StudentPaginationResponse = await getAllStudents(page, limit, searchQuery, filter)
+      const response: StudentPaginationResponse = await getAllStudents(
+        page,
+        limit,
+        searchQuery,
+        filter,
+      );
 
       if (response.data && response.data.result) {
-        setStudents(response.data.result)
+        setStudents(response.data.result);
 
         if (response.data.pagination) {
           setPagination({
             total:
-              typeof response.data.pagination.total === 'string'
+              typeof response.data.pagination.total === "string"
                 ? parseInt(response.data.pagination.total)
                 : response.data.pagination.total,
             currentPage:
-              typeof response.data.pagination.currentPage === 'string'
+              typeof response.data.pagination.currentPage === "string"
                 ? parseInt(response.data.pagination.currentPage)
                 : response.data.pagination.currentPage,
             pageSize:
-              typeof response.data.pagination.pageSize === 'string'
+              typeof response.data.pagination.pageSize === "string"
                 ? parseInt(response.data.pagination.pageSize)
                 : response.data.pagination.pageSize || limit,
             totalPages:
-              typeof response.data.pagination.totalPages === 'string'
+              typeof response.data.pagination.totalPages === "string"
                 ? parseInt(response.data.pagination.totalPages)
                 : response.data.pagination.totalPages,
             hasNextPage: response.data.pagination.hasNextPage,
             hasPreviousPage: response.data.pagination.hasPreviousPage,
-          })
+          });
         }
       }
     } catch (err) {
-      console.error('Error fetching students:', err)
-      setError(err instanceof Error ? err.message : 'Failed to fetch students')
+      console.error("Error fetching students:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch students");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Debounced search effect
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSearch(searchInput)
-    }, 500) // 500ms debounce
+      setSearch(searchInput);
+    }, 500); // 500ms debounce
 
-    return () => clearTimeout(timer)
-  }, [searchInput])
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   useEffect(() => {
-    const filterValue = activeIndex === 1 ? 'male' : activeIndex === 2 ? 'female' : undefined
-    fetchStudents(1, 10, search, filterValue)
-  }, [activeIndex, search])
+    const filterValue = activeIndex === 1 ? "male" : activeIndex === 2 ? "female" : undefined;
+    void fetchStudents(1, 10, search, filterValue);
+  }, [activeIndex, search]);
 
   const handlePageChange = (newPage: number) => {
-    const filterValue = activeIndex === 1 ? 'male' : activeIndex === 2 ? 'female' : undefined
-    fetchStudents(newPage, pagination.pageSize, search, filterValue)
-  }
+    const filterValue = activeIndex === 1 ? "male" : activeIndex === 2 ? "female" : undefined;
+    void fetchStudents(newPage, pagination.pageSize, search, filterValue);
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value)
-  }
+    setSearchInput(e.target.value);
+  };
 
   const RenderStudentName = ({ student }: { student: IStudent }) => {
     return (
       <div className="flex gap-4 items-center">
         <Avatar className="h-12 w-12">
-          <AvatarImage src={student?.photo || '/images/user.png'} />
-          <AvatarFallback>{`${student?.firstName?.[0] || ''}${student?.lastName?.[0] || ''}`}</AvatarFallback>
+          <AvatarImage src={student?.photo || "/images/user.png"} />
+          <AvatarFallback>{`${student?.firstName?.[0] || ""}${student?.lastName?.[0] || ""}`}</AvatarFallback>
         </Avatar>
         <div>
           <p className="text-[16px] font-medium text-[#3F4946]">
-            {`${student?.firstName || ''} ${student?.lastName || ''}`}
+            {`${student?.firstName || ""} ${student?.lastName || ""}`}
           </p>
           {/* <p className="text-sm text-muted-foreground">{student.email || 'No email'}</p> */}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const RenderClass = ({ classInfo }: { classInfo: any }) => {
-    return <p className="text-[14px] text-[#3F4946] font-medium mx-4">{classInfo?.className || 'N/A'}</p>
-  }
+    return (
+      <p className="text-[14px] text-[#3F4946] font-medium mx-4">{classInfo?.className || "N/A"}</p>
+    );
+  };
 
   const RenderGender = ({ gender }: { gender: string }) => {
-    return <p className="capitalize text-[14px] text-[#3F4946] font-medium">{gender || 'N/A'}</p>
-  }
+    return <p className="capitalize text-[14px] text-[#3F4946] font-medium">{gender || "N/A"}</p>;
+  };
 
   const RenderAction = ({ student }: { student: IStudent }) => {
     const handleViewDetails = () => {
-      router.push(`/admin/student/${student._id}`)
-    }
+      router.push(`/admin/student/${student._id}`);
+    };
 
     return (
       <div>
@@ -195,45 +215,45 @@ const StudentList = () => {
           View Details
         </button>
       </div>
-    )
-  }
+    );
+  };
 
   const columns = [
     {
-      key: 'name',
-      label: 'Student name',
+      key: "name",
+      label: "Student name",
       renderCell: (student: IStudent) => <RenderStudentName student={student} />,
     },
     {
-      key: 'class',
-      label: 'Class',
+      key: "class",
+      label: "Class",
       renderCell: (student: IStudent) => <RenderClass classInfo={student.class} />,
     },
     {
-      key: 'gender',
-      label: 'Gender',
+      key: "gender",
+      label: "Gender",
       renderCell: (student: IStudent) => <RenderGender gender={student.gender} />,
     },
     {
-      key: 'action',
-      label: 'Action',
+      key: "action",
+      label: "Action",
       renderCell: (student: IStudent) => <RenderAction student={student} />,
     },
-  ]
+  ];
 
   const sortOptions = [
-    { label: 'Newest First', value: 'desc' },
-    { label: 'Oldest First', value: 'asc' },
-  ]
+    { label: "Newest First", value: "desc" },
+    { label: "Oldest First", value: "asc" },
+  ];
 
   const statusOptions = [
-    { label: 'All', value: '' },
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
-  ]
+    { label: "All", value: "" },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+  ];
 
   if (error) {
-    return <div className="text-red-500 text-center py-8">Error: {error}</div>
+    return <div className="text-red-500 text-center py-8">Error: {error}</div>;
   }
 
   return (
@@ -288,7 +308,7 @@ const StudentList = () => {
                       <th scope="col" className="px-3 py-3 text-[14px] font-medium">
                         <Skeleton className="w-4 h-4" />
                       </th>
-                      {columns.map(col => (
+                      {columns.map((col) => (
                         <th key={col.key} scope="col" className="py-3 text-[14px] font-medium">
                           <Skeleton className="h-4 w-24" />
                         </th>
@@ -312,7 +332,7 @@ const StudentList = () => {
             </div>
           ) : (
             <AdminTable
-              title={''}
+              title={""}
               // title={tabs[activeIndex]}
               columns={columns}
               data={students}
@@ -324,21 +344,21 @@ const StudentList = () => {
               onPageChange={handlePageChange}
               sortOptions={sortOptions}
               statusOptions={statusOptions}
-              onSort={sortValue => {
-                console.log('Sort by:', sortValue)
+              onSort={(sortValue) => {
+                console.log("Sort by:", sortValue);
               }}
-              onStatusFilterChange={status => {
-                console.log('Filter by:', status)
+              onStatusFilterChange={(status) => {
+                console.log("Filter by:", status);
               }}
-              onRecordClicked={student => {
-                console.log('Student clicked:', student)
+              onRecordClicked={(student) => {
+                console.log("Student clicked:", student);
               }}
             />
           )}
         </div>
       </section>
     </Dialog>
-  )
-}
+  );
+};
 
-export default StudentList
+export default StudentList;

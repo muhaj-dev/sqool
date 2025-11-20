@@ -1,6 +1,13 @@
 "use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export function AttendancePreviewTable({ students = [] }: any) {
   return (
@@ -21,7 +28,9 @@ export function AttendancePreviewTable({ students = [] }: any) {
             <TableRow key={s.id}>
               <TableCell className="font-medium">{s.name}</TableCell>
               <TableCell>{s.rollNumber}</TableCell>
-              <TableCell><span className="text-red-500 font-semibold">Absent (default)</span></TableCell>
+              <TableCell>
+                <span className="text-red-500 font-semibold">Absent (default)</span>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

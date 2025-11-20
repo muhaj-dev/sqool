@@ -1,70 +1,72 @@
-'use client'
-import { Button } from './ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import DatePicker from './DatePicker'
-import AttachmentUpload from './AttachmentUpload'
-import { useState } from 'react'
-import { Plus } from 'lucide-react'
-import { Separator } from './ui/separator'
+} from "@/components/ui/select";
+
+import DatePicker from "./DatePicker";
+import { Button } from "./ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Separator } from "./ui/separator";
 
 const formSchema = z.object({
-  firstname: z.string({ required_error: 'first name is required' }).min(2).max(50),
-  lastname: z.string({ required_error: 'last name is required' }).min(2).max(50),
-  phone: z.string({ required_error: 'phone number is required' }).min(2).max(50),
-  gender: z.string({ required_error: 'gender is required' }),
-  dob: z.date({ required_error: 'Please select a date' }),
-  nationality: z.string({ required_error: 'nationality is required' }),
-  address: z.string({ required_error: 'residential address is required' }),
+  firstname: z.string({ required_error: "first name is required" }).min(2).max(50),
+  lastname: z.string({ required_error: "last name is required" }).min(2).max(50),
+  phone: z.string({ required_error: "phone number is required" }).min(2).max(50),
+  gender: z.string({ required_error: "gender is required" }),
+  dob: z.date({ required_error: "Please select a date" }),
+  nationality: z.string({ required_error: "nationality is required" }),
+  address: z.string({ required_error: "residential address is required" }),
   formofID: z.string(),
-  idNumber: z.string({ required_error: 'ID is required' }),
-})
+  idNumber: z.string({ required_error: "ID is required" }),
+});
 
 const SetupSchoolForm = () => {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
   function closeForm() {
-    setIsVisible(false)
+    setIsVisible(false);
   }
   function openForm() {
-    setIsVisible(true)
+    setIsVisible(true);
   }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstname: '',
-      lastname: '',
-      phone: '',
+      firstname: "",
+      lastname: "",
+      phone: "",
       dob: new Date(),
-      nationality: '',
-      address: '',
-      formofID: '',
-      idNumber: '',
-      gender: '',
+      nationality: "",
+      address: "",
+      formofID: "",
+      idNumber: "",
+      gender: "",
     },
-  })
+  });
   function onSubmit(data: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(data)
+    console.log(data);
   }
   return (
     <div className="bg-white rounded-md p-4 mt-8    ">
       <div className="flex items-center justify-between border-b-2 pb-4 mb-4">
         <div>
           <h3 className="text-xl font-semibold">Setup your school system</h3>
-          <p className="text-sm text-muted-foreground">This information that you can update anytime.</p>
+          <p className="text-sm text-muted-foreground">
+            This information that you can update anytime.
+          </p>
         </div>
         <Button className="bg-primary text-white" onClick={openForm}>
           Add School Owner
@@ -80,7 +82,11 @@ const SetupSchoolForm = () => {
         </div>
         <div className="w-[60%]">
           <Form {...form}>
-            <form action="" onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
+            <form
+              action=""
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-4"
+            >
               <FormField
                 control={form.control}
                 name="firstname"
@@ -152,7 +158,12 @@ const SetupSchoolForm = () => {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                        <Input placeholder="Phone Number" {...field} className="rounded-l-none" type="text" />
+                        <Input
+                          placeholder="Phone Number"
+                          {...field}
+                          className="rounded-l-none"
+                          type="text"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -252,14 +263,16 @@ const SetupSchoolForm = () => {
       <div className="flex sm:w-[95%] justify-between mt-4">
         <div>
           <h3 className="text-xl font-semibold">School Brands</h3>
-          <p className="text-sm text-muted-foreground  w-[16rem]">if your school don&apos;t have a brands ignore.</p>
+          <p className="text-sm text-muted-foreground  w-[16rem]">
+            if your school don&apos;t have a brands ignore.
+          </p>
         </div>
         <Button className="text-primary bg-white hover:bg-gray-200">
           <Plus /> Add Brands
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SetupSchoolForm
+export default SetupSchoolForm;

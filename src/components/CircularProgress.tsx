@@ -1,13 +1,13 @@
 // CircularProgress.tsx
-import React from 'react'
+import React from "react";
 
 interface CircularProgressProps {
-  value: number
+  value: number;
 }
 
 const CircularProgress: React.FC<CircularProgressProps> = ({ value }) => {
   // Calculate the stroke-dasharray based on the percentage value
-  const dashArray = `${value}, 100`
+  const dashArray = `${value}, 100`;
 
   return (
     <div className="flex items-center justify-center">
@@ -29,12 +29,17 @@ const CircularProgress: React.FC<CircularProgressProps> = ({ value }) => {
           cx="80"
           cy="80"
         />
-        <text x="50%" y="50%" className="text-center text-lg text-blue-500 dark:text-gray-300" dy=".3em">
+        <text
+          x="50%"
+          y="50%"
+          className="text-center text-lg text-blue-500 dark:text-gray-300"
+          dy=".3em"
+        >
           {value}%
         </text>
       </svg>
     </div>
-  )
-}
+  );
+};
 
-export default CircularProgress
+export default CircularProgress;

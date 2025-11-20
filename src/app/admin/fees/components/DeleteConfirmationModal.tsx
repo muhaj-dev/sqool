@@ -1,16 +1,23 @@
-'use client'
+"use client";
 
-import { AlertTriangle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { AlertTriangle } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface DeleteConfirmationModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  itemName: string
-  loading?: boolean
-  onConfirm: () => void
-  onCancel: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  itemName: string;
+  loading?: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 export function DeleteConfirmationModal({
@@ -37,7 +44,7 @@ export function DeleteConfirmationModal({
             </div>
           </div>
         </DialogHeader>
-        
+
         <div className="bg-destructive/10 border border-destructive/20 rounded-md p-3 mt-4">
           <div className="flex items-start gap-2">
             <div className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5">
@@ -50,37 +57,28 @@ export function DeleteConfirmationModal({
               </svg>
             </div>
             <p className="text-sm text-destructive">
-              This will permanently delete the fee structure and all associated data. This action cannot be reversed.
+              This will permanently delete the fee structure and all associated data. This action
+              cannot be reversed.
             </p>
           </div>
         </div>
 
         <div className="flex justify-end gap-3 mt-6">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onConfirm}
-            disabled={loading}
-          >
+          <Button type="button" variant="destructive" onClick={onConfirm} disabled={loading}>
             {loading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                 Deleting...
               </>
             ) : (
-              'Delete Fee Structure'
+              "Delete Fee Structure"
             )}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

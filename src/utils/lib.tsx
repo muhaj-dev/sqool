@@ -1,14 +1,15 @@
-import { Badge } from "@/components/ui/badge";
 import {
+  addBusinessDays,
+  differenceInYears,
   formatISO,
+  isEqual,
   isWeekend,
   nextMonday,
-  addBusinessDays,
-  isEqual,
-  differenceInYears,
   parse,
 } from "date-fns";
-import { FeeItem, Session, SessionsResponse, StudentAttendance } from "@/types";
+
+import { Badge } from "@/components/ui/badge";
+import { type FeeItem, type IStudent, type Session, type StudentAttendance } from "@/types";
 
 // utils/dateUtils.ts
 export const formatDate = (dateString: string | Date | undefined): string => {
@@ -21,9 +22,7 @@ export const formatDate = (dateString: string | Date | undefined): string => {
   });
 };
 
-export const calculateAge = (
-  dateString: string | Date | undefined
-): number | string => {
+export const calculateAge = (dateString: string | Date | undefined): number | string => {
   if (!dateString) return "N/A";
 
   const birthDate = new Date(dateString);
@@ -31,10 +30,7 @@ export const calculateAge = (
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
 
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < birthDate.getDate())
-  ) {
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
 
@@ -42,9 +38,9 @@ export const calculateAge = (
 };
 
 export const generateBusinessDayDates = (
-  businessDaysDifference: number = 1
+  businessDaysDifference: number,
 ): { start: string; end: string } => {
-  if (businessDaysDifference < 1) {
+  if (!businessDaysDifference || businessDaysDifference < 1) {
     throw new Error("Business days difference must be at least 1");
   }
 
@@ -93,10 +89,7 @@ export const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-export const transformFeeDataToItems = (
-  studentFee: any,
-  children: any[] = []
-) => {
+export const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
   const feeItems: FeeItem[] = [];
 
   if (!studentFee) return feeItems;
@@ -116,8 +109,7 @@ export const transformFeeDataToItems = (
 
   allFees.forEach((fee) => {
     const childName =
-      childMap.get(fee.student._id) ||
-      `${fee.student.firstName} ${fee.student.lastName}`;
+      childMap.get(fee.student._id) || `${fee.student.firstName} ${fee.student.lastName}`;
     const amountOwed = fee.totalAmount - fee.totalPaid;
 
     // Determine status based on paymentStatus, computedStatus, and amount owed
@@ -171,17 +163,11 @@ const estimateDueDate = (term: string, session: string): string => {
   }
 };
 
-export function mapStudentToAttendance(
-  student: any,
-  index: number
-): StudentAttendance {
+export function mapStudentToAttendance(student: IStudent, index: number): StudentAttendance {
   const name = `${student.firstName} ${student.lastName}`.trim();
 
   const age = student.dateOfBirth
-    ? differenceInYears(
-        new Date(),
-        parse(student.dateOfBirth, "yyyy-MM-dd", new Date())
-      )
+    ? differenceInYears(new Date(), parse(student.dateOfBirth, "yyyy-MM-dd", new Date()))
     : 1;
 
   const guardianName = student.parent?.userId
@@ -201,9 +187,7 @@ export function mapStudentToAttendance(
   return {
     id: student._id,
     name,
-    rollNumber:
-      student.rollNumber ??
-      getRollNumber(`${student.class?.shortName}` || "", index),
+    rollNumber: student.rollNumber ?? getRollNumber(`${student.class?.className}` || "", index),
     age,
     guardianName,
 
@@ -218,8 +202,8 @@ export function mapStudentToAttendance(
     lastName: student.lastName,
     parent: student.parent?._id ?? "",
     class: student.class?._id ?? "",
-    school: student.school,
-    gender: student.gender,
+    school: student.school as string,
+    gender: student.gender as "male",
     hobbies: student.hobbies ?? [],
     photo: student.photo,
     language: student.language,
@@ -297,9 +281,9 @@ export const getInitials = (name: string): string => {
   return initials.toUpperCase();
 };
 
-  export const formatTime = (d: string) =>
-    new Date(d).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
+export const formatTime = (d: string) =>
+  new Date(d).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });

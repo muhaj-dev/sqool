@@ -1,5 +1,5 @@
-import log from 'loglevel'
+import log from "loglevel";
 
-log.setLevel(process.env.NODE_ENV === 'production' ? 'warn' : 'debug')
+log.setLevel(process.env.NODE_ENV === "production" ? "warn" : "debug");
 
-export default log
+export default log;

@@ -1,10 +1,10 @@
-import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Skeleton } from "@/components/ui/skeleton";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { IStudent } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import { type IStudent } from "@/types";
 import { formatDate, getInitials } from "@/utils/lib";
 
 const StudentsCard = ({
@@ -21,9 +21,7 @@ const StudentsCard = ({
         <div className="flex gap-2">
           <Avatar>
             <AvatarImage src={item.photo} alt="@shadcn" />
-            <AvatarFallback>
-              {getInitials(`${item.lastName} ${item.lastName}`)}
-            </AvatarFallback>
+            <AvatarFallback>{getInitials(`${item.lastName} ${item.lastName}`)}</AvatarFallback>
           </Avatar>
           <div>
             <p>{`${item.firstName} ${item.lastName}`} </p>
@@ -49,7 +47,7 @@ const StudentsCard = ({
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">ADDMISSION DATE</p>
           <p className="flex items-center gap-1">
-            <span className="w-2 h-2 bg-green-600 rounded-sm"></span>{" "}
+            <span className="w-2 h-2 bg-green-600 rounded-sm" />{" "}
             <span>{formatDate(item.enrolmentDate)}</span>
           </p>
         </div>

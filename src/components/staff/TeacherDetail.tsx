@@ -1,51 +1,56 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { Separator } from '../ui/separator'
-import { getStaffById } from '@/utils/api'
-import { StaffResult, SingleStaffResponse } from '@/types'
+"use client";
+import { useEffect, useState } from "react";
 
-console.log()
+import { type SingleStaffResponse, type StaffResult } from "@/types";
+import { getStaffById } from "@/utils/api";
+
+import { Separator } from "../ui/separator";
+
+console.log();
 const TeacherDetail = ({ staffId }: { staffId: string }) => {
-  const [staff, setStaff] = useState<StaffResult | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [staff, setStaff] = useState<StaffResult | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStaff = async () => {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
       try {
-        const response: SingleStaffResponse = await getStaffById(staffId)
-        console.log(response)
-        setStaff(response?.data ?? null)
+        const response: SingleStaffResponse = await getStaffById(staffId);
+        console.log(response);
+        //@ts-expect-error setstate error
+        setStaff(response?.data ?? null);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch staff details'
-        setError(errorMessage)
+        const errorMessage = err instanceof Error ? err.message : "Failed to fetch staff details";
+        setError(errorMessage);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     if (staffId) {
-      fetchStaff()
+      void fetchStaff();
     }
-  }, [staffId])
+  }, [staffId]);
 
   if (loading) {
-    return <div className="bg-white min-w-[25%] py-8 px-4 max-h-screen">Loading...</div>
+    return <div className="bg-white min-w-[25%] py-8 px-4 max-h-screen">Loading...</div>;
   }
 
   if (error || !staff) {
     return (
       <div className="bg-white min-w-[25%] py-8 px-4 max-h-screen">
-        <p className="text-red-500">{error || 'Staff not found'}</p>
+        <p className="text-red-500">{error || "Staff not found"}</p>
       </div>
-    )
+    );
   }
 
-  const fullName = staff.userId ? `${staff.userId?.firstName} ${staff.userId?.lastName}` : 'Unknown Staff'
-  const address = staff.address ?? '-- --'
-  const aboutMe = staff.aboutMe ?? '-- --'
+  const fullName = staff.userId
+    ? `${staff.userId?.firstName} ${staff.userId?.lastName}`
+    : "Unknown Staff";
+  const address = staff.address ?? "-- --";
+  const aboutMe = staff.aboutMe ?? "-- --";
 
   return (
     <div className="flex flex-col gap-4">
@@ -62,7 +67,7 @@ const TeacherDetail = ({ staffId }: { staffId: string }) => {
         <div className="flex flex-col  max-w-[300px]">
           <p className="text-muted-foreground">Date of Birth</p>
           <p>
-            March 23, 1995 <span className="text-muted-foreground">(26 y.o)</span>{' '}
+            March 23, 1995 <span className="text-muted-foreground">(26 y.o)</span>{" "}
           </p>
         </div>
         <div className="flex flex-col  max-w-[300px]">
@@ -91,7 +96,7 @@ const TeacherDetail = ({ staffId }: { staffId: string }) => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default TeacherDetail
+export default TeacherDetail;

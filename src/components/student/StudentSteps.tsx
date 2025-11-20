@@ -1,10 +1,10 @@
-'use client'
-import React from 'react'
-import { Separator } from '../ui/separator'
-import { useStudent } from '@/contexts/student-context'
-const tabs = ['Student Profile', 'Study Progress', 'Attendance']
+"use client";
+
+import { useStudent } from "@/contexts/student-context";
+
+const tabs = ["Student Profile", "Study Progress", "Attendance"];
 const StudentSteps = () => {
-  const { activeIndex, updateIndex } = useStudent()
+  const { activeIndex, updateIndex } = useStudent();
   return (
     <div className="mb-4 overflow-auto ">
       <section className=" flex items-center justify-between px-1 md:px-1 pt-4 pb-3 gap-4 w-fit">
@@ -13,7 +13,9 @@ const StudentSteps = () => {
             onClick={() => updateIndex(ind)}
             key={ind}
             className={`w-fit cursor-pointer transition pb-2  ${
-              activeIndex === ind ? 'border-b-[2px] border-primary text-black' : 'text-muted-foreground'
+              activeIndex === ind
+                ? "border-b-[2px] border-primary text-black"
+                : "text-muted-foreground"
             }`}
           >
             {item}
@@ -22,7 +24,7 @@ const StudentSteps = () => {
       </section>
       {/* <Separator /> */}
     </div>
-  )
-}
+  );
+};
 
-export default StudentSteps
+export default StudentSteps;

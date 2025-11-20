@@ -1,49 +1,51 @@
-'use client'
-import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import DatePicker from '../DatePicker'
-import AttachmentUpload from '../AttachmentUpload'
-import React, { useState } from 'react'
-import { useOnboarding } from '@/contexts/onboarding-context'
-import { OwnerInformation } from '@/types/onboarding'
-import { Trash2, Edit } from 'lucide-react'
+} from "@/components/ui/select";
+
+import { useOnboarding } from "@/contexts/onboarding-context";
+import DatePicker from "../DatePicker";
+import { Button } from "../ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+
+import { type OwnerInformation } from "@/types/onboarding";
 
 interface OwnerInfoFormProps {
-  initialData: OwnerInformation[]
-  onPrev: () => void
+  initialData: OwnerInformation[];
+  onPrev: () => void;
 }
 
 const formSchema = z.object({
-  firstName: z.string({ required_error: 'First name is required' }).min(2).max(50),
-  lastName: z.string({ required_error: 'Last name is required' }).min(2).max(50),
-  country: z.string({ required_error: 'Country is required' }).min(2),
-  nationality: z.string({ required_error: 'Nationality is required' }).min(2),
-  address: z.string({ required_error: 'Residential address is required' }).min(2),
-  phoneNumber: z.string({ required_error: 'Phone number is required' }).min(2).max(50),
-  email: z.string().email({ message: 'Invalid email address' }),
-  gender: z.string({ required_error: 'Gender is required' }).min(2),
+  firstName: z.string({ required_error: "First name is required" }).min(2).max(50),
+  lastName: z.string({ required_error: "Last name is required" }).min(2).max(50),
+  country: z.string({ required_error: "Country is required" }).min(2),
+  nationality: z.string({ required_error: "Nationality is required" }).min(2),
+  address: z.string({ required_error: "Residential address is required" }).min(2),
+  phoneNumber: z.string({ required_error: "Phone number is required" }).min(2).max(50),
+  email: z.string().email({ message: "Invalid email address" }),
+  gender: z.string({ required_error: "Gender is required" }).min(2),
   idCard: z.object({
-    idType: z.string().min(2, { message: 'ID type is required' }),
-    idNumber: z.string({ required_error: 'ID number is required' }).min(2),
+    idType: z.string().min(2, { message: "ID type is required" }),
+    idNumber: z.string({ required_error: "ID number is required" }).min(2),
   }),
-  dob: z.date({ required_error: 'Please select a date' }),
-})
+  dob: z.date({ required_error: "Please select a date" }),
+});
 
 const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
-  const { formData, updateFormData, goNextPage, goPrevPage, updateCompletionState } = useOnboarding()
+  const { formData, updateFormData, goNextPage, goPrevPage, updateCompletionState } =
+    useOnboarding();
 
   // const [isVisible, setIsVisible] = useState(false);
 
@@ -53,52 +55,52 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
       : formData.OwnerInformation
         ? [formData.OwnerInformation]
         : initialData,
-  )
+  );
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [currentOwnerIndex, setCurrentOwnerIndex] = useState<number | null>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentOwnerIndex, setCurrentOwnerIndex] = useState<number | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      country: 'Nigeria',
-      nationality: 'Nigeria',
-      address: '',
-      phoneNumber: '',
-      email: '',
-      gender: '',
+      firstName: "",
+      lastName: "",
+      country: "Nigeria",
+      nationality: "Nigeria",
+      address: "",
+      phoneNumber: "",
+      email: "",
+      gender: "",
       idCard: {
-        idType: '',
-        idNumber: '',
+        idType: "",
+        idNumber: "",
       },
       dob: undefined,
     },
-  })
+  });
 
   const handleAddOwner = () => {
-    form.reset()
-    setIsEditing(true)
-    setCurrentOwnerIndex(null)
-  }
+    form.reset();
+    setIsEditing(true);
+    setCurrentOwnerIndex(null);
+  };
 
   const handleEditOwner = (index: number) => {
-    const owner = owners[index]
+    const owner = owners[index];
     form.reset({
       ...owner,
       dob: owner.dob ? new Date(owner.dob) : undefined,
-    })
-    setIsEditing(true)
-    setCurrentOwnerIndex(index)
-  }
+    });
+    setIsEditing(true);
+    setCurrentOwnerIndex(index);
+  };
 
   const handleDeleteOwner = (index: number) => {
-    const newOwners = [...owners]
-    newOwners.splice(index, 1)
-    setOwners(newOwners)
-    updateFormData('OwnerInformation', newOwners)
-  }
+    const newOwners = [...owners];
+    newOwners.splice(index, 1);
+    setOwners(newOwners);
+    updateFormData("OwnerInformation", newOwners);
+  };
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     const ownerData: OwnerInformation = {
@@ -108,25 +110,25 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
         idType: data.idCard.idType,
         idNumber: data.idCard.idNumber,
       },
-    }
+    };
 
-    let newOwners = [...owners]
+    const newOwners = [...owners];
     if (currentOwnerIndex !== null) {
-      newOwners[currentOwnerIndex] = ownerData
+      newOwners[currentOwnerIndex] = ownerData;
     } else {
-      newOwners.push(ownerData)
+      newOwners.push(ownerData);
     }
 
-    setOwners(newOwners)
-    updateFormData('OwnerInformation', newOwners)
-    setIsEditing(false)
-    setCurrentOwnerIndex(null)
-  }
+    setOwners(newOwners);
+    updateFormData("OwnerInformation", newOwners);
+    setIsEditing(false);
+    setCurrentOwnerIndex(null);
+  };
 
   const handleSaveAndContinue = () => {
-    updateCompletionState('Owner Information')
-    goNextPage()
-  }
+    updateCompletionState("Owner Information");
+    goNextPage();
+  };
 
   // const handleSubmit = (data: z.infer<typeof formSchema>) => {
   //   const ownerData: OwnerInformation = {
@@ -170,26 +172,31 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
           <div className="w-full flex justify-between items-start">
             <div>
               <h3 className="text-xl font-semibold">Tell us about the business owner</h3>
-              <p className="text-sm text-muted-foreground">This must be the name on your registration documentation.</p>
+              <p className="text-sm text-muted-foreground">
+                This must be the name on your registration documentation.
+              </p>
             </div>
-            {currentOwnerIndex && (
+            {currentOwnerIndex ? (
               <Button
                 variant="ghost"
                 size="icon"
                 className="border-[#E9EBEB] rounded-md ml-4"
                 onClick={() => {
-                  handleDeleteOwner(currentOwnerIndex)
-                  setIsEditing(false)
+                  handleDeleteOwner(currentOwnerIndex);
+                  setIsEditing(false);
                 }}
               >
                 <Trash2 className="h-4 w-4 text-[#515B6F]" />
               </Button>
-            )}
+            ) : null}
           </div>
 
           <div className="w-full md:w-[60%]">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full flex flex-col gap-4">
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="w-full flex flex-col gap-4"
+              >
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <FormField
                     control={form.control}
@@ -238,7 +245,12 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                               </SelectGroup>
                             </SelectContent>
                           </Select>
-                          <Input placeholder="Phone Number" {...field} className="rounded-l-none" type="tel" />
+                          <Input
+                            placeholder="Phone Number"
+                            {...field}
+                            className="rounded-l-none"
+                            type="tel"
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -291,9 +303,9 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                       <FormControl>
                         <DatePicker
                           selected={field.value}
-                          onSelect={date => {
+                          onSelect={(date) => {
                             if (date) {
-                              form.setValue('dob', date)
+                              form.setValue("dob", date);
                             }
                           }}
                         />
@@ -380,7 +392,9 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
                             <SelectItem value="national_id">National ID</SelectItem>
                             <SelectItem value="voters_card">Voter&apos;s Card</SelectItem>
                             <SelectItem value="drivers_license">Driver&apos;s License</SelectItem>
-                            <SelectItem value="international_passport">International Passport</SelectItem>
+                            <SelectItem value="international_passport">
+                              International Passport
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -434,12 +448,17 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
             <>
               <div className="mb-6">
                 <h3 className="text-lg font-semibold">School Owners</h3>
-                <p className="text-sm text-muted-foreground">Personal information of the business Owner(s)</p>
+                <p className="text-sm text-muted-foreground">
+                  Personal information of the business Owner(s)
+                </p>
               </div>
 
               <div className="space-y-4">
                 {owners.map((owner, index) => (
-                  <div key={index} className="border rounded-lg p-4 flex justify-between items-center">
+                  <div
+                    key={index}
+                    className="border rounded-lg p-4 flex justify-between items-center"
+                  >
                     <div>
                       <h4 className="font-medium">
                         {owner.firstName} {owner.lastName}
@@ -482,7 +501,7 @@ const OwnerInfoForm = ({ initialData, onPrev }: OwnerInfoFormProps) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default OwnerInfoForm
+export default OwnerInfoForm;

@@ -1,13 +1,19 @@
-import React from 'react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { IClassConfigurationResponse } from '@/types'
-import Link from 'next/link'
+import Link from "next/link";
+
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { type IClassConfigurationResponse } from "@/types";
 
 interface ClassTableProps {
-  classes: IClassConfigurationResponse[]
+  classes: IClassConfigurationResponse[];
 }
 
 const ClassTable = ({ classes }: ClassTableProps) => {
@@ -31,7 +37,7 @@ const ClassTable = ({ classes }: ClassTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody className="text-black/70">
-            {classes.map(cls => (
+            {classes.map((cls) => (
               <TableRow key={cls._id}>
                 <TableCell className="font-medium">{cls.className}</TableCell>
                 <TableCell>
@@ -39,7 +45,7 @@ const ClassTable = ({ classes }: ClassTableProps) => {
                     {/* <Badge variant={cls.levelType === "primary" ? "default" : "secondary"}>
                       {cls.levelType.charAt(0).toUpperCase() + cls.levelType.slice(1)}
                     </Badge> */}
-                    {cls.classSection && <p className="text-xs">{cls.classSection}</p>}
+                    {cls.classSection ? <p className="text-xs">{cls.classSection}</p> : null}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -70,7 +76,10 @@ const ClassTable = ({ classes }: ClassTableProps) => {
                 </TableCell>
                 <TableCell>
                   <Link href={`/admin/class/${cls._id}`}>
-                    <Badge variant="secondary" className="rounded-[2px] p-2  font-normal cursor-pointer">
+                    <Badge
+                      variant="secondary"
+                      className="rounded-[2px] p-2  font-normal cursor-pointer"
+                    >
                       Manage
                     </Badge>
                   </Link>
@@ -81,7 +90,7 @@ const ClassTable = ({ classes }: ClassTableProps) => {
         </Table>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default ClassTable
+export default ClassTable;

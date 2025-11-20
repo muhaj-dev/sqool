@@ -1,28 +1,35 @@
-'use client'
+"use client";
 
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import TopBar from '@/components/TopBar'
-import Wrapper from '@/components/Wrapper'
-import React from 'react'
-import Link from 'next/link'
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import TopBar from "@/components/TopBar";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import Wrapper from "@/components/Wrapper";
 
 const FormSchema = z.object({
-  email: z.string().email('Please enter your email address'),
-})
+  email: z.string().email("Please enter your email address"),
+});
 
 const ForgotPassword = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: '',
+      email: "",
     },
-  })
+  });
   return (
     <MaxWidthWrapper className="flex flex-col ">
       <TopBar text="New to SQOOLIFY?" btnText="Sign Up" />
@@ -33,8 +40,9 @@ const ForgotPassword = () => {
         <div className="text-center mb-6 ">
           <h3 className="text-primary text-2xl sm:text-3xl  mb-4">Reset Password</h3>
           <p className="text-[#434547] sm:text-xl">
-            {' '}
-            Enter the email associated with your account and we’ll send an email with instruction to reset your Password
+            {" "}
+            Enter the email associated with your account and we’ll send an email with instruction to
+            reset your Password
           </p>
         </div>
         <Form {...form}>
@@ -57,7 +65,7 @@ const ForgotPassword = () => {
             </Button>
             <div className="text-sm">
               Remembered your password ? kindly to
-              <Link href={'/signin'} className=" text-primary px-2  ">
+              <Link href={"/signin"} className=" text-primary px-2  ">
                 click here
               </Link>
               Login
@@ -66,7 +74,7 @@ const ForgotPassword = () => {
         </Form>
       </Wrapper>
     </MaxWidthWrapper>
-  )
-}
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;

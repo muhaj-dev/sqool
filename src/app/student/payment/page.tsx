@@ -1,11 +1,12 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Paymentbar from '../components/Paymentbar'
-import PaymentFee from '../components/PaymentFee'
+import { useState } from "react";
+
+import Paymentbar from "../components/Paymentbar";
+import PaymentFee from "../components/PaymentFee";
 
 const Page = () => {
-  const [showTexam, setShowTexam] = useState<boolean>(false)
+  const [showTexam, setShowTexam] = useState<boolean>(false);
 
   return (
     <div>
@@ -14,7 +15,7 @@ const Page = () => {
         <PaymentFee />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

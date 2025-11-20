@@ -1,8 +1,9 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { parentData } from '@/components/student/student-data'
-import { ParentExpCol } from './ParentExpCol'
-import { ParentTable } from './ParentTable'
+"use client";
+
+import { parentData } from "@/components/student/student-data";
+
+import { ParentExpCol } from "./ParentExpCol";
+import { ParentTable } from "./ParentTable";
 
 const ParentExp = () => {
   return (
@@ -12,7 +13,7 @@ const ParentExp = () => {
         <ParentTable data={parentData} columns={ParentExpCol} />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ParentExp
+export default ParentExp;

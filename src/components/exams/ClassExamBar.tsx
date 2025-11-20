@@ -1,26 +1,34 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '../ui/separator'
-import { usePathname } from 'next/navigation'
+import { usePathname } from "next/navigation";
+import React from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { Separator } from "../ui/separator";
 
 interface ClassExamBarProps {
-  level: string
+  level: string;
 }
 
 const ClassExamBar: React.FC<ClassExamBarProps> = ({ level }) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
-  let statusText = 'Approved' // Default status text
+  let statusText = "Approved"; // Default status text
 
   // If-else statement to check the current route
-  if (pathname.includes('/admin/exam/pending')) {
-    statusText = 'Pending Approve'
-  } else if (pathname.includes('/admin/exam/completed')) {
-    statusText = 'Completed'
-  } else if (pathname.includes('/admin/exam/rejected')) {
-    statusText = 'Rejected'
+  if (pathname.includes("/admin/exam/pending")) {
+    statusText = "Pending Approve";
+  } else if (pathname.includes("/admin/exam/completed")) {
+    statusText = "Completed";
+  } else if (pathname.includes("/admin/exam/rejected")) {
+    statusText = "Rejected";
   }
 
   return (
@@ -47,7 +55,7 @@ const ClassExamBar: React.FC<ClassExamBarProps> = ({ level }) => {
       </div>
       <Separator />
     </section>
-  )
-}
+  );
+};
 
-export default ClassExamBar
+export default ClassExamBar;

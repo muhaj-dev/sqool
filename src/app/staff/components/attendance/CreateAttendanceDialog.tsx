@@ -1,6 +1,27 @@
 "use client";
 
 import React from "react";
+
+import {
+  endOfMonth,
+  endOfWeek,
+  isWithinInterval,
+  parseISO,
+  startOfMonth,
+  startOfWeek,
+} from "date-fns";
+import { CalendarCheck, CalendarRange, Users2 } from "lucide-react";
+
+import { AttendanceClassSelector } from "@/app/staff/components/attendance/AttendanceClassSelector";
+import { AttendancePreviewTable } from "@/app/staff/components/attendance/AttendancePreviewTable";
+import {
+  AttendanceRangeSelector,
+  type AttendanceRangeSelectorProps,
+} from "@/app/staff/components/attendance/AttendanceRangeSelector";
+import LoadingStateAttendance from "@/components/LoadingState";
+import MessageDialog from "@/components/message-dialog";
+import { ReusableSelect } from "@/components/select-resuable";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,35 +30,44 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-
-import { Users2, CalendarRange, CalendarCheck } from "lucide-react";
-
-import { AttendanceRangeSelector } from "./AttendanceRangeSelector";
-import { AttendanceClassSelector } from "./AttendanceClassSelector";
-import { AttendancePreviewTable } from "./AttendancePreviewTable";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
-  endOfMonth,
-  isWithinInterval,
-  parseISO,
-} from "date-fns";
-import { Term, TermDateRange } from "@/types";
+  type AcademicSessionTerms,
+  type Frequency,
+  type StudentAttendance,
+  type Term,
+  type TermDateRange,
+} from "@/types";
+import { type useAttendanceStore } from "@/zustand/staff/useAttendanceStore";
+
+import { type useAttendanceCreate } from "../../hooks/useAttendanceCreate";
 import { CancelAttendanceButton } from "./CreateAttendanceButton";
-import LoadingStateAttendance from "@/components/LoadingState";
+
+type Controller = ReturnType<typeof useAttendanceCreate> &
+  Omit<
+    ReturnType<typeof useAttendanceStore>,
+    | "selectedClass"
+    | "setSelectedClass"
+    | "selectedSession"
+    | "setSelectedSession"
+    | "selectedTerm"
+    | "setSelectedTerm"
+  > & {
+    selectedClass: string;
+    setSelectedClass: (classId: string) => void;
+    selectedSession: string;
+    setSelectedSession: (session: string) => void;
+    selectedTerm: TermDateRange;
+    setSelectedTerm: (term: TermDateRange) => void;
+  };
 
 interface CreateAttendanceDialogProps {
-  controller: any;
-  classOptions: any[];
-  students: any[];
+  controller: Controller;
+  classOptions: { id: string; name: string }[];
+  students: StudentAttendance[];
   academicSessions: string[];
-  termRanges: TermDateRange;
+  termRanges: AcademicSessionTerms;
 }
 
 const termOptions = [
@@ -51,7 +81,7 @@ export default function CreateAttendanceDialog({
   classOptions,
   students,
   termRanges,
-  academicSessions,
+  academicSessions, //1st item in the array is the current session
 }: CreateAttendanceDialogProps) {
   const {
     open,
@@ -68,7 +98,7 @@ export default function CreateAttendanceDialog({
     setRange,
     submit,
     loading,
-    reset
+    reset,
   } = controller;
 
   const [tab, setTab] = React.useState("step1");
@@ -77,19 +107,22 @@ export default function CreateAttendanceDialog({
   const canGoStep3 = canGoStep2 && range;
 
   const handleTermSelection = (term: Term) => {
-    setSelectedTerm(term);
+    const currentSession = selectedSession || academicSessions[0];
 
-    const tr = termRanges.termDates[term];
+    const tr = termRanges?.[currentSession]?.termDates?.[term];
+
     if (!tr) return;
+
+    setSelectedTerm({
+      termDates: { [term]: tr },
+    });
 
     const today = new Date();
     const start = parseISO(tr.start);
     const end = parseISO(tr.end);
 
     // If today is inside the term, start from today.
-    const computedStart = isWithinInterval(today, { start, end })
-      ? today
-      : start;
+    const computedStart = isWithinInterval(today, { start, end }) ? today : start;
 
     setRange({
       from: computedStart,
@@ -97,7 +130,7 @@ export default function CreateAttendanceDialog({
     });
   };
 
-  const handleFrequencyChange = (freq: string, date?: Date) => {
+  const handleFrequencyChange = (freq: Frequency, date?: Date) => {
     setFrequency(freq);
 
     if (!date) return;
@@ -117,7 +150,11 @@ export default function CreateAttendanceDialog({
     }
 
     if (freq === "term" && selectedTerm) {
-      const tr = termRanges.termDates[selectedTerm as Term];
+      const currentSession = selectedSession || academicSessions[0];
+      const term = (Object.keys(selectedTerm.termDates)[0] ?? null) as Term | null;
+      if (!term) return;
+      const tr = termRanges?.[currentSession]?.termDates?.[term];
+
       if (!tr) return;
       const start = parseISO(tr.start);
       const end = parseISO(tr.end);
@@ -125,8 +162,30 @@ export default function CreateAttendanceDialog({
     }
   };
 
+  if (students.length === 0 && selectedTerm && selectedSession && selectedClass) {
+    //configuration of school error, no students present for attendance in that class
+    return (
+      <MessageDialog
+        open={open}
+        onOpenChange={setOpen}
+        type="warning"
+        title="Critical Warning"
+        message="There are no students currently present in this class. Refer to your admin and retify assigning students to you."
+      />
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={!loading ? setOpen : () => {}}>
+    <Dialog
+      open={open}
+      onOpenChange={
+        !loading
+          ? setOpen
+          : () => {
+              return 2;
+            }
+      }
+    >
       <DialogContent className="max-w-4xl min-h-[80vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle>Create Attendance</DialogTitle>
@@ -135,13 +194,9 @@ export default function CreateAttendanceDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {loading && <LoadingStateAttendance  title="Creating attendance..."/>}
+        {loading ? <LoadingStateAttendance title="Creating attendance..." /> : null}
 
-        <Tabs
-          value={tab}
-          onValueChange={setTab}
-          className="w-full mt-4 flex flex-col"
-        >
+        <Tabs value={tab} onValueChange={setTab} className="w-full mt-4 flex flex-col">
           <TabsList className="grid grid-cols-3 mb-4">
             <TabsTrigger value="step1">
               <Users2 className="w-4 h-4 mr-2" />
@@ -172,42 +227,28 @@ export default function CreateAttendanceDialog({
                   />
 
                   {/* Select Academic Session */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                      Academic Session
-                    </label>
-                    <select
-                      className="border rounded-md p-2 w-full bg-background"
-                      value={selectedSession || ""}
-                      onChange={(e) => setSelectedSession(e.target.value)}
-                    >
-                      <option value="">Select Session</option>
-                      {academicSessions.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <ReusableSelect
+                    label="Academic Session"
+                    value={selectedSession || ""}
+                    onChange={(e) => setSelectedSession(e)}
+                    options={academicSessions.map((c) => ({
+                      label: c,
+                      value: c,
+                    }))}
+                    placeholder="Select Session..."
+                  />
 
                   {/* Select Term */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Term</label>
-                    <select
-                      className="border rounded-md p-2 w-full bg-background"
-                      value={selectedTerm || ""}
-                      onChange={(e) =>
-                        handleTermSelection(e.target.value as Term)
-                      }
-                    >
-                      <option value="">Select Term</option>
-                      {termOptions.map((t) => (
-                        <option key={t.value} value={t.value}>
-                          {t.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <ReusableSelect
+                    label="Term"
+                    value={Object.keys(selectedTerm.termDates)[0] || ""}
+                    onChange={(e) => handleTermSelection(e as Term)}
+                    options={termOptions.map((c) => ({
+                      label: c.label,
+                      value: c.value,
+                    }))}
+                    placeholder="Select Term..."
+                  />
 
                   <Button
                     onClick={() => canGoStep2 && setTab("step2")}
@@ -224,9 +265,8 @@ export default function CreateAttendanceDialog({
                     <Users2 className="w-20 h-20 text-muted-foreground mx-auto" />
                     <h3 className="text-lg font-semibold">Choose Details</h3>
                     <p className="text-sm text-muted-foreground">
-                      Select the class, academic session, and term. Attendance
-                      range will be generated automatically from your chosen
-                      term.
+                      Select the class, academic session, and term. Attendance range will be
+                      generated automatically from your chosen term.
                     </p>
                   </div>
                 </div>
@@ -240,14 +280,15 @@ export default function CreateAttendanceDialog({
             <ScrollArea className="h-full">
               <div className="flex flex-col gap-6 h-full">
                 <AttendanceRangeSelector
-                  frequency={frequency}
+                  frequency={frequency as Frequency}
                   onFrequencyChange={handleFrequencyChange}
-                  onSelectRange={(r: any) => {
+                  onSelectRange={(r: AttendanceRangeSelectorProps["currentRange"]) => {
                     setRange(r);
                   }}
                   currentRange={range}
                   termRange={termRanges}
                   selectedTerm={selectedTerm}
+                  selectedSession={selectedSession}
                 />
 
                 <Button
@@ -267,16 +308,23 @@ export default function CreateAttendanceDialog({
               <div className="space-y-6 pb-10">
                 <AttendancePreviewTable students={students} />
 
-                <Button onClick={submit} className="w-full">
+                {}
+                {/* <Button onClick={() => submit()} className="w-full">
                   Create Attendance
-                </Button>
+                </Button> */}
               </div>
             </ScrollArea>
           </TabsContent>
         </Tabs>
 
         <DialogFooter className="max-h-5 ">
-          <CancelAttendanceButton onClick={() => {setOpen(false);reset}} disabled={loading}/>
+          <CancelAttendanceButton
+            onClick={() => {
+              setOpen(false);
+              reset();
+            }}
+            disabled={loading}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

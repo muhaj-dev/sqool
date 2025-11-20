@@ -1,72 +1,60 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { toast } from '@/components/ui/use-toast'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { X } from 'lucide-react'
+import { Button } from "@/components/ui/button";
+import { DialogClose, DialogContent } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
+import Link from "next/link";
 
-type Participant = {
-  name: string
-  role: string
+interface Participant {
+  name: string;
+  role: string;
 }
 
-type Event = {
-  title: string
-  participants: Participant[]
-  time: string
-  date: string
-  description: string
-  attachments: string[]
-  eventDate: string
-  eventTime: string
+interface Event {
+  title: string;
+  participants: Participant[];
+  time: string;
+  date: string;
+  description: string;
+  attachments: string[];
+  eventDate: string;
+  eventTime: string;
 }
 
 interface EventModalProps {
-  event: Event
+  event: Event;
 }
 
 const FormSchema = z.object({
   username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
+    message: "Username must be at least 2 characters.",
   }),
   email: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
+    message: "Username must be at least 2 characters.",
   }),
-})
+});
 
 export function EventModal({ event }: EventModalProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: '',
-      email: '',
+      username: "",
+      email: "",
     },
-  })
+  });
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
-      title: 'You submitted the following values:',
+      title: "You submitted the following values:",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    })
+    });
   }
 
   return (
@@ -106,9 +94,9 @@ export function EventModal({ event }: EventModalProps) {
           </div>
           <div className="flex justify-between items-center">
             <div className="mt-4 text-sm  flex gap-5">
-              <a href="#" className="text-blue-500">
+              <Link href="#" className="text-blue-500">
                 {event.attachments[0]}
-              </a>
+              </Link>
               <span>{event.eventDate}</span>
               <span>{event.eventTime}</span>
             </div>
@@ -126,7 +114,10 @@ export function EventModal({ event }: EventModalProps) {
               >
                 Yes
               </Button>
-              <Button type="submit" className=" border-primary text-primary border-[1px] bg-transparent px-5">
+              <Button
+                type="submit"
+                className=" border-primary text-primary border-[1px] bg-transparent px-5"
+              >
                 No
               </Button>
             </div>
@@ -134,7 +125,7 @@ export function EventModal({ event }: EventModalProps) {
         </div>
       </div>
     </DialogContent>
-  )
+  );
 }
 
 const File = () => (
@@ -148,31 +139,31 @@ const File = () => (
       stroke="#9530AE"
     />
   </svg>
-)
+);
 
 const Dots = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_1069_26036)">
+    <g clipPath="url(#clip0_1069_26036)">
       <path
         d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
         stroke="#181336"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
         stroke="#181336"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
         stroke="#181336"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <defs>
@@ -181,4 +172,4 @@ const Dots = () => (
       </clipPath>
     </defs>
   </svg>
-)
+);

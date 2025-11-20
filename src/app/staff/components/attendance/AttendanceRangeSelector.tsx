@@ -1,34 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
+import { addDays, eachDayOfInterval, endOfMonth, endOfWeek, isAfter, isWeekend } from "date-fns";
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
-  endOfMonth,
-  addDays,
-  isBefore,
-  isAfter,
-  eachDayOfInterval,
-  isWeekend,
-} from "date-fns";
+import { type AcademicSessionTerms, type Frequency, type Term, type TermDateRange } from "@/types";
 import { generateBusinessDayDates } from "@/utils/lib";
-import { TermDateRange, Term } from "@/types";
-import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
+import { type DateRange } from "react-day-picker";
 
-interface AttendanceRangeSelectorProps {
-  frequency: string;
-  termRange?: TermDateRange | null;
+export interface AttendanceRangeSelectorProps {
+  frequency: Frequency;
+  termRange?: AcademicSessionTerms | null;
   currentRange: {
-    from: Date | null;
-    to: Date | null;
+    from: Date | string | null;
+    to: Date | string | null;
     validDays?: Date[];
   } | null;
-  selectedTerm: Term;
+  selectedTerm: TermDateRange;
+  selectedSession: string;
 
-  onFrequencyChange: (frequency: string) => void;
+  onFrequencyChange: (frequency: Frequency) => void;
   onSelectRange: (range: { from: Date; to: Date; validDays: Date[] }) => void;
 }
 
@@ -39,14 +32,17 @@ export function AttendanceRangeSelector({
   onSelectRange,
   termRange,
   selectedTerm,
+  selectedSession,
 }: AttendanceRangeSelectorProps) {
-  const [customRange, setCustomRange] = useState<any>(null);
+  const [customRange, setCustomRange] = useState<
+    AttendanceRangeSelectorProps["currentRange"] | null
+  >(null);
   const today = new Date();
-
-  const term = termRange?.termDates[selectedTerm];
+  const term = Object.keys(selectedTerm.termDates)[0] as Term;
+  const range = termRange?.[selectedSession]?.termDates?.[term];
   const sessionRange = {
-    from: new Date(termRange?.termDates.first?.start ?? new Date()),
-    to: new Date(termRange?.termDates.third?.end ?? new Date()),
+    from: new Date(range?.start ?? new Date()),
+    to: new Date(range?.end ?? new Date()),
   };
 
   // Sync parent → local
@@ -99,20 +95,17 @@ export function AttendanceRangeSelector({
   };
 
   const computeTerm = () => {
-    if (!termRange || !term) return;
-    const { start, end } = term;
+    if (!termRange || !range) return;
+    const { start, end } = range;
     selectRange(new Date(start), new Date(end));
   };
 
   const computeHalfTerm = () => {
     if (!termRange || !term) return;
-    const { start, end } = term;
+    const { start, end } = range!;
     const mid = addDays(
       start,
-      Math.floor(
-        (new Date(end).getTime() - new Date(start).getTime()) /
-          (1000 * 60 * 60 * 24 * 2)
-      )
+      Math.floor((new Date(end).getTime() - new Date(start).getTime()) / (1000 * 60 * 60 * 24 * 2)),
     );
     selectRange(new Date(start), new Date(mid));
   };
@@ -121,6 +114,10 @@ export function AttendanceRangeSelector({
     if (!sessionRange) return;
     const { from, to } = sessionRange;
     selectRange(from, to);
+  };
+
+  const computeCustom = () => {
+    // No-op, handled by calendar
   };
 
   const PRESETS = [
@@ -149,11 +146,11 @@ export function AttendanceRangeSelector({
     { key: "term", label: "Full Term", handler: computeTerm },
     { key: "half-term", label: "Half Term", handler: computeHalfTerm },
     { key: "session", label: "Full Session", handler: computeSession },
-    { key: "custom", label: "Custom", handler: () => {} },
+    { key: "custom", label: "Custom", handler: computeCustom },
   ];
 
   const selectPreset = (presetKey: string) => {
-    onFrequencyChange(presetKey);
+    onFrequencyChange(presetKey as Frequency);
     const preset = PRESETS.find((p) => p.key === presetKey);
     if (preset && preset.key !== "custom") preset.handler();
   };
@@ -175,18 +172,18 @@ export function AttendanceRangeSelector({
         ))}
       </div>
 
-      {currentRange?.from && currentRange?.to && (
+      {currentRange?.from && currentRange?.to ? (
         <div className="border bg-muted/20 rounded-md p-3">
           <p className="text-sm font-medium">Selected:</p>
           <p className="text-sm text-muted-foreground mt-1">
-            {currentRange.from.toDateString()} →{" "}
-            {currentRange.to.toDateString()}
+            {(currentRange.from as Date).toDateString()} →{" "}
+            {(currentRange.to as Date).toDateString()}
           </p>
           <p className="text-xs text-muted-foreground">
             Valid school days: {currentRange?.validDays?.length}
           </p>
         </div>
-      )}
+      ) : null}
 
       {frequency === "custom" && (
         <div className="border rounded-md">
@@ -194,10 +191,10 @@ export function AttendanceRangeSelector({
             <Calendar
               mode="range"
               numberOfMonths={12}
-              selected={customRange}
+              selected={customRange as DateRange}
               disabled={{ before: today }}
-              onSelect={(range: any) => {
-                setCustomRange(range);
+              onSelect={(range: DateRange | undefined) => {
+                setCustomRange(range as AttendanceRangeSelectorProps["currentRange"]);
 
                 if (range?.from && range?.to) {
                   const from = new Date(range.from);
