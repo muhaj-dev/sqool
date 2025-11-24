@@ -146,28 +146,41 @@ const Page = () => {
     }
   };
 
-  const handleSave = async (noticeData: Notice) => {
+  const handleSave = async (noticeData: any) => {
     setLoading(true);
     try {
-      if (editingNotice?.id) {
-        await updateNotice(editingNotice.id, noticeData);
+      const payload = {
+        title: noticeData.title,
+        content: noticeData.content,
+        body: noticeData.body,
+        visibility: noticeData.visibility,
+        resources: noticeData.resources || [],
+        expirationDate: new Date(noticeData.expirationDate).toISOString(),
+        notificationDate: new Date(noticeData.notificationDate).toISOString(),
+      };
+
+      if (editingNotice?._id) {
+        await updateNotice(editingNotice._id, payload);
         toast({
           title: "Success",
           description: "Notice updated successfully",
         });
       } else {
-        await createNotice(noticeData);
+        await createNotice(payload);
         toast({
           title: "Success",
           description: "Notice created successfully",
         });
       }
       setIsDialogOpen(false);
-      void fetchNotices(); // Refresh the list
-    } catch (error) {
+      setEditingNotice(null);
+      void fetchNotices();
+    } catch (error: any) {
+      console.error("Save notice error:", error);
+      const errorMessage = error.response?.data?.message || "Failed to save notice";
       toast({
         title: "Error",
-        description: "Failed to save notice",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

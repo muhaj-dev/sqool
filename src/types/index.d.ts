@@ -859,6 +859,22 @@ export interface Notice {
   expirationDate: string;
 }
 
+// In your types file
+export interface AdminNotice {
+  _id: string;
+  id?: string; // for backward compatibility
+  title: string;
+  content: string;
+  body: string;
+  visibility: "parent" | "staff" | "everyone";
+  resources: string[];
+  expirationDate: string | Date;
+  notificationDate: string | Date;
+  notificationType?: string;
+  isActive?: boolean;
+  isPinned?: boolean;
+}
+
 export interface NoticesResponse {
   result: Notice[];
   pagination: Pagination;
