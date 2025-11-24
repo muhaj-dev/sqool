@@ -80,11 +80,6 @@ const TeacherProfile = ({ staffId, staff }: { staffId: string; staff: StaffResul
           <p className="font-medium">{dateOfBirth}</p>
         </div>
 
-        {/* <div className="flex flex-col">
-          <p className="text-muted-foreground">Language</p>
-          <p className="font-medium">{language}</p>
-        </div> */}
-
         <div className="flex flex-col">
           <p className="text-muted-foreground">Role</p>
           <p className="font-medium capitalize">{role}</p>

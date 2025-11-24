@@ -182,21 +182,6 @@ const AdminPaymentHistory = () => {
     void fetchPayments();
   }, [refresh, statusFilter, pagination.currentPage, pagination.pageSize]);
 
-  // Fix the useEffect for student search
-  // Move this function outside the useEffect
-  // const fetchRecentStudents = async () => {
-  //   setIsSearching(true);
-  //   try {
-  //     const response = await getAllStudents(1, 5, ""); // Get first 5 students
-  //     const studentsData = response.data?.result || [];
-  //     setStudents(studentsData);
-  //   } catch (error) {
-  //     console.error("Failed to fetch recent students:", error);
-  //   } finally {
-  //     setIsSearching(false);
-  //   }
-  // };
-
   // Then in your useEffect, keep the fetchStudents function but remove fetchRecentStudents
   useEffect(() => {
     const fetchStudents = async () => {

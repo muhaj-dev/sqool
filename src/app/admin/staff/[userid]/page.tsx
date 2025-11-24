@@ -65,7 +65,7 @@ const Page = () => {
             staffId={staffId}
             staff={staffData?.staff}
             staffSchedules={staffData?.staffSchedules}
-            refreshStaff={fetchStaff} // ✅ Pass the refresh function
+            refreshStaff={fetchStaff}
           />
         </div>
       </section>
