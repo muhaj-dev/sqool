@@ -1458,3 +1458,24 @@ export const updateStaffByAdmin = async (staffId: string, data: any) => {
     throw new Error("Failed to update staff");
   }
 };
+
+export const updatePaymentAdmin = async (
+  paymentId: string,
+  payload: {
+    paymentDate: string;
+    amountPaid: number;
+    paymentMethod: string;
+    paymentStatus: string;
+    paymentType: string;
+    paymentCategory: string;
+    transactionId: string;
+    userId: string;
+  },
+) => {
+  try {
+    const response = await api.patch(`/v1/admin/payment/${paymentId}`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update payment");
+  }
+};

@@ -182,10 +182,25 @@ const AdminPaymentHistory = () => {
     void fetchPayments();
   }, [refresh, statusFilter, pagination.currentPage, pagination.pageSize]);
 
-  // Fetch students for search
+  // Fix the useEffect for student search
+  // Move this function outside the useEffect
+  // const fetchRecentStudents = async () => {
+  //   setIsSearching(true);
+  //   try {
+  //     const response = await getAllStudents(1, 5, ""); // Get first 5 students
+  //     const studentsData = response.data?.result || [];
+  //     setStudents(studentsData);
+  //   } catch (error) {
+  //     console.error("Failed to fetch recent students:", error);
+  //   } finally {
+  //     setIsSearching(false);
+  //   }
+  // };
+
+  // Then in your useEffect, keep the fetchStudents function but remove fetchRecentStudents
   useEffect(() => {
     const fetchStudents = async () => {
-      if (studentSearch.length < 2) {
+      if (studentSearch.length < 1) {
         setStudents([]);
         return;
       }
@@ -193,7 +208,8 @@ const AdminPaymentHistory = () => {
       setIsSearching(true);
       try {
         const response = await getAllStudents(1, 10, studentSearch);
-        setStudents(response.data?.result || response.data || []);
+        const studentsData = response.data?.result || [];
+        setStudents(studentsData);
       } catch (error) {
         console.error("Failed to search students:", error);
         toast({
@@ -206,10 +222,12 @@ const AdminPaymentHistory = () => {
       }
     };
 
-    const debounceTimer = setTimeout(() => void fetchStudents, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [studentSearch, refresh, toast]);
+    const debounceTimer = setTimeout(() => {
+      void fetchStudents();
+    }, 300);
 
+    return () => clearTimeout(debounceTimer);
+  }, [studentSearch]);
   const handleStudentSelect = (student: IStudent) => {
     setSelectedStudent(student);
     setFormData((prev) => ({
@@ -217,8 +235,21 @@ const AdminPaymentHistory = () => {
       userId: student._id,
     }));
     setStudentSearch(`${student.firstName} ${student.lastName}`);
-    setStudents([]);
+    setStudents([]); // Clear the dropdown after selection
   };
+
+  // Add this useEffect to handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".student-search-container")) {
+        setStudents([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Calculate totals from real data (fallback if API fails)
   const totalPaid =
@@ -448,46 +479,86 @@ const AdminPaymentHistory = () => {
                 </DialogHeader>
                 <div className="space-y-4">
                   {/* Student Search */}
+                  {/* Student Search */}
                   <div className="relative">
-                    <Label>Student *</Label>
-                    <Input
-                      placeholder="Search student by name..."
-                      value={studentSearch}
-                      onChange={(e) => setStudentSearch(e.target.value)}
-                    />
-                    {students?.length > 0 && (
-                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
-                        {students.map((student) => (
-                          <div
-                            key={student?._id}
-                            className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                            onClick={() => handleStudentSelect(student)}
-                          >
-                            <div className="font-medium">
-                              {student?.firstName} {student?.lastName}
+                    <div className="student-search-container relative">
+                      <Label>Student *</Label>
+                      <Input
+                        placeholder="Search student by name..."
+                        value={studentSearch}
+                        onChange={(e) => {
+                          setStudentSearch(e.target.value);
+                          if (
+                            selectedStudent &&
+                            e.target.value !==
+                              `${selectedStudent.firstName} ${selectedStudent.lastName}`
+                          ) {
+                            setSelectedStudent(null);
+                            setFormData((prev) => ({ ...prev, userId: "" }));
+                          }
+                        }}
+                      />
+
+                      {/* Loading indicator */}
+                      {isSearching ? (
+                        <div className="absolute right-3 top-8">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900" />
+                        </div>
+                      ) : null}
+
+                      {/* Search results dropdown - show when typing and no student selected */}
+                      {!selectedStudent && students.length > 0 && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+                          {students.map((student) => (
+                            <div
+                              key={student._id}
+                              className="px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0"
+                              onClick={() => handleStudentSelect(student)}
+                            >
+                              <div className="font-medium">
+                                {student.firstName} {student.lastName}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {student.class?.className || ""}
+                              </div>
+                              {student.parent?.userId ? (
+                                <div className="text-xs text-gray-400">
+                                  Parent: {student.parent.userId.firstName}{" "}
+                                  {student.parent.userId.lastName}
+                                </div>
+                              ) : null}
                             </div>
-                            <div className="text-sm text-gray-500">
-                              {student?.class?.className || "No grade"} • {student?._id}
+                          ))}
+                        </div>
+                      )}
+
+                      {/* No results message - only show when no student is selected */}
+                      {!selectedStudent &&
+                        studentSearch.length >= 2 &&
+                        !isSearching &&
+                        students.length === 0 && (
+                          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
+                            <div className="px-4 py-2 text-sm text-gray-500">
+                              No students found matching "{studentSearch}"
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                    {isSearching ? (
-                      <div className="absolute right-3 top-8">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900" />
-                      </div>
-                    ) : null}
-                    {selectedStudent ? (
-                      <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
-                        <p className="text-sm text-green-800">
-                          Selected:{" "}
-                          <strong>
-                            {selectedStudent?.firstName} {selectedStudent?.lastName}
-                          </strong>
-                        </p>
-                      </div>
-                    ) : null}
+                        )}
+
+                      {/* Selected student display */}
+                      {selectedStudent ? (
+                        <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
+                          <p className="text-sm text-green-800">
+                            Selected:{" "}
+                            <strong>
+                              {selectedStudent.firstName} {selectedStudent.lastName}
+                            </strong>
+                            {selectedStudent.class?.className ? (
+                              <span className="ml-2">• {selectedStudent.class.className}</span>
+                            ) : null}
+                          </p>
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
 
                   <div>
