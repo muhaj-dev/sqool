@@ -75,9 +75,7 @@ const Exam = () => {
   };
   return (
     <section>
-      <div className="flex justify-end">
-        <SchoolSession />
-      </div>
+      <div className="flex justify-end">{/* <SchoolSession /> */}</div>
       <div className="flex items-center gap-8">
         {STEPS.map((item, ind) => (
           <div
