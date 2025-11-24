@@ -1,7 +1,6 @@
-// src/app/staff/[staffId]/page.tsx
 "use client";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import LeftBar from "@/components/staff/LeftBar";
 import StaffSteps from "@/components/staff/StaffSteps";
@@ -33,30 +32,28 @@ const Page = () => {
     }
   }, [pathname]);
 
-  useEffect(() => {
-    const fetchStaff = async () => {
-      if (!staffId) return;
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response: SingleStaffResponse = await getStaffById(staffId);
-        setStaffData({
-          staff: response.data.staff,
-          staffSchedules: response.data.staffSchedules,
-        });
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to fetch staff details";
-        setError(errorMessage);
-        console.error("Error fetching staff:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void fetchStaff();
+  const fetchStaff = useCallback(async () => {
+    if (!staffId) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const response: SingleStaffResponse = await getStaffById(staffId);
+      setStaffData({
+        staff: response.data.staff,
+        staffSchedules: response.data.staffSchedules,
+      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to fetch staff details";
+      setError(errorMessage);
+      console.error("Error fetching staff:", err);
+    } finally {
+      setLoading(false);
+    }
   }, [staffId]);
+
+  useEffect(() => {
+    void fetchStaff();
+  }, [fetchStaff]);
 
   return (
     <>
@@ -66,8 +63,9 @@ const Page = () => {
         <div className="bg-white flex-1 rounded-md">
           <StaffSteps
             staffId={staffId}
-            staff={staffData.staff}
-            staffSchedules={staffData.staffSchedules}
+            staff={staffData?.staff}
+            staffSchedules={staffData?.staffSchedules}
+            refreshStaff={fetchStaff} // ✅ Pass the refresh function
           />
         </div>
       </section>

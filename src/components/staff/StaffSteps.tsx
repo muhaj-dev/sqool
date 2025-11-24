@@ -1,4 +1,3 @@
-// src/components/staff/StaffSteps.tsx
 "use client";
 import { useState } from "react";
 
@@ -18,27 +17,33 @@ interface StaffContentProps {
   staffId: string;
   staff: StaffResult | null;
   staffSchedules: StaffSchedule[];
+  refreshStaff?: () => Promise<void>; // ✅ Add refreshStaff prop
 }
 
 interface StaffStepsProps {
   staffId: string;
   staff: StaffResult | null;
   staffSchedules: StaffSchedule[];
+  refreshStaff?: () => Promise<void>; // ✅ Add refreshStaff prop
 }
 
-const StaffSteps = ({ staffId, staff, staffSchedules }: StaffStepsProps) => {
+const StaffSteps = ({ staffId, staff, staffSchedules, refreshStaff }: StaffStepsProps) => {
   const [activeIndex, setActiveIndex] = useState<TabIndex>(0);
 
-  const StaffContent = ({ activeIndex, staffId, staff, staffSchedules }: StaffContentProps) => {
+  const StaffContent = ({
+    activeIndex,
+    staffId,
+    staff,
+    staffSchedules,
+    refreshStaff,
+  }: StaffContentProps) => {
     switch (activeIndex) {
       case 0:
         return <TeacherProfile staffId={staffId} staff={staff} />;
       case 1:
         return <TeacherTimeTable staffId={staffId} staffSchedules={staffSchedules} />;
       case 2:
-        return <TeacherSettings staffId={staffId} />;
-      // case 3:
-      // return <Review staffId={staffId} />
+        return <TeacherSettings staffId={staffId} staff={staff} refreshStaff={refreshStaff} />; // ✅ Pass refreshStaff
       default:
         return null;
     }
@@ -72,6 +77,7 @@ const StaffSteps = ({ staffId, staff, staffSchedules }: StaffStepsProps) => {
           staffId={staffId}
           staff={staff}
           staffSchedules={staffSchedules}
+          refreshStaff={refreshStaff} // ✅ Pass the refresh function
         />
       </div>
     </div>

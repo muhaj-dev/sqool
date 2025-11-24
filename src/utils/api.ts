@@ -1440,3 +1440,21 @@ export const updateParentById = async (
     throw new Error("Failed to update parent");
   }
 };
+
+export const updateStaffByAdmin = async (staffId: string, data: any) => {
+  try {
+    const response = await api.patch(`/v1/admin/staffs/${staffId}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to update staff";
+      console.error("API Error:", {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to update staff");
+  }
+};

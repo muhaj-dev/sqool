@@ -73,7 +73,7 @@ const SubjectAssignment = ({ classData, onRefresh }: SubjectAssignmentProps) => 
   // Initial data fetch
   useEffect(() => {
     void fetchData();
-  }, [toast]);
+  }, [toast, classData]);
 
   const subjectListClasses = classes.map((cls) => ({
     id: cls.id,

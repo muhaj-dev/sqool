@@ -642,14 +642,14 @@ export const TeacherManagement = ({ classData, refresh, onRefresh }: any) => {
               )}
             </div>
             <div className="flex gap-2">
-              <Button
+              {/* <Button
                 onClick={handleRefresh}
                 variant="outline"
                 className="flex-1 flex items-center gap-2"
               >
                 <RefreshCw className="h-4 w-4" />
                 Refresh
-              </Button>
+              </Button> */}
               <Button
                 onClick={handleRemoveSelectedSubjects}
                 className="flex-1 text-white bg-destructive hover:bg-destructive/90"

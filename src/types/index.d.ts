@@ -261,6 +261,10 @@ export interface StaffResult {
   experience: string;
   primarySubject: string;
   isActive: boolean;
+  phoneNumber: string;
+  dateOfBirth: string;
+  hobbies: string[];
+  employmentDate: string;
 }
 
 export interface ScheduleSubject {
