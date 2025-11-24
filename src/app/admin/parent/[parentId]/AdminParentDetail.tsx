@@ -9,6 +9,7 @@ import {
   Phone,
   School,
   TrendingUp,
+  Edit,
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -30,12 +31,15 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { getParentById } from "@/utils/api";
+import { getParentById, updateParentById } from "@/utils/api";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface FeeItem {
   id: string;
   childName: string;
   childClass: string;
+  childSection: string;
   feeName: string;
   amount: number;
   dueDate: string;
@@ -156,16 +160,20 @@ const calculateFinancialData = (studentFee: any) => {
   };
 };
 
-// Transform API data to FeeItem format
+// Transform API data to FeeItem format - FIXED VERSION
 const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
   const feeItems: FeeItem[] = [];
 
   if (!studentFee) return feeItems;
 
-  // Create child name mapping for better display
+  // Create child mapping for better display
   const childMap = new Map();
   children.forEach((child) => {
-    childMap.set(child._id, `${child.firstName} ${child.lastName}`);
+    childMap.set(child._id, {
+      name: `${child.firstName} ${child.lastName}`,
+      className: child.class?.className || "Class Pending",
+      classSection: child.class?.classSection || "Section Pending",
+    });
   });
 
   // Process all fees
@@ -176,8 +184,12 @@ const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
   ];
 
   allFees.forEach((fee) => {
-    const childName =
-      childMap.get(fee.student._id) || `${fee.student.firstName} ${fee.student.lastName}`;
+    const childData = childMap.get(fee.student._id) || {
+      name: `${fee.student.firstName} ${fee.student.lastName}`,
+      className: "Class Pending",
+      classSection: "Section Pending",
+    };
+
     const amountOwed = fee.totalAmount - fee.totalPaid;
 
     // Determine status based on paymentStatus, computedStatus, and amount owed
@@ -198,8 +210,9 @@ const transformFeeDataToItems = (studentFee: any, children: any[] = []) => {
 
     feeItems.push({
       id: fee._id,
-      childName,
-      childClass: fee.student.class?.className || "Class Pending",
+      childName: childData.name,
+      childClass: childData.className,
+      childSection: childData.classSection,
       feeName: `School Fees - ${fee.term.charAt(0).toUpperCase() + fee.term.slice(1)} Term ${fee.session.session}`,
       amount: fee.totalAmount,
       dueDate,
@@ -234,6 +247,14 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
   const { toast } = useToast();
   const [parent, setParent] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [editFormData, setEditFormData] = useState({
+    firstName: "",
+    lastName: "",
+    occupation: "",
+    email: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (!parentId) return;
@@ -244,6 +265,21 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
         // Get the main data object that contains both parent and studentFee
         const parentData = res?.data ?? res;
         setParent(parentData);
+
+        // ADD THIS CODE: Initialize edit form data when parent is loaded
+        const userInfo =
+          parentData?.parent?.userId ??
+          parentData?.user ??
+          (typeof parentData?.userId === "object" ? parentData.userId : null);
+
+        const occupation = parentData?.parent?.occupation ?? parentData?.occupation ?? "";
+
+        setEditFormData({
+          firstName: userInfo?.firstName || "",
+          lastName: userInfo?.lastName || "",
+          occupation: occupation,
+          email: userInfo?.email || "",
+        });
 
         // For debugging - log the structure
         console.log("API Response:", res);
@@ -261,6 +297,86 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
     };
     void fetchParent();
   }, [parentId, toast]);
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // FIXED: Use the correct data structure that matches your API expectations
+      const updateData = {
+        firstName: editFormData.firstName,
+        lastName: editFormData.lastName,
+        email: editFormData.email,
+        occupation: editFormData.occupation,
+      };
+
+      const response = await updateParentById(parentId, updateData);
+
+      // Show success message first
+      toast({
+        title: "Success",
+        description: "Parent information updated successfully",
+      });
+
+      // Close the modal
+      setIsEditModalOpen(false);
+
+      // Refetch parent data to get the latest information
+      setLoading(true);
+      try {
+        const res = await getParentById(parentId);
+        const parentData = res?.data ?? res;
+        setParent(parentData);
+
+        // FIXED: Update edit form data with the fresh data using same structure as initialization
+        const userInfo =
+          parentData?.parent?.userId ??
+          parentData?.user ??
+          (typeof parentData?.userId === "object" ? parentData.userId : null);
+
+        const occupation = parentData?.parent?.occupation ?? parentData?.occupation ?? "";
+
+        setEditFormData({
+          firstName: userInfo?.firstName || "",
+          lastName: userInfo?.lastName || "",
+          occupation: occupation,
+          email: userInfo?.email || "",
+        });
+      } catch (fetchError: any) {
+        toast({
+          title: "Warning",
+          description:
+            "Parent updated but failed to refresh details: " +
+            (fetchError?.message || "Unknown error"),
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    } catch (error: any) {
+      console.error("Update error:", error);
+      toast({
+        title: "Error",
+        description: error?.message || "Failed to update parent information",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   // Calculate financial data from API
   const financialData = parent?.studentFee
@@ -399,28 +515,20 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
           </Alert>
         )}
 
-        {/* Quick Actions */}
-        {/* <div className="mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Button variant="outline">Generate Invoice</Button>
-                <Button variant="outline" onClick={() => router.push('/admin/account')}>
-                  Payment History
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div> */}
-
         <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6">
           {/* Parent Information Card */}
           <Card className="lg:col-span-1">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Parent Information</CardTitle>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleEditClick}
+                className="flex items-center gap-2"
+              >
+                <Edit className="h-4 w-4" />
+                Edit
+              </Button>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex flex-col items-center text-center">
@@ -430,8 +538,11 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                 </Avatar>
                 <h2 className="text-2xl font-bold">{displayName}</h2>
                 <p className="text-muted-foreground">Parent</p>
-                <Badge variant={parent?.isActive ? "default" : "secondary"} className="mt-2">
-                  {parent?.isActive ? "Active" : "Inactive"}
+                <Badge
+                  variant={parent?.parent?.isActive ? "default" : "secondary"}
+                  className="mt-2"
+                >
+                  {parent?.parent?.isActive ? "Active" : "Inactive"}
                 </Badge>
               </div>
 
@@ -458,7 +569,7 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
                   <Briefcase className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">Occupation</p>
-                    <p className="font-medium">{parent?.occupation ?? "N/A"}</p>
+                    <p className="font-medium capitalize">{parent?.parent?.occupation ?? "N/A"}</p>
                   </div>
                 </div>
 
@@ -739,6 +850,94 @@ const AdminParentDetail = ({ parentId }: { parentId: string }) => {
             </Card>
           </div>
         </div>
+
+        {/* Edit Parent Modal */}
+        {isEditModalOpen ? (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold">Edit Parent Information</h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsEditModalOpen(false)}
+                    disabled={isSubmitting}
+                  >
+                    ×
+                  </Button>
+                </div>
+
+                <form onSubmit={handleEditSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input
+                        id="firstName"
+                        name="firstName"
+                        value={editFormData.firstName}
+                        onChange={handleInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        name="lastName"
+                        value={editFormData.lastName}
+                        onChange={handleInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={editFormData.email}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="occupation">Occupation</Label>
+                    <Input
+                      id="occupation"
+                      name="occupation"
+                      value={editFormData.occupation}
+                      onChange={handleInputChange}
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div className="flex gap-2 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsEditModalOpen(false)}
+                      disabled={isSubmitting}
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isSubmitting} className="flex-1">
+                      {isSubmitting ? "Updating..." : "Update"}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </main>
     </div>
   );

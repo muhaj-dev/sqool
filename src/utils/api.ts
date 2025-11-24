@@ -52,7 +52,6 @@ export const api = axios.create({
 
 // Add request interceptor to inject token
 api.interceptors.request.use(
-  // eslint-disable-next-line prettier/prettier
   (config) => {
     const token = useAuthStore.getState().token;
     if (token) {
@@ -61,7 +60,7 @@ api.interceptors.request.use(
     console.log(token);
     return config;
   },
-  // eslint-disable-next-line prettier/prettier
+
   (error) => {
     // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
@@ -70,9 +69,8 @@ api.interceptors.request.use(
 
 // Add response interceptor to handle errors
 api.interceptors.response.use(
-  // eslint-disable-next-line prettier/prettier
   (response) => response,
-  // eslint-disable-next-line prettier/prettier
+
   (error) => {
     // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
@@ -1410,5 +1408,35 @@ export const updateStudent = async (studentId: string, data: any) => {
       throw new Error(errorMessage);
     }
     throw new Error("Failed to update student");
+  }
+};
+
+export const updateParentById = async (
+  parentId: string,
+  data: {
+    firstName: string;
+    lastName: string;
+    occupation: string;
+    email: string;
+  },
+) => {
+  try {
+    const response = await api.patch(`/v1/admin/parents/${parentId}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to update parent";
+      console.error("API Error:", {
+        status: error.response?.status,
+        message: errorMessage,
+        url: error.config?.url,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to update parent");
   }
 };
