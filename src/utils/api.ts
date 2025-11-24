@@ -53,7 +53,7 @@ export const api = axios.create({
 // Add request interceptor to inject token
 api.interceptors.request.use(
   // eslint-disable-next-line prettier/prettier
-  config => {
+  (config) => {
     const token = useAuthStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -62,7 +62,7 @@ api.interceptors.request.use(
     return config;
   },
   // eslint-disable-next-line prettier/prettier
-  error => {
+  (error) => {
     // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
   },
@@ -71,9 +71,9 @@ api.interceptors.request.use(
 // Add response interceptor to handle errors
 api.interceptors.response.use(
   // eslint-disable-next-line prettier/prettier
-  response => response,
+  (response) => response,
   // eslint-disable-next-line prettier/prettier
-  error => {
+  (error) => {
     // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
   },
@@ -1392,5 +1392,23 @@ export const getPaymentStatistics = async () => {
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch payment statistics");
+  }
+};
+
+export const updateStudent = async (studentId: string, data: any) => {
+  try {
+    const response = await api.patch(`/v1/admin/student/${studentId}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || "Failed to update student";
+      console.error("API Error:", {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw new Error("Failed to update student");
   }
 };

@@ -1,8 +1,8 @@
 "use client";
-
+import React from "react";
+import { Separator } from "../ui/separator";
 import { useStudent } from "@/contexts/student-context";
-
-const tabs = ["Student Profile", "Study Progress", "Attendance"];
+const tabs = ["Student Profile", "Study Progress", "Attendance", "settings"] as const;
 const StudentSteps = () => {
   const { activeIndex, updateIndex } = useStudent();
   return (
