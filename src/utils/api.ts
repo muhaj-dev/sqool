@@ -60,10 +60,10 @@ api.interceptors.request.use(
     console.log(token);
     return config;
   },
-
   (error) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-    return Promise.reject(error);
+    // Properly convert to Error object
+    const errorObj = error instanceof Error ? error : new Error(String(error));
+    return Promise.reject(errorObj);
   },
 );
 
