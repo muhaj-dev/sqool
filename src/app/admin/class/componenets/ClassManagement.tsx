@@ -34,7 +34,7 @@ const ClassManagement = ({
 
   const [refresh, setRefresh] = useState(false);
   // eslint-disable-next-line prettier/prettier
-  const handleRefresh = useCallback(() => setRefresh(r => !r), []);
+  const handleRefresh = useCallback(() => setRefresh((r) => !r), []);
 
   useEffect(() => {
     if (!classId) return;
