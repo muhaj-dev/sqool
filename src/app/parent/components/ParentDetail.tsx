@@ -154,9 +154,6 @@ const ParentDetail = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard")}>
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
                 <div>
                   <h1 className="text-2xl font-bold">Parent Dashboard</h1>
                   <p className="text-sm text-muted-foreground">
@@ -256,40 +253,6 @@ const ParentDetail = () => {
                       <p className="text-sm text-muted-foreground">Occupation</p>
                       <p className="font-medium">{parent?.occupation || "N/A"}</p>
                     </div>
-                    {/* <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                      <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon" onClick={() => setEditedOccupation(parent?.occupation)}>
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit Occupation</DialogTitle>
-                          <DialogDescription>
-                            Update the parent&apos;s occupation information.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4 py-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="occupation">Occupation</Label>
-                            <Input
-                              id="occupation"
-                              value={editedOccupation}
-                              onChange={(e) => setEditedOccupation(e.target.value)}
-                              placeholder="Enter occupation"
-                            />
-                          </div>
-                        </div>
-                        <div className="flex justify-end gap-2">
-                          <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                            Cancel
-                          </Button>
-                          <Button onClick={handleUpdateOccupation}>
-                            Save Changes
-                          </Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog> */}
                   </div>
                 </div>
 
@@ -311,14 +274,6 @@ const ParentDetail = () => {
               </div>
 
               <Separator />
-
-              {/* <Button 
-                variant={parent?.isActive ? "destructive" : "default"}
-                className="w-full"
-                onClick={handleToggleStatus}
-              >
-                {parent?.isActive ? "Deactivate Parent" : "Activate Parent"}
-              </Button> */}
             </CardContent>
           </Card>
 
@@ -406,7 +361,7 @@ const ParentDetail = () => {
                       <Card
                         key={child?._id}
                         className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
-                        onClick={() => router.push(`/student/${child?._id}`)}
+                        onClick={() => router.push(`/parent/kid/${child?._id}`)}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
@@ -500,8 +455,6 @@ const ParentDetail = () => {
                 )}
               </CardContent>
             </Card>
-
-            {/* Quick Actions Card */}
           </div>
         </div>
       </main>
