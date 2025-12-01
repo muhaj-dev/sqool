@@ -17,14 +17,14 @@ interface StaffContentProps {
   staffId: string;
   staff: StaffResult | null;
   staffSchedules: StaffSchedule[];
-  refreshStaff?: () => Promise<void>; // ✅ Add refreshStaff prop
+  refreshStaff?: () => Promise<void>;
 }
 
 interface StaffStepsProps {
   staffId: string;
   staff: StaffResult | null;
   staffSchedules: StaffSchedule[];
-  refreshStaff?: () => Promise<void>; // ✅ Add refreshStaff prop
+  refreshStaff?: () => Promise<void>;
 }
 
 const StaffSteps = ({ staffId, staff, staffSchedules, refreshStaff }: StaffStepsProps) => {

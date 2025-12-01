@@ -1,14 +1,23 @@
-'use client'
-import { CheckCircle2 } from 'lucide-react'
+"use client";
+import { CheckCircle2 } from "lucide-react";
 
-import { Button } from './ui/button'
-import { DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
+import { Button } from "./ui/button";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 
 const Requirement = () => {
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle className="text-primary font-semibold text-xl">The follow requirement is needed</DialogTitle>
+        <DialogTitle className="text-primary font-semibold text-xl">
+          The follow requirement is needed
+        </DialogTitle>
         <DialogDescription>
           <p className="text-muted-foreground">
             The following information is required depending on the sort of School you run.
@@ -41,7 +50,7 @@ const Requirement = () => {
         <DialogFooter>
           <DialogClose className="w-full">
             <Button
-              variant={'outline'}
+              variant={"outline"}
               type="submit"
               className="w-full text-primary mt-6 hover:text-yellow-500 font-bold"
             >
@@ -51,7 +60,7 @@ const Requirement = () => {
         </DialogFooter>
       </DialogHeader>
     </DialogContent>
-  )
-}
+  );
+};
 
-export default Requirement
+export default Requirement;

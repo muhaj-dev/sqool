@@ -17,9 +17,7 @@ const LoadingState: React.FC<LoadingState> = ({ title }) => {
       <div className="bg-background border shadow-xl rounded-2xl p-6 w-[260px] flex flex-col items-center gap-4">
         <Spinner className="w-8 h-8 text-primary animate-spin" />
 
-        <p className="text-sm font-medium text-center text-foreground">
-          {title}
-        </p>
+        <p className="text-sm font-medium text-center text-foreground">{title}</p>
       </div>
     </div>
   );
